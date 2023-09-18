@@ -1,0 +1,6 @@
+#!/bin/sh
+
+set -xe
+
+pnpm run lint 
+pnpm run format
