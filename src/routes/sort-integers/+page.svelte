@@ -1,10 +1,12 @@
 <script lang="ts">
 	import Container from '../../components/Container.svelte';
+	import { sendWebsocket } from '../../server/websocket';
+
 	import { Card, StepIndicator, Gallery, Input, Label, Button, Toast } from 'flowbite-svelte';
 
 	import { scale } from 'svelte/transition';
 	import { flip } from 'svelte/animate';
-	import { PlaySolid, PlusSolid, TrashBinSolid } from 'flowbite-svelte-icons';
+	import { CloudArrowUpOutline, PlaySolid, PlusSolid, TrashBinSolid } from 'flowbite-svelte-icons';
 
 	let currentStep = 1;
 	let steps = ['Zahlen eingeben', 'Algorithmus auswählen', 'Sortieren'].map(
@@ -43,6 +45,16 @@
 			return;
 		}
 		numbers = [{ value: num, id: genId() }, ...numbers];
+	}
+
+	function serverSend(numbers: number[]) {
+		sendWebsocket({
+			type: 'action',
+			action: {
+				type: 'sortNumbers',
+				numbers: numbers.map((n) => n.toString())
+			}
+		});
 	}
 </script>
 
@@ -104,5 +116,16 @@
 				</div>
 			{/each}
 		</Gallery>
+	{:else if currentStep === 2}
+		<Card transition={scale} size="lg" class="col-span-1">
+			<Button
+				class="mt-2 text-xl"
+				on:click={() => serverSend(numbers.map((e) => e.value))}
+				disabled={numbers.length == 0}
+			>
+				<CloudArrowUpOutline class="mr-2" />
+				An Server senden</Button
+			>
+		</Card>
 	{/if}
 </Container>
