@@ -1,9 +1,12 @@
+import type { ZodSchema } from 'zod';
 import { handleClientError, handleServerError } from './error';
-import { assertNever, serverOutput, type ServerInput, type ServerOutput } from './types';
+import { serverOutput, type ServerInput, type ServerOutput } from './types';
 
 const port = 3141;
 const websocket: WebSocket = new WebSocket(`ws://localhost:${port}`);
 websocket.onerror = console.error;
+
+let callbacks: { f: (so: ServerOutput) => void; id: number }[] = [];
 
 export function sendWebsocket(input: ServerInput) {
 	websocket.send(JSON.stringify(input));
@@ -52,10 +55,35 @@ function handleServerOutput(output: ServerOutput) {
 	} else if (output.type === 'log') {
 		console.log(output.message);
 		return;
-	} else if (output.type === 'sortedNumbers') {
-		console.log(output.numbers);
-		return;
+	} else {
+		for (const { f } of callbacks) {
+			f(output);
+		}
 	}
+}
 
-	assertNever(output);
+let _id = 0;
+function genId() {
+	return _id++;
+}
+
+export function registerCallback<T extends ServerOutput>(
+	schema: ZodSchema<T>,
+	f: (so: T) => void
+): number {
+	const id = genId();
+	callbacks.push({
+		id,
+		f: (so: ServerOutput) => {
+			const parsed = schema.safeParse(so);
+			if (parsed.success) {
+				f(parsed.data);
+			}
+		}
+	});
+	return id;
+}
+
+export function unregisterCallback(id: number) {
+	callbacks = callbacks.filter((e) => e.id !== id);
 }

@@ -1,12 +1,20 @@
 <script lang="ts">
 	import Container from '../../components/Container.svelte';
-	import { sendWebsocket } from '../../server/websocket';
+	import { registerCallback, sendWebsocket, unregisterCallback } from '../../server/websocket';
+	import { serverOutputSortedNumbers } from '../../server/types';
 
 	import { Card, StepIndicator, Gallery, Input, Label, Button, Toast } from 'flowbite-svelte';
 
+	import { onDestroy } from 'svelte';
 	import { scale } from 'svelte/transition';
 	import { flip } from 'svelte/animate';
-	import { CloudArrowUpOutline, PlaySolid, PlusSolid, TrashBinSolid } from 'flowbite-svelte-icons';
+	import {
+		CloudArrowUpOutline,
+		PlaySolid,
+		PlusSolid,
+		ShuffleSolid,
+		TrashBinSolid
+	} from 'flowbite-svelte-icons';
 
 	let currentStep = 1;
 	let steps = ['Zahlen eingeben', 'Algorithmus auswählen', 'Sortieren'].map(
@@ -24,9 +32,11 @@
 		for (let i = 1; i < 10; i++) {
 			funnyNumbers.push(111 * i);
 		}
-		let rand = (Math.random() + numbers.length / 2) % 1;
-		let idx = Math.floor(rand * funnyNumbers.length);
-		funnyNumber = funnyNumbers[idx];
+		do {
+			let rand = (Math.random() + numbers.length / 2) % 1;
+			let idx = Math.floor(rand * funnyNumbers.length);
+			funnyNumber = funnyNumbers[idx];
+		} while (numbers.some((v) => v.value === funnyNumber));
 	}
 
 	let value: null | string = null;
@@ -52,10 +62,29 @@
 			type: 'action',
 			action: {
 				type: 'sortNumbers',
-				numbers: numbers.map((n) => n.toString())
+				algorithm: 'bubbleSort',
+				numbers
 			}
 		});
 	}
+
+	function shuffleNumbers() {
+		for (let i = 0; i < numbers.length; i++) {
+			for (let j = i + 1; j < numbers.length; j++) {
+				if (Math.random() > 0.5) {
+					let temp = numbers[i];
+					numbers[i] = numbers[j];
+					numbers[j] = temp;
+				}
+			}
+		}
+	}
+
+	let callbackId = registerCallback(serverOutputSortedNumbers, (so) => {
+		numbers = so.numbers.map((value, index) => ({ value, id: index }));
+	});
+
+	onDestroy(() => unregisterCallback(callbackId));
 </script>
 
 <Container>
@@ -117,15 +146,34 @@
 			{/each}
 		</Gallery>
 	{:else if currentStep === 2}
-		<Card transition={scale} size="lg" class="col-span-1">
-			<Button
-				class="mt-2 text-xl"
-				on:click={() => serverSend(numbers.map((e) => e.value))}
-				disabled={numbers.length == 0}
-			>
-				<CloudArrowUpOutline class="mr-2" />
-				An Server senden</Button
-			>
-		</Card>
+		<Gallery class="gap-4 md:grid-cols-4 grid-cols-2 mx-4 my-4">
+			<Card transition={scale} size="lg" class="col-span-1">
+				<Button
+					class="mt-2 text-xl"
+					on:click={() => serverSend(numbers.map((e) => e.value))}
+					color="blue"
+				>
+					<CloudArrowUpOutline class="mr-2" />
+					An Server senden</Button
+				>
+			</Card>
+			<Card transition={scale} size="lg" class="col-span-1">
+				<Button class="mt-2 text-xl" on:click={shuffleNumbers} color="yellow">
+					<ShuffleSolid class="mr-2" />
+					Mischen</Button
+				>
+			</Card>
+			{#each numbers as number (number.value)}
+				<div animate:flip={{ duration: 200 }}>
+					<Card>
+						<h5
+							class="px-0 mb-2 text-8xl font-light mx-auto tracking-tight text-gray-900 dark:text-white"
+						>
+							{number.value}
+						</h5>
+					</Card>
+				</div>
+			{/each}
+		</Gallery>
 	{/if}
 </Container>

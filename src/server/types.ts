@@ -28,36 +28,34 @@ export const clientError = z.discriminatedUnion('type', [
 const action = z.discriminatedUnion('type', [
 	z.object({
 		type: z.literal('sortNumbers'),
-		numbers: z.array(z.number())
+		numbers: z.array(z.number()),
+		algorithm: z.enum(['bubbleSort'])
 	})
 ]);
 
-const inputType = z.discriminatedUnion('type', [
-	z.object({
-		type: z.literal('log'),
-		message: z.string()
-	}),
-	z.object({
-		type: z.literal('action'),
-		action
-	})
-]);
+const serverInputLog = z.object({ type: z.literal('log'), message: z.string() });
+const serverInputAction = z.object({ type: z.literal('action'), action });
+const serverInput = z.discriminatedUnion('type', [serverInputLog, serverInputAction]);
 
-export type ServerInput = z.infer<typeof inputType>;
+export type ServerInput = z.infer<typeof serverInput>;
 
+const serverOutputError = z.object({
+	type: z.literal('error'),
+	error: serverError
+});
+const serverOutputLog = z.object({
+	type: z.literal('log'),
+	message: z.string()
+});
+export const serverOutputSortedNumbers = z.object({
+	type: z.literal('sortedNumbers'),
+	done: z.boolean(),
+	numbers: z.array(z.number())
+});
 export const serverOutput = z.discriminatedUnion('type', [
-	z.object({
-		type: z.literal('error'),
-		error: serverError
-	}),
-	z.object({
-		type: z.literal('log'),
-		message: z.string()
-	}),
-	z.object({
-		type: z.literal('sortedNumbers'),
-		numbers: z.array(z.number())
-	})
+	serverOutputError,
+	serverOutputLog,
+	serverOutputSortedNumbers
 ]);
 
 export type ServerOutput = z.infer<typeof serverOutput>;
