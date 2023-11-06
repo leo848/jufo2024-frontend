@@ -69,14 +69,14 @@
 			<Icon.ArrowDownSolid />
 		</div>
 	</div>
-	<Popover>
-		<div class="min-w-20 m-4">
+	<Popover class="zindex9">
+		<div class="min-w-20 m-4 zindex9">
 			<p class="mb-2 text-xl font-bold">Serververbindung</p>
 			<GradientButton color="teal" class="transition mb-4" on:click={reconnectWebsocket}>
 				<Icon.RotateOutline class="mr-4" />
 				<div>Neu verbinden</div>
 			</GradientButton>
-			<p class="font-normal min-w-40">
+			<div class="font-normal min-w-40">
 				{#each extractors as { key, title, icon }}
 					{#if $connectionData[key]}
 						<div class="flex justify-between items-center">
@@ -91,18 +91,14 @@
 						</div>
 					{/if}
 				{/each}
-			</p>
+			</div>
 		</div>
 	</Popover>
 </div>
 
 <style>
-	.tooltip {
-		display: none;
-	}
-
-	.tooltip.active {
-		display: block;
+	.zindex9 {
+		z-index: 99;
 	}
 
 	.circle {

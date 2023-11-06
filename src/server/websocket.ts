@@ -117,7 +117,8 @@ export function reconnectWebsocket(): boolean {
 	connectionData.update((cd) => ({
 		...cd,
 		firstConnected: new Date(),
-		lastRequest: null
+		lastRequest: null,
+		lastResponse: null
 	}));
 
 	// updateConnectionData();

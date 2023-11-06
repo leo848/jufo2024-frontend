@@ -1,14 +1,24 @@
 <script lang="ts">
 	import Container from '../../components/Container.svelte';
 	import { registerCallback, sendWebsocket, unregisterCallback } from '../../server/websocket';
-	import { serverOutputSortedNumbers } from '../../server/types';
+	import { type ServerInput, serverOutputSortedNumbers } from '../../server/types';
 
-	import { Card, StepIndicator, Gallery, Input, Label, Button, Toast } from 'flowbite-svelte';
+	import {
+		Card,
+		StepIndicator,
+		Gallery,
+		Input,
+		Label,
+		Button,
+		Toast,
+		GradientButton
+	} from 'flowbite-svelte';
 
 	import { onDestroy } from 'svelte';
 	import { scale } from 'svelte/transition';
 	import { flip } from 'svelte/animate';
 	import {
+		ArrowRightSolid,
 		CloudArrowUpOutline,
 		PlaySolid,
 		PlusSolid,
@@ -21,7 +31,32 @@
 		(s, i) => `${i + 1}. ${s}`
 	);
 
-	let numbers: { value: number; id: number }[] = [];
+	const algorithms = [
+		{
+			key: 'bubbleSort',
+			name: 'Bubble Sort',
+			desc: 'Beim Bubble-Sort-Verfahren handelt es sich um einen simplen Sortieralgorithmus, der asymptotisch eine quadratische Laufzeit benötigt.',
+			img: '/platinumportfolio-bubble.png'
+		},
+		{
+			key: 'selectionSort',
+			name: 'Selection Sort',
+			desc: 'Beim Selection Sort wird wiederholt das minimale Element ausgewählt und so einsortiert, dass ein Teil der Liste sortiert bleibt.',
+			img: '/victoriano-izquierdo-selection.png'
+		},
+		{
+			key: 'insertionSort',
+			name: 'Insertion Sort',
+			desc: 'Beim Insertion Sort wird jeweils das nächste Element so lange in die links sortierte Teilliste eingefügt, bis diese sortiert ist.',
+			img: '/pan-xiaozhen-insert.png'
+		}
+	] as const;
+	let selectedAlgorithm: (ServerInput & {
+		type: 'action';
+		action: { type: 'sortNumbers' };
+	})['action']['algorithm'] = algorithms[0].key;
+
+	let numbers: { value: number; id: number; highlight: boolean }[] = [];
 
 	let funnyNumber = 0;
 	$: {
@@ -54,7 +89,7 @@
 			error = true;
 			return;
 		}
-		numbers = [{ value: num, id: genId() }, ...numbers];
+		numbers = [{ value: num, id: genId(), highlight: false }, ...numbers];
 	}
 
 	function serverSend(numbers: number[]) {
@@ -62,7 +97,7 @@
 			type: 'action',
 			action: {
 				type: 'sortNumbers',
-				algorithm: 'bubbleSort',
+				algorithm: selectedAlgorithm,
 				numbers
 			}
 		});
@@ -83,7 +118,11 @@
 	let redoable = true;
 
 	let callbackId = registerCallback(serverOutputSortedNumbers, (so) => {
-		numbers = so.numbers.map((value, index) => ({ value, id: index }));
+		numbers = so.numbers.map((value, index) => ({
+			value,
+			id: index,
+			highlight: so.highlight.includes(index)
+		}));
 		redoable = so.done;
 	});
 
@@ -149,31 +188,47 @@
 			{/each}
 		</Gallery>
 	{:else if currentStep === 2}
+		{#each algorithms as { key, name, desc, img }, index}
+			<Card horizontal reverse={index % 2 === 1} {img} class="max-w-100% mt-5">
+				<h2 class="text-2xl font-bold dark:text-white">{name}</h2>
+				<div>{desc}</div>
+				<Button
+					color="alternative"
+					class="w-fit mt-4"
+					on:click={() => {
+						selectedAlgorithm = key;
+						currentStep++;
+					}}
+					>Auswählen <ArrowRightSolid class="ml-4" />
+				</Button>
+			</Card>
+		{/each}
+	{:else if currentStep === 3}
 		<Gallery class="gap-4 md:grid-cols-4 grid-cols-2 mx-4 my-4">
 			<Card transition={scale} size="lg" class="col-span-1">
-				<Button
+				<GradientButton
 					class="mt-2 text-xl"
 					disabled={!redoable}
 					on:click={() => serverSend(numbers.map((e) => e.value))}
-					color="blue"
+					color="teal"
 				>
-					<CloudArrowUpOutline class="mr-2" />
-					An Server senden</Button
+					<CloudArrowUpOutline class="mr-2" size="xl" />
+					An Server senden</GradientButton
 				>
 			</Card>
 			<Card transition={scale} size="lg" class="col-span-1">
-				<Button class="mt-2 text-xl" on:click={shuffleNumbers} color="yellow">
+				<GradientButton class="mt-2 text-xl" on:click={shuffleNumbers} color="cyan">
 					<ShuffleSolid class="mr-2" />
-					Mischen</Button
+					Mischen</GradientButton
 				>
 			</Card>
-			{#each numbers as number (number.value)}
+			{#each numbers as { value, highlight } (value)}
 				<div animate:flip={{ duration: 200 }}>
-					<Card>
+					<Card color={highlight ? 'orange' : undefined}>
 						<h5
 							class="px-0 mb-2 text-8xl font-light mx-auto tracking-tight text-gray-900 dark:text-white"
 						>
-							{number.value}
+							{value}
 						</h5>
 					</Card>
 				</div>

@@ -29,7 +29,7 @@ const action = z.discriminatedUnion('type', [
 	z.object({
 		type: z.literal('sortNumbers'),
 		numbers: z.array(z.number()),
-		algorithm: z.enum(['bubbleSort'])
+		algorithm: z.enum(['bubbleSort', 'selectionSort', 'insertionSort'])
 	})
 ]);
 
@@ -59,7 +59,8 @@ export const serverOutputLatency = z.object({
 export const serverOutputSortedNumbers = z.object({
 	type: z.literal('sortedNumbers'),
 	done: z.boolean(),
-	numbers: z.array(z.number())
+	numbers: z.array(z.number()),
+	highlight: z.array(z.number())
 });
 export const serverOutput = z.discriminatedUnion('type', [
 	serverOutputError,
