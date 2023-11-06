@@ -10,6 +10,7 @@
 		Button
 	} from 'flowbite-svelte';
 	import { SunSolid, MoonSolid } from 'flowbite-svelte-icons';
+	import ServerStatus from '../components/ServerStatus.svelte';
 
 	import { onMount } from 'svelte';
 
@@ -34,6 +35,9 @@
 			<span class="self-center whitespace-nowrap text-3xl font-semibold">jufo2024</span>
 		</NavBrand>
 		<NavUl>
+			<NavLi>
+				<ServerStatus />
+			</NavLi>
 			<NavLi>
 				<DarkMode>
 					<svelte:fragment slot="lightIcon">

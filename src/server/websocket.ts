@@ -1,18 +1,54 @@
 import type { ZodSchema } from 'zod';
 import { handleClientError, handleServerError } from './error';
-import { serverOutput, type ServerInput, type ServerOutput } from './types';
+import {
+	serverOutput,
+	type ServerInput,
+	type ServerOutput,
+	type ServerStatus,
+	type ConnectionData,
+	serverOutputLatency
+} from './types';
+import { writable, type Writable } from 'svelte/store';
 
-const port = 3141;
-const websocket: WebSocket = new WebSocket(`ws://localhost:${port}`);
-websocket.onerror = console.error;
+let statusCallback: (ss: ServerStatus) => void = () => {};
 
-let callbacks: { f: (so: ServerOutput) => void; id: number }[] = [];
-
-export function sendWebsocket(input: ServerInput) {
-	websocket.send(JSON.stringify(input));
+export function getStatus(): ServerStatus & { type: 'status' } {
+	const states = ['loading', 'online', 'offline', 'offline'] as const;
+	return { type: 'status', status: states[websocket.readyState] };
 }
 
-websocket.onmessage = (input) => {
+let interval: null | number = null;
+export function setStatusCallback(callback: (ss: ServerStatus) => void) {
+	statusCallback = callback;
+
+	if (interval) clearInterval(interval);
+	interval = setInterval(() => statusCallback(getStatus()), 1000);
+}
+
+const port = 3141;
+const url = `localhost:${port}`;
+const uri = `ws://${url}`;
+
+let websocket: WebSocket = new WebSocket(uri);
+export const connectionData: Writable<ConnectionData> = writable({
+	firstConnected: new Date(),
+	lastRequest: null,
+	latency: null
+});
+// updateConnectionData();
+
+const onerror = (e: Event) => {
+	statusCallback({
+		type: 'status',
+		status: 'offline'
+	});
+	console.error(e);
+};
+const onmessage = (input: MessageEvent<unknown>) => {
+	statusCallback({
+		type: 'interact',
+		status: 'download'
+	});
 	if (typeof input.data !== 'string') {
 		handleClientError({
 			type: 'binaryData'
@@ -47,6 +83,39 @@ websocket.onmessage = (input) => {
 
 	handleServerOutput(parsed);
 };
+websocket.onerror = onerror;
+websocket.onmessage = onmessage;
+
+let callbacks: { f: (so: ServerOutput) => void; id: number }[] = [];
+
+export function sendWebsocket(input: ServerInput) {
+	const status = getStatus();
+	if (status.status === 'offline') {
+		reconnectWebsocket();
+	}
+	statusCallback(getStatus());
+	websocket.send(JSON.stringify(input));
+	statusCallback({
+		type: 'interact',
+		status: 'upload'
+	});
+}
+
+export function reconnectWebsocket(): boolean {
+	statusCallback({ type: 'status', status: 'loading' });
+	try {
+		websocket = new WebSocket(uri);
+	} catch (e) {
+		console.error(e);
+		return false;
+	}
+	websocket.onerror = onerror;
+	websocket.onmessage = onmessage;
+
+	// updateConnectionData();
+
+	return true;
+}
 
 function handleServerOutput(output: ServerOutput) {
 	if (output.type === 'error') {
@@ -86,4 +155,38 @@ export function registerCallback<T extends ServerOutput>(
 
 export function unregisterCallback(id: number) {
 	callbacks = callbacks.filter((e) => e.id !== id);
+}
+
+export function updateConnectionData(): Writable<ConnectionData> {
+	const unsub = connectionData.subscribe((c: ConnectionData) => {
+		if (
+			!c.latency ||
+			new Date().getMilliseconds() - c.latency.requestTime.getMilliseconds() > 2000
+		) {
+			const beforeTime = new Date();
+			sendWebsocket({
+				type: 'latency'
+			});
+
+			const millis = (date: Date) => date.getTime() * 1000 + date.getMilliseconds();
+
+			const id = registerCallback(serverOutputLatency, (l) => {
+				const afterTime = new Date();
+				connectionData.update((c) => ({
+					...c,
+					latency: {
+						requestTime: beforeTime,
+						serverToClient: millis(afterTime) - l.timeMillis,
+						clientToServer: l.timeMillis - millis(beforeTime)
+					}
+				}));
+
+				unregisterCallback(id);
+			});
+		}
+	});
+
+	unsub();
+
+	return connectionData;
 }

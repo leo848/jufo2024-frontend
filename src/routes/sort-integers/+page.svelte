@@ -80,8 +80,11 @@
 		}
 	}
 
+	let redoable = true;
+
 	let callbackId = registerCallback(serverOutputSortedNumbers, (so) => {
 		numbers = so.numbers.map((value, index) => ({ value, id: index }));
+		redoable = so.done;
 	});
 
 	onDestroy(() => unregisterCallback(callbackId));
@@ -150,6 +153,7 @@
 			<Card transition={scale} size="lg" class="col-span-1">
 				<Button
 					class="mt-2 text-xl"
+					disabled={!redoable}
 					on:click={() => serverSend(numbers.map((e) => e.value))}
 					color="blue"
 				>
