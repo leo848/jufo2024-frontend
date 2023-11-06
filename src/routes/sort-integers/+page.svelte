@@ -189,22 +189,22 @@
 		</Gallery>
 	{:else if currentStep === 2}
 		<Gallery class="md:grid-cols-2 gap-4 mt-4">
-		{#each algorithms as { key, name, desc, img }, index}
-			<Card horizontal reverse={((index + 1) / 2 | 0) % 2 === 1} {img}>
-				<h2 class="text-2xl font-bold dark:text-white">{name}</h2>
-				<div>{desc}</div>
-				<Button
-					color="alternative"
-					class="w-fit mt-4 transition"
-					on:click={() => {
-						selectedAlgorithm = key;
-						currentStep++;
-					}}
-					>Auswählen <ArrowRightSolid class="ml-4" />
-				</Button>
-			</Card>
-		{/each}
-	</Gallery>
+			{#each algorithms as { key, name, desc, img }, index}
+				<Card horizontal reverse={(((index + 1) / 2) | 0) % 2 === 1} {img}>
+					<h2 class="text-2xl font-bold dark:text-white">{name}</h2>
+					<div>{desc}</div>
+					<Button
+						color="alternative"
+						class="w-fit mt-4 transition"
+						on:click={() => {
+							selectedAlgorithm = key;
+							currentStep++;
+						}}
+						>Auswählen <ArrowRightSolid class="ml-4" />
+					</Button>
+				</Card>
+			{/each}
+		</Gallery>
 	{:else if currentStep === 3}
 		<Gallery class="gap-4 md:grid-cols-4 grid-cols-2 mx-4 my-4">
 			<Card transition={scale} size="lg" class="col-span-1">
