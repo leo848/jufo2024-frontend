@@ -33,6 +33,7 @@ let websocket: WebSocket = new WebSocket(uri);
 export const connectionData: Writable<ConnectionData> = writable({
 	firstConnected: new Date(),
 	lastRequest: null,
+	lastResponse: null,
 	latency: null
 });
 // updateConnectionData();
@@ -95,6 +96,7 @@ export function sendWebsocket(input: ServerInput) {
 	}
 	statusCallback(getStatus());
 	websocket.send(JSON.stringify(input));
+	connectionData.update((cd) => ({ ...cd, lastRequest: new Date() }));
 	statusCallback({
 		type: 'interact',
 		status: 'upload'
@@ -112,6 +114,12 @@ export function reconnectWebsocket(): boolean {
 	websocket.onerror = onerror;
 	websocket.onmessage = onmessage;
 
+	connectionData.update((cd) => ({
+		...cd,
+		firstConnected: new Date(),
+		lastRequest: null
+	}));
+
 	// updateConnectionData();
 
 	return true;
@@ -125,6 +133,10 @@ function handleServerOutput(output: ServerOutput) {
 		console.log(output.message);
 		return;
 	} else {
+		connectionData.update((cd) => ({
+			...cd,
+			lastResponse: new Date()
+		}));
 		for (const { f } of callbacks) {
 			f(output);
 		}
@@ -158,7 +170,7 @@ export function unregisterCallback(id: number) {
 }
 
 export function updateConnectionData(): Writable<ConnectionData> {
-	const unsub = connectionData.subscribe((c: ConnectionData) => {
+	connectionData.subscribe((c: ConnectionData) => {
 		if (
 			!c.latency ||
 			new Date().getMilliseconds() - c.latency.requestTime.getMilliseconds() > 2000
@@ -184,9 +196,7 @@ export function updateConnectionData(): Writable<ConnectionData> {
 				unregisterCallback(id);
 			});
 		}
-	});
-
-	unsub();
+	})();
 
 	return connectionData;
 }

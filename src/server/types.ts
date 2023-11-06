@@ -88,6 +88,7 @@ export type ServerStatus = z.infer<typeof serverStatus>;
 export type ConnectionData = {
 	firstConnected: Date;
 	lastRequest: Date | null;
+	lastResponse: Date | null;
 	latency: {
 		clientToServer: number;
 		serverToClient: number;

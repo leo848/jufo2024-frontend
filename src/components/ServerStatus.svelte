@@ -1,11 +1,20 @@
 <script lang="ts">
-	import { ArrowDownSolid, ArrowUpSolid } from 'flowbite-svelte-icons';
+	import * as Icon from 'flowbite-svelte-icons';
 	import { onMount } from 'svelte';
 	import { connectionData, reconnectWebsocket, setStatusCallback } from '../server/websocket';
 	import { type ServerStatus, assertNever } from '../server/types';
-	import { Tooltip } from 'flowbite-svelte';
+	import { relativeTimeFromDates } from '../utils/time';
+	import { Badge, GradientButton, Popover } from 'flowbite-svelte';
 
-	const dateFormat = new Intl.DateTimeFormat('de-DE');
+	const extractors = [
+		{
+			key: 'firstConnected',
+			title: 'Verbunden',
+			icon: Icon.DesktopPcOutline
+		},
+		{ key: 'lastRequest', title: 'Letzte Anfrage', icon: Icon.UploadOutline },
+		{ key: 'lastResponse', title: 'Letzte Antwort', icon: Icon.DownloadOutline }
+	] as const;
 
 	let setting = 'offline';
 	let upload = 0;
@@ -52,29 +61,50 @@
 </script>
 
 <div>
-	<div
-		class={className}
-		on:click={reconnectWebsocket}
-		role="button"
-		tabindex="0"
-		on:keypress={() => {}}
-	>
+	<div class={className} role="button" tabindex="0" on:keypress={() => {}}>
 		<div class={upClass} style={'opacity: ' + upload}>
-			<ArrowUpSolid />
+			<Icon.ArrowUpSolid />
 		</div>
 		<div class={downClass} style={'opacity: ' + download}>
-			<ArrowDownSolid />
+			<Icon.ArrowDownSolid />
 		</div>
 	</div>
-	<Tooltip>
-		<p class="ml-8 mb-2 text-xl font-bold">Serververbindung</p>
-		<p class="font-normal">
-			Verbunden seit: {dateFormat.format($connectionData.firstConnected)}
-		</p>
-	</Tooltip>
+	<Popover>
+		<div class="min-w-20 m-4">
+			<p class="mb-2 text-xl font-bold">Serververbindung</p>
+			<GradientButton color="teal" class="transition mb-4" on:click={reconnectWebsocket}>
+				<Icon.RotateOutline class="mr-4" />
+				<div>Neu verbinden</div>
+			</GradientButton>
+			<p class="font-normal min-w-40">
+				{#each extractors as { key, title, icon }}
+					{#if $connectionData[key]}
+						<div class="flex justify-between items-center">
+							<p class="mb-3">
+								<b>{title}</b><br />
+								<Badge color="dark" border large>
+									<Icon.ClockSolid class="w-3 h-3 mr-2" />
+									{relativeTimeFromDates($connectionData[key])}
+								</Badge>
+							</p>
+							<svelte:component this={icon} class="ml-4" />
+						</div>
+					{/if}
+				{/each}
+			</p>
+		</div>
+	</Popover>
 </div>
 
 <style>
+	.tooltip {
+		display: none;
+	}
+
+	.tooltip.active {
+		display: block;
+	}
+
 	.circle {
 		border-radius: 100%;
 		width: 40px;
