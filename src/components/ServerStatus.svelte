@@ -5,6 +5,7 @@
 	import { type ServerStatus, assertNever } from '../server/types';
 	import { relativeTimeFromDates } from '../utils/time';
 	import { Badge, GradientButton, Popover } from 'flowbite-svelte';
+	import { tweened } from 'svelte/motion';
 
 	const extractors = [
 		{
@@ -17,14 +18,14 @@
 	] as const;
 
 	let setting = 'offline';
-	let upload = 0;
-	let download = 0;
-	$: active = upload > 0 || download > 0;
+	let upload = tweened(0, { duration: 1000 });
+	let download = tweened(0, { duration: 1000 });
+	$: active = $upload > 0 || $download > 0;
 
 	const act = (b: boolean) => (b ? 'active' : '');
 	$: className = ['circle', setting, act(active)].join(' ');
-	$: upClass = ['icon', 'up', act(upload > 0)].join(' ');
-	$: downClass = ['icon', 'up', act(download > 0)].join(' ');
+	$: upClass = ['icon', 'up', act($upload > 0)].join(' ');
+	$: downClass = ['icon', 'up', act($download > 0)].join(' ');
 
 	onMount(() => {
 		setStatusCallback((ss: ServerStatus) => {
@@ -33,23 +34,11 @@
 			} else if (ss.type === 'interact') {
 				setting = 'online';
 				if (ss.status === 'upload') {
-					upload += 1;
-					let i = setInterval(() => {
-						upload -= 0.02;
-						if (upload <= 0) {
-							upload = 0;
-							clearInterval(i);
-						}
-					}, 20);
+					upload.update((n) => n + 1, { duration: 0 });
+					upload.update((n) => n - 1);
 				} else if (ss.status === 'download') {
-					download += 1;
-					let i = setInterval(() => {
-						download -= 0.02;
-						if (download <= 0) {
-							download = 0;
-							clearInterval(i);
-						}
-					}, 20);
+					download.update((n) => n + 1, { duration: 0 });
+					download.update((n) => n - 1);
 				} else {
 					assertNever(ss.status);
 				}
@@ -62,10 +51,10 @@
 
 <div>
 	<div class={className} role="button" tabindex="0" on:keypress={() => {}}>
-		<div class={upClass} style={'opacity: ' + upload}>
+		<div class={upClass} style={'opacity: ' + $upload}>
 			<Icon.ArrowUpSolid />
 		</div>
-		<div class={downClass} style={'opacity: ' + download}>
+		<div class={downClass} style={'opacity: ' + $download}>
 			<Icon.ArrowDownSolid />
 		</div>
 	</div>
