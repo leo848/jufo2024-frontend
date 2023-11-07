@@ -6,6 +6,7 @@
 	import { relativeTimeFromDates } from '../utils/time';
 	import { Badge, GradientButton, Popover } from 'flowbite-svelte';
 	import { tweened } from 'svelte/motion';
+	import { quartInOut } from 'svelte/easing';
 
 	const extractors = [
 		{
@@ -18,8 +19,9 @@
 	] as const;
 
 	let setting = 'offline';
-	let upload = tweened(0, { duration: 1000 });
-	let download = tweened(0, { duration: 1000 });
+	const tweenOptions = { duration: 1000, easing: quartInOut };
+	let upload = tweened(0, tweenOptions);
+	let download = tweened(0, tweenOptions);
 	$: active = $upload > 0 || $download > 0;
 
 	const act = (b: boolean) => (b ? 'active' : '');
@@ -34,11 +36,11 @@
 			} else if (ss.type === 'interact') {
 				setting = 'online';
 				if (ss.status === 'upload') {
-					upload.update((n) => n + 1, { duration: 0 });
-					upload.update((n) => n - 1);
+					upload.update((n) => n + 1, { duration: 500 }).then(() => upload.update((n) => n - 1));
 				} else if (ss.status === 'download') {
-					download.update((n) => n + 1, { duration: 0 });
-					download.update((n) => n - 1);
+					download
+						.update((n) => n + 1, { duration: 500 })
+						.then(() => download.update((n) => n - 1));
 				} else {
 					assertNever(ss.status);
 				}

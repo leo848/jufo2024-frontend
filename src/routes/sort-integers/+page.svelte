@@ -1,5 +1,6 @@
 <script lang="ts">
 	import Container from '../../components/Container.svelte';
+	import BarChart from '../../components/BarChart.svelte';
 	import { registerCallback, sendWebsocket, unregisterCallback } from '../../server/websocket';
 	import { type ServerInput, serverOutputSortedNumbers } from '../../server/types';
 
@@ -11,20 +12,25 @@
 		Label,
 		Button,
 		Toast,
-		GradientButton
+		GradientButton,
+		Tabs,
+		TabItem
 	} from 'flowbite-svelte';
 
 	import { onDestroy } from 'svelte';
 	import { scale } from 'svelte/transition';
 	import { flip } from 'svelte/animate';
-	import {
-		ArrowRightSolid,
-		CloudArrowUpOutline,
-		PlaySolid,
-		PlusSolid,
-		ShuffleSolid,
-		TrashBinSolid
-	} from 'flowbite-svelte-icons';
+	import * as Icon from 'flowbite-svelte-icons';
+
+	let _id = 0;
+	function genId() {
+		return _id++;
+	}
+
+	let numbers: { value: number; id: number; highlight: boolean }[] =
+		[]; /* [1, 2, 3, 4, 5, 6, 7, 8].map(
+		(value) => ({ value, id: genId(), highlight: false })
+); */
 
 	let currentStep = 1;
 	let steps = ['Zahlen eingeben', 'Algorithmus auswählen', 'Sortieren'].map(
@@ -56,8 +62,6 @@
 		action: { type: 'sortNumbers' };
 	})['action']['algorithm'] = algorithms[0].key;
 
-	let numbers: { value: number; id: number; highlight: boolean }[] = [];
-
 	let funnyNumber = 0;
 	$: {
 		let funnyNumbers = [0, 69, 420, 37, 73];
@@ -76,11 +80,6 @@
 
 	let value: null | string = null;
 	let error = false;
-
-	let _id = 0;
-	function genId() {
-		return _id++;
-	}
 
 	function addNumber() {
 		let num = !value ? funnyNumber : Number(value);
@@ -143,7 +142,7 @@
 					on:click={() => (numbers = [])}
 					disabled={numbers.length == 0}
 				>
-					<TrashBinSolid class="mr-2" />
+					<Icon.TrashBinSolid class="mr-2" />
 					Löschen</Button
 				>
 				<Button
@@ -152,7 +151,7 @@
 					on:click={() => currentStep++}
 					disabled={numbers.length < 5}
 				>
-					<PlaySolid class="mr-2" />
+					<Icon.PlaySolid class="mr-2" />
 					Fortfahren</Button
 				>
 			</Card>
@@ -164,7 +163,7 @@
 						<Input id="num-input" class="text-3xl" bind:value placeholder={funnyNumber} />
 					</div>
 					<Button class="mt-2 text-xl" on:click={addNumber}>
-						<PlusSolid class="mr-2" />
+						<Icon.PlusSolid class="mr-2" />
 						Hinzufügen
 					</Button>
 				</Gallery>
@@ -200,41 +199,52 @@
 							selectedAlgorithm = key;
 							currentStep++;
 						}}
-						>Auswählen <ArrowRightSolid class="ml-4" />
+						>Auswählen <Icon.ArrowRightSolid class="ml-4" />
 					</Button>
 				</Card>
 			{/each}
 		</Gallery>
 	{:else if currentStep === 3}
-		<Gallery class="gap-4 md:grid-cols-4 grid-cols-2 mx-4 my-4">
-			<Card transition={scale} size="lg" class="col-span-1">
-				<GradientButton
-					class="mt-2 text-xl"
-					disabled={!redoable}
-					on:click={() => serverSend(numbers.map((e) => e.value))}
-					color="teal"
-				>
-					<CloudArrowUpOutline class="mr-2" size="xl" />
-					An Server senden</GradientButton
-				>
-			</Card>
-			<Card transition={scale} size="lg" class="col-span-1">
-				<GradientButton class="mt-2 text-xl" on:click={shuffleNumbers} color="cyan">
-					<ShuffleSolid class="mr-2" />
-					Mischen</GradientButton
-				>
-			</Card>
-			{#each numbers as { value, highlight } (value)}
-				<div animate:flip={{ duration: 200 }}>
-					<Card color={highlight ? 'orange' : undefined}>
-						<h5
-							class="px-0 mb-2 text-8xl font-light mx-auto tracking-tight text-gray-900 dark:text-white"
-						>
-							{value}
-						</h5>
-					</Card>
+		<GradientButton
+			class="mt-2 mb-4 mx-4 text-xl"
+			disabled={!redoable}
+			on:click={() => serverSend(numbers.map((e) => e.value))}
+			color="teal"
+		>
+			<Icon.ArrowSortLettersOutline class="mr-2" size="xl" />
+			Sortieren
+			<Icon.CloudArrowUpOutline class="ml-2" />
+		</GradientButton>
+		<GradientButton class="mt-2 text-xl" on:click={shuffleNumbers} color="cyan">
+			<Icon.ShuffleSolid class="mr-2" size="xl" />
+			Mischen</GradientButton
+		>
+		<Tabs
+			style="full"
+			defaultClass="flex rounded-lg divide-x divide-gray-200 shadow dark:divide-gray-700"
+		>
+			<TabItem open class="w-full">
+				<div class="text-xl" slot="title">Karten</div>
+				<Gallery class="gap-4 md:grid-cols-4 grid-cols-2 m-4">
+					{#each numbers as { value, highlight } (value)}
+						<div animate:flip={{ duration: 200 }}>
+							<Card class={highlight ? 'dark:bg-gray-500' : 'dark:bg-gray-700'}>
+								<h5
+									class="px-0 mb-2 text-6xl font-light mx-auto tracking-tight text-gray-900 dark:text-white"
+								>
+									{value}
+								</h5>
+							</Card>
+						</div>
+					{/each}
+				</Gallery>
+			</TabItem>
+			<TabItem class="w-full">
+				<div class="text-xl" slot="title">Balkendiagramm</div>
+				<div>
+					<BarChart content={numbers} />
 				</div>
-			{/each}
-		</Gallery>
+			</TabItem>
+		</Tabs>
 	{/if}
 </Container>
