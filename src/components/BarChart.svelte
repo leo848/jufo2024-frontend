@@ -27,24 +27,25 @@
 					? 0xff66cc
 					: highlight === 'correct'
 					? 0x00ff44
-					: 0xcdcdcd,
+					: 0xcdcdcd
 			/* reflectivity: .5,
 			combine: THREE.MixOperation, */
-		})
+		});
 	}
 
 	$: len = values.length;
-	
+
 	function position(index: number, value: number): [number, number, number] {
 		return [(index + 1 / 2) / (len + 1) + index / len / len, value / len / 2 - 1 / 2, 0];
 	}
 
-	let frameCount = 0, lightPositions: [number, number, number][] = [[0, 0, 0.3]];
+	let frameCount = 0,
+		lightPositions: [number, number, number][] = [[0, 0, 0.3]];
 	SC.onFrame(() => {
 		lightPositions[0][0] = Math.sin(frameCount / 400);
 		// lightPositions[0][2] = Math.cos(frameCount / 400);
 		frameCount += 1;
-	})
+	});
 </script>
 
 <div class="chart">
@@ -67,7 +68,7 @@
 		<SC.AmbientLight intensity={0.5} />
 
 		{#each lightPositions as position}
-			<SC.DirectionalLight intensity={0.8} {position}/>
+			<SC.DirectionalLight intensity={0.8} {position} />
 		{/each}
 
 		<SC.Group position={[0, -1 / 2, 0]}>
