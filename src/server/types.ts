@@ -60,7 +60,7 @@ export const serverOutputSortedNumbers = z.object({
 	type: z.literal('sortedNumbers'),
 	done: z.boolean(),
 	numbers: z.array(z.number()),
-	highlight: z.array(z.number())
+	highlight: z.array(z.tuple([z.number(), z.enum(['compare', 'swap', 'correct'])]))
 });
 export const serverOutput = z.discriminatedUnion('type', [
 	serverOutputError,

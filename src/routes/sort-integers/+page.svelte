@@ -27,10 +27,10 @@
 		return _id++;
 	}
 
-	let numbers: { value: number; id: number; highlight: boolean }[] =
+	let numbers: { value: number; id: number; highlight?: 'compare' | 'swap' | 'correct' }[] =
 		[]; /* [1, 2, 3, 4, 5, 6, 7, 8].map(
 		(value) => ({ value, id: genId(), highlight: false })
-); */
+	); */
 
 	let currentStep = 1;
 	let steps = ['Zahlen eingeben', 'Algorithmus auswählen', 'Sortieren'].map(
@@ -88,7 +88,7 @@
 			error = true;
 			return;
 		}
-		numbers = [{ value: num, id: genId(), highlight: false }, ...numbers];
+		numbers = [{ value: num, id: genId() }, ...numbers];
 	}
 
 	function serverSend(numbers: number[]) {
@@ -120,7 +120,7 @@
 		numbers = so.numbers.map((value, index) => ({
 			value,
 			id: index,
-			highlight: so.highlight.includes(index)
+			highlight: (so.highlight.find(([i]) => i === index) ?? [])[1]
 		}));
 		redoable = so.done;
 	});
@@ -228,7 +228,15 @@
 				<Gallery class="gap-4 md:grid-cols-4 grid-cols-2 m-4">
 					{#each numbers as { value, highlight } (value)}
 						<div animate:flip={{ duration: 200 }}>
-							<Card class={highlight ? 'dark:bg-gray-500' : 'dark:bg-gray-700'}>
+							<Card
+								class={highlight === 'compare'
+									? 'dark:bg-orange'
+									: highlight === 'swap'
+									? 'dark:bg-violet'
+									: highlight === 'correct'
+									? 'dark:bg-green'
+									: 'dark:bg-gray-700'}
+							>
 								<h5
 									class="px-0 mb-2 text-6xl font-light mx-auto tracking-tight text-gray-900 dark:text-white"
 								>

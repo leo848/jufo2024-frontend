@@ -36,11 +36,11 @@
 			} else if (ss.type === 'interact') {
 				setting = 'online';
 				if (ss.status === 'upload') {
-					upload.update((n) => n + 1, { duration: 500 }).then(() => upload.update((n) => n - 1));
+					upload.update((n) => n + 1, { duration: 500 });
+					setTimeout(() => upload.update((n) => n - 1), 500);
 				} else if (ss.status === 'download') {
-					download
-						.update((n) => n + 1, { duration: 500 })
-						.then(() => download.update((n) => n - 1));
+					download.update((n) => n + 1, { duration: 500 });
+					setTimeout(() => download.update((n) => n - 1), 500);
 				} else {
 					assertNever(ss.status);
 				}
@@ -63,7 +63,15 @@
 	<Popover class="zindex9">
 		<div class="min-w-20 m-4 zindex9">
 			<p class="mb-2 text-xl font-bold">Serververbindung</p>
-			<GradientButton color="teal" class="transition mb-4" on:click={reconnectWebsocket}>
+			<GradientButton
+				color="teal"
+				class="transition mb-4"
+				on:click={() => {
+					upload.set(0);
+					download.set(0);
+					reconnectWebsocket();
+				}}
+			>
 				<Icon.RotateOutline class="mr-4" />
 				<div>Neu verbinden</div>
 			</GradientButton>
