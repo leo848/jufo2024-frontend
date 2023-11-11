@@ -14,7 +14,7 @@
 		b: { elt?: HTMLElement; nopple?: HTMLElement };
 	} = { r: {}, g: {}, b: {} };
 	const comps = ['r', 'g', 'b'] as const;
-	const compNames = {'r': "Rot", 'g': "Grün", 'b': "Blau"} as const;
+	const compNames = { r: 'Rot', g: 'Grün', b: 'Blau' } as const;
 	$: for (const key of comps) {
 		const gradient = gradients[key];
 		if (!(gradient.elt && gradient.nopple)) break;
@@ -83,7 +83,7 @@
 					<div bind:this={gradients[comp].elt} class="gradient">
 						<div class="gr-nopple" bind:this={gradients[comp].nopple} />
 					</div>
-					<div>{compNames[comp]} = {Math.round(modalColor[comp]*100)}%</div>
+					<div>{compNames[comp]} = {Math.round(modalColor[comp] * 100)}%</div>
 				{/each}
 			</TabItem>
 			<TabItem class="w-full">
