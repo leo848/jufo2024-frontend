@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { Button, Modal, TabItem, Tabs } from 'flowbite-svelte';
+	import { Button, ButtonGroup, Modal, TabItem, Tabs } from 'flowbite-svelte';
 	import { Color } from '../geom/color';
 	import { scale } from 'svelte/transition';
 
@@ -14,6 +14,7 @@
 		b: { elt?: HTMLElement; nopple?: HTMLElement };
 	} = { r: {}, g: {}, b: {} };
 	const comps = ['r', 'g', 'b'] as const;
+	const compNames = {'r': "Rot", 'g': "Grün", 'b': "Blau"} as const;
 	$: for (const key of comps) {
 		const gradient = gradients[key];
 		if (!(gradient.elt && gradient.nopple)) break;
@@ -25,6 +26,18 @@
 
 	function complement() {
 		modalColor = modalColor.rgbMap((c) => 1 - c);
+	}
+
+	function compoSwap() {
+		const temp = modalColor.r;
+		modalColor.r = modalColor.b;
+		modalColor.b = modalColor.g;
+		modalColor.g = temp;
+	}
+
+	function gray() {
+		const avg = (modalColor.r + modalColor.g + modalColor.b) / 3;
+		modalColor = new Color(avg, avg, avg);
 	}
 </script>
 
@@ -53,7 +66,11 @@
 				<div class="mb-3 text-xl">
 					<code>{modalColor.css()}</code>
 				</div>
-				<Button color="light" on:click={complement}>Komplementär</Button>
+				<ButtonGroup size="xl">
+					<Button on:click={complement}>Komplementär</Button>
+					<Button on:click={compoSwap}>Komponententausch</Button>
+					<Button on:click={gray}>Grauwert</Button>
+				</ButtonGroup>
 				{#each comps as comp (comp)}
 					<input
 						type="range"
@@ -66,6 +83,7 @@
 					<div bind:this={gradients[comp].elt} class="gradient">
 						<div class="gr-nopple" bind:this={gradients[comp].nopple} />
 					</div>
+					<div>{compNames[comp]} = {Math.round(modalColor[comp]*100)}%</div>
 				{/each}
 			</TabItem>
 			<TabItem class="w-full">
@@ -125,8 +143,9 @@
 	}
 
 	.gr-nopple {
-		background-color: rgba(1, 1, 1, 0.1);
-		border: 5px solid black;
+		background-color: transparent;
+		backdrop-filter: blur(20px);
+		border: 5px solid rgba(0, 0, 0, 0.5);
 		border-radius: 50%;
 		position: relative;
 		height: 35px;
