@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { scale } from 'svelte/transition';
 	import { Card, Gallery } from 'flowbite-svelte';
+	import Container from './Container.svelte';
 
 	const cards = [
 		{
@@ -10,11 +11,11 @@
 			desc: 'Eine beliebige Anzahl ganzer Zahlen nach ihrem Wert sortieren'
 		},
 		{
-			img: '/sven-brandsma-letters.png',
+			img: '/robert-katzki-colors.png',
 			reverse: false,
-			href: '/sort-strings',
-			text: 'Liste von Zeichenketten sortieren',
-			desc: 'Eine beliebige Anzahl von Zeichenketten korrekt lokalisiert sortieren'
+			href: '/sort-colors',
+			text: 'Farben sortieren',
+			desc: 'Farben in beliebigem Farbraum eingeben und nach einzelnen Komponenten oder mit eigener TSP-Metrik optimal oder heuristisch sortieren'
 		},
 		{
 			img: '/fabian-oelkers-mond.png',
@@ -33,22 +34,24 @@
 	});
 </script>
 
-<Gallery class="gap-4 md:grid-cols-2 xl:grid-cols-3 mx-4 xl:mx-16 xl:mx-16 mt-4">
-	{#each displayCards as card, i (card.text)}
-		<Card
-			transition={scale}
-			img={card.img}
-			horizontal
-			reverse={i % 3 == 0}
-			href={card.href}
-			class=""
-		>
-			<h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
-				{card.text}
-			</h5>
-			<p class="font-normal text-gray-700 dark:text-gray-600 leading-tight">
-				{card.desc}
-			</p>
-		</Card>
-	{/each}
-</Gallery>
+<Container>
+	<Gallery class="gap-4 md:grid-cols-1 mx-4 xl:mx-16 xl:mx-16 mt-4">
+		{#each displayCards as card, i (card.text)}
+			<Card
+				transition={scale}
+				img={card.img}
+				horizontal
+				reverse={i % 2 == 0}
+				href={card.href}
+				class="mb-4"
+			>
+				<h5 class="mb-2 text-3xl font-bold tracking-tight text-gray-900 dark:text-white">
+					{card.text}
+				</h5>
+				<p class="font-normal text-gray-700 dark:text-gray-400 leading-tight">
+					{card.desc}
+				</p>
+			</Card>
+		{/each}
+	</Gallery>
+</Container>

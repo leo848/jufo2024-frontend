@@ -1,3 +1,6 @@
+import { Color } from './color';
+import { Point3 } from './point';
+
 abstract class AbstractColor {
 	abstract color(): Color;
 	abstract point(): Point3;
