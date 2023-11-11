@@ -39,6 +39,28 @@
 		const avg = (modalColor.r + modalColor.g + modalColor.b) / 3;
 		modalColor = new Color(avg, avg, avg);
 	}
+
+	function randomColor() {
+		modalColor = new Color(Math.random(), Math.random(), Math.random());
+	}
+
+	function nicerCss(color: Color) {
+		const { r, g, b } = color.rgbMap((c) => Math.floor(c * 255));
+		return `rgb(<span class="text-red-300">${r}</span>, <span class="text-green-300">${g}</span>, <span class="text-blue-300">${b}</span>)`;
+	}
+
+	function nicerHex(color: Color) {
+		let { r, g, b } = color.rgbMap((c) => Math.floor(c * 255));
+		let str = [r, g, b]
+			.map((comp, index) => {
+				let str = comp.toString(16);
+				if (str.length === 1) str = '0' + str;
+				let color = ['red', 'green', 'blue'][index];
+				return `<span class="text-${color}-300">${str}</span>`;
+			})
+			.reduce((s1, s2) => s1 + s2);
+		return '#' + str;
+	}
 </script>
 
 <div>
@@ -63,13 +85,17 @@
 		>
 			<TabItem open class="w-full">
 				<div class="text-xl" slot="title">RGB</div>
-				<div class="mb-3 text-xl">
-					<code>{modalColor.css()}</code>
+				<div class="mb-4 text-2xl flex flex-row justify-around">
+					<!-- eslint-disable -->
+					<code>{@html nicerCss(modalColor)}</code>
+					<!-- eslint-disable -->
+					<code>{@html nicerHex(modalColor)}</code>
 				</div>
-				<ButtonGroup size="xl">
-					<Button on:click={complement}>Komplementär</Button>
-					<Button on:click={compoSwap}>Komponententausch</Button>
-					<Button on:click={gray}>Grauwert</Button>
+				<ButtonGroup class="space-x-px transition">
+					<Button pill on:click={randomColor}>Zufällig</Button>
+					<Button pill on:click={complement}>Komplementär</Button>
+					<Button pill on:click={compoSwap}>Komponententausch</Button>
+					<Button pill on:click={gray}>Grauwert</Button>
 				</ButtonGroup>
 				{#each comps as comp (comp)}
 					<input

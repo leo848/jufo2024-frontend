@@ -1,0 +1,22 @@
+@font-face {
+	font-family: 'Inter';
+	src: url('fonts/Inter.ttf') format('truetype');
+}
+@font-face {
+	font-family: 'Ubuntu Mono';
+	src: url('fonts/UbuntuMono.ttf') format('truetype');
+}
+.complete {
+	font-family: -apple-system, Inter, Helvetica, Arial, ui-sans-serif, sans-serif;
+}
+
+.complete code {
+	font-family: 'Ubuntu Mono', monospace;
+	background: black;
+	padding: 10px;
+	border-radius: 5px;
+}
+
+.toast {
+	max-width: 40rem !important;
+}

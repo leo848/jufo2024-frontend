@@ -20,6 +20,8 @@
 	import { fly } from 'svelte/transition';
 	import { flip } from 'svelte/animate';
 
+	import './fonts.css';
+
 	let errors: { error: DisplayError; showDetails: boolean }[] = [];
 
 	onMount(() => {
@@ -99,17 +101,3 @@
 	<slot />
 	<!-- </PageTransition> -->
 </div>
-
-<style>
-	@font-face {
-		font-family: 'Inter';
-		src: url('fonts/Inter.ttf') format('truetype');
-	}
-	.complete {
-		font-family: -apple-system, Inter, Helvetica, Arial, ui-sans-serif, sans-serif !important;
-	}
-
-	.toast {
-		max-width: 40rem !important;
-	}
-</style>
