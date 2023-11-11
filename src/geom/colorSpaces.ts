@@ -1,9 +1,11 @@
-import { Color } from './color';
+import { assertNever } from '../server/types';
+import { Color, type RgbComponent } from './color';
 import { Point3 } from './point';
 
 abstract class AbstractColor {
 	abstract color(): Color;
 	abstract point(): Point3;
+	abstract css(): string;
 }
 
 export class RgbColor implements AbstractColor {
@@ -18,7 +20,7 @@ export class RgbColor implements AbstractColor {
 	}
 
 	static fromRgb(r: number, g: number, b: number): RgbColor {
-		return new this(r, g, b);
+		return new RgbColor(r, g, b);
 	}
 
 	color(): Color {
@@ -27,6 +29,52 @@ export class RgbColor implements AbstractColor {
 
 	point(): Point3 {
 		return new Point3(this.r, this.g, this.b);
+	}
+
+	with(comp: RgbComponent, value: number): RgbColor {
+		if (comp === 'r') {
+			return this.with_r(value);
+		} else if (comp === 'g') {
+			return this.with_g(value);
+		} else if (comp === 'b') {
+			return this.with_b(value);
+		} else {
+			assertNever(comp);
+		}
+	}
+
+	with_r(r: number): RgbColor {
+		return new RgbColor(r, this.g, this.b);
+	}
+
+	with_g(g: number): RgbColor {
+		return new RgbColor(this.r, g, this.b);
+	}
+
+	with_b(b: number): RgbColor {
+		return new RgbColor(this.r, this.g, b);
+	}
+
+	map(f: (comp: number) => number): Color {
+		const { r, g, b } = this;
+		return new Color(f(r), f(g), f(b));
+	}
+
+	css(): string {
+		const { r, g, b } = this.map((c) => Math.floor(c * 255));
+		return `rgb(${r}, ${g}, ${b})`;
+	}
+
+	get(comp: RgbComponent): number {
+		if (comp === 'r') {
+			return this.r;
+		} else if (comp === 'g') {
+			return this.g;
+		} else if (comp === 'b') {
+			return this.b;
+		} else {
+			assertNever(comp);
+		}
 	}
 }
 
@@ -47,7 +95,7 @@ export class HsvColor implements AbstractColor {
 		const h = HsvColor.#calculateHue(r, g, b, max, delta);
 		const s = max === 0 ? 0 : delta / max;
 		const v = max;
-		return new this(h, s, v);
+		return new HsvColor(h, s, v);
 	}
 
 	static #calculateHue(r: number, g: number, b: number, max: number, delta: number) {
@@ -100,6 +148,10 @@ export class HsvColor implements AbstractColor {
 
 		return new Point3(radius * Math.cos(angle), radius * Math.sin(angle), height);
 	}
+
+	css(): string {
+		return this.color().rgb().css();
+	}
 }
 
 export class OklabColor implements AbstractColor {
@@ -118,7 +170,7 @@ export class OklabColor implements AbstractColor {
 		const m = Math.cbrt(0.2119034982 * r + 0.6806995451 * g + 0.1073969566 * b);
 		const s = Math.cbrt(0.0883024619 * r + 0.2817188376 * g + 0.6299787005 * b);
 
-		return new this(
+		return new OklabColor(
 			0.2104542553 * l + 0.793617785 * m - 0.0040720468 * s,
 			1.9779984951 * l - 2.428592205 * m + 0.4505937099 * s,
 			0.0259040371 * l + 0.7827717662 * m - 0.808675766 * s
@@ -141,6 +193,11 @@ export class OklabColor implements AbstractColor {
 	point(): Point3 {
 		const { l, a, b } = this;
 		return new Point3(a + 0.5, l, b + 0.5);
+	}
+
+	css(): string {
+		const { l, a, b } = this;
+		return `oklab(${l}, ${a}, ${b})`;
 	}
 }
 

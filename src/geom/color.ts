@@ -1,4 +1,3 @@
-import { assertNever } from '../server/types';
 import { HsvColor, OklabColor, RgbColor } from './colorSpaces';
 
 export class Color {
@@ -26,11 +25,6 @@ export class Color {
 		return construct(this.r, this.g, this.b);
 	}
 
-	css(): string {
-		const { r, g, b } = this.rgbMap((c) => Math.floor(c * 255));
-		return `rgb(${r}, ${g}, ${b})`;
-	}
-
 	rgb(): RgbColor {
 		return this.#toColor(RgbColor.fromRgb);
 	}
@@ -47,40 +41,11 @@ export class Color {
 		return new Color(this.r, this.g, this.b);
 	}
 
-	get(comp: RgbComponent): number {
-		if (comp === 'r') {
-			return this.r;
-		} else if (comp === 'g') {
-			return this.g;
-		} else if (comp === 'b') {
-			return this.b;
-		} else {
-			assertNever(comp);
-		}
-	}
-
-	with(comp: RgbComponent, value: number): Color {
-		if (comp === 'r') {
-			return this.with_r(value);
-		} else if (comp === 'g') {
-			return this.with_g(value);
-		} else if (comp === 'b') {
-			return this.with_b(value);
-		} else {
-			assertNever(comp);
-		}
-	}
-
-	with_r(r: number): Color {
-		return new Color(r, this.g, this.b);
-	}
-
-	with_g(g: number): Color {
-		return new Color(this.r, g, this.b);
-	}
-
-	with_b(b: number): Color {
-		return new Color(this.r, this.g, b);
+	set(color: Color): Color {
+		this.r = color.r;
+		this.g = color.g;
+		this.b = color.b;
+		return this;
 	}
 }
 

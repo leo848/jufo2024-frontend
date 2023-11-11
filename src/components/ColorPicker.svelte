@@ -18,10 +18,10 @@
 	$: for (const key of comps) {
 		const gradient = gradients[key];
 		if (!(gradient.elt && gradient.nopple)) break;
-		const from = modalColor.with(key, 0).css();
-		const to = modalColor.with(key, 1).css();
+		const from = modalColor.rgb().with(key, 0).css();
+		const to = modalColor.rgb().with(key, 1).css();
 		gradient.elt.style.background = `linear-gradient(111deg, ${from} 0%, ${to} 100%)`;
-		gradient.nopple.style.left = `${modalColor.get(key) * 100}%`;
+		gradient.nopple.style.left = `${modalColor.rgb().get(key) * 100}%`;
 	}
 
 	function complement() {
@@ -66,7 +66,7 @@
 <div>
 	<div
 		class="open-button"
-		style={'background-color: ' + selectedColor.css()}
+		style={'background-color: ' + selectedColor.rgb().css()}
 		on:click={() => (modal = true)}
 		role="button"
 		tabindex="0"
@@ -76,7 +76,7 @@
 		<svelte:fragment slot="header">
 			<p class="text-4xl text-bold my-2 text-white">Farbauswahl</p>
 		</svelte:fragment>
-		<div class="color-preview" style={'background-color: ' + modalColor.css()} />
+		<div class="color-preview" style={'background-color: ' + modalColor.rgb().css()} />
 		<Tabs
 			style="full"
 			class="grow ml-8"
