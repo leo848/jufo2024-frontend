@@ -1,14 +1,26 @@
-import { assertNever } from '../server/types';
-import { Color, type RgbComponent } from './color';
+import {
+	Color,
+	type ColorComponent,
+	type HsvComponent,
+	type OklabComponent,
+	type RgbComponent
+} from './color';
 import { Point3 } from './point';
 
-abstract class AbstractColor {
+export abstract class AbstractColor<
+	Self extends AbstractColor<Self, Component>,
+	Component extends ColorComponent
+> {
 	abstract color(): Color;
 	abstract point(): Point3;
 	abstract css(): string;
+	abstract with(key: Component, value: number): Self;
+	abstract get(key: Component): number;
+	abstract neededGradientPoints(key: Component): number;
+	abstract clone(): Self;
 }
 
-export class RgbColor implements AbstractColor {
+export class RgbColor implements AbstractColor<RgbColor, RgbComponent> {
 	r: number;
 	g: number;
 	b: number;
@@ -17,6 +29,10 @@ export class RgbColor implements AbstractColor {
 		this.r = r;
 		this.g = g;
 		this.b = b;
+	}
+
+	clone() {
+		return new RgbColor(this.r, this.g, this.b);
 	}
 
 	static fromRgb(r: number, g: number, b: number): RgbColor {
@@ -32,27 +48,9 @@ export class RgbColor implements AbstractColor {
 	}
 
 	with(comp: RgbComponent, value: number): RgbColor {
-		if (comp === 'r') {
-			return this.with_r(value);
-		} else if (comp === 'g') {
-			return this.with_g(value);
-		} else if (comp === 'b') {
-			return this.with_b(value);
-		} else {
-			assertNever(comp);
-		}
-	}
-
-	with_r(r: number): RgbColor {
-		return new RgbColor(r, this.g, this.b);
-	}
-
-	with_g(g: number): RgbColor {
-		return new RgbColor(this.r, g, this.b);
-	}
-
-	with_b(b: number): RgbColor {
-		return new RgbColor(this.r, this.g, b);
+		const color = this.clone();
+		color[comp] = value;
+		return color;
 	}
 
 	map(f: (comp: number) => number): Color {
@@ -65,20 +63,16 @@ export class RgbColor implements AbstractColor {
 		return `rgb(${r}, ${g}, ${b})`;
 	}
 
-	get(comp: RgbComponent): number {
-		if (comp === 'r') {
-			return this.r;
-		} else if (comp === 'g') {
-			return this.g;
-		} else if (comp === 'b') {
-			return this.b;
-		} else {
-			assertNever(comp);
-		}
+	get(key: 'r' | 'g' | 'b'): number {
+		return this[key];
+	}
+
+	neededGradientPoints(): number {
+		return 2;
 	}
 }
 
-export class HsvColor implements AbstractColor {
+export class HsvColor implements AbstractColor<HsvColor, HsvComponent> {
 	h: number; // 0..1
 	s: number; // 0..1
 	v: number; // 0..1
@@ -89,11 +83,15 @@ export class HsvColor implements AbstractColor {
 		this.v = v;
 	}
 
+	clone(): HsvColor {
+		return new HsvColor(this.h, this.s, this.v);
+	}
+
 	static fromRgb(r: number, g: number, b: number): HsvColor {
 		const [max, min] = [Math.max(r, g, b), Math.min(r, g, b)];
 		const delta = max - min;
-		const h = HsvColor.#calculateHue(r, g, b, max, delta);
-		const s = max === 0 ? 0 : delta / max;
+		const h = delta < 0.001 ? 0 : HsvColor.#calculateHue(r, g, b, max, delta);
+		const s = max < 0.001 ? 0 : delta / max;
 		const v = max;
 		return new HsvColor(h, s, v);
 	}
@@ -101,11 +99,11 @@ export class HsvColor implements AbstractColor {
 	static #calculateHue(r: number, g: number, b: number, max: number, delta: number) {
 		const sixty_deg = 1 / 6;
 		if (max === r) {
-			return (sixty_deg * ((g - b) / delta)) % 6;
+			return sixty_deg * (((g - b) / delta) % 6);
 		} else if (max === g) {
-			return sixty_deg * ((b - r) / delta) + 2;
+			return sixty_deg * ((b - r) / delta + 2);
 		} else if (max === b) {
-			return sixty_deg * ((r - g) / delta) + 4;
+			return sixty_deg * ((r - g) / delta + 4);
 		} else throw new Error('Invalid value for max');
 	}
 
@@ -133,10 +131,10 @@ export class HsvColor implements AbstractColor {
 			return [0, x, c];
 		} else if (hue < 5) {
 			return [x, 0, c];
-		} else if (hue < 6) {
+		} else if (hue <= 6) {
 			return [c, 0, x];
 		} else {
-			throw new Error('Invalid hue');
+			throw new Error('Invalid hue: ' + hue);
 		}
 	}
 
@@ -152,9 +150,24 @@ export class HsvColor implements AbstractColor {
 	css(): string {
 		return this.color().rgb().css();
 	}
+
+	with(comp: HsvComponent, value: number): HsvColor {
+		const color = this.clone();
+		color[comp] = value;
+		return color;
+	}
+
+	get(key: 'h' | 's' | 'v'): number {
+		return this[key];
+	}
+
+	neededGradientPoints(key: 'h' | 's' | 'v'): number {
+		if (key === 'h') return 38;
+		else return 2;
+	}
 }
 
-export class OklabColor implements AbstractColor {
+export class OklabColor implements AbstractColor<OklabColor, OklabComponent> {
 	l: number;
 	a: number;
 	b: number;
@@ -163,6 +176,10 @@ export class OklabColor implements AbstractColor {
 		this.l = l;
 		this.a = a;
 		this.b = b;
+	}
+
+	clone(): OklabColor {
+		return new OklabColor(this.l, this.a, this.b);
 	}
 
 	static fromRgb(r: number, g: number, b: number): OklabColor {
@@ -199,9 +216,31 @@ export class OklabColor implements AbstractColor {
 		const { l, a, b } = this;
 		return `oklab(${l}, ${a}, ${b})`;
 	}
+
+	with(comp: OklabComponent, value: number): OklabColor {
+		const color = this.clone();
+		color[comp] = value;
+		return color;
+	}
+
+	get(key: 'l' | 'a' | 'b'): number {
+		return this[key];
+	}
+
+	neededGradientPoints(key: 'l' | 'a' | 'b'): number {
+		if (key === 'l') {
+			return 2;
+		} else {
+			return 3;
+		}
+	}
 }
 
-export const colorSpaces = {
+export const colorSpaces = ['rgb', 'hsv', 'oklab'] as const;
+
+export type ColorSpace = (typeof colorSpaces)[number];
+
+export const colorSpaceClasses = {
 	rgb: RgbColor,
 	hsv: HsvColor,
 	oklab: OklabColor

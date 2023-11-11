@@ -2,30 +2,59 @@
 	import { Button, ButtonGroup, Modal, TabItem, Tabs } from 'flowbite-svelte';
 	import { Color } from '../geom/color';
 	import { scale } from 'svelte/transition';
+	import { HsvColor, OklabColor, RgbColor, colorSpaces } from '../geom/colorSpaces';
 
 	let selectedColor = new Color(0.5, 0.1, 0.0);
 	let modal = false;
 
 	let modalColor = selectedColor.clone();
 
-	let gradients: {
-		r: { elt?: HTMLElement; nopple?: HTMLElement };
-		g: { elt?: HTMLElement; nopple?: HTMLElement };
-		b: { elt?: HTMLElement; nopple?: HTMLElement };
-	} = { r: {}, g: {}, b: {} };
-	const comps = ['r', 'g', 'b'] as const;
-	const compNames = { r: 'Rot', g: 'Grün', b: 'Blau' } as const;
-	$: for (const key of comps) {
-		const gradient = gradients[key];
-		if (!(gradient.elt && gradient.nopple)) break;
-		const from = modalColor.rgb().with(key, 0).css();
-		const to = modalColor.rgb().with(key, 1).css();
-		gradient.elt.style.background = `linear-gradient(111deg, ${from} 0%, ${to} 100%)`;
-		gradient.nopple.style.left = `${modalColor.rgb().get(key) * 100}%`;
+	const comps = {
+		rgb: ['r', 'g', 'b'],
+		hsv: ['h', 's', 'v'],
+		oklab: ['l', 'a', 'b']
+	} as const;
+
+	type Grad = { elt?: HTMLElement; nopple?: HTMLElement };
+	let gradients: { [Key in keyof typeof comps]: Record<(typeof comps)[Key][number], Grad> } = {
+		rgb: { r: {}, g: {}, b: {} },
+		hsv: { h: {}, s: {}, v: {} },
+		oklab: { l: {}, a: {}, b: {} }
+	};
+
+	const compNames = {
+		rgb: { r: 'Rot', g: 'Grün', b: 'Blau' },
+		hsv: { h: 'Farbton (Hue)', s: 'Sättigung', v: 'Farbwert' },
+		oklab: { l: 'Helligkeit (Lightness)', a: 'Farbwert A', b: 'Farbwert B' }
+	} as const;
+	$: for (const space of colorSpaces) {
+		let colorSpace = modalColor.space(space);
+		for (const rawKey of comps[space]) {
+			const key = rawKey as keyof (typeof gradients)[typeof space];
+			if (!gradients[space] || !gradients[space][key]) continue;
+			const gradient = gradients[space][key] as Grad;
+			if (!(gradient.elt && gradient.nopple)) continue;
+
+			const neededAmount = colorSpace.neededGradientPoints(key);
+			const gradientPoints = new Array(neededAmount);
+			for (let i = 0; i < neededAmount; i++) {
+				const value = i / (neededAmount - 1);
+				gradientPoints[i] = colorSpace.with(key, value).css();
+			}
+			gradient.elt.style.background = `linear-gradient(111deg, ${gradientPoints.join(', ')})`;
+
+			gradient.nopple.style.left = `${colorSpace.get(key) * 100}%`;
+		}
 	}
 
+	$: proxies = {
+		rgb: modalColor.proxy(RgbColor),
+		hsv: modalColor.proxy(HsvColor),
+		oklab: modalColor.proxy(OklabColor)
+	} as const;
+
 	function complement() {
-		modalColor = modalColor.rgbMap((c) => 1 - c);
+		modalColor = modalColor.rgbMap((c: number) => 1 - c);
 	}
 
 	function compoSwap() {
@@ -97,23 +126,37 @@
 					<Button pill on:click={compoSwap}>Komponententausch</Button>
 					<Button pill on:click={gray}>Grauwert</Button>
 				</ButtonGroup>
-				{#each comps as comp (comp)}
+				{#each comps.rgb as comp (comp)}
 					<input
 						type="range"
 						min="0"
 						max="1"
 						step="0.001"
 						class="gr-range -mb-8"
-						bind:value={modalColor[comp]}
+						bind:value={proxies.rgb[comp]}
 					/>
-					<div bind:this={gradients[comp].elt} class="gradient">
-						<div class="gr-nopple" bind:this={gradients[comp].nopple} />
+					<div bind:this={gradients.rgb[comp].elt} class="gradient">
+						<div class="gr-nopple" bind:this={gradients.rgb[comp].nopple} />
 					</div>
-					<div>{compNames[comp]} = {Math.round(modalColor[comp] * 100)}%</div>
+					<div>{compNames.rgb[comp]} = {Math.round(proxies.rgb[comp] * 100)}%</div>
 				{/each}
 			</TabItem>
 			<TabItem class="w-full">
 				<div class="text-xl" slot="title">HSV</div>
+				{#each comps.hsv as comp (comp)}
+					<input
+						type="range"
+						min="0"
+						max="1"
+						step="0.001"
+						class="gr-range -mb-8"
+						bind:value={proxies.hsv[comp]}
+					/>
+					<div bind:this={gradients.hsv[comp].elt} class="gradient">
+						<div class="gr-nopple" bind:this={gradients.hsv[comp].nopple} />
+					</div>
+					<div>{compNames.hsv[comp]} = {Math.round(proxies.hsv[comp] * 100)}%</div>
+				{/each}
 			</TabItem>
 			<TabItem class="w-full">
 				<div class="text-xl" slot="title">OKLAB</div>
