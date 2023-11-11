@@ -54,39 +54,19 @@
 					<code>{modalColor.css()}</code>
 				</div>
 				<Button color="light" on:click={complement}>Komplementär</Button>
-				<input
-					type="range"
-					min="0"
-					max="1"
-					step="0.001"
-					class="gr-range -mb-8"
-					bind:value={modalColor.r}
-				/>
-				<div bind:this={gradients.r.elt} class="gradient">
-					<div class="gr-nopple" bind:this={gradients.r.nopple} />
-				</div>
-				<input
-					type="range"
-					min="0"
-					max="1"
-					step="0.001"
-					class="gr-range -mb-8"
-					bind:value={modalColor.g}
-				/>
-				<div bind:this={gradients.g.elt} class="gradient">
-					<div class="gr-nopple" bind:this={gradients.g.nopple} />
-				</div>
-				<input
-					type="range"
-					min="0"
-					max="1"
-					step="0.001"
-					class="gr-range -mb-8"
-					bind:value={modalColor.b}
-				/>
-				<div bind:this={gradients.b.elt} class="gradient">
-					<div class="gr-nopple" bind:this={gradients.b.nopple} />
-				</div>
+				{#each comps as comp (comp)}
+					<input
+						type="range"
+						min="0"
+						max="1"
+						step="0.001"
+						class="gr-range -mb-8"
+						bind:value={modalColor[comp]}
+					/>
+					<div bind:this={gradients[comp].elt} class="gradient">
+						<div class="gr-nopple" bind:this={gradients[comp].nopple} />
+					</div>
+				{/each}
 			</TabItem>
 			<TabItem class="w-full">
 				<div class="text-xl" slot="title">HSV</div>
