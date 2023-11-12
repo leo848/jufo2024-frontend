@@ -232,10 +232,11 @@ export class OklabColor implements AbstractColor<OklabColor, OklabComponent> {
 	}
 
 	css(): string {
-		const l = this.l;
-		const a = rangeMap(this.a, [0, 1], [-100, 100]);
-		const b = rangeMap(this.b, [0, 1], [-100, 100]);
-		return `oklab(${l} ${a}% ${b}%)`;
+		// const l = this.l;
+		// const a = rangeMap(this.a, [0, 1], [-100, 100]);
+		// const b = rangeMap(this.b, [0, 1], [-100, 100]);
+		// return `oklab(${l} ${a}% ${b}%)`;
+		return this.color().rgb().css();
 	}
 
 	fancyCss(): string {
