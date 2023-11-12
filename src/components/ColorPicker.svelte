@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { Button, ButtonGroup, Modal, TabItem, Tabs } from 'flowbite-svelte';
 	import { Color } from '../geom/color';
-	import { scale } from 'svelte/transition';
+	import { fly } from 'svelte/transition';
 	import { HsvColor, OklabColor, RgbColor, colorSpaces } from '../geom/colorSpaces';
 
 	export let value: Color;
@@ -92,23 +92,28 @@
 	}
 </script>
 
-<div class="inline-block">
+<div class="inline-block transition color-picker">
 	<div
-		class="open-button inline-block"
+		class="open-button inline-block transition"
 		style={'background-color: ' + value.rgb().css()}
 		on:click={() => (modal = true)}
 		role="button"
 		tabindex="0"
 		on:keypress={() => {}}
 	/>
-	<Modal bind:open={modal} transition={scale}>
+	<Modal
+		bind:open={modal}
+		transition={(elt) => fly(elt, { y: -300 })}
+		backdropClass="modal-background"
+		class="backdrop-blur"
+	>
 		<svelte:fragment slot="header">
 			<p class="text-4xl text-bold my-2 text-white">Farbauswahl</p>
 		</svelte:fragment>
 		<div class="color-preview" style={'background-color: ' + modalColor.rgb().css()} />
 		<Tabs
 			style="full"
-			class="grow ml-8"
+			class="grow ml-8 border-solid border-gray-500 border-2"
 			defaultClass="flex rounded-lg divide-x divide-gray-200 shadow dark:divide-gray-700"
 			inactiveClasses="dark:bg-gray-600"
 		>
@@ -195,6 +200,14 @@
 </div>
 
 <style>
+	:global(.color-picker .modal-background) {
+		z-index: 40;
+		inset: 0;
+		position: fixed;
+		background: #111;
+		opacity: 0.5;
+	}
+
 	.open-button,
 	.color-preview {
 		border-width: 3px;
