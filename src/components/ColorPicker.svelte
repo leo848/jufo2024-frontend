@@ -73,11 +73,6 @@
 		modalColor = new Color(Math.random(), Math.random(), Math.random());
 	}
 
-	function nicerCss(color: Color) {
-		const { r, g, b } = color.rgbMap((c) => Math.floor(c * 255));
-		return `rgb(<span class="text-red-300">${r}</span>, <span class="text-green-300">${g}</span>, <span class="text-blue-300">${b}</span>)`;
-	}
-
 	function nicerHex(color: Color) {
 		let { r, g, b } = color.rgbMap((c) => Math.floor(c * 255));
 		let str = [r, g, b]
@@ -116,7 +111,7 @@
 				<div class="text-xl" slot="title">RGB</div>
 				<div class="mb-4 text-2xl flex flex-row justify-around">
 					<!-- eslint-disable -->
-					<code>{@html nicerCss(modalColor)}</code>
+					<code>{@html modalColor.space("rgb").fancyCss()}</code>
 					<!-- eslint-disable -->
 					<code>{@html nicerHex(modalColor)}</code>
 				</div>
