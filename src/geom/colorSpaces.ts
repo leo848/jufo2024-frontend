@@ -1,3 +1,4 @@
+import { constrain, rangeMap } from '../utils/math';
 import {
 	Color,
 	type ColorComponent,
@@ -26,9 +27,9 @@ export class RgbColor implements AbstractColor<RgbColor, RgbComponent> {
 	b: number;
 
 	constructor(r: number, g: number, b: number) {
-		this.r = r;
-		this.g = g;
-		this.b = b;
+		this.r = constrain(r);
+		this.g = constrain(g);
+		this.b = constrain(b);
 	}
 
 	clone() {
@@ -78,9 +79,9 @@ export class HsvColor implements AbstractColor<HsvColor, HsvComponent> {
 	v: number; // 0..1
 
 	constructor(h: number, s: number, v: number) {
-		this.h = h;
-		this.s = s;
-		this.v = v;
+		this.h = constrain(h);
+		this.s = constrain(s);
+		this.v = constrain(v);
 	}
 
 	clone(): HsvColor {
@@ -173,9 +174,9 @@ export class OklabColor implements AbstractColor<OklabColor, OklabComponent> {
 	b: number;
 
 	constructor(l: number, a: number, b: number) {
-		this.l = l;
-		this.a = a;
-		this.b = b;
+		this.l = constrain(l);
+		this.a = constrain(a);
+		this.b = constrain(b);
 	}
 
 	clone(): OklabColor {
@@ -187,18 +188,22 @@ export class OklabColor implements AbstractColor<OklabColor, OklabComponent> {
 		const m = Math.cbrt(0.2119034982 * r + 0.6806995451 * g + 0.1073969566 * b);
 		const s = Math.cbrt(0.0883024619 * r + 0.2817188376 * g + 0.6299787005 * b);
 
-		return new OklabColor(
-			0.2104542553 * l + 0.793617785 * m - 0.0040720468 * s,
-			1.9779984951 * l - 2.428592205 * m + 0.4505937099 * s,
-			0.0259040371 * l + 0.7827717662 * m - 0.808675766 * s
-		);
+		const l1 = 0.2104542553 * l + 0.793617785 * m - 0.0040720468 * s;
+		const a1 = 1.9779984951 * l - 2.428592205 * m + 0.4505937099 * s;
+		const b1 = 0.0259040371 * l + 0.7827717662 * m - 0.808675766 * s;
+
+		return new OklabColor(l1, rangeMap(a1, [-0.4, 0.4], [0, 1]), rangeMap(b1, [-0.4, 0.4], [0, 1]));
 	}
 
 	color(): Color {
+		const l0 = this.l;
+		const a0 = rangeMap(this.a, [0, 1], [-0.4, 0.4]);
+		const b0 = rangeMap(this.b, [0, 1], [-0.4, 0.4]);
+
 		const cube = (x: number) => x * x * x;
-		const l = cube(this.l + 0.3963377774 * this.a + 0.2158037573 * this.b);
-		const m = cube(this.l - 0.1055613458 * this.a - 0.0638541728 * this.b);
-		const s = cube(this.l - 0.0894841775 * this.a - 1.291485548 * this.b);
+		const l = cube(l0 + 0.3963377774 * a0 + 0.2158037573 * b0);
+		const m = cube(l0 - 0.1055613458 * a0 - 0.0638541728 * b0);
+		const s = cube(l0 - 0.0894841775 * a0 - 1.291485548 * b0);
 
 		return new Color(
 			+4.0767416621 * l - 3.3077115913 * m + 0.2309699292 * s,
@@ -213,8 +218,10 @@ export class OklabColor implements AbstractColor<OklabColor, OklabComponent> {
 	}
 
 	css(): string {
-		const { l, a, b } = this;
-		return `oklab(${l}, ${a}, ${b})`;
+		const l = this.l;
+		const a = rangeMap(this.a, [0, 1], [-100, 100]);
+		const b = rangeMap(this.b, [0, 1], [-100, 100]);
+		return `oklab(${l} ${a}% ${b}%)`;
 	}
 
 	with(comp: OklabComponent, value: number): OklabColor {
@@ -227,12 +234,8 @@ export class OklabColor implements AbstractColor<OklabColor, OklabComponent> {
 		return this[key];
 	}
 
-	neededGradientPoints(key: 'l' | 'a' | 'b'): number {
-		if (key === 'l') {
-			return 2;
-		} else {
-			return 3;
-		}
+	neededGradientPoints(): number {
+		return 20;
 	}
 }
 

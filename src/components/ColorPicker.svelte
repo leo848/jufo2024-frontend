@@ -160,6 +160,20 @@
 			</TabItem>
 			<TabItem class="w-full">
 				<div class="text-xl" slot="title">OKLAB</div>
+				{#each comps.oklab as comp (comp)}
+					<input
+						type="range"
+						min="0"
+						max="1"
+						step="0.001"
+						class="gr-range -mb-8"
+						bind:value={proxies.oklab[comp]}
+					/>
+					<div bind:this={gradients.oklab[comp].elt} class="gradient">
+						<div class="gr-nopple" bind:this={gradients.oklab[comp].nopple} />
+					</div>
+					<div>{compNames.oklab[comp]} = {Math.round(proxies.oklab[comp] * 100)}%</div>
+				{/each}
 			</TabItem>
 		</Tabs>
 		<svelte:fragment slot="footer">
