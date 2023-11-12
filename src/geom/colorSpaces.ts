@@ -248,7 +248,11 @@ export class OklabColor implements AbstractColor<OklabColor, OklabComponent> {
 		const l = Math.floor(this.l * 100);
 		const a = rangeMap(this.a, [0, 1], [-0.4, 0.4]).toFixed(2);
 		const b = rangeMap(this.b, [0, 1], [-0.4, 0.4]).toFixed(2);
-		return `oklab(${l}% ${a} ${b})`;
+		// const aColor = this.a >= 0.5 ? "red-300" : "green-300";
+		// const bColor = this.b >= 0.5 ? "amber-300": "blue-300";
+		const aStyle = `color: color-mix(in oklab, white, oklab(0.5 ${a} 0))`;
+		const bStyle = `color: color-mix(in oklab, white, oklab(0.5 0 ${b}))`;
+		return `oklab(${l}% <span style="${aStyle}">${a}</span> <span style="${bStyle}">${b}</span>)`;
 	}
 
 	with(comp: OklabComponent, value: number): OklabColor {
