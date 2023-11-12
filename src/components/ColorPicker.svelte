@@ -160,6 +160,12 @@
 			</TabItem>
 			<TabItem class="w-full">
 				<div class="text-xl" slot="title">OKLAB</div>
+				<div class="mb-4 text-2xl flex flex-row justify-around">
+					<!-- eslint-disable -->
+					<code>{@html modalColor.space('oklab').fancyCss()}</code>
+					<!-- eslint-disable -->
+					<code>{@html nicerHex(modalColor)}</code>
+				</div>
 				{#each comps.oklab as comp (comp)}
 					<input
 						type="range"

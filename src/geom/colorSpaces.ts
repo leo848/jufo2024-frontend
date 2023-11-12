@@ -246,9 +246,9 @@ export class OklabColor implements AbstractColor<OklabColor, OklabComponent> {
 
 	fancyCss(): string {
 		const l = Math.floor(this.l * 100);
-		const a = Math.floor(rangeMap(this.a, [0, 1], [-100, 100]));
-		const b = Math.floor(rangeMap(this.b, [0, 1], [-100, 100]));
-		return `oklab(${l}% ${a}% ${b}%)`;
+		const a = rangeMap(this.a, [0, 1], [-0.4, 0.4]).toFixed(3);
+		const b = rangeMap(this.b, [0, 1], [-0.4, 0.4]).toFixed(2);
+		return `oklab(${l}% ${a} ${b})`;
 	}
 
 	with(comp: OklabComponent, value: number): OklabColor {
