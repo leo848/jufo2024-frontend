@@ -4,10 +4,10 @@
 	import { scale } from 'svelte/transition';
 	import { HsvColor, OklabColor, RgbColor, colorSpaces } from '../geom/colorSpaces';
 
-	let selectedColor = new Color(0.5, 0.1, 0.0);
+	export let value: Color;
 	let modal = false;
 
-	let modalColor = selectedColor.clone();
+	let modalColor = value.clone();
 
 	const comps = {
 		rgb: ['r', 'g', 'b'],
@@ -92,10 +92,10 @@
 	}
 </script>
 
-<div>
+<div class="inline-block">
 	<div
-		class="open-button"
-		style={'background-color: ' + selectedColor.rgb().css()}
+		class="open-button inline-block"
+		style={'background-color: ' + value.rgb().css()}
 		on:click={() => (modal = true)}
 		role="button"
 		tabindex="0"
@@ -185,7 +185,7 @@
 		<svelte:fragment slot="footer">
 			<Button
 				on:click={() => {
-					selectedColor = modalColor;
+					value = modalColor;
 					modal = false;
 				}}>Auswählen</Button
 			>
