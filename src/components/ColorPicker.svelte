@@ -111,7 +111,7 @@
 				<div class="text-xl" slot="title">RGB</div>
 				<div class="mb-4 text-2xl flex flex-row justify-around">
 					<!-- eslint-disable -->
-					<code>{@html modalColor.space("rgb").fancyCss()}</code>
+					<code>{@html modalColor.space('rgb').fancyCss()}</code>
 					<!-- eslint-disable -->
 					<code>{@html nicerHex(modalColor)}</code>
 				</div>

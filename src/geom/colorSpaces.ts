@@ -238,7 +238,7 @@ export class OklabColor implements AbstractColor<OklabColor, OklabComponent> {
 		const l = Math.floor(this.l * 100);
 		const a = Math.floor(rangeMap(this.a, [0, 1], [-100, 100]));
 		const b = Math.floor(rangeMap(this.b, [0, 1], [-100, 100]));
-		return `oklab(${l}% ${a}% ${b}%)`
+		return `oklab(${l}% ${a}% ${b}%)`;
 	}
 
 	with(comp: OklabComponent, value: number): OklabColor {
