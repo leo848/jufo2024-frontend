@@ -55,9 +55,9 @@ export class RgbColor implements AbstractColor<RgbColor, RgbComponent> {
 		return color;
 	}
 
-	map(f: (comp: number) => number): Color {
+	map(f: (comp: number) => number): RgbColor {
 		const { r, g, b } = this;
-		return new Color(f(r), f(g), f(b));
+		return new RgbColor(f(r), f(g), f(b));
 	}
 
 	css(): string {

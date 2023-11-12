@@ -58,14 +58,16 @@
 	}
 
 	function compoSwap() {
-		const temp = modalColor.r;
-		modalColor.r = modalColor.b;
-		modalColor.b = modalColor.g;
-		modalColor.g = temp;
+		const proxy = modalColor.proxy(RgbColor);
+		const temp = proxy.r;
+		proxy.r = proxy.b;
+		proxy.b = proxy.g;
+		proxy.g = temp;
 	}
 
 	function gray() {
-		const avg = (modalColor.r + modalColor.g + modalColor.b) / 3;
+		let { r, g, b } = modalColor.rgb();
+		const avg = (r + g + b) / 3;
 		modalColor = new Color(avg, avg, avg);
 	}
 
@@ -74,7 +76,7 @@
 	}
 
 	function nicerHex(color: Color) {
-		let { r, g, b } = color.rgbMap((c) => Math.floor(c * 255));
+		let { r, g, b } = color.rgb().map((c: number) => Math.floor(c * 255));
 		let str = [r, g, b]
 			.map((comp, index) => {
 				let str = comp.toString(16);
