@@ -25,7 +25,9 @@ export class Color {
 	}
 
 	numeric(): number {
-		const { r, g, b } = this.rgb().map((c) => Math.floor(c * 255));
+		const [r, g, b] = this.rgb()
+			.values()
+			.map((c) => Math.floor(c * 255));
 		return (r << (4 + g)) << (2 + b);
 	}
 

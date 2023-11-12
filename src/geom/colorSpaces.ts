@@ -19,6 +19,7 @@ export abstract class AbstractColor<
 	abstract with(key: Component, value: number): Self;
 	abstract get(key: Component): number;
 	abstract neededGradientPoints(key: Component): number;
+	abstract values(): [number, number, number];
 	abstract clone(): Self;
 }
 
@@ -55,13 +56,8 @@ export class RgbColor implements AbstractColor<RgbColor, RgbComponent> {
 		return color;
 	}
 
-	map(f: (comp: number) => number): RgbColor {
-		const { r, g, b } = this;
-		return new RgbColor(f(r), f(g), f(b));
-	}
-
 	css(): string {
-		const { r, g, b } = this.map((c) => Math.floor(c * 255));
+		const [r, g, b] = this.values().map((c) => Math.floor(c * 255));
 		return `rgb(${r}, ${g}, ${b})`;
 	}
 
@@ -74,8 +70,12 @@ export class RgbColor implements AbstractColor<RgbColor, RgbComponent> {
 	}
 
 	fancyCss(): string {
-		const { r, g, b } = this.map((c) => Math.floor(c * 255));
+		const [r, g, b] = this.values().map((c) => Math.floor(c * 255));
 		return `rgb(<span class="text-red-300">${r}</span>, <span class="text-green-300">${g}</span>, <span class="text-blue-300">${b}</span>)`;
+	}
+
+	values(): [number, number, number] {
+		return [this.r, this.g, this.b];
 	}
 }
 
@@ -176,6 +176,10 @@ export class HsvColor implements AbstractColor<HsvColor, HsvComponent> {
 		if (key === 'h') return 38;
 		else return 2;
 	}
+
+	values(): [number, number, number] {
+		return [this.h, this.s, this.v];
+	}
 }
 
 export class OklabColor implements AbstractColor<OklabColor, OklabComponent> {
@@ -253,6 +257,10 @@ export class OklabColor implements AbstractColor<OklabColor, OklabComponent> {
 
 	neededGradientPoints(): number {
 		return 20;
+	}
+
+	values(): [number, number, number] {
+		return [this.l, this.a, this.b];
 	}
 }
 

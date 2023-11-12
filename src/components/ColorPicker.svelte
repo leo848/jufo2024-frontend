@@ -76,7 +76,10 @@
 	}
 
 	function nicerHex(color: Color) {
-		let { r, g, b } = color.rgb().map((c: number) => Math.floor(c * 255));
+		let [r, g, b] = color
+			.rgb()
+			.values()
+			.map((c: number) => Math.floor(c * 255));
 		let str = [r, g, b]
 			.map((comp, index) => {
 				let str = comp.toString(16);
