@@ -6,6 +6,7 @@ import {
 	type OklabComponent,
 	type RgbComponent
 } from './color';
+import { toGamma, toLinear } from './linearity';
 import { Point3 } from './point';
 
 export abstract class AbstractColor<
@@ -198,9 +199,11 @@ export class OklabColor implements AbstractColor<OklabColor, OklabComponent> {
 	}
 
 	static fromRgb(r: number, g: number, b: number): OklabColor {
-		const l = Math.cbrt(0.4122214708 * r + 0.5363325363 * g + 0.0514459929 * b);
-		const m = Math.cbrt(0.2119034982 * r + 0.6806995451 * g + 0.1073969566 * b);
-		const s = Math.cbrt(0.0883024619 * r + 0.2817188376 * g + 0.6299787005 * b);
+		const [linearR, linearG, linearB] = [r, g, b].map(toLinear);
+
+		const l = Math.cbrt(0.4122214708 * linearR + 0.5363325363 * linearG + 0.0514459929 * linearB);
+		const m = Math.cbrt(0.2119034982 * linearR + 0.6806995451 * linearG + 0.1073969566 * linearB);
+		const s = Math.cbrt(0.0883024619 * linearR + 0.2817188376 * linearG + 0.6299787005 * linearB);
 
 		const l1 = 0.2104542553 * l + 0.793617785 * m - 0.0040720468 * s;
 		const a1 = 1.9779984951 * l - 2.428592205 * m + 0.4505937099 * s;
@@ -219,11 +222,13 @@ export class OklabColor implements AbstractColor<OklabColor, OklabComponent> {
 		const m = cube(l0 - 0.1055613458 * a0 - 0.0638541728 * b0);
 		const s = cube(l0 - 0.0894841775 * a0 - 1.291485548 * b0);
 
-		return new Color(
-			+4.0767416621 * l - 3.3077115913 * m + 0.2309699292 * s,
-			-1.2684380046 * l + 2.6097574011 * m - 0.3413193965 * s,
-			-0.0041960863 * l - 0.7034186147 * m + 1.707614701 * s
-		);
+		const linearR = +4.0767416621 * l - 3.3077115913 * m + 0.2309699292 * s;
+		const linearG = -1.2684380046 * l + 2.6097574011 * m - 0.3413193965 * s;
+		const linearB = -0.0041960863 * l - 0.7034186147 * m + 1.707614701 * s;
+
+		const [r, g, b] = [linearR, linearG, linearB].map(toGamma);
+
+		return new Color(r, g, b);
 	}
 
 	point(): Point3 {

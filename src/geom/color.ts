@@ -99,6 +99,8 @@ export class Color {
 	}
 }
 
+window.Myc = Color;
+
 export const rgbComponentSchema = z.enum(['r', 'g', 'b']);
 export type RgbComponent = z.infer<typeof rgbComponentSchema>;
 export const hsvComponentSchema = z.enum(['h', 's', 'v']);
