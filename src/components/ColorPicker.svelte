@@ -1,13 +1,21 @@
 <script lang="ts">
 	import { Button, ButtonGroup, Modal, TabItem, Tabs } from 'flowbite-svelte';
 	import { Color } from '../geom/color';
-	import { fly } from 'svelte/transition';
-	import { HsvColor, OklabColor, RgbColor, colorSpaces } from '../geom/colorSpaces';
+	import { blur, fly } from 'svelte/transition';
+	import {
+		HsvColor,
+		OklabColor,
+		RgbColor,
+		colorSpaces,
+		type ColorSpace
+	} from '../geom/colorSpaces';
 
 	export let value: Color;
 	let modal = false;
 
 	let modalColor = value.clone();
+
+	let space: ColorSpace = 'rgb';
 
 	const comps = {
 		rgb: ['r', 'g', 'b'],
@@ -90,6 +98,10 @@
 			.reduce((s1, s2) => s1 + s2);
 		return '#' + str;
 	}
+
+	function fancyCss(color: Color) {
+		return color.space(space).fancyCss();
+	}
 </script>
 
 <div class="inline-block transition color-picker">
@@ -110,21 +122,32 @@
 		<svelte:fragment slot="header">
 			<p class="text-4xl text-bold my-2 text-white">Farbauswahl</p>
 		</svelte:fragment>
-		<div class="color-preview" style={'background-color: ' + modalColor.rgb().css()} />
+		<div class="flex flex-row gap-8">
+			<div class="color-preview" style={'background-color: ' + modalColor.rgb().css()} />
+			<div class="flex flex-col grow justify-between">
+				<div class="flex justify-start">
+					<h3 class="text-3xl">Farbname</h3>
+				</div>
+				<div class="flex flex-row justify-start gap-4">
+					<!-- eslint-disable -->
+					<code class="text-2xl">{@html nicerHex(modalColor)}</code>
+					{#key [space, fancyCss(modalColor)]}
+						{#if fancyCss(modalColor)}
+							<code class="text-2xl" out:blur={{ duration: 500 }}>{@html fancyCss(modalColor)}</code
+							>
+						{/if}
+					{/key}
+				</div>
+			</div>
+		</div>
 		<Tabs
 			style="full"
 			class="grow ml-8 border-solid border-gray-500 border-2"
 			defaultClass="flex rounded-lg divide-x divide-gray-200 shadow dark:divide-gray-700"
 			inactiveClasses="dark:bg-gray-600"
 		>
-			<TabItem open class="w-full">
+			<TabItem open class="w-full" on:click={() => (space = 'rgb')}>
 				<div class="text-xl" slot="title">RGB</div>
-				<div class="mb-4 text-2xl flex flex-row justify-around">
-					<!-- eslint-disable -->
-					<code>{@html modalColor.space('rgb').fancyCss()}</code>
-					<!-- eslint-disable -->
-					<code>{@html nicerHex(modalColor)}</code>
-				</div>
 				<ButtonGroup class="space-x-px transition">
 					<Button pill on:click={randomColor}>Zufällig</Button>
 					<Button pill on:click={complement}>Komplementär</Button>
@@ -146,7 +169,7 @@
 					<div>{compNames.rgb[comp]} = {Math.round(proxies.rgb[comp] * 100)}%</div>
 				{/each}
 			</TabItem>
-			<TabItem class="w-full">
+			<TabItem class="w-full" on:click={() => (space = 'hsv')}>
 				<div class="text-xl" slot="title">HSV</div>
 				{#each comps.hsv as comp (comp)}
 					<input
@@ -163,14 +186,8 @@
 					<div>{compNames.hsv[comp]} = {Math.round(proxies.hsv[comp] * 100)}%</div>
 				{/each}
 			</TabItem>
-			<TabItem class="w-full">
+			<TabItem class="w-full" on:click={() => (space = 'oklab')}>
 				<div class="text-xl" slot="title">OKLAB</div>
-				<div class="mb-4 text-2xl flex flex-row justify-around">
-					<!-- eslint-disable -->
-					<code>{@html modalColor.space('oklab').fancyCss()}</code>
-					<!-- eslint-disable -->
-					<code>{@html nicerHex(modalColor)}</code>
-				</div>
 				{#each comps.oklab as comp (comp)}
 					<input
 						type="range"
@@ -224,8 +241,8 @@
 		border-radius: 10px;
 	}
 	.color-preview {
-		height: 75px;
-		width: 75px;
+		height: 100px;
+		width: 100px;
 		border-radius: 20px;
 	}
 
