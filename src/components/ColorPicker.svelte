@@ -4,6 +4,7 @@
 	import { blur, fly } from 'svelte/transition';
 	import { HsvColor, OklabColor, RgbColor, type ColorSpace } from '../geom/colorSpaces';
 	import GradientRange from './GradientRange.svelte';
+	import GradientDiagram from './GradientDiagram.svelte';
 
 	export let value: Color;
 	let modal = false;
@@ -77,6 +78,7 @@
 		bind:open={modal}
 		transition={(elt) => fly(elt, { y: -300 })}
 		backdropClass="modal-background"
+		size="xl"
 		class="backdrop-blur"
 	>
 		<svelte:fragment slot="header">
@@ -108,18 +110,40 @@
 		>
 			<TabItem open class="w-full" on:click={() => (space = 'rgb')}>
 				<div class="text-xl" slot="title">RGB</div>
-				<ButtonGroup class="space-x-px transition">
-					<Button pill on:click={randomColor}>Zufällig</Button>
-					<Button pill on:click={complement}>Komplementär</Button>
-					<Button pill on:click={compoSwap}>Komponententausch</Button>
-					<Button pill on:click={gray}>Grauwert</Button>
-				</ButtonGroup>
-				{#each proxies.rgb.components() as comp (comp)}
-					<div class="h-10 mt-4">
-						<GradientRange bind:value={proxies.rgb[comp]} space="rgb" {comp} color={modalColor} />
+				<ButtonGroup class="space-x-px transition" />
+				<div class="flex flex-row justify-between gap-8 h-full">
+					<div class="flex flex-col justify-around align-stretch">
+						<Button color="alternative" on:click={randomColor}>Zufällig</Button><br />
+						<Button color="alternative" on:click={complement}>Komplementär</Button><br />
+						<Button color="alternative" on:click={compoSwap}>Komponententausch</Button><br />
+						<Button color="alternative" on:click={gray}>Grauwert</Button><br />
 					</div>
-					<div>{compNames.rgb[comp]} = {Math.round(proxies.rgb[comp] * 100)}%</div>
-				{/each}
+					<div class="stretch w-full">
+						{#each proxies.rgb.components() as comp (comp)}
+							<div class="h-10 mt-4">
+								<GradientRange
+									bind:value={proxies.rgb[comp]}
+									space="rgb"
+									{comp}
+									color={modalColor}
+								/>
+							</div>
+							<div>{compNames.rgb[comp]} = {Math.round(proxies.rgb[comp] * 100)}%</div>
+						{/each}
+					</div>
+					<div>
+						<div class="h-64 w-64">
+							<GradientDiagram
+								bind:valueX={proxies.rgb.r}
+								bind:valueY={proxies.rgb.g}
+								space="rgb"
+								compX="r"
+								compY="g"
+								color={modalColor}
+							/>
+						</div>
+					</div>
+				</div>
 			</TabItem>
 			<TabItem class="w-full" on:click={() => (space = 'hsv')}>
 				<div class="text-xl" slot="title">HSV</div>
