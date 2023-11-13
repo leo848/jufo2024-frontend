@@ -26,8 +26,11 @@
 	}
 
 	const lastUpdate = { timeout: 0, grad: new Date().getTime(), render: new Date().getTime() };
-	let points: string[][] = [];
-	function getGradient(): { points: string[][]; current: string } {
+	let points: CanvasGradient[] = [];
+	function getGradient(ctx: CanvasRenderingContext2D): {
+		gradients: CanvasGradient[];
+		current: string;
+	} {
 		const spaced = color.space(space);
 		if (!spaced.isComponent(compX)) {
 			throw new Error(`invalid component ${compX} for ${space}`);
@@ -39,27 +42,30 @@
 		if (points.length > 0 && new Date().getTime() - lastUpdate.grad < 1000) {
 			clearTimeout(lastUpdate.timeout);
 			lastUpdate.timeout = setTimeout(() => (ctx = ctx), 1000);
-			return { points, current };
+			return { gradients: points, current };
 		}
 		lastUpdate.grad = new Date().getTime();
 
 		// eslint-disable-next-line
 		const amount = spaced.neededGradientPoints(compX as any);
 		const yCount = 15;
-		const gradientPoints: string[][] = new Array(yCount);
+		const gradients: CanvasGradient[] = new Array(yCount);
 		for (let y = 0; y < yCount; y++) {
 			const testValueY = y / (yCount - 1);
-			gradientPoints[y] = new Array(amount);
+			gradients[y] = ctx.createLinearGradient(0, 0, width, 0);
 			for (let x = 0; x < amount; x++) {
 				const testValueX = x / (amount - 1);
-				gradientPoints[y][x] = spaced
-					.with(compX as never, testValueX)
-					.with(compY as never, testValueY)
-					.css();
+				gradients[y].addColorStop(
+					x / (amount - 1),
+					spaced
+						.with(compX as never, testValueX)
+						.with(compY as never, testValueY)
+						.css()
+				);
 			}
 		}
-		points = gradientPoints;
-		return { points: gradientPoints, current };
+		points = gradients;
+		return { gradients, current };
 	}
 
 	onMount(() => {
@@ -106,16 +112,11 @@
 	$: if (color && ctx) {
 		ctx.clearRect(0, 0, width, height);
 
-		const { points, current } = getGradient();
+		const { gradients, current } = getGradient(ctx);
 
-		for (let y = 0; y < points.length; y++) {
-			const gradient = ctx.createLinearGradient(0, 0, width, 0);
-			for (let x = 0; x < points[y].length; x++) {
-				gradient.addColorStop(x / (points[y].length - 1), points[y][x]);
-			}
-
+		for (let y = 0; y < gradients.length; y++) {
 			ctx.beginPath();
-			ctx.fillStyle = gradient;
+			ctx.fillStyle = gradients[y];
 			if (y == 0) {
 				ctx.roundRect(
 					0,
