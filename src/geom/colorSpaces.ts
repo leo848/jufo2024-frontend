@@ -21,6 +21,7 @@ export abstract class AbstractColor<
 	abstract get(key: Component): number;
 	abstract neededGradientPoints(key: Component): number;
 	abstract values(): [number, number, number];
+	abstract isComponent(maybeComponent: ColorComponent): maybeComponent is Component;
 	abstract clone(): Self;
 }
 
@@ -77,6 +78,10 @@ export class RgbColor implements AbstractColor<RgbColor, RgbComponent> {
 
 	values(): [number, number, number] {
 		return [this.r, this.g, this.b];
+	}
+
+	isComponent(maybeComponent: ColorComponent): maybeComponent is 'r' | 'g' | 'b' {
+		return ['r', 'g', 'b'].includes(maybeComponent);
 	}
 }
 
@@ -181,6 +186,10 @@ export class HsvColor implements AbstractColor<HsvColor, HsvComponent> {
 	values(): [number, number, number] {
 		return [this.h, this.s, this.v];
 	}
+
+	isComponent(maybeComponent: ColorComponent): maybeComponent is 'h' | 's' | 'v' {
+		return ['h', 's', 'v'].includes(maybeComponent);
+	}
 }
 
 export class OklabColor implements AbstractColor<OklabColor, OklabComponent> {
@@ -271,6 +280,10 @@ export class OklabColor implements AbstractColor<OklabColor, OklabComponent> {
 
 	values(): [number, number, number] {
 		return [this.l, this.a, this.b];
+	}
+
+	isComponent(maybeComponent: ColorComponent): maybeComponent is 'l' | 'a' | 'b' {
+		return ['l', 'a', 'b'].includes(maybeComponent);
 	}
 }
 

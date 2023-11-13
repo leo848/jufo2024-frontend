@@ -2,13 +2,8 @@
 	import { Button, ButtonGroup, Modal, TabItem, Tabs } from 'flowbite-svelte';
 	import { Color } from '../geom/color';
 	import { blur, fly } from 'svelte/transition';
-	import {
-		HsvColor,
-		OklabColor,
-		RgbColor,
-		colorSpaces,
-		type ColorSpace
-	} from '../geom/colorSpaces';
+	import { HsvColor, OklabColor, RgbColor, type ColorSpace } from '../geom/colorSpaces';
+	import GradientRange from './GradientRange.svelte';
 
 	export let value: Color;
 	let modal = false;
@@ -23,37 +18,11 @@
 		oklab: ['l', 'a', 'b']
 	} as const;
 
-	type Grad = { elt?: HTMLElement; nopple?: HTMLElement };
-	let gradients: { [Key in keyof typeof comps]: Record<(typeof comps)[Key][number], Grad> } = {
-		rgb: { r: {}, g: {}, b: {} },
-		hsv: { h: {}, s: {}, v: {} },
-		oklab: { l: {}, a: {}, b: {} }
-	};
-
 	const compNames = {
 		rgb: { r: 'Rot', g: 'Grün', b: 'Blau' },
 		hsv: { h: 'Farbton (Hue)', s: 'Sättigung', v: 'Farbwert' },
 		oklab: { l: 'Helligkeit (Lightness)', a: 'Farbwert A', b: 'Farbwert B' }
 	} as const;
-	$: for (const space of colorSpaces) {
-		let colorSpace = modalColor.space(space);
-		for (const rawKey of comps[space]) {
-			const key = rawKey as keyof (typeof gradients)[typeof space];
-			if (!gradients[space] || !gradients[space][key]) continue;
-			const gradient = gradients[space][key] as Grad;
-			if (!(gradient.elt && gradient.nopple)) continue;
-
-			const neededAmount = colorSpace.neededGradientPoints(key);
-			const gradientPoints = new Array(neededAmount);
-			for (let i = 0; i < neededAmount; i++) {
-				const value = i / (neededAmount - 1);
-				gradientPoints[i] = colorSpace.with(key, value).css();
-			}
-			gradient.elt.style.background = `linear-gradient(111deg, ${gradientPoints.join(', ')})`;
-
-			gradient.nopple.style.left = `${colorSpace.get(key) * 100}%`;
-		}
-	}
 
 	$: proxies = {
 		rgb: modalColor.proxy(RgbColor),
@@ -155,16 +124,8 @@
 					<Button pill on:click={gray}>Grauwert</Button>
 				</ButtonGroup>
 				{#each comps.rgb as comp (comp)}
-					<input
-						type="range"
-						min="0"
-						max="1"
-						step="0.001"
-						class="gr-range -mb-8"
-						bind:value={proxies.rgb[comp]}
-					/>
-					<div bind:this={gradients.rgb[comp].elt} class="gradient">
-						<div class="gr-nopple" bind:this={gradients.rgb[comp].nopple} />
+					<div class="h-10 mt-4">
+						<GradientRange bind:value={proxies.rgb[comp]} space="rgb" {comp} color={modalColor} />
 					</div>
 					<div>{compNames.rgb[comp]} = {Math.round(proxies.rgb[comp] * 100)}%</div>
 				{/each}
@@ -172,16 +133,8 @@
 			<TabItem class="w-full" on:click={() => (space = 'hsv')}>
 				<div class="text-xl" slot="title">HSV</div>
 				{#each comps.hsv as comp (comp)}
-					<input
-						type="range"
-						min="0"
-						max="1"
-						step="0.001"
-						class="gr-range -mb-8"
-						bind:value={proxies.hsv[comp]}
-					/>
-					<div bind:this={gradients.hsv[comp].elt} class="gradient">
-						<div class="gr-nopple" bind:this={gradients.hsv[comp].nopple} />
+					<div class="h-10 mt-4">
+						<GradientRange bind:value={proxies.hsv[comp]} space="hsv" {comp} color={modalColor} />
 					</div>
 					<div>{compNames.hsv[comp]} = {Math.round(proxies.hsv[comp] * 100)}%</div>
 				{/each}
@@ -189,16 +142,13 @@
 			<TabItem class="w-full" on:click={() => (space = 'oklab')}>
 				<div class="text-xl" slot="title">OKLAB</div>
 				{#each comps.oklab as comp (comp)}
-					<input
-						type="range"
-						min="0"
-						max="1"
-						step="0.001"
-						class="gr-range -mb-8"
-						bind:value={proxies.oklab[comp]}
-					/>
-					<div bind:this={gradients.oklab[comp].elt} class="gradient">
-						<div class="gr-nopple" bind:this={gradients.oklab[comp].nopple} />
+					<div class="h-10 mt-4">
+						<GradientRange
+							bind:value={proxies.oklab[comp]}
+							space="oklab"
+							{comp}
+							color={modalColor}
+						/>
 					</div>
 					<div>{compNames.oklab[comp]} = {Math.round(proxies.oklab[comp] * 100)}%</div>
 				{/each}
@@ -244,32 +194,5 @@
 		height: 100px;
 		width: 100px;
 		border-radius: 20px;
-	}
-
-	.gradient {
-		width: 100%;
-		height: 30px;
-		border-radius: 20px;
-		transition: 0.5s all;
-	}
-
-	.gr-range {
-		width: 100%;
-		opacity: 0;
-		z-index: 2;
-		position: relative;
-		height: 35px;
-	}
-
-	.gr-nopple {
-		background-color: transparent;
-		backdrop-filter: blur(20px);
-		border: 5px solid rgba(0, 0, 0, 0.5);
-		border-radius: 50%;
-		position: relative;
-		height: 35px;
-		width: 35px;
-		transform: translate(-50%, -3px);
-		transition: 0.1s all;
 	}
 </style>
