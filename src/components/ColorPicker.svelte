@@ -12,12 +12,6 @@
 
 	let space: ColorSpace = 'rgb';
 
-	const comps = {
-		rgb: ['r', 'g', 'b'],
-		hsv: ['h', 's', 'v'],
-		oklab: ['l', 'a', 'b']
-	} as const;
-
 	const compNames = {
 		rgb: { r: 'Rot', g: 'Grün', b: 'Blau' },
 		hsv: { h: 'Farbton (Hue)', s: 'Sättigung', v: 'Farbwert' },
@@ -120,7 +114,7 @@
 					<Button pill on:click={compoSwap}>Komponententausch</Button>
 					<Button pill on:click={gray}>Grauwert</Button>
 				</ButtonGroup>
-				{#each comps.rgb as comp (comp)}
+				{#each proxies.rgb.components() as comp (comp)}
 					<div class="h-10 mt-4">
 						<GradientRange bind:value={proxies.rgb[comp]} space="rgb" {comp} color={modalColor} />
 					</div>
@@ -129,7 +123,7 @@
 			</TabItem>
 			<TabItem class="w-full" on:click={() => (space = 'hsv')}>
 				<div class="text-xl" slot="title">HSV</div>
-				{#each comps.hsv as comp (comp)}
+				{#each proxies.hsv.components() as comp (comp)}
 					<div class="h-10 mt-4">
 						<GradientRange bind:value={proxies.hsv[comp]} space="hsv" {comp} color={modalColor} />
 					</div>
@@ -138,7 +132,7 @@
 			</TabItem>
 			<TabItem class="w-full" on:click={() => (space = 'oklab')}>
 				<div class="text-xl" slot="title">OKLAB</div>
-				{#each comps.oklab as comp (comp)}
+				{#each proxies.oklab.components() as comp (comp)}
 					<div class="h-10 mt-4">
 						<GradientRange
 							bind:value={proxies.oklab[comp]}

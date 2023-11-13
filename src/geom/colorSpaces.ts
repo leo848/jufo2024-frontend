@@ -15,22 +15,33 @@ export abstract class AbstractColor<
 > {
 	abstract color(): Color;
 	abstract point(): Point3;
-	abstract css(): string;
-	abstract fancyCss(): string | null;
+	abstract components(): Component[];
 	abstract with(key: Component, value: number): Self;
 	abstract get(key: Component): number;
 	abstract neededGradientPoints(key: Component): number;
-	abstract values(): [number, number, number];
-	abstract isComponent(maybeComponent: ColorComponent): maybeComponent is Component;
 	abstract clone(): Self;
+	css(): string {
+		return this.color().rgb().css();
+	}
+	values(): [number, number, number] {
+		const comps = this.components();
+		return [this.get(comps[0]), this.get(comps[1]), this.get(comps[2])];
+	}
+	isComponent(maybeComponent: ColorComponent): maybeComponent is Component {
+		return (this.components() as ColorComponent[]).includes(maybeComponent);
+	}
+	fancyCss(): string | null {
+		return null;
+	}
 }
 
-export class RgbColor implements AbstractColor<RgbColor, RgbComponent> {
+export class RgbColor extends AbstractColor<RgbColor, RgbComponent> {
 	r: number;
 	g: number;
 	b: number;
 
 	constructor(r: number, g: number, b: number) {
+		super();
 		this.r = constrain(r);
 		this.g = constrain(g);
 		this.b = constrain(b);
@@ -76,21 +87,18 @@ export class RgbColor implements AbstractColor<RgbColor, RgbComponent> {
 		return `rgb(<span class="text-red-300">${r}</span>, <span class="text-green-300">${g}</span>, <span class="text-blue-300">${b}</span>)`;
 	}
 
-	values(): [number, number, number] {
-		return [this.r, this.g, this.b];
-	}
-
-	isComponent(maybeComponent: ColorComponent): maybeComponent is 'r' | 'g' | 'b' {
-		return ['r', 'g', 'b'].includes(maybeComponent);
+	components(): ['r', 'g', 'b'] {
+		return ['r', 'g', 'b'];
 	}
 }
 
-export class HsvColor implements AbstractColor<HsvColor, HsvComponent> {
+export class HsvColor extends AbstractColor<HsvColor, HsvComponent> {
 	h: number; // 0..1
 	s: number; // 0..1
 	v: number; // 0..1
 
 	constructor(h: number, s: number, v: number) {
+		super();
 		this.h = constrain(h);
 		this.s = constrain(s);
 		this.v = constrain(v);
@@ -160,14 +168,6 @@ export class HsvColor implements AbstractColor<HsvColor, HsvComponent> {
 		return new Point3(radius * Math.cos(angle), radius * Math.sin(angle), height);
 	}
 
-	css(): string {
-		return this.color().rgb().css();
-	}
-
-	fancyCss(): null {
-		return null;
-	}
-
 	with(comp: HsvComponent, value: number): HsvColor {
 		const color = this.clone();
 		color[comp] = value;
@@ -183,21 +183,18 @@ export class HsvColor implements AbstractColor<HsvColor, HsvComponent> {
 		else return 2;
 	}
 
-	values(): [number, number, number] {
-		return [this.h, this.s, this.v];
-	}
-
-	isComponent(maybeComponent: ColorComponent): maybeComponent is 'h' | 's' | 'v' {
-		return ['h', 's', 'v'].includes(maybeComponent);
+	components(): ['h', 's', 'v'] {
+		return ['h', 's', 'v'];
 	}
 }
 
-export class OklabColor implements AbstractColor<OklabColor, OklabComponent> {
+export class OklabColor extends AbstractColor<OklabColor, OklabComponent> {
 	l: number;
 	a: number;
 	b: number;
 
 	constructor(l: number, a: number, b: number) {
+		super();
 		this.l = constrain(l);
 		this.a = constrain(a);
 		this.b = constrain(b);
@@ -246,11 +243,11 @@ export class OklabColor implements AbstractColor<OklabColor, OklabComponent> {
 	}
 
 	css(): string {
-		// const l = this.l;
-		// const a = rangeMap(this.a, [0, 1], [-100, 100]);
-		// const b = rangeMap(this.b, [0, 1], [-100, 100]);
-		// return `oklab(${l} ${a}% ${b}%)`;
-		return this.color().rgb().css();
+		const l = this.l;
+		const a = rangeMap(this.a, [0, 1], [-100, 100]);
+		const b = rangeMap(this.b, [0, 1], [-100, 100]);
+		return `oklab(${l} ${a}% ${b}%)`;
+		// return this.color().rgb().css();
 	}
 
 	fancyCss(): string {
@@ -278,12 +275,8 @@ export class OklabColor implements AbstractColor<OklabColor, OklabComponent> {
 		return 20;
 	}
 
-	values(): [number, number, number] {
-		return [this.l, this.a, this.b];
-	}
-
-	isComponent(maybeComponent: ColorComponent): maybeComponent is 'l' | 'a' | 'b' {
-		return ['l', 'a', 'b'].includes(maybeComponent);
+	components(): ['l', 'a', 'b'] {
+		return ['l', 'a', 'b'];
 	}
 }
 
