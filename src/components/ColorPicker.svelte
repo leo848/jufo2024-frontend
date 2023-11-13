@@ -35,11 +35,8 @@
 	}
 
 	function compoSwap() {
-		const proxy = modalColor.proxy(RgbColor);
-		const temp = proxy.r;
-		proxy.r = proxy.b;
-		proxy.b = proxy.g;
-		proxy.g = temp;
+		const rgb = modalColor.rgb();
+		modalColor = new RgbColor(rgb.b, rgb.r, rgb.g).color();
 	}
 
 	function gray() {
