@@ -126,7 +126,7 @@
 			<div class="color-preview" style={'background-color: ' + modalColor.rgb().css()} />
 			<div class="flex flex-col grow justify-between">
 				<div class="flex justify-start">
-					<h3 class="text-3xl">Farbname</h3>
+					<h3 class="text-4xl">farbname</h3>
 				</div>
 				<div class="flex flex-row justify-start gap-4">
 					<!-- eslint-disable -->
