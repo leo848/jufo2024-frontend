@@ -112,12 +112,6 @@
 				<div class="text-xl" slot="title">RGB</div>
 				<ButtonGroup class="space-x-px transition" />
 				<div class="flex flex-row justify-between gap-8 h-full">
-					<div class="flex flex-col justify-around align-stretch">
-						<Button color="alternative" on:click={randomColor}>Zufällig</Button><br />
-						<Button color="alternative" on:click={complement}>Komplementär</Button><br />
-						<Button color="alternative" on:click={compoSwap}>Komponententausch</Button><br />
-						<Button color="alternative" on:click={gray}>Grauwert</Button><br />
-					</div>
 					<div class="stretch w-full">
 						{#each proxies.rgb.components() as comp (comp)}
 							<div class="h-10 mt-4">
@@ -142,6 +136,12 @@
 								color={modalColor}
 							/>
 						</div>
+					</div>
+					<div class="flex flex-col justify-around align-stretch">
+						<Button color="alternative" on:click={randomColor}>Zufällig</Button><br />
+						<Button color="alternative" on:click={complement}>Komplementär</Button><br />
+						<Button color="alternative" on:click={compoSwap}>Komponententausch</Button><br />
+						<Button color="alternative" on:click={gray}>Grauwert</Button><br />
 					</div>
 				</div>
 			</TabItem>
