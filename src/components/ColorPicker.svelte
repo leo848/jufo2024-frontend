@@ -9,6 +9,8 @@
 	export let value: Color;
 	let modal = false;
 
+	export const open = () => (modal = true);
+
 	let modalColor = value.clone();
 
 	let space: ColorSpace = 'rgb';
@@ -67,13 +69,18 @@
 
 <div class="inline-block transition color-picker">
 	<div
-		class="open-button inline-block transition"
-		style={'background-color: ' + value.rgb().css()}
 		on:click={() => (modal = true)}
 		role="button"
 		tabindex="0"
-		on:keypress={() => {}}
-	/>
+		on:keypress={() => (modal = true)}
+	>
+		<slot name="open-button">
+			<div
+				class="open-button inline-block transition"
+				style={'background-color: ' + value.rgb().css()}
+			/>
+		</slot>
+	</div>
 	<Modal
 		bind:open={modal}
 		transition={(elt) => fly(elt, { y: -300 })}
