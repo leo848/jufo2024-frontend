@@ -2,20 +2,31 @@
 	import * as THREE from 'three';
 	import * as SC from 'svelte-cubed';
 	import type { ColorSpace } from '../geom/colorSpaces';
+	import { RgbColor, colorSpaceClasses } from '../geom/colorSpaces';
 	import type { Color } from '../geom/color';
 
 	export let space: ColorSpace;
 	export let colors: Color[];
 
+	let axisTextures = new Array(3).fill(null).map((_, index) => {
+		const spaced = new RgbColor(0, 0, 0).color().space(space);
+		const comp = spaced.xyzComponents()[index];
+		if (!spaced.isComponent(comp)) throw new Error('invalid');
+		const gradient = spaced.gradientTexture(comp as never);
+		const texture = new THREE.Texture(gradient);
+		texture.needsUpdate = true;
+		return texture;
+	});
+
 	const rotations = [
-		[Math.PI / 2, 0, 0],
+		[0, 0, -Math.PI / 2],
 		[0, Math.PI / 2, 0],
-		[0, 0, -Math.PI / 2]
+		[Math.PI / 2, 0, 0]
 	] as const;
 	$: axisPositions = [
-		[0, 0, 5],
+		[5, 0, 0],
 		[0, 5, 0],
-		[5, 0, 0]
+		[0, 0, 5]
 	] as const;
 </script>
 
@@ -47,13 +58,11 @@
 
 		{#each rotations as rotation, index}
 			<SC.Mesh
-				geometry={new THREE.CylinderGeometry(0.1, 0.1, 10, 8)}
-				position={axisPositions[index]}
+				geometry={new THREE.CylinderGeometry(0.2, 0.15, 10, 12)}
+				position={[...axisPositions[index]]}
 				rotation={[...rotation]}
-				material={new THREE.MeshStandardMaterial({
-					roughness: 0.8,
-					metalness: 0.4,
-					color: 0x0
+				material={new THREE.MeshBasicMaterial({
+					map: axisTextures[index]
 				})}
 			/>
 			<SC.Group position={[0, 0, 0]} rotation={[...rotation]}>

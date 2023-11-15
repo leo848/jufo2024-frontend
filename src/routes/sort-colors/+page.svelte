@@ -79,7 +79,7 @@
 				3D-Darstellung
 			</p>
 			<div class="h-full m-0 min-h-[420px]">
-				<PointChart {colors} space="rgb" />
+				<PointChart {colors} space="oklab" />
 			</div>
 		</Card>
 		<Card class="rounded-xl col-span-12 md:col-span-6 lg:col-span-5 xl:col-span-3 max-w-none">

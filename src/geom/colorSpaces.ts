@@ -6,6 +6,7 @@ import {
 	type OklabComponent,
 	type RgbComponent
 } from './color';
+import { linearGradient } from './gradient';
 import { toGamma, toLinear } from './linearity';
 import { Point3 } from './point';
 
@@ -16,10 +17,17 @@ export abstract class AbstractColor<
 	abstract color(): Color;
 	abstract point(): Point3;
 	abstract components(): Component[];
+	xyzComponents(): [Component, Component, Component] {
+		const comps = this.components();
+		if (comps.length !== 3) throw new Error('Invalid color');
+		let [x, y, z] = comps;
+		return [x, y, z];
+	}
 	abstract with(key: Component, value: number): Self;
 	abstract get(key: Component): number;
 	abstract neededGradientPoints(key: Component): number;
 	abstract clone(): Self;
+	abstract gradientTexture(key: Component): HTMLCanvasElement;
 	css(): string {
 		return this.color().rgb().css();
 	}
@@ -103,6 +111,10 @@ export class RgbColor extends AbstractColor<RgbColor, RgbComponent> {
 		hex /= 0x100;
 		const r = hex & 0xff;
 		return new RgbColor(r / 255, g / 255, b / 255);
+	}
+
+	gradientTexture(key: 'r' | 'g' | 'b'): HTMLCanvasElement {
+		return linearGradient(new RgbColor(0, 0, 0), key);
 	}
 }
 
@@ -201,6 +213,10 @@ export class HsvColor extends AbstractColor<HsvColor, HsvComponent> {
 		else return 2;
 	}
 
+	gradientTexture(key: 'h' | 's' | 'v'): HTMLCanvasElement {
+		return linearGradient(new HsvColor(0, 1, 1), key);
+	}
+
 	components(): ['h', 's', 'v'] {
 		return ['h', 's', 'v'];
 	}
@@ -293,8 +309,16 @@ export class OklabColor extends AbstractColor<OklabColor, OklabComponent> {
 		return 20;
 	}
 
+	gradientTexture(key: 'l' | 'a' | 'b'): HTMLCanvasElement {
+		return linearGradient(new OklabColor(0.5, 0.5, 0.5), key);
+	}
+
 	components(): ['l', 'a', 'b'] {
 		return ['l', 'a', 'b'];
+	}
+
+	xyzComponents(): ['a', 'l', 'b'] {
+		return ['a', 'l', 'b'];
 	}
 }
 
