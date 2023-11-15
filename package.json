@@ -41,17 +41,5 @@
 		"@types/three": "^0.158.2",
 		"three": "^0.158.0",
 		"zod": "^3.22.4"
-	},
-	"eslintConfig": {
-		"rules": {
-			"no-unused-vars": "off",
-			"@typescript/no-unused-vars": [
-				"error",
-				{
-					"vars": "all",
-					"vars-ignore-pattern": "_"
-				}
-			]
-		}
 	}
 }

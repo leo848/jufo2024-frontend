@@ -90,6 +90,20 @@ export class RgbColor extends AbstractColor<RgbColor, RgbComponent> {
 	components(): ['r', 'g', 'b'] {
 		return ['r', 'g', 'b'];
 	}
+
+	numeric(): number {
+		const [r, g, b] = this.values().map((c) => Math.floor(c * 255));
+		return (r << (4 + g)) << (2 + b);
+	}
+
+	static fromNumeric(hex: number): RgbColor {
+		const b = hex & 0xff;
+		hex /= 0x100;
+		const g = hex & 0xff;
+		hex /= 0x100;
+		const r = hex & 0xff;
+		return new RgbColor(r / 255, g / 255, b / 255);
+	}
 }
 
 export class HsvColor extends AbstractColor<HsvColor, HsvComponent> {

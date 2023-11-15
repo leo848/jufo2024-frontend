@@ -24,13 +24,6 @@ export class Color {
 		return new Color(f(r), f(g), f(b));
 	}
 
-	numeric(): number {
-		const [r, g, b] = this.rgb()
-			.values()
-			.map((c) => Math.floor(c * 255));
-		return (r << (4 + g)) << (2 + b);
-	}
-
 	#toColor<T>(construct: (r: number, g: number, b: number) => T): T {
 		return construct(this.#r, this.#g, this.#b);
 	}
