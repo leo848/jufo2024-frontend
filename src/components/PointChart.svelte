@@ -2,7 +2,7 @@
 	import * as THREE from 'three';
 	import * as SC from 'svelte-cubed';
 	import type { ColorSpace } from '../geom/colorSpaces';
-	import { RgbColor, colorSpaceClasses } from '../geom/colorSpaces';
+	import { RgbColor } from '../geom/colorSpaces';
 	import type { Color } from '../geom/color';
 
 	export let space: ColorSpace;
@@ -24,9 +24,24 @@
 		[Math.PI / 2, 0, 0]
 	] as const;
 	$: axisPositions = [
-		[5, 0, 0],
-		[0, 5, 0],
-		[0, 0, 5]
+		[
+			[5, 0, 0],
+			[5, 0, 10],
+			[5, 10, 0],
+			[5, 10, 10]
+		],
+		[
+			[0, 5, 0],
+			[10, 5, 0],
+			[0, 5, 10],
+			[10, 5, 10]
+		],
+		[
+			[0, 0, 5],
+			[10, 0, 5],
+			[0, 10, 5],
+			[10, 10, 5]
+		]
 	] as const;
 </script>
 
@@ -57,14 +72,18 @@
 		<SC.DirectionalLight intensity={0.8} position={[5, 5, 5]} />
 
 		{#each rotations as rotation, index}
-			<SC.Mesh
-				geometry={new THREE.CylinderGeometry(0.2, 0.15, 10, 12)}
-				position={[...axisPositions[index]]}
-				rotation={[...rotation]}
-				material={new THREE.MeshBasicMaterial({
-					map: axisTextures[index]
-				})}
-			/>
+			{#each axisPositions[index] as position, axisIndex}
+				<SC.Mesh
+					geometry={new THREE.CylinderGeometry(0.2, 0.15, 10, 12)}
+					position={[...position]}
+					rotation={[...rotation]}
+					material={new THREE.MeshBasicMaterial({
+						map: axisTextures[index],
+						opacity: axisIndex === 0 ? 1 : axisIndex === 3 ? 0.1 : 0.25,
+						transparent: axisIndex !== 0
+					})}
+				/>
+			{/each}
 			<SC.Group position={[0, 0, 0]} rotation={[...rotation]}>
 				<SC.Mesh
 					geometry={new THREE.PlaneGeometry(50, 50)}
