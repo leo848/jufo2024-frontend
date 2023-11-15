@@ -27,13 +27,13 @@
 		{/each}
 	</div>
 	<div class="mt-12 grid grid-cols-3 justify-stretch gap-8">
-		<Card>
-			<p class="lg:text-2xl text-3xl dark:text-white bg-gray-700 p-4 -m-6 rounded-xl mb-4">
+		<Card class="rounded-xl">
+			<p class="text-2xl xl:text-3xl dark:text-white bg-gray-700 p-4 -m-6 rounded-xl mb-4">
 				3D-Darstellung
 			</p>
 		</Card>
-		<Card>
-			<p class="lg:text-2xl text-3xl dark:text-white bg-gray-700 p-4 -m-6 rounded-xl mb-4">
+		<Card class="rounded-xl">
+			<p class="text-2xl xl:text-3xl dark:text-white bg-gray-700 p-4 -m-6 rounded-xl mb-4">
 				Eigenschaften
 			</p>
 			<div class="text-xl">
@@ -43,27 +43,34 @@
 				</div>
 			</div>
 		</Card>
-		<Card>
-			<p class="lg:text-2xl text-3xl dark:text-white bg-gray-700 p-4 -m-6 rounded-xl mb-4">
+		<Card class="rounded-xl">
+			<p class="text-2xl xl:text-3xl dark:text-white bg-gray-700 p-4 -m-6 rounded-xl mb-4">
 				Konstruktion
 			</p>
 			<div class="text-xl">
 				<Accordion>
 					<AccordionItem>
 						<div slot="header">Manuell</div>
+						<div>Manuelle Auswahl der Punkte in einer Reihenfolge</div>
 					</AccordionItem>
 					<AccordionItem>
 						<div slot="header">Greedy</div>
+						<div>Greedy-Algorithmus</div>
 					</AccordionItem>
 					<AccordionItem>
 						<div slot="header">Nearest Neighbor</div>
+						<div>Nächster Nachbar</div>
 					</AccordionItem>
 					<AccordionItem>
 						<div slot="header">Brute Force</div>
+						<div>Teste alle möglichen Kombinationen</div>
 					</AccordionItem>
 					<AccordionItem>
 						<div slot="header">Optimal (Concorde)</div>
-					</AccordionItem>
+						<div>
+							Finde die optimale Sortierung mittels des externen Tools Concorde
+						</div></AccordionItem
+					>
 				</Accordion>
 			</div>
 		</Card>
