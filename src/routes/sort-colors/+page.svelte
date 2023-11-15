@@ -56,20 +56,38 @@
 		displayConstructionItems = find === undefined ? constructionItems : [find];
 	}
 	$: constructionOpen = selectedConstructionItem !== null;
+
+	function addRandomColor() {
+		colors = [...colors, new RgbColor(Math.random(), Math.random(), Math.random()).color()];
+	}
 </script>
 
 <div class="mx-10">
 	<p class="text-3xl xl:text-5xl dark:text-white mb-4">Farben sortieren</p>
-	<div class="flex flex-row flex-wrap justify-start gap-8 items-stretch h-16">
-		{#each colors as color, index}
-			<ColorPicker bind:value={colors[index]}>
-				<div slot="open-button">
-					<div class="color-button w-full grow" style={'background-color:' + color.rgb().css()}>
-						<div class="h-16 w-16" />
+	<div class="flex flex-row justify-between align-center">
+		<div class="flex flex-row flex-wrap justify-start gap-8 items-stretch h-16">
+			{#each colors as color, index}
+				<ColorPicker bind:value={colors[index]}>
+					<div slot="open-button">
+						<div class="color-button w-full grow" style={'background-color:' + color.rgb().css()}>
+							<div class="h-16 w-16" />
+						</div>
 					</div>
-				</div>
-			</ColorPicker>
-		{/each}
+				</ColorPicker>
+			{/each}
+		</div>
+		<div class="stretch" />
+		<div>
+			<div
+				class="color-button h-16 w-16 bg-white text-6xl flex align-baseline justify-center items-center"
+				on:click={addRandomColor}
+				role="button"
+				tabindex="0"
+				on:keypress={addRandomColor}
+			>
+				+
+			</div>
+		</div>
 	</div>
 	<div
 		class="mt-8 grid grid-cols-12 gap-8 auto-cols-max align-stretch justify-stretch justify-items-stretch"
@@ -79,7 +97,7 @@
 				3D-Darstellung
 			</p>
 			<div class="h-full m-0 min-h-[420px]">
-				<PointChart {colors} space="rgb" />
+				<PointChart {colors} space="oklab" />
 			</div>
 		</Card>
 		<Card class="rounded-xl col-span-12 md:col-span-6 lg:col-span-5 xl:col-span-3 max-w-none">
