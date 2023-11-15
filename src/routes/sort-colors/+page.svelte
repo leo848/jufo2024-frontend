@@ -1,7 +1,6 @@
 <script lang="ts">
 	import { Accordion, AccordionItem, Card } from 'flowbite-svelte';
 	import ColorPicker from '../../components/ColorPicker.svelte';
-	import Container from '../../components/Container.svelte';
 	import { RgbColor } from '../../geom/colorSpaces';
 
 	let colors = [
@@ -14,7 +13,7 @@
 	];
 </script>
 
-<Container>
+<div class="mx-10">
 	<p class="lg:text-3xl text-5xl dark:text-white mb-4">Farben sortieren</p>
 	<div class="flex flex-row flex-wrap justify-start gap-8 items-stretch h-16">
 		{#each colors as color, index}
@@ -29,11 +28,15 @@
 	</div>
 	<div class="mt-12 grid grid-cols-3 justify-stretch gap-8">
 		<Card>
-			<p class="lg:text-2xl text-3xl dark:text-white">3D-Darstellung</p>
+			<p class="lg:text-2xl text-3xl dark:text-white bg-gray-700 p-4 -m-6 rounded-xl mb-4">
+				3D-Darstellung
+			</p>
 		</Card>
 		<Card>
-			<p class="lg:text-2xl text-3xl dark:text-white">Eigenschaften</p>
-			<div class="text-base">
+			<p class="lg:text-2xl text-3xl dark:text-white bg-gray-700 p-4 -m-6 rounded-xl mb-4">
+				Eigenschaften
+			</p>
+			<div class="text-xl">
 				<div class="flex-col">
 					<div>Anzahl: {colors.length}</div>
 					<div>Weglänge: undefined</div>
@@ -41,8 +44,10 @@
 			</div>
 		</Card>
 		<Card>
-			<p class="lg:text-2xl text-3xl dark:text-white">Konstruktion</p>
-			<div class="text-base">
+			<p class="lg:text-2xl text-3xl dark:text-white bg-gray-700 p-4 -m-6 rounded-xl mb-4">
+				Konstruktion
+			</p>
+			<div class="text-xl">
 				<Accordion>
 					<AccordionItem>
 						<div slot="header">Manuell</div>
@@ -63,7 +68,7 @@
 			</div>
 		</Card>
 	</div>
-</Container>
+</div>
 
 <style>
 	.color-button {
