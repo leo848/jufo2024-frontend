@@ -14,7 +14,7 @@
 </script>
 
 <div class="mx-10">
-	<p class="lg:text-3xl text-5xl dark:text-white mb-4">Farben sortieren</p>
+	<p class="text-3xl xl:text-5xl dark:text-white mb-4">Farben sortieren</p>
 	<div class="flex flex-row flex-wrap justify-start gap-8 items-stretch h-16">
 		{#each colors as color, index}
 			<ColorPicker bind:value={colors[index]}>
@@ -26,7 +26,7 @@
 			</ColorPicker>
 		{/each}
 	</div>
-	<div class="mt-12 grid grid-cols-3 justify-stretch gap-8">
+	<div class="mt-8 grid grid-cols-3 justify-stretch">
 		<Card class="rounded-xl">
 			<p class="text-2xl xl:text-3xl dark:text-white bg-gray-700 p-4 -m-6 rounded-xl mb-4">
 				3D-Darstellung
