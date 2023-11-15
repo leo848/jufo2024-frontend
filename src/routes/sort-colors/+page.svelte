@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { Accordion, AccordionItem, Card } from 'flowbite-svelte';
 	import ColorPicker from '../../components/ColorPicker.svelte';
 	import Container from '../../components/Container.svelte';
 	import { RgbColor } from '../../geom/colorSpaces';
@@ -25,6 +26,42 @@
 				</div>
 			</ColorPicker>
 		{/each}
+	</div>
+	<div class="mt-12 grid grid-cols-3 justify-stretch gap-8">
+		<Card>
+			<p class="lg:text-2xl text-3xl dark:text-white">3D-Darstellung</p>
+		</Card>
+		<Card>
+			<p class="lg:text-2xl text-3xl dark:text-white">Eigenschaften</p>
+			<div class="text-base">
+				<div class="flex-col">
+					<div>Anzahl: {colors.length}</div>
+					<div>Weglänge: undefined</div>
+				</div>
+			</div>
+		</Card>
+		<Card>
+			<p class="lg:text-2xl text-3xl dark:text-white">Konstruktion</p>
+			<div class="text-base">
+				<Accordion>
+					<AccordionItem>
+						<div slot="header">Manuell</div>
+					</AccordionItem>
+					<AccordionItem>
+						<div slot="header">Greedy</div>
+					</AccordionItem>
+					<AccordionItem>
+						<div slot="header">Nearest Neighbor</div>
+					</AccordionItem>
+					<AccordionItem>
+						<div slot="header">Brute Force</div>
+					</AccordionItem>
+					<AccordionItem>
+						<div slot="header">Optimal (Concorde)</div>
+					</AccordionItem>
+				</Accordion>
+			</div>
+		</Card>
 	</div>
 </Container>
 
