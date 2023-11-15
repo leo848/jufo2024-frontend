@@ -230,11 +230,11 @@
 						<div animate:flip={{ duration: 200 }}>
 							<Card
 								class={highlight === 'compare'
-									? 'dark:bg-orange'
+									? 'dark:bg-[orange]'
 									: highlight === 'swap'
-									? 'dark:bg-violet'
+									? 'dark:bg-[violet]'
 									: highlight === 'correct'
-									? 'dark:bg-green'
+									? 'dark:bg-[green]'
 									: 'dark:bg-gray-700'}
 							>
 								<h5
