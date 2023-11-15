@@ -16,4 +16,8 @@ export class Point3 {
 	position(): [number, number, number] {
 		return [this.x, this.y, this.z];
 	}
+
+	scale(factor: number): Point3 {
+		return new Point3(this.x * factor, this.y * factor, this.z * factor);
+	}
 }

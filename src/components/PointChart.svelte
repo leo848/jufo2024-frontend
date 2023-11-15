@@ -12,19 +12,24 @@
 		[0, Math.PI / 2, 0],
 		[0, 0, -Math.PI / 2]
 	] as const;
+	$: axisPositions = [
+		[0, 0, 5],
+		[0, 5, 0],
+		[5, 0, 0]
+	] as const;
 </script>
 
 <div class="chart">
 	<SC.Canvas
-		background={new THREE.Color('papayawhip')}
-		fog={new THREE.FogExp2('papayawhip', 0.05)}
+		background={new THREE.Color(0x0c0c0c)}
+		fog={new THREE.FogExp2(0x0c0c0c, 0.015)}
 		antialias
 		shadows
 	>
 		{#each colors as color (color.rgb().numeric())}
 			<SC.Mesh
-				geometry={new THREE.SphereGeometry(0.05)}
-				position={color.space(space).point().position()}
+				geometry={new THREE.SphereGeometry(0.5)}
+				position={color.space(space).point().scale(10).position()}
 				material={new THREE.MeshStandardMaterial({
 					roughness: 0.6,
 					metalness: 0.8,
@@ -34,13 +39,23 @@
 			/>
 		{/each}
 
-		<SC.PerspectiveCamera position={[0.5, 0.5, 3]} target={[0.5, 0.5, 0]} />
+		<SC.PerspectiveCamera position={[5, 5, 20]} target={[5, 5, 5]} />
 
 		<SC.AmbientLight intensity={0.5} />
 
-		<SC.DirectionalLight intensity={0.8} position={[0.5, 0.5, 0.5]} />
+		<SC.DirectionalLight intensity={0.8} position={[5, 5, 5]} />
 
-		{#each rotations as rotation}
+		{#each rotations as rotation, index}
+			<SC.Mesh
+				geometry={new THREE.CylinderGeometry(0.1, 0.1, 10, 8)}
+				position={axisPositions[index]}
+				rotation={[...rotation]}
+				material={new THREE.MeshStandardMaterial({
+					roughness: 0.8,
+					metalness: 0.4,
+					color: 0x0
+				})}
+			/>
 			<SC.Group position={[0, 0, 0]} rotation={[...rotation]}>
 				<SC.Mesh
 					geometry={new THREE.PlaneGeometry(50, 50)}
@@ -59,7 +74,7 @@
 		<SC.OrbitControls
 			enableDamping
 			maxPolarAngle={Math.PI * 0.51}
-			maxDistance={4}
+			maxDistance={30}
 			enablePan={false}
 		/>
 	</SC.Canvas>
