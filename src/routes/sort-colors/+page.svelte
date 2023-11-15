@@ -74,8 +74,8 @@
 	<div
 		class="mt-8 grid grid-cols-12 gap-8 auto-cols-max align-stretch justify-stretch justify-items-stretch"
 	>
-		<Card class="rounded-xl col-span-12 xl:col-span-5 max-w-none p-0">
-			<p class="text-2xl xl:text-3xl dark:text-white bg-gray-700 p-4 -m-6 rounded-t-xl mb-4">
+		<Card class="rounded-xl col-span-12 xl:col-span-5 max-w-none xl:p-0 mb-0">
+			<p class="text-2xl xl:text-3xl dark:text-white bg-gray-700 p-4 rounded-t-xl">
 				3D-Darstellung
 			</p>
 			<div class="h-full m-0 min-h-[420px]">
