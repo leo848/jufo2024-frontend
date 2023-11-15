@@ -6,6 +6,7 @@
 	import { scale } from 'svelte/transition';
 	import * as Icon from 'flowbite-svelte-icons';
 	import type { ComponentType } from 'svelte';
+	import PointChart from '../../components/PointChart.svelte';
 
 	let colors = [
 		RgbColor.fromNumeric(0xff1e26).color(),
@@ -73,10 +74,13 @@
 	<div
 		class="mt-8 grid grid-cols-12 gap-8 auto-cols-max align-stretch justify-stretch justify-items-stretch"
 	>
-		<Card class="rounded-xl col-span-12 xl:col-span-5 max-w-none">
+		<Card class="rounded-xl col-span-12 xl:col-span-5 max-w-none p-0">
 			<p class="text-2xl xl:text-3xl dark:text-white bg-gray-700 p-4 -m-6 rounded-t-xl mb-4">
 				3D-Darstellung
 			</p>
+			<div class="h-full m-0 min-h-[420px]">
+				<PointChart {colors} space="rgb" />
+			</div>
 		</Card>
 		<Card class="rounded-xl col-span-12 md:col-span-6 lg:col-span-5 xl:col-span-3 max-w-none">
 			<p class="text-2xl xl:text-3xl dark:text-white bg-gray-700 p-4 -m-6 rounded-t-xl mb-4">

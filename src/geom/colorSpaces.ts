@@ -93,7 +93,7 @@ export class RgbColor extends AbstractColor<RgbColor, RgbComponent> {
 
 	numeric(): number {
 		const [r, g, b] = this.values().map((c) => Math.floor(c * 255));
-		return (r << (4 + g)) << (2 + b);
+		return (r << 16) + (g << 8) + b;
 	}
 
 	static fromNumeric(hex: number): RgbColor {
