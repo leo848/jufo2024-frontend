@@ -179,7 +179,11 @@ export class HsvColor extends AbstractColor<HsvColor, HsvComponent> {
 		const radius = s;
 		const height = v;
 
-		return new Point3(radius * Math.cos(angle), radius * Math.sin(angle), height);
+		return new Point3(
+			(radius * Math.cos(angle)) / 2 + 0.5,
+			height,
+			(radius * Math.sin(angle)) / 2 + 0.5
+		);
 	}
 
 	with(comp: HsvComponent, value: number): HsvColor {
@@ -253,7 +257,7 @@ export class OklabColor extends AbstractColor<OklabColor, OklabComponent> {
 
 	point(): Point3 {
 		const { l, a, b } = this;
-		return new Point3(a + 0.5, l, b + 0.5);
+		return new Point3(a, l, b);
 	}
 
 	css(): string {
