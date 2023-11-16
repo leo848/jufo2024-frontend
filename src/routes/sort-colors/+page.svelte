@@ -96,24 +96,33 @@
 	>
 		<Card class="rounded-xl col-span-12 xl:col-span-5 max-w-none xl:p-0 mb-0">
 			<div
-				class="text-2xl xl:text-3xl dark:text-white bg-gray-700 p-4 rounded-t-xl flex flex-row justify-between"
+				class="text-2xl xl:text-3xl dark:text-white bg-gray-700 p-4 rounded-t-xl flex flex-row justify-between items-center"
 			>
 				<div>3D-Darstellung</div>
 				<div>
-					<button
-						class="transition bg-orange-600 disabled:bg-gray-600 rounded-full p-2"
-						disabled={ballSize <= 0.11}
-						on:click={() => (ballSize -= 0.1)}
-					>
-						<Icon.MinusSolid />
-					</button>
-					<button
-						class="transition bg-orange-600 disabled:bg-gray-600 rounded-full p-2"
-						disabled={ballSize >= 0.69}
-						on:click={() => (ballSize += 0.1)}
-					>
-						<Icon.PlusSolid />
-					</button>
+					<div class="bg-gray-800 rounded-xl -m-4 -mr-2 p-2">
+						<button
+							class="transition disabled:bg-gray-600 rounded-full p-2"
+							disabled
+						>
+							<Icon.DribbbleSolid />
+							<span>{Math.round(ballSize * 10)}</span>
+						</button>
+						<button
+							class="transition bg-orange-600 disabled:bg-gray-600 rounded-full p-2"
+							disabled={ballSize <= 0.11}
+							on:click={() => (ballSize -= 0.1)}
+						>
+							<Icon.MinusSolid />
+						</button>
+						<button
+							class="transition bg-orange-600 disabled:bg-gray-600 rounded-full p-2"
+							disabled={ballSize >= 0.69}
+							on:click={() => (ballSize += 0.1)}
+						>
+							<Icon.PlusSolid />
+						</button>
+					</div>
 				</div>
 			</div>
 			<div class="h-full m-0 min-h-[420px]">
