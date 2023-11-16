@@ -60,6 +60,8 @@
 	function addRandomColor() {
 		colors = [...colors, new RgbColor(Math.random(), Math.random(), Math.random()).color()];
 	}
+
+	let ballSize = 0.4;
 </script>
 
 <div class="mx-10">
@@ -93,11 +95,29 @@
 		class="mt-8 grid grid-cols-12 gap-8 auto-cols-max align-stretch justify-stretch justify-items-stretch"
 	>
 		<Card class="rounded-xl col-span-12 xl:col-span-5 max-w-none xl:p-0 mb-0">
-			<p class="text-2xl xl:text-3xl dark:text-white bg-gray-700 p-4 rounded-t-xl">
-				3D-Darstellung
-			</p>
+			<div
+				class="text-2xl xl:text-3xl dark:text-white bg-gray-700 p-4 rounded-t-xl flex flex-row justify-between"
+			>
+				<div>3D-Darstellung</div>
+				<div>
+					<button
+						class="transition bg-orange-600 disabled:bg-gray-600 rounded-full p-2"
+						disabled={ballSize <= 0.11}
+						on:click={() => (ballSize -= 0.1)}
+					>
+						<Icon.MinusSolid />
+					</button>
+					<button
+						class="transition bg-orange-600 disabled:bg-gray-600 rounded-full p-2"
+						disabled={ballSize >= 0.69}
+						on:click={() => (ballSize += 0.1)}
+					>
+						<Icon.PlusSolid />
+					</button>
+				</div>
+			</div>
 			<div class="h-full m-0 min-h-[420px]">
-				<PointChart {colors} space="oklab" />
+				<PointChart {colors} {ballSize} space="rgb" />
 			</div>
 		</Card>
 		<Card class="rounded-xl col-span-12 md:col-span-6 lg:col-span-5 xl:col-span-3 max-w-none">

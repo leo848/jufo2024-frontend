@@ -4,6 +4,8 @@
 	import type { ColorSpace } from '../geom/colorSpaces';
 	import { RgbColor } from '../geom/colorSpaces';
 	import type { Color } from '../geom/color';
+	import { cubicOut } from 'svelte/easing';
+	import { tweened } from 'svelte/motion';
 
 	export let space: ColorSpace;
 	export let colors: Color[];
@@ -43,6 +45,10 @@
 			[10, 10, 5]
 		]
 	] as const;
+
+	export let ballSize: number = 0.5;
+	const ballSizeAnim = tweened(ballSize, { duration: 250, easing: cubicOut });
+	$: $ballSizeAnim = ballSize;
 </script>
 
 <div class="chart">
@@ -54,7 +60,7 @@
 	>
 		{#each colors as color (color.rgb().numeric())}
 			<SC.Mesh
-				geometry={new THREE.SphereGeometry(0.5)}
+				geometry={new THREE.SphereGeometry($ballSizeAnim)}
 				position={color.space(space).point().scale(10).position()}
 				material={new THREE.MeshStandardMaterial({
 					roughness: 0.6,
