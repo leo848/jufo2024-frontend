@@ -20,7 +20,7 @@ export abstract class AbstractColor<
 	xyzComponents(): [Component, Component, Component] {
 		const comps = this.components();
 		if (comps.length !== 3) throw new Error('Invalid color');
-		let [x, y, z] = comps;
+		const [x, y, z] = comps;
 		return [x, y, z];
 	}
 	abstract with(key: Component, value: number): Self;
