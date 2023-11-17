@@ -3,7 +3,7 @@
 	import ColorPicker from '../../components/ColorPicker.svelte';
 	import { RgbColor } from '../../geom/colorSpaces';
 	import { flip } from 'svelte/animate';
-	import { scale } from 'svelte/transition';
+	import { fly, scale } from 'svelte/transition';
 	import * as Icon from 'flowbite-svelte-icons';
 	import type { ComponentType } from 'svelte';
 	import PointChart from '../../components/PointChart.svelte';
@@ -62,6 +62,7 @@
 	}
 
 	let ballSize = 0.4;
+	let ballSizeChange: 0 | -1 | 1 = 0;
 </script>
 
 <div class="mx-10">
@@ -100,25 +101,34 @@
 			>
 				<div>3D-Darstellung</div>
 				<div>
-					<div class="bg-gray-800 rounded-xl -m-4 -mr-2 p-2">
+					<div class="bg-gray-800 rounded-xl -m-4 -mr-2 p-2 flex flex-row items-center gap-2">
 						<button
-							class="transition disabled:bg-gray-600 rounded-full p-2"
+							class="transition disabled:bg-gray-600 rounded-lg px-2 flex flex-row items-center gap-2"
 							disabled
 						>
-							<Icon.DribbbleSolid />
-							<span>{Math.round(ballSize * 10)}</span>
+							<span><Icon.DribbbleSolid /></span>
+							<div class="grid overflow-hidden">
+								{#key ballSize}
+									<span
+										class="row-[1/2] col-[1/2] tabular-nums"
+										in:fly={{ y: -100 * ballSizeChange, duration: 200 }}
+										out:fly={{ y: 100 * ballSizeChange, duration: 200 }}
+										>{Math.round(ballSize * 10)}</span
+									>
+								{/key}
+							</div>
 						</button>
 						<button
 							class="transition bg-orange-600 disabled:bg-gray-600 rounded-full p-2"
 							disabled={ballSize <= 0.11}
-							on:click={() => (ballSize -= 0.1)}
+							on:click={() => ((ballSize -= 0.1), (ballSizeChange = -1))}
 						>
 							<Icon.MinusSolid />
 						</button>
 						<button
 							class="transition bg-orange-600 disabled:bg-gray-600 rounded-full p-2"
 							disabled={ballSize >= 0.69}
-							on:click={() => (ballSize += 0.1)}
+							on:click={() => ((ballSize += 0.1), (ballSizeChange = 1))}
 						>
 							<Icon.PlusSolid />
 						</button>
