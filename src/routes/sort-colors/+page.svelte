@@ -62,7 +62,13 @@
 	}
 
 	let ballSize = 0.4;
-	let ballSizeChange: 0 | -1 | 1 = 0;
+	let threeDOptions: {
+		ballSizeChange: 0 | -1 | 1;
+		// ballSizeShowControls: boolean,
+	} = {
+		ballSizeChange: 0
+		// ballSizeShowControls: true,
+	};
 </script>
 
 <div class="mx-10">
@@ -101,18 +107,22 @@
 			>
 				<div>3D-Darstellung</div>
 				<div>
-					<div class="bg-gray-800 rounded-xl -m-4 -mr-2 p-2 flex flex-row items-center gap-2">
+					<div
+						class="bg-gray-800 rounded-xl -m-4 -mr-2 p-2 flex flex-row items-center gap-2 transition overflow-hidden"
+					>
 						<button
-							class="transition disabled:bg-gray-600 rounded-lg px-2 flex flex-row items-center gap-2"
+							class="transition bg-gray-600 rounded-lg px-2 flex flex-row items-center gap-2"
 							disabled
+							on:click={() =>
+								(threeDOptions.ballSizeShowControls = !threeDOptions.ballSizeShowControls)}
 						>
 							<span><Icon.DribbbleSolid /></span>
 							<div class="grid overflow-hidden">
 								{#key ballSize}
 									<span
 										class="row-[1/2] col-[1/2] tabular-nums"
-										in:fly={{ y: -100 * ballSizeChange, duration: 200 }}
-										out:fly={{ y: 100 * ballSizeChange, duration: 200 }}
+										in:fly={{ y: -100 * threeDOptions.ballSizeChange, duration: 200 }}
+										out:fly={{ y: 100 * threeDOptions.ballSizeChange, duration: 200 }}
 										>{Math.round(ballSize * 10)}</span
 									>
 								{/key}
@@ -121,14 +131,16 @@
 						<button
 							class="transition bg-orange-600 disabled:bg-gray-600 rounded-full p-2"
 							disabled={ballSize <= 0.11}
-							on:click={() => ((ballSize -= 0.1), (ballSizeChange = -1))}
+							transition:fly={{ x: 100 }}
+							on:click={() => ((ballSize -= 0.1), (threeDOptions.ballSizeChange = -1))}
 						>
 							<Icon.MinusSolid />
 						</button>
 						<button
 							class="transition bg-orange-600 disabled:bg-gray-600 rounded-full p-2"
 							disabled={ballSize >= 0.69}
-							on:click={() => ((ballSize += 0.1), (ballSizeChange = 1))}
+							transition:fly={{ x: 100 }}
+							on:click={() => ((ballSize += 0.1), (threeDOptions.ballSizeChange = 1))}
 						>
 							<Icon.PlusSolid />
 						</button>
