@@ -9,9 +9,9 @@
 	import { onDestroy, type ComponentType } from 'svelte';
 	import PointChart from '../../components/PointChart.svelte';
 	import { registerCallback, sendWebsocket, unregisterCallback } from '../../server/websocket';
-	import {serverOutputPathCreation} from '../../server/types';
+	import { serverOutputPathCreation } from '../../server/types';
 
-	let space: ColorSpace = 'rgb';
+	let space: ColorSpace = 'oklab';
 
 	let colors = [
 		RgbColor.fromNumeric(0xff1e26).color(),
@@ -23,13 +23,20 @@
 	]; // pride flag
 
 	let path: Point3[] = [];
+	let chainLength = 0;
+	$: {
+		chainLength = 0;
+		for (let i = 0; i < path.length - 1; i++) {
+			chainLength += path[i].distanceTo(path[i + 1]);
+		}
+	}
 
 	const constructionItems: {
 		name: string;
 		description: string;
 		icon: ComponentType;
 		index: number;
-		expectedTime?: (n: number) => null | number,
+		expectedTime?: (n: number) => null | number;
 		send: (() => void) | null;
 	}[] = (
 		[
@@ -38,7 +45,7 @@
 				description: 'Manuelle Auswahl der Punkte in einer Reihenfolge',
 				method: null,
 				expectedTime: () => null,
-				icon: Icon.AnnotationOutline,
+				icon: Icon.AnnotationOutline
 			},
 			{
 				name: 'Greedy',
@@ -69,15 +76,16 @@
 	).map((e, i) => {
 		const payload =
 			e.method &&
-			(() => ({
-				type: 'action',
-				action: {
-					type: 'createPath',
-					method: { type: e.method },
-					dimensions: 3,
-					values: colors.map((color) => color.space(space).point().values())
-				}
-			} as const));
+			(() =>
+				({
+					type: 'action',
+					action: {
+						type: 'createPath',
+						method: { type: e.method },
+						dimensions: 3,
+						values: colors.map((color) => color.space(space).point().values())
+					}
+				} as const));
 		const send = payload && (() => sendWebsocket(payload()));
 		return Object.assign({}, e, { index: i, send });
 	});
@@ -104,10 +112,10 @@
 		// ballSizeShowControls: true,
 	};
 
-	let callbackId = registerCallback(serverOutputPathCreation, pc => {
-	console.log(pc);
-		path = pc.currentPath.map(vec => new Point3(vec[0], vec[1], vec[2]));
-	})
+	let callbackId = registerCallback(serverOutputPathCreation, (pc) => {
+		console.log(pc);
+		path = pc.currentPath.map((vec) => new Point3(vec[0], vec[1], vec[2]));
+	});
 
 	onDestroy(() => unregisterCallback(callbackId));
 </script>
@@ -207,7 +215,7 @@
 			<div class="text-xl">
 				<div class="flex-col">
 					<div>Anzahl: {colors.length}</div>
-					<div>Weglänge: undefined</div>
+					<div>Kettenlänge: {chainLength.toFixed(2)}</div>
 				</div>
 			</div>
 		</Card>
