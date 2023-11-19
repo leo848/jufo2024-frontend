@@ -36,10 +36,12 @@ const action = z.discriminatedUnion('type', [
 const serverInputLog = z.object({ type: z.literal('log'), message: z.string() });
 const serverInputAction = z.object({ type: z.literal('action'), action });
 const serverInputLatency = z.object({ type: z.literal('latency') });
+const serverInputCreatePath = z.object({ type: z.literal('createPath'), dimensions: z.number().positive().int(), values: z.array(z.array(z.number())), method: z.enum(["nearestNeighbor", "bruteForce"]) });
 const serverInput = z.discriminatedUnion('type', [
 	serverInputLog,
 	serverInputAction,
-	serverInputLatency
+	serverInputLatency,
+	serverInputCreatePath,
 ]);
 
 export type ServerInput = z.infer<typeof serverInput>;
