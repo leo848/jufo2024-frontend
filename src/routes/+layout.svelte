@@ -1,15 +1,5 @@
 <script lang="ts">
-	import {
-		Navbar,
-		NavBrand,
-		NavUl,
-		NavLi,
-		DarkMode,
-		NavHamburger,
-		Toast,
-		Button
-	} from 'flowbite-svelte';
-	import { SunSolid, MoonSolid } from 'flowbite-svelte-icons';
+	import { Navbar, NavBrand, NavUl, NavLi, NavHamburger, Toast, Button } from 'flowbite-svelte';
 	import ServerStatus from '../components/ServerStatus.svelte';
 
 	import { onMount } from 'svelte';
