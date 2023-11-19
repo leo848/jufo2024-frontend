@@ -3,7 +3,7 @@
 	import ColorPicker from '../../components/ColorPicker.svelte';
 	import { RgbColor } from '../../geom/colorSpaces';
 	import { flip } from 'svelte/animate';
-	import { fly, scale } from 'svelte/transition';
+	import { fly, scale, slide } from 'svelte/transition';
 	import * as Icon from 'flowbite-svelte-icons';
 	import type { ComponentType } from 'svelte';
 	import PointChart from '../../components/PointChart.svelte';
@@ -64,9 +64,11 @@
 	let ballSize = 0.4;
 	let threeDOptions: {
 		ballSizeChange: 0 | -1 | 1;
+		showOptions: boolean;
 		// ballSizeShowControls: boolean,
 	} = {
-		ballSizeChange: 0
+		ballSizeChange: 0,
+		showOptions: false
 		// ballSizeShowControls: true,
 	};
 </script>
@@ -106,47 +108,55 @@
 				class="text-2xl xl:text-3xl dark:text-white bg-gray-700 p-4 rounded-t-xl flex flex-row justify-between items-center"
 			>
 				<div>3D-Darstellung</div>
+				<button
+					class="bg-gray-600 rounded-xl p-2"
+					on:click={() => (threeDOptions.showOptions = !threeDOptions.showOptions)}
+					><Icon.CogOutline /></button
+				>
+			</div>
+			{#if threeDOptions.showOptions}
 				<div>
 					<div
-						class="bg-gray-800 rounded-xl -m-4 -mr-2 p-2 flex flex-row items-center gap-2 transition overflow-hidden"
+						class="flex flex-row justify-between items-center py-2 text-2xl text-white threedoptions-parent p-2 border-transparent m-0"
+						transition:slide={{ axis: 'y' }}
 					>
-						<button
-							class="transition bg-gray-600 rounded-lg px-2 flex flex-row items-center gap-2"
-							disabled
-							on:click={() =>
-								(threeDOptions.ballSizeShowControls = !threeDOptions.ballSizeShowControls)}
+						<div
+							class="ball-setting bg-gray-700 rounded-xl p-2 flex flex-row gap-2 overflow-hidden threedoptions-child"
 						>
-							<span><Icon.DribbbleSolid /></span>
-							<div class="grid overflow-hidden">
-								{#key ballSize}
-									<span
-										class="row-[1/2] col-[1/2] tabular-nums"
-										in:fly={{ y: -100 * threeDOptions.ballSizeChange, duration: 200 }}
-										out:fly={{ y: 100 * threeDOptions.ballSizeChange, duration: 200 }}
-										>{Math.round(ballSize * 10)}</span
-									>
-								{/key}
-							</div>
-						</button>
-						<button
-							class="transition bg-orange-600 disabled:bg-gray-600 rounded-full p-2"
-							disabled={ballSize <= 0.11}
-							transition:fly={{ x: 100 }}
-							on:click={() => ((ballSize -= 0.1), (threeDOptions.ballSizeChange = -1))}
-						>
-							<Icon.MinusSolid />
-						</button>
-						<button
-							class="transition bg-orange-600 disabled:bg-gray-600 rounded-full p-2"
-							disabled={ballSize >= 0.69}
-							transition:fly={{ x: 100 }}
-							on:click={() => ((ballSize += 0.1), (threeDOptions.ballSizeChange = 1))}
-						>
-							<Icon.PlusSolid />
-						</button>
+							<button
+								class="transition bg-gray-600 rounded-lg px-2 flex flex-row items-center gap-2"
+								disabled
+							>
+								<span><Icon.DribbbleSolid /></span>
+								<div class="grid overflow-hidden">
+									{#key ballSize}
+										<span
+											class="row-[1/2] col-[1/2] tabular-nums"
+											in:fly={{ y: -100 * threeDOptions.ballSizeChange, duration: 200 }}
+											out:fly={{ y: 100 * threeDOptions.ballSizeChange, duration: 200 }}
+											>{Math.round(ballSize * 10)}</span
+										>
+									{/key}
+								</div>
+							</button>
+							<button
+								class="transition bg-orange-600 disabled:bg-gray-600 rounded-full p-2"
+								disabled={ballSize <= 0.11}
+								on:click={() => ((ballSize -= 0.1), (threeDOptions.ballSizeChange = -1))}
+							>
+								<Icon.MinusSolid />
+							</button>
+							<button
+								class="transition bg-orange-600 disabled:bg-gray-600 rounded-full p-2"
+								disabled={ballSize >= 0.69}
+								on:click={() => ((ballSize += 0.1), (threeDOptions.ballSizeChange = 1))}
+							>
+								<Icon.PlusSolid />
+							</button>
+						</div>
 					</div>
 				</div>
-			</div>
+			{/if}
 			<div class="h-full m-0 min-h-[420px]">
 				<PointChart {colors} {ballSize} space="rgb" />
 			</div>
@@ -200,6 +210,9 @@
 </div>
 
 <style>
+	.border-transparent {
+		border: 1px solid transparent;
+	}
 	.color-button {
 		border-radius: 10px;
 		border: 3px solid rgba(0, 0, 0, 0.3);
