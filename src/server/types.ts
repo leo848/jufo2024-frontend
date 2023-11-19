@@ -30,18 +30,22 @@ const action = z.discriminatedUnion('type', [
 		type: z.literal('sortNumbers'),
 		numbers: z.array(z.number()),
 		algorithm: z.enum(['bubbleSort', 'selectionSort', 'insertionSort'])
+	}),
+	z.object({
+		type: z.literal('createPath'),
+		dimensions: z.number().positive().int().lt(256),
+		values: z.array(z.array(z.number())),
+		method: z.enum(['nearestNeighbor', 'bruteForce'])
 	})
 ]);
 
 const serverInputLog = z.object({ type: z.literal('log'), message: z.string() });
 const serverInputAction = z.object({ type: z.literal('action'), action });
 const serverInputLatency = z.object({ type: z.literal('latency') });
-const serverInputCreatePath = z.object({ type: z.literal('createPath'), dimensions: z.number().positive().int(), values: z.array(z.array(z.number())), method: z.enum(["nearestNeighbor", "bruteForce"]) });
 const serverInput = z.discriminatedUnion('type', [
 	serverInputLog,
 	serverInputAction,
-	serverInputLatency,
-	serverInputCreatePath,
+	serverInputLatency
 ]);
 
 export type ServerInput = z.infer<typeof serverInput>;
@@ -64,10 +68,16 @@ export const serverOutputSortedNumbers = z.object({
 	numbers: z.array(z.number()),
 	highlight: z.array(z.tuple([z.number(), z.enum(['compare', 'swap', 'correct'])]))
 });
+export const serverOutputPathCreation = z.object({
+	type: z.literal('pathCreation'),
+	done: z.boolean(),
+	currentPath: z.array(z.array(z.number()))
+});
 export const serverOutput = z.discriminatedUnion('type', [
 	serverOutputError,
 	serverOutputLog,
 	serverOutputSortedNumbers,
+	serverOutputPathCreation,
 	serverOutputLatency
 ]);
 
