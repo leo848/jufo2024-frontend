@@ -1,12 +1,15 @@
 <script lang="ts">
 	import { Card } from 'flowbite-svelte';
 	import ColorPicker from '../../components/ColorPicker.svelte';
-	import { RgbColor } from '../../geom/colorSpaces';
+	import { RgbColor, type ColorSpace } from '../../geom/colorSpaces';
 	import { flip } from 'svelte/animate';
 	import { fly, scale, slide } from 'svelte/transition';
 	import * as Icon from 'flowbite-svelte-icons';
 	import type { ComponentType } from 'svelte';
 	import PointChart from '../../components/PointChart.svelte';
+	import { sendWebsocket } from '../../server/websocket';
+
+	let space: ColorSpace = 'rgb';
 
 	let colors = [
 		RgbColor.fromNumeric(0xff1e26).color(),
@@ -15,40 +18,64 @@
 		RgbColor.fromNumeric(0x06bd00).color(),
 		RgbColor.fromNumeric(0x001a98).color(),
 		RgbColor.fromNumeric(0x760088).color()
-	];
+	]; // pride flag
+
+	$: path = colors.map((color) => color.space(space).point());
 
 	const constructionItems: {
 		name: string;
 		description: string;
 		icon: ComponentType;
 		index: number;
-	}[] = [
-		{
-			name: 'Manuell',
-			description: 'Manuelle Auswahl der Punkte in einer Reihenfolge',
-			icon: Icon.AnnotationOutline
-		},
-		{
-			name: 'Greedy',
-			description: 'Greedy-Algorithmus',
-			icon: Icon.DollarOutline
-		},
-		{
-			name: 'Nearest Neighbor',
-			description: 'Nächster Nachbar',
-			icon: Icon.PhoneOutline
-		},
-		{
-			name: 'Brute Force',
-			description: 'Teste alle möglichen Kombinationen',
-			icon: Icon.HourglassOutline
-		},
-		{
-			name: 'Optimal (Concorde)',
-			description: 'Finde die optimale Lösung mittels des externen Tools Concorde',
-			icon: Icon.WandMagicSparklesOutline
-		}
-	].map((e, i) => Object.assign({}, e, { index: i }));
+		send: (() => void) | null;
+	}[] = (
+		[
+			{
+				name: 'Manuell',
+				description: 'Manuelle Auswahl der Punkte in einer Reihenfolge',
+				method: null,
+				icon: Icon.AnnotationOutline
+			},
+			{
+				name: 'Greedy',
+				description: 'Greedy-Algorithmus',
+				method: null,
+				icon: Icon.DollarOutline
+			},
+			{
+				name: 'Nearest Neighbor',
+				description: 'Nächster Nachbar',
+				method: 'nearestNeighbor',
+				icon: Icon.PhoneOutline
+			},
+			{
+				name: 'Brute Force',
+				description: 'Teste alle möglichen Kombinationen',
+				method: null,
+				icon: Icon.HourglassOutline
+			},
+			{
+				name: 'Optimal (Concorde)',
+				description: 'Finde die optimale Lösung mittels des externen Tools Concorde',
+				method: null,
+				icon: Icon.WandMagicSparklesOutline
+			}
+		] as const
+	).map((e, i) => {
+		const payload =
+			e.method &&
+			({
+				type: 'action',
+				action: {
+					type: 'createPath',
+					method: { type: e.method },
+					dimensions: 3,
+					values: colors.map((color) => color.space(space).point().values())
+				}
+			} as const);
+		const send = payload && (() => sendWebsocket(payload));
+		return Object.assign({}, e, { index: i, send });
+	});
 	let selectedConstructionItem: null | number = null;
 	let displayConstructionItems = constructionItems;
 	$: {
@@ -158,7 +185,7 @@
 				</div>
 			{/if}
 			<div class="h-full m-0 min-h-[420px]">
-				<PointChart {colors} {ballSize} space="rgb" />
+				<PointChart {colors} {path} {ballSize} {space} />
 			</div>
 		</Card>
 		<Card class="rounded-xl col-span-12 md:col-span-6 lg:col-span-5 xl:col-span-3 max-w-none">
@@ -176,8 +203,8 @@
 			<p class="text-2xl xl:text-3xl dark:text-white bg-gray-700 p-4 -m-6 rounded-t-xl mb-4">
 				Konstruktion
 			</p>
-			<div class="text-xl">
-				{#each displayConstructionItems as { name, description, icon, index } (index)}
+			<div class="text-xl grow flex flex-col">
+				{#each displayConstructionItems as { name, icon, index } (index)}
 					<div
 						animate:flip={{ duration: 200 }}
 						transition:scale
@@ -198,12 +225,20 @@
 								</span>
 								<svelte:component this={icon} />
 							</div>
-							{#if constructionOpen}
-								<div>{description}</div>
-							{/if}
 						</div>
 					</div>
 				{/each}
+				{#if selectedConstructionItem !== null}
+					{@const { description, send } = constructionItems[selectedConstructionItem]}
+					<div class="flex flex-col justify-between grow">
+						<div class="rounded-xl" in:scale={{ delay: 150 }}>{description}</div>
+						{#if send}
+							<button on:click={send} class="rounded-xl text-white bg-primary-800 p-4"
+								>Ausführen</button
+							>
+						{/if}
+					</div>
+				{/if}
 			</div>
 		</Card>
 	</div>

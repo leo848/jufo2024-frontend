@@ -6,9 +6,11 @@
 	import type { Color } from '../geom/color';
 	import { cubicOut } from 'svelte/easing';
 	import { tweened } from 'svelte/motion';
+	import type { Point3 } from '../geom/point';
 
 	export let space: ColorSpace;
 	export let colors: Color[];
+	export let path: Point3[];
 
 	let axisTextures = new Array(3).fill(null).map((_, index) => {
 		const spaced = new RgbColor(0, 0, 0).color().space(space);
@@ -19,6 +21,14 @@
 		texture.needsUpdate = true;
 		return texture;
 	});
+
+	let pathSegments: [Point3, Point3][] = [];
+	$: {
+		pathSegments = [];
+		for (let i = 0; i < path.length - 1; i++) {
+			pathSegments.push([path[i], path[i + 1]]);
+		}
+	}
 
 	const rotations = [
 		[0, 0, -Math.PI / 2],
@@ -61,13 +71,31 @@
 		{#each colors as color (color.rgb().numeric())}
 			<SC.Mesh
 				geometry={new THREE.SphereGeometry($ballSizeAnim)}
-				position={color.space(space).point().scale(10).position()}
+				position={color.space(space).point().scale(10).values()}
 				material={new THREE.MeshStandardMaterial({
 					roughness: 0.6,
 					metalness: 0.8,
 					color: color.rgb().numeric()
 				})}
 				castShadow
+			/>
+		{/each}
+
+		{#each pathSegments as [pointA, pointB] ([pointA, pointB])}
+			{@const [displayA, displayB] = [pointA.scale(10), pointB.scale(10)]}
+			{@const deltaVector = displayA.delta(displayB)}
+			{@const distance = deltaVector.mag()}
+			{@const position = displayA.add(deltaVector.scale(0.5)).values()}
+			{@const rotation = deltaVector.rotationFromPoint(displayA)}
+			<SC.Mesh
+				geometry={new THREE.CylinderGeometry(0.08, 0.06, distance, 10)}
+				material={new THREE.MeshStandardMaterial({
+					roughness: 0.2,
+					metalness: 0.8,
+					color: 0xeeeeee
+				})}
+				{position}
+				{rotation}
 			/>
 		{/each}
 

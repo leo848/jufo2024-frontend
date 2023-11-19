@@ -35,7 +35,10 @@ const action = z.discriminatedUnion('type', [
 		type: z.literal('createPath'),
 		dimensions: z.number().positive().int().lt(256),
 		values: z.array(z.array(z.number())),
-		method: z.enum(['nearestNeighbor', 'bruteForce'])
+		method: z.discriminatedUnion('type', [
+			z.object({ type: z.literal('nearestNeighbor') }),
+			z.object({ type: z.literal('bruteForce') })
+		])
 	})
 ]);
 
