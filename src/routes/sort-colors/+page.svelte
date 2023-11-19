@@ -29,6 +29,7 @@
 		description: string;
 		icon: ComponentType;
 		index: number;
+		expectedTime?: (n: number) => null | number,
 		send: (() => void) | null;
 	}[] = (
 		[
@@ -36,7 +37,8 @@
 				name: 'Manuell',
 				description: 'Manuelle Auswahl der Punkte in einer Reihenfolge',
 				method: null,
-				icon: Icon.AnnotationOutline
+				expectedTime: () => null,
+				icon: Icon.AnnotationOutline,
 			},
 			{
 				name: 'Greedy',
@@ -48,6 +50,7 @@
 				name: 'Nearest Neighbor',
 				description: 'Nächster Nachbar',
 				method: 'nearestNeighbor',
+				expectedTime: (n: number) => Math.min(n / 2, 5),
 				icon: Icon.PhoneOutline
 			},
 			{
@@ -238,9 +241,18 @@
 					</div>
 				{/each}
 				{#if selectedConstructionItem !== null}
-					{@const { description, send } = constructionItems[selectedConstructionItem]}
+					{@const { description, send, expectedTime } = constructionItems[selectedConstructionItem]}
 					<div class="flex flex-col justify-between grow">
-						<div class="rounded-xl" in:scale={{ delay: 150 }}>{description}</div>
+						<div>
+							<div class="rounded-xl" in:scale={{ delay: 150 }}>{description}</div>
+							{#if expectedTime}
+								{#if expectedTime(colors.length) === null}
+									<div>Erwartete Zeit: beliebig</div>
+								{:else}
+									<div>Erwartete Zeit: <b>{expectedTime(colors.length)}</b> Sekunden</div>
+								{/if}
+							{/if}
+						</div>
 						{#if send}
 							<button on:click={send} class="rounded-xl text-white bg-primary-800 p-4"
 								>Ausführen</button
