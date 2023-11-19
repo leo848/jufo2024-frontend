@@ -2,12 +2,14 @@
 	import { Card } from 'flowbite-svelte';
 	import ColorPicker from '../../components/ColorPicker.svelte';
 	import { RgbColor, type ColorSpace } from '../../geom/colorSpaces';
+	import { Point3 } from '../../geom/point';
 	import { flip } from 'svelte/animate';
 	import { fly, scale, slide } from 'svelte/transition';
 	import * as Icon from 'flowbite-svelte-icons';
-	import type { ComponentType } from 'svelte';
+	import { onDestroy, type ComponentType } from 'svelte';
 	import PointChart from '../../components/PointChart.svelte';
-	import { sendWebsocket } from '../../server/websocket';
+	import { registerCallback, sendWebsocket, unregisterCallback } from '../../server/websocket';
+	import {serverOutputPathCreation} from '../../server/types';
 
 	let space: ColorSpace = 'rgb';
 
@@ -20,7 +22,7 @@
 		RgbColor.fromNumeric(0x760088).color()
 	]; // pride flag
 
-	$: path = colors.map((color) => color.space(space).point());
+	let path: Point3[] = [];
 
 	const constructionItems: {
 		name: string;
@@ -64,7 +66,7 @@
 	).map((e, i) => {
 		const payload =
 			e.method &&
-			({
+			(() => ({
 				type: 'action',
 				action: {
 					type: 'createPath',
@@ -72,8 +74,8 @@
 					dimensions: 3,
 					values: colors.map((color) => color.space(space).point().values())
 				}
-			} as const);
-		const send = payload && (() => sendWebsocket(payload));
+			} as const));
+		const send = payload && (() => sendWebsocket(payload()));
 		return Object.assign({}, e, { index: i, send });
 	});
 	let selectedConstructionItem: null | number = null;
@@ -98,6 +100,13 @@
 		showOptions: false
 		// ballSizeShowControls: true,
 	};
+
+	let callbackId = registerCallback(serverOutputPathCreation, pc => {
+	console.log(pc);
+		path = pc.currentPath.map(vec => new Point3(vec[0], vec[1], vec[2]));
+	})
+
+	onDestroy(() => unregisterCallback(callbackId));
 </script>
 
 <div class="mx-10">

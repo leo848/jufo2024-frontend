@@ -79,7 +79,6 @@ export class Vec3 {
 		const array = new THREE.ArrowHelper(this.normalized().three(), point.vec().three()).rotation
 			.clone()
 			.toArray();
-		console.log(array);
 		return [array[0], array[1], array[2], array[3]] as [
 			number,
 			number,
