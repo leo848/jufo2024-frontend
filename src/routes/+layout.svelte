@@ -40,7 +40,7 @@
 			<NavLi>
 				<ServerStatus />
 			</NavLi>
-			<NavLi>
+			<!-- <NavLi>
 				<DarkMode>
 					<svelte:fragment slot="lightIcon">
 						<SunSolid />
@@ -49,7 +49,7 @@
 						<MoonSolid />
 					</svelte:fragment>
 				</DarkMode>
-			</NavLi>
+			</NavLi> -->
 		</NavUl>
 		<NavHamburger on:click={toggle} />
 	</Navbar>
