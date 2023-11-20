@@ -15,6 +15,7 @@
 	let axisTextures = new Array(3).fill(null).map((_, index) => {
 		const spaced = new RgbColor(0, 0, 0).color().space(space);
 		const comp = spaced.xyzComponents()[index];
+		if (comp === null) return null;
 		if (!spaced.isComponent(comp)) throw new Error('invalid');
 		const gradient = spaced.gradientTexture(comp as never);
 		const texture = new THREE.Texture(gradient);
@@ -107,16 +108,18 @@
 
 		{#each rotations as rotation, index}
 			{#each axisPositions[index] as position, axisIndex}
-				<SC.Mesh
-					geometry={new THREE.CylinderGeometry(0.2, 0.15, 10, 12)}
-					position={[...position]}
-					rotation={[...rotation]}
-					material={new THREE.MeshBasicMaterial({
-						map: axisTextures[index],
-						opacity: axisIndex === 0 ? 1 : axisIndex === 3 ? 0.1 : 0.25,
-						transparent: axisIndex !== 0
-					})}
-				/>
+				{#if axisTextures[index]}
+					<SC.Mesh
+						geometry={new THREE.CylinderGeometry(0.2, 0.15, 10, 12)}
+						position={[...position]}
+						rotation={[...rotation]}
+						material={new THREE.MeshBasicMaterial({
+							map: axisTextures[index],
+							opacity: axisIndex === 0 ? 1 : axisIndex === 3 ? 0.1 : 0.25,
+							transparent: axisIndex !== 0
+						})}
+					/>
+				{/if}
 			{/each}
 			<SC.Group position={[0, 0, 0]} rotation={[...rotation]}>
 				<SC.Mesh

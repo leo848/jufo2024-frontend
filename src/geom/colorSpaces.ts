@@ -17,7 +17,7 @@ export abstract class AbstractColor<
 	abstract color(): Color;
 	abstract point(): Point3;
 	abstract components(): Component[];
-	xyzComponents(): [Component, Component, Component] {
+	xyzComponents(): [Component | null, Component | null, Component | null] {
 		const comps = this.components();
 		if (comps.length !== 3) throw new Error('Invalid color');
 		const [x, y, z] = comps;
@@ -219,6 +219,10 @@ export class HsvColor extends AbstractColor<HsvColor, HsvComponent> {
 
 	components(): ['h', 's', 'v'] {
 		return ['h', 's', 'v'];
+	}
+
+	xyzComponents(): [null, 'v', null] {
+		return [null, 'v', null];
 	}
 }
 

@@ -11,7 +11,7 @@
 	import { registerCallback, sendWebsocket, unregisterCallback } from '../../server/websocket';
 	import { serverOutputPathCreation } from '../../server/types';
 
-	let space: ColorSpace = 'oklab';
+	let space: ColorSpace = 'hsv';
 
 	let colors = [
 		RgbColor.fromNumeric(0xff1e26).color(),
