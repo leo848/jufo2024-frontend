@@ -10,6 +10,7 @@
 	import PointChart from '../../components/PointChart.svelte';
 	import { registerCallback, sendWebsocket, unregisterCallback } from '../../server/websocket';
 	import { serverOutputPathCreation } from '../../server/types';
+	import {tweened} from 'svelte/motion';
 
 	let space: ColorSpace = 'hsv';
 
@@ -23,12 +24,13 @@
 	]; // pride flag
 
 	let path: Point3[] = [];
-	let chainLength = 0;
+	let chainLength = tweened(0);
 	$: {
-		chainLength = 0;
+		let lengthAcc = 0;
 		for (let i = 0; i < path.length - 1; i++) {
-			chainLength += path[i].distanceTo(path[i + 1]);
+			lengthAcc += path[i].distanceTo(path[i + 1]);
 		}
+		chainLength.set(lengthAcc);
 	}
 
 	const constructionItems: {
@@ -215,7 +217,7 @@
 			<div class="text-xl">
 				<div class="flex-col">
 					<div>Anzahl: {colors.length}</div>
-					<div>Kettenlänge: {chainLength.toFixed(2)}</div>
+					<div>Kettenlänge: {$chainLength.toFixed(2)}</div>
 				</div>
 			</div>
 		</Card>
