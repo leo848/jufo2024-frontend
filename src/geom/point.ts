@@ -1,5 +1,9 @@
 import * as THREE from 'three';
 
+function floatsSimilar(a: number, b: number): boolean {
+	return Math.abs(a - b) < 0.0001;
+}
+
 // Ein Punkt im dreidimensionalen Raum.
 export class Point3 {
 	// x-Koordinate: vom Ursprung aus nach rechts.
@@ -45,6 +49,14 @@ export class Point3 {
 
 	add(vector: Vec3): Point3 {
 		return new Point3(this.x + vector.x, this.y + vector.y, this.z + vector.z);
+	}
+
+	equals(other: Point3) {
+		return (
+			floatsSimilar(this.x, other.x) &&
+			floatsSimilar(this.y, other.y) &&
+			floatsSimilar(this.z, other.z)
+		);
 	}
 }
 

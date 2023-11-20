@@ -7,10 +7,9 @@
 	import GradientDiagram from './GradientDiagram.svelte';
 
 	export let value: Color;
-	let modal = false;
-
 	export const open = () => (modal = true);
 
+	let modal = false;
 	let modalColor = value.clone();
 
 	let space: ColorSpace = 'rgb';

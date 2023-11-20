@@ -10,9 +10,9 @@
 	import PointChart from '../../components/PointChart.svelte';
 	import { registerCallback, sendWebsocket, unregisterCallback } from '../../server/websocket';
 	import { serverOutputPathCreation } from '../../server/types';
-	import {tweened} from 'svelte/motion';
+	import { tweened } from 'svelte/motion';
 
-	let space: ColorSpace = 'hsv';
+	let space: ColorSpace = 'oklab';
 
 	let colors = [
 		RgbColor.fromNumeric(0xff1e26).color(),
@@ -115,8 +115,17 @@
 	};
 
 	let callbackId = registerCallback(serverOutputPathCreation, (pc) => {
-		console.log(pc);
 		path = pc.currentPath.map((vec) => new Point3(vec[0], vec[1], vec[2]));
+		if (pc.done) {
+			console.log(pc);
+			colors = path.map(
+				(point) =>
+					colors.find((color) => color.space(space).point().equals(point)) ||
+					(() => {
+						throw new Error('Invalid: returned invalid color not in list');
+					})()
+			);
+		}
 	});
 
 	onDestroy(() => unregisterCallback(callbackId));
@@ -126,14 +135,16 @@
 	<p class="text-3xl xl:text-5xl dark:text-white mb-4">Farben sortieren</p>
 	<div class="flex flex-row justify-between align-center">
 		<div class="flex flex-row flex-wrap justify-start gap-8 items-stretch h-16">
-			{#each colors as color, index}
-				<ColorPicker bind:value={colors[index]}>
-					<div slot="open-button">
-						<div class="color-button w-full grow" style={'background-color:' + color.rgb().css()}>
-							<div class="h-16 w-16" />
+			{#each colors as color, index (color)}
+				<div animate:flip>
+					<ColorPicker bind:value={colors[index]}>
+						<div slot="open-button">
+							<div class="color-button w-full grow" style={'background-color:' + color.rgb().css()}>
+								<div class="h-16 w-16" />
+							</div>
 						</div>
-					</div>
-				</ColorPicker>
+					</ColorPicker>
+				</div>
 			{/each}
 		</div>
 		<div class="stretch" />
