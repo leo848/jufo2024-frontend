@@ -11,6 +11,7 @@
 	import { registerCallback, sendWebsocket, unregisterCallback } from '../../server/websocket';
 	import { serverOutputPathCreation } from '../../server/types';
 	import { tweened } from 'svelte/motion';
+	import type { Color } from '../../geom/color';
 
 	let space: ColorSpace = 'oklab';
 
@@ -103,6 +104,18 @@
 		colors = [...colors, new RgbColor(Math.random(), Math.random(), Math.random()).color()];
 	}
 
+	function gradient(colors: Color[]) {
+		let str = 'linear-gradient(90deg, ';
+		for (let i = 0; i < colors.length; i++) {
+			const v = i / colors.length;
+			const v2 = (i + 1) / colors.length;
+			str += colors[i].rgb().css() + ' ' + v * 100 + '%, ';
+			str += colors[i].rgb().css() + ' ' + v2 * 100 + '%, ';
+		}
+		str = str.substring(0, str.length - 2) + ')';
+		return str;
+	}
+
 	let ballSize = 0.4;
 	let threeDOptions: {
 		ballSizeChange: 0 | -1 | 1;
@@ -131,10 +144,11 @@
 	onDestroy(() => unregisterCallback(callbackId));
 </script>
 
+<div class="w-full h-2" style={`background: ${gradient(colors)}`} />
 <div class="mx-10">
 	<p class="text-3xl xl:text-5xl dark:text-white mb-4">Farben sortieren</p>
 	<div class="flex flex-row justify-between align-center">
-		<div class="flex flex-row flex-wrap justify-start gap-8 items-stretch h-16">
+		<div class="flex flex-row flex-wrap justify-start 2xl:gap-8 gap-2 items-stretch h-16">
 			{#each colors as color, index (color)}
 				<div animate:flip>
 					<ColorPicker bind:value={colors[index]}>
