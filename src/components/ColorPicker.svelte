@@ -6,11 +6,12 @@
 	import GradientRange from './GradientRange.svelte';
 	import GradientDiagram from './GradientDiagram.svelte';
 	import DeltaBadge from './DeltaBadge.svelte';
+	import { createEventDispatcher, type EventDispatcher } from 'svelte';
 
 	export let value: Color;
-	export const open = () => (modal = true);
+	// export const open = () => (modal = true);
 
-	let modal = false;
+	let modal = true;
 	let modalColor = value.clone();
 
 	let space: ColorSpace = 'rgb';
@@ -28,6 +29,8 @@
 	} as const;
 
 	$: colorMetadata = modalColor.name();
+
+	const dispatch: EventDispatcher<{ choose: Color; cancel: undefined }> = createEventDispatcher();
 
 	function complement() {
 		modalColor = modalColor.rgbMap((c: number) => 1 - c);
@@ -54,19 +57,6 @@
 </script>
 
 <div class="inline-block transition color-picker">
-	<div
-		on:click={() => (modal = true)}
-		role="button"
-		tabindex="0"
-		on:keypress={() => (modal = true)}
-	>
-		<slot name="open-button">
-			<div
-				class="open-button inline-block transition"
-				style={'background-color: ' + value.rgb().css()}
-			/>
-		</slot>
-	</div>
 	<Modal
 		bind:open={modal}
 		transition={(elt) => fly(elt, { y: -300 })}
@@ -185,9 +175,16 @@
 				on:click={() => {
 					value = modalColor;
 					modal = false;
+					dispatch('choose', value);
 				}}>Auswählen</Button
 			>
-			<Button color="alternative" on:click={() => (modal = false)}>Abbrechen</Button>
+			<Button
+				color="alternative"
+				on:click={() => {
+					modal = false;
+					dispatch('cancel');
+				}}>Abbrechen</Button
+			>
 		</svelte:fragment>
 	</Modal>
 </div>
@@ -201,7 +198,6 @@
 		opacity: 0.5;
 	}
 
-	.open-button,
 	.color-preview {
 		border-width: 3px;
 		border-style: solid;
@@ -211,11 +207,6 @@
 		border-bottom-color: rgba(1, 1, 1, 0.3);
 	}
 
-	.open-button {
-		height: 60px;
-		width: 60px;
-		border-radius: 10px;
-	}
 	.color-preview {
 		height: 100px;
 		width: 100px;

@@ -26,6 +26,20 @@
 		RgbColor.fromNumeric(0x001a98).color(),
 		RgbColor.fromNumeric(0x760088).color()
 	]; // pride flag
+	let selection: {
+		index: number;
+		colorPickerOpen?: boolean;
+		position: { x: number; y: number };
+	} | null = null;
+	$: colors, selection = null;
+	function selectCard(evt: MouseEvent, index: number) {
+		if (!evt.target) return;
+		const target = evt.target as HTMLElement;
+		selection = {
+			index,
+			position: { x: target.offsetLeft, y: target.offsetTop + target.offsetHeight + 8 }
+		};
+	}
 
 	let path: Point3[] = [];
 	let chainLength = tweened(0);
@@ -107,6 +121,10 @@
 		colors = [...colors, new RgbColor(Math.random(), Math.random(), Math.random()).color()];
 	}
 
+	function assertColor(n: any): Color {
+		return n as Color;
+	}
+
 	function gradient(colors: Color[]) {
 		let str = 'linear-gradient(90deg, ';
 		for (let i = 0; i < colors.length; i++) {
@@ -147,19 +165,44 @@
 	onDestroy(() => unregisterCallback(callbackId));
 </script>
 
+{#if selection !== null && selection.colorPickerOpen}
+	<ColorPicker
+		value={colors[selection.index]}
+		on:choose={(color) => {
+	 console.log(color);
+			if (selection && selection.index !== null) {
+				colors[selection.index] = assertColor(color.detail);
+			}
+		}}
+	/>
+{/if}
+
+{#if selection !== null}
+	<button
+		class="py-2 px-4 bg-white rounded-lg"
+		transition:scale
+		style={`position: fixed; left: ${selection.position.x}px; top: ${selection.position.y}px`}
+		  on:click={() => {if (selection) {selection.colorPickerOpen = true}}}
+  >
+  		Bearbeiten
+	</button>
+{/if}
+
 <div class="w-full h-2 hover:h-28 transition-all" style={`background: ${gradient(colors)}`} />
 <div class="mx-10">
 	<div class="flex flex-row justify-between align-center mt-8">
 		<div class="flex flex-row flex-wrap justify-start 2xl:gap-8 gap-2 items-stretch h-16">
 			{#each colors as color, index (color)}
 				<div animate:flip>
-					<ColorPicker bind:value={colors[index]}>
-						<div slot="open-button">
-							<div class="color-button w-full grow" style={'background-color:' + color.rgb().css()}>
-								<div class="h-16 w-16" />
-							</div>
-						</div>
-					</ColorPicker>
+					<button
+						class="color-button w-full grow"
+						style={'background-color:' + color.rgb().css()}
+						on:click={(evt) => {
+							selectCard(evt, index);
+						}}
+					>
+						<div class="h-16 w-16" />
+					</button>
 				</div>
 			{/each}
 		</div>
