@@ -111,7 +111,6 @@
 		>
 			<TabItem open class="w-full" on:click={() => (space = 'rgb')}>
 				<div class="text-xl" slot="title">sRGB</div>
-				<ButtonGroup class="space-x-px transition" />
 				<div class="flex flex-row justify-between gap-8 h-full">
 					<div class="stretch w-full">
 						{#each proxies.rgb.components() as comp (comp)}
