@@ -7,7 +7,7 @@ import {
 	type ColorSpace,
 	colorSpaceClasses
 } from './colorSpaces';
-import {getColorName, type ColorNameMetadata} from './colorName';
+import { getColorName, type ColorNameMetadata } from './colorName';
 
 export class Color {
 	#r: number;

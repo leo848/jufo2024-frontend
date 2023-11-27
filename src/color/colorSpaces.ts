@@ -88,11 +88,9 @@ export class RgbColor extends AbstractColor<RgbColor, RgbComponent> {
 	}
 
 	hex(): string {
-		let [r, g, b] = this
-			.values()
-			.map((c: number) => Math.floor(c * 255));
+		let [r, g, b] = this.values().map((c: number) => Math.floor(c * 255));
 		let str = [r, g, b]
-			.map(comp => {
+			.map((comp) => {
 				let str = comp.toString(16);
 				if (str.length === 1) str = '0' + str;
 				return str;
@@ -102,9 +100,7 @@ export class RgbColor extends AbstractColor<RgbColor, RgbComponent> {
 	}
 
 	fancyHex(): string {
-		let [r, g, b] = this
-			.values()
-			.map((c: number) => Math.floor(c * 255));
+		let [r, g, b] = this.values().map((c: number) => Math.floor(c * 255));
 		let str = [r, g, b]
 			.map((comp, index) => {
 				let str = comp.toString(16);

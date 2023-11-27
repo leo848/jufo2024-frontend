@@ -92,7 +92,7 @@ function clientToDisplayErrorRaw(error: ClientError): Omit<DisplayError, 'origin
 function colorNameApiToDisplayError(error: ColorNameApiError): DisplayError {
 	return {
 		...colorNameApiToDisplayErrorRaw(error),
-		origin: 'api',
+		origin: 'api'
 	};
 }
 
@@ -100,11 +100,11 @@ function colorNameApiToDisplayErrorRaw(error: ColorNameApiError): Omit<DisplayEr
 	const type = error.type;
 	if (type === 'noResponse') {
 		return {
-			title: "Keine Antwort erhalten",
-			description: "Der Server zur Bestimmung des Farbwerts hat keine Antwort zurückgegeben."
+			title: 'Keine Antwort erhalten',
+			description: 'Der Server zur Bestimmung des Farbwerts hat keine Antwort zurückgegeben.'
 		};
-	} else if (type === "serde") {
-		return serdeError(error.original, error.error)
+	} else if (type === 'serde') {
+		return serdeError(error.original, error.error);
 	}
 	assertNever(error);
 }

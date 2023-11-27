@@ -25,15 +25,16 @@ export const clientError = z.discriminatedUnion('type', [
 	})
 ]);
 
-export const colorNameApiError = z.discriminatedUnion('type', [ z.object({
-	type: z.literal('noResponse')
-}),
-z.object({
-	type: z.literal('serde'),
-	error: z.string(),
-	original: z.string(),
-})
-])
+export const colorNameApiError = z.discriminatedUnion('type', [
+	z.object({
+		type: z.literal('noResponse')
+	}),
+	z.object({
+		type: z.literal('serde'),
+		error: z.string(),
+		original: z.string()
+	})
+]);
 
 const action = z.discriminatedUnion('type', [
 	z.object({

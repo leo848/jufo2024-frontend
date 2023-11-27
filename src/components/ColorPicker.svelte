@@ -87,7 +87,16 @@
 						<h3 class="text-4xl">
 							{meta.name}
 						</h3>
-						<DeltaBadge type="pos" value={meta.distance} on:click={() => modalColor = new RgbColor(meta.rgb.r / 255, meta.rgb.g / 255, meta.rgb.b / 255).color()} />
+						<DeltaBadge
+							type="pos"
+							value={meta.distance}
+							on:click={() =>
+								(modalColor = new RgbColor(
+									meta.rgb.r / 255,
+									meta.rgb.g / 255,
+									meta.rgb.b / 255
+								).color())}
+						/>
 					{:catch}
 						<h3 class="text-4xl text-red">Farbname unbekannt</h3>
 					{/await}
