@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { Card } from 'flowbite-svelte';
+	import { Card, Spinner } from 'flowbite-svelte';
 	import ColorPicker from '../../components/ColorPicker.svelte';
 	import { RgbColor, type ColorSpace } from '../../color/colorSpaces';
 	import { Point3 } from '../../geom/point';
@@ -31,7 +31,7 @@
 		colorPickerOpen?: boolean;
 		position: { x: number; y: number };
 	} | null = null;
-	$: colors, selection = null;
+	$: colors, (selection = null);
 	function selectCard(evt: MouseEvent, index: number) {
 		if (!evt.target) return;
 		if (selection?.index === index) {
@@ -173,7 +173,7 @@
 	<ColorPicker
 		value={colors[selection.index]}
 		on:choose={(color) => {
-	 console.log(color);
+			console.log(color);
 			if (selection && selection.index !== null) {
 				colors[selection.index] = assertColor(color.detail);
 			}
@@ -182,14 +182,39 @@
 {/if}
 
 {#if selection !== null}
-	<button
-		class="py-2 px-4 bg-white rounded-lg"
+	<div
+		class="p-2 bg-gray-600 text-white rounded-lg z-10 flex flex-col"
 		transition:scale
 		style={`position: fixed; left: ${selection.position.x}px; top: ${selection.position.y}px`}
-		  on:click={() => {if (selection) {selection.colorPickerOpen = true}}}
-  >
-  		Bearbeiten
-	</button>
+	>
+		{#await colors[selection.index].name()}
+			<Spinner />
+		{:then meta}
+			<div class="text-2xl px-2">{meta.name}</div>
+		{/await}
+		<div class="flex flew-row mt-4 gap-4">
+			<button
+				class="text-base p-2 bg-gray-500 rounded-lg"
+				on:click={() => {
+					if (selection) {
+						selection.colorPickerOpen = true;
+					}
+				}}
+			>
+			<Icon.PenNibOutline size="xl" />
+			</button>
+			<button
+				class="text-base p-2 bg-gray-500 rounded-lg"
+				on:click={() => {
+					if (selection) {
+	colors = colors.toSpliced(selection.index, 1);
+					}
+				}}
+			>
+			<Icon.TrashBinOutline size="xl" />
+			</button>
+		</div>
+	</div>
 {/if}
 
 <div class="w-full h-2 hover:h-28 transition-all" style={`background: ${gradient(colors)}`} />
