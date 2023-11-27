@@ -1,8 +1,8 @@
 <script lang="ts">
 	import { Button, ButtonGroup, Modal, TabItem, Tabs } from 'flowbite-svelte';
-	import { Color } from '../geom/color';
+	import { Color } from '../color/color';
 	import { blur, fly } from 'svelte/transition';
-	import { HsvColor, OklabColor, RgbColor, type ColorSpace } from '../geom/colorSpaces';
+	import { HsvColor, OklabColor, RgbColor, type ColorSpace } from '../color/colorSpaces';
 	import GradientRange from './GradientRange.svelte';
 	import GradientDiagram from './GradientDiagram.svelte';
 

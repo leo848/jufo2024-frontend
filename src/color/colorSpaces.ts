@@ -8,7 +8,7 @@ import {
 } from './color';
 import { linearGradient } from './gradient';
 import { toGamma, toLinear } from './linearity';
-import { Point3 } from './point';
+import { Point3 } from '../geom/point';
 
 export abstract class AbstractColor<
 	Self extends AbstractColor<Self, Component>,

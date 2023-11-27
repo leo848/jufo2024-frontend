@@ -1,9 +1,9 @@
 <script lang="ts">
 	import * as THREE from 'three';
 	import * as SC from 'svelte-cubed';
-	import type { ColorSpace } from '../geom/colorSpaces';
-	import { RgbColor } from '../geom/colorSpaces';
-	import type { Color } from '../geom/color';
+	import type { ColorSpace } from '../color/colorSpaces';
+	import { RgbColor } from '../color/colorSpaces';
+	import type { Color } from '../color/color';
 	import { cubicOut } from 'svelte/easing';
 	import { tweened } from 'svelte/motion';
 	import type { Point3 } from '../geom/point';

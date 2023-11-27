@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { Card } from 'flowbite-svelte';
 	import ColorPicker from '../../components/ColorPicker.svelte';
-	import { RgbColor, type ColorSpace } from '../../geom/colorSpaces';
+	import { RgbColor, type ColorSpace } from '../../color/colorSpaces';
 	import { Point3 } from '../../geom/point';
 	import { flip } from 'svelte/animate';
 	import { fly, scale, slide } from 'svelte/transition';
@@ -11,7 +11,7 @@
 	import { registerCallback, sendWebsocket, unregisterCallback } from '../../server/websocket';
 	import { serverOutputPathCreation } from '../../server/types';
 	import { tweened } from 'svelte/motion';
-	import type { Color } from '../../geom/color';
+	import type { Color } from '../../color/color';
 	import { title } from '../../ui/navbar';
 
 	title.set('Farben sortieren');
