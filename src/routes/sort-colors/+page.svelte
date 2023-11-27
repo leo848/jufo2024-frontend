@@ -147,9 +147,9 @@
 	onDestroy(() => unregisterCallback(callbackId));
 </script>
 
-<div class="w-full h-2" style={`background: ${gradient(colors)}`} />
+<div class="w-full h-2 hover:h-28 transition-all" style={`background: ${gradient(colors)}`} />
 <div class="mx-10">
-	<div class="flex flex-row justify-between align-center">
+	<div class="flex flex-row justify-between align-center mt-8">
 		<div class="flex flex-row flex-wrap justify-start 2xl:gap-8 gap-2 items-stretch h-16">
 			{#each colors as color, index (color)}
 				<div animate:flip>
