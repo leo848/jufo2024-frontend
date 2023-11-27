@@ -62,7 +62,7 @@
 		transition={(elt) => fly(elt, { y: -300 })}
 		backdropClass="modal-background"
 		size="xl"
-		class="backdrop-blur"
+		defaultClass="dark:bg-black dark:backdrop-blur dark:bg-clip-padding dark:backdrop-filter dark:backdrop-blur-2xl dark:bg-opacity-10 dark:border dark:border-gray-800"
 	>
 		<svelte:fragment slot="header">
 			<p class="text-4xl text-bold my-2 text-white">Farbauswahl</p>
@@ -74,7 +74,7 @@
 					{#await colorMetadata}
 						<Spinner />
 					{:then meta}
-						<h3 class="text-4xl">
+						<h3 class="text-4xl text-white">
 							{meta.name}
 						</h3>
 						<DeltaBadge

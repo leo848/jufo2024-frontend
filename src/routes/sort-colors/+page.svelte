@@ -183,14 +183,14 @@
 
 {#if selection !== null}
 	<div
-		class="p-2 bg-gray-600 text-white rounded-lg z-10 flex flex-col"
+		class="p-2 bg-clip-padding bg-gray-300 backdrop-filter backdrop-blur-md bg-opacity-20 border border-gray-700 text-white rounded-lg z-10 flex flex-col"
 		transition:scale
 		style={`position: fixed; left: ${selection.position.x}px; top: ${selection.position.y}px`}
 	>
 		{#await colors[selection.index].name()}
 			<Spinner />
 		{:then meta}
-			<div class="text-2xl px-2">{meta.name}</div>
+			<div class="text-3xl px-2">{meta.name}</div>
 		{/await}
 		<div class="flex flew-row mt-4 gap-4">
 			<button
@@ -201,17 +201,17 @@
 					}
 				}}
 			>
-			<Icon.PenNibOutline size="xl" />
+				<Icon.PenNibOutline size="xl" />
 			</button>
 			<button
 				class="text-base p-2 bg-gray-500 rounded-lg"
 				on:click={() => {
 					if (selection) {
-	colors = colors.toSpliced(selection.index, 1);
+						colors = colors.toSpliced(selection.index, 1);
 					}
 				}}
 			>
-			<Icon.TrashBinOutline size="xl" />
+				<Icon.TrashBinOutline size="xl" />
 			</button>
 		</div>
 	</div>
