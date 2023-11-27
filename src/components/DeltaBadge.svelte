@@ -46,7 +46,7 @@
 {#if format(value)}
 	<button
 		style={`background-color: ${color()[0]}; border: 2px solid ${color()[1]}`}
-		class="border border-2 rounded-xl text-white px-2 mx-4 text-xl flex flex-row items-center"
+		class="border border-2 rounded-xl text-white px-2 mx-4 text-base self-end opacity-50 flex flex-row items-center"
 		on:click
 	>
 		<div>
