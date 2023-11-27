@@ -2,12 +2,12 @@ import type { ComponentType } from 'svelte';
 import { assertNever } from './types';
 
 import { CodeSolid, FileZipOutline } from 'flowbite-svelte-icons';
-import type { ServerError, ClientError } from './types';
+import type { ServerError, ClientError, ColorNameApiError } from './types';
 
 export type DisplayError = {
 	title: string;
 	description: string;
-	origin: 'client' | 'server';
+	origin: 'client' | 'server' | 'api';
 	icon?: ComponentType;
 };
 
@@ -27,6 +27,10 @@ export function handleServerError(err: ServerError) {
 
 export function handleClientError(err: ClientError) {
 	handleError(clientToDisplayError(err));
+}
+
+export function handleColorNameApiError(err: ColorNameApiError) {
+	handleError(colorNameApiToDisplayError(err));
 }
 
 function escapeHtml(html: string): string {
@@ -81,6 +85,26 @@ function clientToDisplayErrorRaw(error: ClientError): Omit<DisplayError, 'origin
 		};
 	} else if (type === 'serde') {
 		return serdeError(error.original, error.error);
+	}
+	assertNever(error);
+}
+
+function colorNameApiToDisplayError(error: ColorNameApiError): DisplayError {
+	return {
+		...colorNameApiToDisplayErrorRaw(error),
+		origin: 'api',
+	};
+}
+
+function colorNameApiToDisplayErrorRaw(error: ColorNameApiError): Omit<DisplayError, 'origin'> {
+	const type = error.type;
+	if (type === 'noResponse') {
+		return {
+			title: "Keine Antwort erhalten",
+			description: "Der Server zur Bestimmung des Farbwerts hat keine Antwort zurückgegeben."
+		};
+	} else if (type === "serde") {
+		return serdeError(error.original, error.error)
 	}
 	assertNever(error);
 }

@@ -25,6 +25,16 @@ export const clientError = z.discriminatedUnion('type', [
 	})
 ]);
 
+export const colorNameApiError = z.discriminatedUnion('type', [ z.object({
+	type: z.literal('noResponse')
+}),
+z.object({
+	type: z.literal('serde'),
+	error: z.string(),
+	original: z.string(),
+})
+])
+
 const action = z.discriminatedUnion('type', [
 	z.object({
 		type: z.literal('sortNumbers'),
@@ -87,6 +97,7 @@ export const serverOutput = z.discriminatedUnion('type', [
 export type ServerOutput = z.infer<typeof serverOutput>;
 
 export type ClientError = z.infer<typeof clientError>;
+export type ColorNameApiError = z.infer<typeof colorNameApiError>;
 
 export const serverStatus = z.discriminatedUnion('type', [
 	z.object({

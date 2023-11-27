@@ -7,6 +7,7 @@ import {
 	type ColorSpace,
 	colorSpaceClasses
 } from './colorSpaces';
+import {getColorName, type ColorNameMetadata} from './colorName';
 
 export class Color {
 	#r: number;
@@ -89,6 +90,10 @@ export class Color {
 		this.#g = color.#g;
 		this.#b = color.#b;
 		return this;
+	}
+
+	async name(): Promise<ColorNameMetadata> {
+		return await getColorName(this.rgb());
 	}
 }
 
