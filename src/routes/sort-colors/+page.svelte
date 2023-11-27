@@ -87,7 +87,7 @@
 			{
 				name: 'Brute Force',
 				description: 'Teste alle möglichen Kombinationen',
-				method: null,
+				method: 'bruteForce',
 				icon: Icon.HourglassOutline
 			},
 			{
