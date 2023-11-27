@@ -5,6 +5,7 @@
 	import { HsvColor, OklabColor, RgbColor, type ColorSpace } from '../color/colorSpaces';
 	import GradientRange from './GradientRange.svelte';
 	import GradientDiagram from './GradientDiagram.svelte';
+	import DeltaBadge from './DeltaBadge.svelte';
 
 	export let value: Color;
 	export const open = () => (modal = true);
@@ -86,6 +87,7 @@
 						<h3 class="text-4xl">
 							{meta.name}
 						</h3>
+						<DeltaBadge type="pos" value={meta.distance} />
 					{:catch}
 						<h3 class="text-4xl text-red">Farbname unbekannt</h3>
 					{/await}
