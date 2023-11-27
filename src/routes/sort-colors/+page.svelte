@@ -34,6 +34,10 @@
 	$: colors, selection = null;
 	function selectCard(evt: MouseEvent, index: number) {
 		if (!evt.target) return;
+		if (selection?.index === index) {
+			selection = null;
+			return;
+		}
 		const target = evt.target as HTMLElement;
 		selection = {
 			index,
