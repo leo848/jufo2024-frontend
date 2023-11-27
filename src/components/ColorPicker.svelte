@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { Button, ButtonGroup, Modal, TabItem, Tabs } from 'flowbite-svelte';
+	import { Button, ButtonGroup, Modal, Spinner, TabItem, Tabs } from 'flowbite-svelte';
 	import { Color } from '../color/color';
 	import { blur, fly } from 'svelte/transition';
 	import { HsvColor, OklabColor, RgbColor, type ColorSpace } from '../color/colorSpaces';
@@ -26,6 +26,8 @@
 		oklab: modalColor.proxy(OklabColor)
 	} as const;
 
+	$: colorMetadata = modalColor.name();
+
 	function complement() {
 		modalColor = modalColor.rgbMap((c: number) => 1 - c);
 	}
@@ -43,22 +45,6 @@
 
 	function randomColor() {
 		modalColor = new Color(Math.random(), Math.random(), Math.random());
-	}
-
-	function nicerHex(color: Color) {
-		let [r, g, b] = color
-			.rgb()
-			.values()
-			.map((c: number) => Math.floor(c * 255));
-		let str = [r, g, b]
-			.map((comp, index) => {
-				let str = comp.toString(16);
-				if (str.length === 1) str = '0' + str;
-				let color = ['red', 'green', 'blue'][index];
-				return `<span class="text-${color}-300">${str}</span>`;
-			})
-			.reduce((s1, s2) => s1 + s2);
-		return '#' + str;
 	}
 
 	function fancyCss(color: Color) {
@@ -94,11 +80,19 @@
 			<div class="color-preview" style={'background-color: ' + modalColor.rgb().css()} />
 			<div class="flex flex-col grow justify-between">
 				<div class="flex justify-start">
-					<h3 class="text-4xl">farbname</h3>
+					{#await colorMetadata}
+						<Spinner />
+					{:then meta}
+						<h3 class="text-4xl">
+							{meta.name}
+						</h3>
+					{:catch}
+						<h3 class="text-4xl text-red">Farbname unbekannt</h3>
+					{/await}
 				</div>
 				<div class="flex flex-row justify-start gap-4">
 					<!-- eslint-disable -->
-					<code class="text-2xl">{@html nicerHex(modalColor)}</code>
+					<code class="text-2xl">{@html modalColor.rgb().fancyHex()}</code>
 					{#key [space, fancyCss(modalColor)]}
 						{#if fancyCss(modalColor)}
 							<code class="text-2xl" out:blur={{ duration: 500 }}>{@html fancyCss(modalColor)}</code

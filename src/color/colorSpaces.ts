@@ -82,17 +82,46 @@ export class RgbColor extends AbstractColor<RgbColor, RgbComponent> {
 		return `rgb(${r}, ${g}, ${b})`;
 	}
 
+	fancyCss(): string {
+		const [r, g, b] = this.values().map((c) => Math.floor(c * 255));
+		return `rgb(<span class="text-red-300">${r}</span>, <span class="text-green-300">${g}</span>, <span class="text-blue-300">${b}</span>)`;
+	}
+
+	hex(): string {
+		let [r, g, b] = this
+			.values()
+			.map((c: number) => Math.floor(c * 255));
+		let str = [r, g, b]
+			.map(comp => {
+				let str = comp.toString(16);
+				if (str.length === 1) str = '0' + str;
+				return str;
+			})
+			.reduce((s1, s2) => s1 + s2);
+		return str;
+	}
+
+	fancyHex(): string {
+		let [r, g, b] = this
+			.values()
+			.map((c: number) => Math.floor(c * 255));
+		let str = [r, g, b]
+			.map((comp, index) => {
+				let str = comp.toString(16);
+				if (str.length === 1) str = '0' + str;
+				let color = ['red', 'green', 'blue'][index];
+				return `<span class="text-${color}-300">${str}</span>`;
+			})
+			.reduce((s1, s2) => s1 + s2);
+		return '#' + str;
+	}
+
 	get(key: 'r' | 'g' | 'b'): number {
 		return this[key];
 	}
 
 	neededGradientPoints(): number {
 		return 2;
-	}
-
-	fancyCss(): string {
-		const [r, g, b] = this.values().map((c) => Math.floor(c * 255));
-		return `rgb(<span class="text-red-300">${r}</span>, <span class="text-green-300">${g}</span>, <span class="text-blue-300">${b}</span>)`;
 	}
 
 	components(): ['r', 'g', 'b'] {

@@ -5,7 +5,7 @@ import {handleColorNameApiError} from '../server/error';
 const colorNameApiResponse = z.object({
 	"colors": z.array(z.object({
 		"name": z.string(),
-		"rgb": z.object({r:z.string(),g:z.string(),b:z.string()}),
+		"rgb": z.object({r:z.number(),g:z.number(),b:z.number()}),
 		distance: z.number().nonnegative(),
 	})),
 });
@@ -15,7 +15,7 @@ export type ColorNameMetadata = z.infer<typeof colorNameApiResponse>["colors"][0
 export async function getColorName(color: RgbColor): Promise<ColorNameMetadata> {
 	let response, json;
 	try {
-		response = await fetch(`https://api.color.pizza/v1/?values=${color.numeric().toString(16)}`);
+		response = await fetch(`https://api.color.pizza/v1/?values=${color.hex()}`);
 		json = await response.json();
 	} catch (e) {
 		handleColorNameApiError({ type: "noResponse" });
