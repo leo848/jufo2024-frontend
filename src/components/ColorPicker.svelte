@@ -147,15 +147,33 @@
 			</TabItem>
 			<TabItem class="w-full" on:click={() => (space = 'hsv')}>
 				<div class="text-xl" slot="title">HSV</div>
+				<div class="flex flex-row justify-between gap-8 h-full">
+					<div class="stretch w-full">
 				{#each proxies.hsv.components() as comp (comp)}
 					<div class="h-10 mt-4">
 						<GradientRange bind:value={proxies.hsv[comp]} space="hsv" {comp} color={modalColor} />
 					</div>
 					<div>{compNames.hsv[comp]} = {Math.round(proxies.hsv[comp] * 100)}%</div>
 				{/each}
+					</div>
+					<div>
+						<div class="h-64 w-64">
+							<GradientDiagram
+								bind:valueX={proxies.hsv.h}
+								bind:valueY={proxies.hsv.v}
+								space="hsv"
+								compX="h"
+								compY="v"
+								color={modalColor}
+							/>
+						</div>
+					</div>
+				</div>
 			</TabItem>
 			<TabItem class="w-full" on:click={() => (space = 'oklab')}>
 				<div class="text-xl" slot="title">OKLAB</div>
+				<div class="flex flex-row justify-between gap-8 h-full">
+					<div class="stretch w-full">
 				{#each proxies.oklab.components() as comp (comp)}
 					<div class="h-10 mt-4">
 						<GradientRange
@@ -167,6 +185,20 @@
 					</div>
 					<div>{compNames.oklab[comp]} = {Math.round(proxies.oklab[comp] * 100)}%</div>
 				{/each}
+					</div>
+					<div>
+						<div class="h-64 w-64">
+							<GradientDiagram
+								bind:valueX={proxies.oklab.a}
+								bind:valueY={proxies.oklab.b}
+								space="oklab"
+								compX="a"
+								compY="b"
+								color={modalColor}
+							/>
+						</div>
+					</div>
+				</div>
 			</TabItem>
 		</Tabs>
 		<svelte:fragment slot="footer">

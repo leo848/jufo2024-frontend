@@ -159,25 +159,7 @@
 			for (let y = 0; y < gradients.length; y++) {
 				ctx.beginPath();
 				ctx.fillStyle = gradients[y];
-				if (y == 0) {
-					ctx.roundRect(
-						0,
-						(height * y) / points.length,
-						width,
-						height / points.length + 1,
-						[20, 20, 0, 0]
-					);
-				} else if (y == points.length - 1) {
-					ctx.roundRect(
-						0,
-						(height * y) / points.length,
-						width,
-						height / points.length + 1,
-						[0, 0, 20, 20]
-					);
-				} else {
-					ctx.rect(0, (height * y) / points.length, width, height / points.length + 1);
-				}
+				ctx.rect(0, (height * y) / points.length, width, height / points.length + 1);
 				ctx.fill();
 			}
 		} else {
@@ -202,6 +184,6 @@
 	}
 </script>
 
-<div class="w-full h-full" bind:this={wrapperDiv}>
-	<canvas bind:this={canvas} />
+<div class="w-full h-full rounded-xl" bind:this={wrapperDiv}>
+	<canvas bind:this={canvas} class="rounded-xl" />
 </div>
