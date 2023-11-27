@@ -21,6 +21,9 @@
 	import { scale } from 'svelte/transition';
 	import { flip } from 'svelte/animate';
 	import * as Icon from 'flowbite-svelte-icons';
+	import { title } from '../../ui/navbar';
+
+	title.set('Zahlen sortieren');
 
 	let _id = 0;
 	function genId() {
@@ -129,8 +132,6 @@
 </script>
 
 <Container>
-	<h1 class="text-6xl dark:text-gray-300">Zahlen sortieren</h1>
-
 	<StepIndicator class="mt-4 mb-8" {currentStep} {steps} glow />
 
 	{#if currentStep == 1}

@@ -5,6 +5,7 @@
 	import { onMount } from 'svelte';
 
 	import { setGlobalErrorHandler, type DisplayError } from '../server/error';
+	import { title } from '../ui/navbar';
 
 	import '../app.postcss';
 	import { fly } from 'svelte/transition';
@@ -26,6 +27,15 @@
 		<NavBrand href="/">
 			<span class="self-center whitespace-nowrap text-3xl font-semibold">jufo2024</span>
 		</NavBrand>
+		{#if $title}
+			{#if typeof $title === 'string'}
+				<div class="flex flex-col content-center items-center h-full">
+					<p class="text-3xl dark:text-white">{$title}</p>
+				</div>
+			{:else}
+				<svelte:component this={$title} />
+			{/if}
+		{/if}
 		<NavUl>
 			<NavLi>
 				<ServerStatus />

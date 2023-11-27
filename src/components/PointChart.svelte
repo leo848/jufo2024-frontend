@@ -141,7 +141,7 @@
 			maxPolarAngle={Math.PI * 0.51}
 			maxDistance={30}
 			enablePan={false}
-	  		target={[5, 5, 5]}
+			target={[5, 5, 5]}
 		/>
 	</SC.Canvas>
 </div>

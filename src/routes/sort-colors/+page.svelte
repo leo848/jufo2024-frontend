@@ -12,6 +12,9 @@
 	import { serverOutputPathCreation } from '../../server/types';
 	import { tweened } from 'svelte/motion';
 	import type { Color } from '../../geom/color';
+	import { title } from '../../ui/navbar';
+
+	title.set('Farben sortieren');
 
 	let space: ColorSpace = 'oklab';
 
@@ -146,7 +149,6 @@
 
 <div class="w-full h-2" style={`background: ${gradient(colors)}`} />
 <div class="mx-10">
-	<p class="text-3xl xl:text-5xl dark:text-white mb-4">Farben sortieren</p>
 	<div class="flex flex-row justify-between align-center">
 		<div class="flex flex-row flex-wrap justify-start 2xl:gap-8 gap-2 items-stretch h-16">
 			{#each colors as color, index (color)}
