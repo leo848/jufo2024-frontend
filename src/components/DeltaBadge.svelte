@@ -36,15 +36,17 @@
 
 	function format(value: number) {
 		if (Math.abs(value) < 0.001) {
-			return "exakt";
+			return null
 		} else {
 			return "±" + formatter.format(value);
 		}
 	}
 </script>
 
-<div style={`background-color: ${color()[0]}; border: 2px solid ${color()[1]}`} class="border border-2 rounded-xl text-white px-2 mx-4 text-xl flex flex-row items-center">
-	<div>
-		{format(value)}
-	</div>
-</div>
+{#if format(value)}
+	<button style={`background-color: ${color()[0]}; border: 2px solid ${color()[1]}`} class="border border-2 rounded-xl text-white px-2 mx-4 text-xl flex flex-row items-center" on:click>
+		<div>
+			{format(value)}
+		</div>
+	</button>
+{/if}
