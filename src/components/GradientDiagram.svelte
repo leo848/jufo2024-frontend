@@ -27,6 +27,14 @@
 
 	const lastUpdate = { timeout: 0, grad: new Date().getTime(), render: new Date().getTime() };
 	let points: CanvasGradient[] = [];
+	function getCurrent(): { current: string } {
+		return {
+			current: color
+				.space(space)
+				.with(compX as never, valueX)
+				.css()
+		};
+	}
 	function getGradient(ctx: CanvasRenderingContext2D): {
 		gradients: CanvasGradient[];
 		current: string;
@@ -66,6 +74,38 @@
 		}
 		points = gradients;
 		return { gradients, current };
+	}
+
+	let lastGradientUpdate = {
+		timeout: 0,
+		grad: new Date().getTime(),
+		render: new Date().getTime(),
+		imageData: null as null | ImageData
+	};
+	function get2DRgbGradient(ctx: CanvasRenderingContext2D): ImageData {
+		if (
+			lastGradientUpdate.imageData != null &&
+			new Date().getTime() - lastGradientUpdate.grad < 1000
+		) {
+			clearTimeout(lastGradientUpdate.timeout);
+			lastGradientUpdate.timeout = setTimeout(() => (ctx = ctx), 1000);
+			return lastGradientUpdate.imageData;
+		}
+		lastGradientUpdate.grad = new Date().getTime();
+		const imageData = ctx.getImageData(0, 0, width, height);
+		for (let y = 0; y < height; y++) {
+			for (let x = 0; x < width; x++) {
+				imageData.data[(y * width + x) * 4] =
+					compX === 'r' ? x : compY === 'r' ? y : color.rgb().r * 255;
+				imageData.data[(y * width + x) * 4 + 1] =
+					compX === 'g' ? x : compY === 'g' ? y : color.rgb().g * 255;
+				imageData.data[(y * width + x) * 4 + 2] =
+					compX === 'b' ? x : compY === 'b' ? y : color.rgb().b * 255;
+				imageData.data[(y * width + x) * 4 + 3] = 255;
+			}
+		}
+		lastGradientUpdate.imageData = imageData;
+		return imageData;
 	}
 
 	onMount(() => {
@@ -112,31 +152,36 @@
 	$: if (color && ctx) {
 		ctx.clearRect(0, 0, width, height);
 
-		const { gradients, current } = getGradient(ctx);
+		const { current } = getCurrent();
+		if (space !== 'rgb') {
+			const { gradients } = getGradient(ctx);
 
-		for (let y = 0; y < gradients.length; y++) {
-			ctx.beginPath();
-			ctx.fillStyle = gradients[y];
-			if (y == 0) {
-				ctx.roundRect(
-					0,
-					(height * y) / points.length,
-					width,
-					height / points.length + 1,
-					[20, 20, 0, 0]
-				);
-			} else if (y == points.length - 1) {
-				ctx.roundRect(
-					0,
-					(height * y) / points.length,
-					width,
-					height / points.length + 1,
-					[0, 0, 20, 20]
-				);
-			} else {
-				ctx.rect(0, (height * y) / points.length, width, height / points.length + 1);
+			for (let y = 0; y < gradients.length; y++) {
+				ctx.beginPath();
+				ctx.fillStyle = gradients[y];
+				if (y == 0) {
+					ctx.roundRect(
+						0,
+						(height * y) / points.length,
+						width,
+						height / points.length + 1,
+						[20, 20, 0, 0]
+					);
+				} else if (y == points.length - 1) {
+					ctx.roundRect(
+						0,
+						(height * y) / points.length,
+						width,
+						height / points.length + 1,
+						[0, 0, 20, 20]
+					);
+				} else {
+					ctx.rect(0, (height * y) / points.length, width, height / points.length + 1);
+				}
+				ctx.fill();
 			}
-			ctx.fill();
+		} else {
+			ctx.putImageData(get2DRgbGradient(ctx), 0, 0);
 		}
 
 		let x = rangeMap($displayValueX, [0, 1], [20, width - 20]);
