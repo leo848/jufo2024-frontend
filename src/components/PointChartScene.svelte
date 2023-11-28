@@ -7,7 +7,7 @@
 	import type { Color } from '../color/color';
 	import { cubicOut } from 'svelte/easing';
 	import { tweened } from 'svelte/motion';
-	import type { Point3 } from '../geom/point';
+	import { type Point3, axes } from '../geom/point';
 	import { createEventDispatcher, type EventDispatcher } from 'svelte';
 
 	extend({
@@ -90,9 +90,23 @@
 
 {#each colors as color, index (color.rgb().numeric())}
 	{@const selected = selection?.index === index}
+	{@const displayPoint = color.space(space).point().scale(10)}
+	{#if selected}
+		{#each axes as comp, index}
+			{@const end = displayPoint.with(0, comp)}
+			{@const deltaVector = displayPoint.delta(end)}
+			{@const distance = deltaVector.mag()}
+			{@const position = displayPoint.add(deltaVector.scale(0.5)).values()}
+			{@const rotation = deltaVector.rotationFromPoint(displayPoint)}
+			<T.Mesh {position} {rotation}>
+				<T.CylinderGeometry args={[0.1, 0.08, distance, 10]} />
+				<T.MeshStandardMaterial roughness={0.8} metalness={0.2} color={0xffffff} />
+			</T.Mesh>
+		{/each}
+	{/if}
 	<T.Mesh
 		geometry={new THREE.SphereGeometry($ballSizeAnim * (selected ? 1.1 : 1.0))}
-		position={color.space(space).point().scale(10).values()}
+		position={displayPoint.values()}
 		material={new THREE.MeshStandardMaterial({
 			roughness: selected ? 0.5 : 0.6,
 			metalness: selected ? 0 : 0.8,
@@ -110,13 +124,13 @@
 	{@const rotation = deltaVector.rotationFromPoint(displayA)}
 	<T.Mesh {position} {rotation}>
 		<T.CylinderGeometry args={[0.08, 0.06, distance, 10]} />
-		<T.MeshStandardMaterial roughness={0.2} metalness={0.8} color={0xeeeeee} />
+		<T.MeshStandardMaterial roughness={0.2} metalness={0.8} color={0xffffff} />
 	</T.Mesh>
 {/each}
 
 <T.AmbientLight intensity={0.5} />
 
-<T.DirectionalLight intensity={0.8} position={[5, 5, 5]} />
+<T.DirectionalLight intensity={1.0} position={[5, 5, 5]} />
 
 {#each rotations as rotation, index}
 	{#each axisPositions[index] as position, axisIndex}
@@ -136,7 +150,6 @@
 	<T.Group position={[0, 0, 0]} rotation={[...rotation]}>
 		<T.Mesh position={[0, 0, 0]} rotation={[-Math.PI / 2, 0, 0]} receiveShadow />
 
-		<!-- <T is={new THREE.GridHelper(50, 50, 0x444444, 0x555555)} position={[0, 0.001, 0]} /> -->
 		<T
 			is={THREE.GridHelper}
 			args={[10, 10, 0x444444, 0x555555]}

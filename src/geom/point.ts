@@ -4,6 +4,8 @@ function floatsSimilar(a: number, b: number): boolean {
 	return Math.abs(a - b) < 0.0001;
 }
 
+export const axes = ['x', 'y', 'z'] as const;
+
 // Ein Punkt im dreidimensionalen Raum.
 export class Point3 {
 	// x-Koordinate: vom Ursprung aus nach rechts.
@@ -45,6 +47,10 @@ export class Point3 {
 
 	map(f: (comp: number, axis: 'x' | 'y' | 'z') => number): Point3 {
 		return new Point3(f(this.x, 'x'), f(this.y, 'y'), f(this.z, 'z'));
+	}
+
+	with(value: number, axis: 'x' | 'y' | 'z'): Point3 {
+		return this.map((c, xyz) => (xyz === axis ? value : c));
 	}
 
 	vec(): Vec3 {
