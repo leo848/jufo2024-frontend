@@ -86,6 +86,7 @@ export const serverOutputPathCreation = z.object({
 	type: z.literal('pathCreation'),
 	donePath: z.optional(z.array(z.array(z.number()))),
 	currentEdges: z.array(z.tuple([z.array(z.number()), z.array(z.number())])),
+	progress: z.optional(z.number()),
 });
 export const serverOutput = z.discriminatedUnion('type', [
 	serverOutputError,

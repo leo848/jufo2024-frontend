@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { Card, Spinner } from 'flowbite-svelte';
+	import { Card, Progressbar, Spinner } from 'flowbite-svelte';
 	import ColorPicker from '../../components/ColorPicker.svelte';
 	import { RgbColor, type ColorSpace } from '../../color/colorSpaces';
 	import { Point3 } from '../../geom/point';
@@ -124,6 +124,8 @@
 	}
 	$: constructionOpen = selectedConstructionItem !== null;
 
+	let progress = { ongoing: false, value: 0 as null|number };
+
 	function addRandomColor() {
 		colors = [...colors, new RgbColor(Math.random(), Math.random(), Math.random()).color()];
 	}
@@ -158,6 +160,7 @@
 	let callbackId = registerCallback(serverOutputPathCreation, (pc) => {
 		path = null;
 		if (pc.donePath) {
+			progress.ongoing = false;
 			path = pc.donePath.map(Point3.fromArray);
 			edges = [];
 			for (let i = 0; i < pc.donePath.length - 1; i++) {
@@ -172,6 +175,8 @@
 					})()
 			);
 		} else {
+			progress.ongoing = true;
+			progress.value = pc.progress ?? null;
 			edges = pc.currentEdges.map(([from, to]) => [Point3.fromArray(from), Point3.fromArray(to)]);
 		}
 	});
@@ -376,9 +381,15 @@
 							{/if}
 						</div>
 						{#if send}
-							<button on:click={send} class="rounded-xl text-white bg-primary-800 p-4"
-								>Ausführen</button
-							>
+							{#if !progress.ongoing}
+								<button on:click={send} class="rounded-xl text-white bg-primary-800 p-4"
+									>Ausführen</button
+								>
+							{:else if progress.value === null}
+								<Spinner />
+							{:else}
+								<Progressbar progress={progress.value * 100} />
+							{/if}
 						{/if}
 					</div>
 				{/if}
