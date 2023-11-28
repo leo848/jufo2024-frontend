@@ -88,8 +88,8 @@ export class RgbColor extends AbstractColor<RgbColor, RgbComponent> {
 	}
 
 	hex(): string {
-		let [r, g, b] = this.values().map((c: number) => Math.floor(c * 255));
-		let str = [r, g, b]
+		const [r, g, b] = this.values().map((c: number) => Math.floor(c * 255));
+		const str = [r, g, b]
 			.map((comp) => {
 				let str = comp.toString(16);
 				if (str.length === 1) str = '0' + str;
@@ -100,12 +100,12 @@ export class RgbColor extends AbstractColor<RgbColor, RgbComponent> {
 	}
 
 	fancyHex(): string {
-		let [r, g, b] = this.values().map((c: number) => Math.floor(c * 255));
-		let str = [r, g, b]
+		const [r, g, b] = this.values().map((c: number) => Math.floor(c * 255));
+		const str = [r, g, b]
 			.map((comp, index) => {
 				let str = comp.toString(16);
 				if (str.length === 1) str = '0' + str;
-				let color = ['red', 'green', 'blue'][index];
+				const color = ['red', 'green', 'blue'][index];
 				return `<span class="text-${color}-300">${str}</span>`;
 			})
 			.reduce((s1, s2) => s1 + s2);

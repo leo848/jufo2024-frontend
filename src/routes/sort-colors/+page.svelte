@@ -131,7 +131,7 @@
 		colors = [...colors, new RgbColor(Math.random(), Math.random(), Math.random()).color()];
 	}
 
-	function assertColor(n: any): Color {
+	function assertColor(n: unknown): Color {
 		return n as Color;
 	}
 
@@ -241,14 +241,14 @@
 				<div animate:flip>
 					<button
 						class="color-button w-full grow transition-all"
-						style={`background-color: ${color.rgb().css()}; ${selection?.index === index ? 'transform: scale(1.1); border-color: white' : ''}`}
+						style={`background-color: ${color.rgb().css()}; ${
+							selection?.index === index ? 'transform: scale(1.1); border-color: white' : ''
+						}`}
 						on:click={(evt) => {
 							selectCard(evt, index);
 						}}
 					>
-						<div
-							class="h-16 w-16"
-						/>
+						<div class="h-16 w-16" />
 					</button>
 				</div>
 			{/each}
@@ -324,7 +324,7 @@
 				</div>
 			{/if}
 			<div class="h-full m-0 min-h-[420px]">
-				<PointChart {colors} {edges} {ballSize} {space} bind:selection={selection} />
+				<PointChart {colors} {edges} {ballSize} {space} bind:selection />
 			</div>
 		</Card>
 		<Card class="rounded-xl col-span-12 md:col-span-6 lg:col-span-5 xl:col-span-3 max-w-none">
