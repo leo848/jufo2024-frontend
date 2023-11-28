@@ -49,7 +49,7 @@ const action = z.discriminatedUnion('type', [
 		method: z.discriminatedUnion('type', [
 			z.object({ type: z.literal('nearestNeighbor') }),
 			z.object({ type: z.literal('bruteForce') }),
-			z.object({ type: z.literal('greedy') }),
+			z.object({ type: z.literal('greedy') })
 		])
 	})
 ]);
@@ -87,7 +87,7 @@ export const serverOutputPathCreation = z.object({
 	type: z.literal('pathCreation'),
 	donePath: z.optional(z.array(z.array(z.number()))),
 	currentEdges: z.array(z.tuple([z.array(z.number()), z.array(z.number())])),
-	progress: z.optional(z.number()),
+	progress: z.optional(z.number())
 });
 export const serverOutput = z.discriminatedUnion('type', [
 	serverOutputError,

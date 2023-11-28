@@ -46,7 +46,7 @@
 		};
 	}
 
-	let path: Point3[]|null = null;
+	let path: Point3[] | null = null;
 	let edges: [Point3, Point3, Color?][] = [];
 	let chainLength = tweened(0);
 	$: if (path !== null) {
@@ -124,7 +124,7 @@
 	}
 	$: constructionOpen = selectedConstructionItem !== null;
 
-	let progress = { ongoing: false, value: 0 as null|number };
+	let progress = { ongoing: false, value: 0 as null | number };
 
 	function addRandomColor() {
 		colors = [...colors, new RgbColor(Math.random(), Math.random(), Math.random()).color()];
@@ -239,13 +239,15 @@
 			{#each colors as color, index (color)}
 				<div animate:flip>
 					<button
-						class="color-button w-full grow"
-						style={'background-color:' + color.rgb().css()}
+						class="color-button w-full grow transition-all"
+						style={`background-color: ${color.rgb().css()}; ${selection?.index === index ? 'transform: scale(1.1); border-color: white' : ''}`}
 						on:click={(evt) => {
 							selectCard(evt, index);
 						}}
 					>
-						<div class="h-16 w-16" />
+						<div
+							class="h-16 w-16"
+						/>
 					</button>
 				</div>
 			{/each}

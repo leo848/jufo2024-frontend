@@ -149,12 +149,17 @@
 				<div class="text-xl" slot="title">HSV</div>
 				<div class="flex flex-row justify-between gap-8 h-full">
 					<div class="stretch w-full">
-				{#each proxies.hsv.components() as comp (comp)}
-					<div class="h-10 mt-4">
-						<GradientRange bind:value={proxies.hsv[comp]} space="hsv" {comp} color={modalColor} />
-					</div>
-					<div>{compNames.hsv[comp]} = {Math.round(proxies.hsv[comp] * 100)}%</div>
-				{/each}
+						{#each proxies.hsv.components() as comp (comp)}
+							<div class="h-10 mt-4">
+								<GradientRange
+									bind:value={proxies.hsv[comp]}
+									space="hsv"
+									{comp}
+									color={modalColor}
+								/>
+							</div>
+							<div>{compNames.hsv[comp]} = {Math.round(proxies.hsv[comp] * 100)}%</div>
+						{/each}
 					</div>
 					<div>
 						<div class="h-64 w-64">
@@ -174,17 +179,17 @@
 				<div class="text-xl" slot="title">OKLAB</div>
 				<div class="flex flex-row justify-between gap-8 h-full">
 					<div class="stretch w-full">
-				{#each proxies.oklab.components() as comp (comp)}
-					<div class="h-10 mt-4">
-						<GradientRange
-							bind:value={proxies.oklab[comp]}
-							space="oklab"
-							{comp}
-							color={modalColor}
-						/>
-					</div>
-					<div>{compNames.oklab[comp]} = {Math.round(proxies.oklab[comp] * 100)}%</div>
-				{/each}
+						{#each proxies.oklab.components() as comp (comp)}
+							<div class="h-10 mt-4">
+								<GradientRange
+									bind:value={proxies.oklab[comp]}
+									space="oklab"
+									{comp}
+									color={modalColor}
+								/>
+							</div>
+							<div>{compNames.oklab[comp]} = {Math.round(proxies.oklab[comp] * 100)}%</div>
+						{/each}
 					</div>
 					<div>
 						<div class="h-64 w-64">
