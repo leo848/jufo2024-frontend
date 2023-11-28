@@ -76,7 +76,7 @@
 			{
 				name: 'Greedy',
 				description: 'Greedy-Algorithmus',
-				method: null,
+				method: 'greedy',
 				icon: Icon.DollarOutline
 			},
 			{
