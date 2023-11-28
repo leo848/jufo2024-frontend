@@ -7,10 +7,16 @@
 	import { cubicOut } from 'svelte/easing';
 	import { tweened } from 'svelte/motion';
 	import type { Point3 } from '../geom/point';
+	import { createEventDispatcher, type EventDispatcher } from 'svelte';
 
 	export let space: ColorSpace;
 	export let colors: Color[];
 	export let edges: [Point3, Point3, Color?][];
+	export let selection: {
+		index: number;
+		colorPickerOpen?: boolean;
+		position: { x: number; y: number };
+	} | null = null;
 
 	let axisTextures = new Array(3).fill(null).map((_, index) => {
 		const spaced = new RgbColor(0, 0, 0).color().space(space);
@@ -52,22 +58,30 @@
 	export let ballSize: number = 0.5;
 	const ballSizeAnim = tweened(ballSize, { duration: 250, easing: cubicOut });
 	$: $ballSizeAnim = ballSize;
+
+	const dispatch: EventDispatcher<{ pick: number }> = createEventDispatcher();
+	const raycaster = new THREE.Raycaster();
+
+	function tryPick(evt: MouseEvent) {
+		selection = null;
+	}
 </script>
 
-<div class="chart">
+<div class="chart cursor-default" on:click={tryPick} role="button" tabindex="0" on:keydown={()=>{}}>
 	<SC.Canvas
 		background={new THREE.Color(0x0c0c0c)}
 		fog={new THREE.FogExp2(0x0c0c0c, 0.015)}
 		antialias
 		shadows
 	>
-		{#each colors as color (color.rgb().numeric())}
+		{#each colors as color, index (color.rgb().numeric())}
+			{@const selected = selection?.index === index}
 			<SC.Mesh
-				geometry={new THREE.SphereGeometry($ballSizeAnim)}
+				geometry={new THREE.SphereGeometry($ballSizeAnim * (selected ? 1.1 : 1.0))}
 				position={color.space(space).point().scale(10).values()}
 				material={new THREE.MeshStandardMaterial({
-					roughness: 0.6,
-					metalness: 0.8,
+					roughness: selected ? 0.5 : 0.6,
+					metalness: selected ? 0 : 0.8,
 					color: color.rgb().numeric()
 				})}
 				castShadow
