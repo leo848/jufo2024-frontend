@@ -19,6 +19,10 @@ export class Point3 {
 		this.z = z;
 	}
 
+	static fromArray(array: number[]): Point3 {
+		return new Point3(array[0], array[1], array[2]);
+	}
+
 	values(): [number, number, number] {
 		return [this.x, this.y, this.z];
 	}

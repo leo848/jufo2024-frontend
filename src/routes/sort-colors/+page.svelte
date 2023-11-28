@@ -46,9 +46,10 @@
 		};
 	}
 
-	let path: Point3[] = [];
+	let path: Point3[]|null = null;
+	let edges: [Point3, Point3, Color?][] = [];
 	let chainLength = tweened(0);
-	$: {
+	$: if (path !== null) {
 		let lengthAcc = 0;
 		for (let i = 0; i < path.length - 1; i++) {
 			lengthAcc += path[i].distanceTo(path[i + 1]);
@@ -155,16 +156,23 @@
 	};
 
 	let callbackId = registerCallback(serverOutputPathCreation, (pc) => {
-		path = pc.currentPath.map((vec) => new Point3(vec[0], vec[1], vec[2]));
-		if (pc.done) {
+		path = null;
+		if (pc.donePath) {
+			path = pc.donePath.map(Point3.fromArray);
+			edges = [];
+			for (let i = 0; i < pc.donePath.length - 1; i++) {
+				edges.push([Point3.fromArray(pc.donePath[i]), Point3.fromArray(pc.donePath[i + 1])]);
+			}
 			console.log(pc);
-			colors = path.map(
-				(point) =>
-					colors.find((color) => color.space(space).point().equals(point)) ||
+			colors = pc.donePath.map(
+				(arr) =>
+					colors.find((color) => color.space(space).point().equals(Point3.fromArray(arr))) ||
 					(() => {
 						throw new Error('Invalid: returned invalid color not in list');
 					})()
 			);
+		} else {
+			edges = pc.currentEdges.map(([from, to]) => [Point3.fromArray(from), Point3.fromArray(to)]);
 		}
 	});
 
@@ -308,7 +316,7 @@
 				</div>
 			{/if}
 			<div class="h-full m-0 min-h-[420px]">
-				<PointChart {colors} {path} {ballSize} {space} />
+				<PointChart {colors} {edges} {ballSize} {space} />
 			</div>
 		</Card>
 		<Card class="rounded-xl col-span-12 md:col-span-6 lg:col-span-5 xl:col-span-3 max-w-none">

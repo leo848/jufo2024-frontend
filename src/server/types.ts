@@ -84,8 +84,8 @@ export const serverOutputSortedNumbers = z.object({
 });
 export const serverOutputPathCreation = z.object({
 	type: z.literal('pathCreation'),
-	done: z.boolean(),
-	currentPath: z.array(z.array(z.number()))
+	donePath: z.optional(z.array(z.array(z.number()))),
+	currentEdges: z.array(z.tuple([z.array(z.number()), z.array(z.number())])),
 });
 export const serverOutput = z.discriminatedUnion('type', [
 	serverOutputError,

@@ -10,7 +10,7 @@
 
 	export let space: ColorSpace;
 	export let colors: Color[];
-	export let path: Point3[];
+	export let edges: [Point3, Point3, Color?][];
 
 	let axisTextures = new Array(3).fill(null).map((_, index) => {
 		const spaced = new RgbColor(0, 0, 0).color().space(space);
@@ -22,14 +22,6 @@
 		texture.needsUpdate = true;
 		return texture;
 	});
-
-	let pathSegments: [Point3, Point3][] = [];
-	$: {
-		pathSegments = [];
-		for (let i = 0; i < path.length - 1; i++) {
-			pathSegments.push([path[i], path[i + 1]]);
-		}
-	}
 
 	const rotations = [
 		[0, 0, -Math.PI / 2],
@@ -82,7 +74,7 @@
 			/>
 		{/each}
 
-		{#each pathSegments as [pointA, pointB] ([pointA, pointB])}
+		{#each edges as [pointA, pointB] ([pointA, pointB])}
 			{@const [displayA, displayB] = [pointA.scale(10), pointB.scale(10)]}
 			{@const deltaVector = displayA.delta(displayB)}
 			{@const distance = deltaVector.mag()}
