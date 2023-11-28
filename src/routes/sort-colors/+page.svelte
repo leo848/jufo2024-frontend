@@ -3,6 +3,7 @@
 	import ColorPicker from '../../components/ColorPicker.svelte';
 	import { RgbColor, type ColorSpace } from '../../color/colorSpaces';
 	import { Point3 } from '../../geom/point';
+	import { factorial } from '../../utils/math';
 	import { flip } from 'svelte/animate';
 	import { fly, scale, slide } from 'svelte/transition';
 	import * as Icon from 'flowbite-svelte-icons';
@@ -88,6 +89,7 @@
 				name: 'Brute Force',
 				description: 'Teste alle möglichen Kombinationen',
 				method: 'bruteForce',
+				expectedTime: (n: number) => factorial(n) / 360,
 				icon: Icon.HourglassOutline
 			},
 			{
@@ -355,8 +357,11 @@
 						<div>
 							<div class="rounded-xl" in:scale={{ delay: 150 }}>{description}</div>
 							{#if expectedTime}
-								{#if expectedTime(colors.length) === null}
+								{@const time = expectedTime(colors.length)}
+								{#if time === null}
 									<div>Erwartete Zeit: beliebig</div>
+								{:else if time < 1}
+									<div>Erwartete Zeit: <b>&lt;1</b> Sekunde</div>
 								{:else}
 									<div>Erwartete Zeit: <b>{expectedTime(colors.length)}</b> Sekunden</div>
 								{/if}

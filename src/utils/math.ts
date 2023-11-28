@@ -11,3 +11,8 @@ export function constrain(x: number, low: number = 0.0, high: number = 1.0) {
 	else if (x >= high) return high;
 	else return x;
 }
+
+export function factorial(n: number): number {
+	if (n <= 1) return 1;
+	else return n * factorial(n - 1);
+}
