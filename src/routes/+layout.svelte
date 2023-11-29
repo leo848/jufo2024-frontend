@@ -14,12 +14,25 @@
 	import './fonts.css';
 
 	let errors: { error: DisplayError; showDetails: boolean }[] = [];
+	let ignore = new Set();
 
 	onMount(() => {
 		setGlobalErrorHandler((error: DisplayError) => {
+			if (ignore.has(keySep([error.title, error.origin]))) return;
 			errors = [...errors, { error, showDetails: false }];
 		});
 	});
+
+	function keySep(strings: string[]): string {
+		return strings.join('|SEP|');
+	}
+
+	function addIgnore(title: string, origin: string) {
+		console.log(ignore);
+		const key = keySep([title, origin]);
+		ignore.add(key);
+		errors = errors.filter((e) => keySep([e.error.title, e.error.origin]) != key);
+	}
 </script>
 
 <div class="complete min-h-screen dark:bg-gray-900">
@@ -83,7 +96,7 @@
 					<div>
 						<Button
 							on:click={() => (errors[index].showDetails = !errors[index].showDetails)}
-							class="mt-4"
+							class="mt-4 text-sm p-2"
 							color="light"
 						>
 							{#if showDetails}
@@ -92,6 +105,16 @@
 								Mehr anzeigen
 							{/if}
 						</Button>
+						{#if errors.length >= 2}
+							<Button on:click={() => (errors = [])} class="mt-4 text-sm p-2" color="light">
+								Alle schließen
+							</Button>
+						{/if}
+						<Button
+							on:click={() => addIgnore(error.title, error.origin)}
+							class="text-sm p-2"
+							color="light">Nicht mehr anzeigen</Button
+						>
 					</div>
 				</Toast>
 			</div>
