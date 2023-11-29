@@ -65,7 +65,7 @@
 		defaultClass="dark:bg-black dark:backdrop-blur dark:bg-clip-padding dark:backdrop-filter dark:backdrop-blur-xl dark:bg-opacity-10 dark:border dark:border-gray-800"
 	>
 		<svelte:fragment slot="header">
-			<p class="text-4xl text-bold my-2 text-white">Farbauswahl</p>
+			<p class="text-2xl 2xl:text-4xl text-bold 2xl:my-2 text-white">Farbauswahl</p>
 		</svelte:fragment>
 		<div class="flex flex-row gap-8">
 			<div class="color-preview" style={'background-color: ' + modalColor.rgb().css()} />
@@ -74,7 +74,7 @@
 					{#await colorMetadata}
 						<Spinner />
 					{:then meta}
-						<h3 class="text-4xl text-white">
+						<h3 class="text-3xl 2xl:text-4xl text-white">
 							{meta.name}
 						</h3>
 						<DeltaBadge
