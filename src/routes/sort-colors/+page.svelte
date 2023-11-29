@@ -41,9 +41,10 @@
 			return;
 		}
 		const target = evt.target as HTMLElement;
+		const { left: x, bottom: y } = target.getBoundingClientRect();
 		selection = {
 			index,
-			position: { x: target.offsetLeft, y: target.offsetTop + target.offsetHeight + 8 }
+			position: { x, y },
 		};
 	}
 
