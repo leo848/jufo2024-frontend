@@ -1,8 +1,8 @@
 <script lang="ts">
-	import { Button, ButtonGroup, Modal, Spinner, TabItem, Tabs } from 'flowbite-svelte';
+	import { Button, Modal, Spinner, TabItem, Tabs } from 'flowbite-svelte';
 	import { Color } from '../color/color';
-	import { blur, fly } from 'svelte/transition';
-	import { HsvColor, OklabColor, RgbColor, type ColorSpace } from '../color/colorSpaces';
+	import { blur } from 'svelte/transition';
+	import { HsvColor, OklabColor, RgbColor, LinearRgbColor, type ColorSpace } from '../color/colorSpaces';
 	import GradientRange from './GradientRange.svelte';
 	import GradientDiagram from './GradientDiagram.svelte';
 	import DeltaBadge from './DeltaBadge.svelte';
@@ -18,6 +18,7 @@
 
 	const compNames = {
 		rgb: { r: 'Rot', g: 'Grün', b: 'Blau' },
+		lrgb: { r: 'Rot', g: 'Grün', b: 'Blau' },
 		hsv: { h: 'Farbton (Hue)', s: 'Sättigung', v: 'Farbwert' },
 		oklab: { l: 'Helligkeit (Lightness)', a: 'Farbwert A', b: 'Farbwert B' }
 	} as const;
@@ -25,7 +26,8 @@
 	$: proxies = {
 		rgb: modalColor.proxy(RgbColor),
 		hsv: modalColor.proxy(HsvColor),
-		oklab: modalColor.proxy(OklabColor)
+		oklab: modalColor.proxy(OklabColor),
+		lrgb: modalColor.proxy(LinearRgbColor),
 	} as const;
 
 	$: colorMetadata = modalColor.name();
@@ -59,7 +61,6 @@
 <div class="inline-block transition color-picker">
 	<Modal
 		bind:open={modal}
-		transition={(elt) => fly(elt, { y: -300 })}
 		backdropClass="modal-background"
 		size="xl"
 		defaultClass="dark:bg-black dark:backdrop-blur dark:bg-clip-padding dark:backdrop-filter dark:backdrop-blur-xl dark:bg-opacity-10 dark:border dark:border-gray-800"
@@ -142,6 +143,36 @@
 						<Button color="alternative" on:click={complement}>Komplementär</Button><br />
 						<Button color="alternative" on:click={compoSwap}>Komponententausch</Button><br />
 						<Button color="alternative" on:click={gray}>Grauwert</Button><br />
+					</div>
+				</div>
+			</TabItem>
+			<TabItem class="w-full" on:click={() => (space = 'lrgb')}>
+				<div class="text-xl" slot="title">linear RGB</div>
+				<div class="flex flex-row justify-between gap-8 h-full">
+					<div class="stretch w-full">
+						{#each proxies.lrgb.components() as comp (comp)}
+							<div class="h-10 mt-4">
+								<GradientRange
+									bind:value={proxies.lrgb[comp]}
+									space="lrgb"
+									{comp}
+									color={modalColor}
+								/>
+							</div>
+							<div>{compNames.lrgb[comp]} = {Math.round(proxies.lrgb[comp] * 100)}%</div>
+						{/each}
+					</div>
+					<div>
+						<div class="h-64 w-64">
+							<GradientDiagram
+								bind:valueX={proxies.lrgb.r}
+								bind:valueY={proxies.lrgb.g}
+								space="lrgb"
+								compX="r"
+								compY="g"
+								color={modalColor}
+							/>
+						</div>
 					</div>
 				</div>
 			</TabItem>

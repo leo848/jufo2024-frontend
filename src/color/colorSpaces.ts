@@ -351,12 +351,64 @@ export class OklabColor extends AbstractColor<OklabColor, OklabComponent> {
 	}
 }
 
-export const colorSpaces = ['rgb', 'hsv', 'oklab'] as const;
+export class LinearRgbColor extends AbstractColor<LinearRgbColor, RgbComponent> {
+	r: number
+	g: number
+	b: number
+
+	constructor(r: number, g: number, b: number) {
+		super();
+		this.r = r;
+		this.g = g;
+		this.b = b;
+	}
+
+	clone(): LinearRgbColor {
+		return new LinearRgbColor(this.r, this.g, this.b);
+	}
+
+	color(): Color {
+		return new Color(toGamma(this.r), toGamma(this.g), toGamma(this.b));
+	}
+
+	components(): ['r','g','b'] {
+		return ['r','g','b']
+	}
+
+	static fromRgb(r: number, g: number, b: number): LinearRgbColor {
+		return new LinearRgbColor(toLinear(r), toLinear(g), toLinear(b));
+	}
+
+	neededGradientPoints(_key: 'r' | 'g' | 'b'): number {
+		return 10;
+	}
+
+	get(key: 'r' | 'g' | 'b'): number {
+		return this[key];
+	}
+
+	with(key: 'r' | 'g' | 'b', value: number): LinearRgbColor {
+		const color = this.clone();
+		color[key] = value;
+		return color;
+	}
+
+	point(): Point3 {
+		return new Point3(this.r, this.g, this.b);
+	}
+
+	gradientTexture(key: 'r' | 'g' | 'b'): HTMLCanvasElement {
+		return linearGradient(new LinearRgbColor(0, 0, 0), key);
+	}
+}
+
+export const colorSpaces = ['rgb', 'hsv', 'oklab', 'lrgb'] as const;
 
 export type ColorSpace = (typeof colorSpaces)[number];
 
 export const colorSpaceClasses = {
 	rgb: RgbColor,
 	hsv: HsvColor,
-	oklab: OklabColor
+	oklab: OklabColor,
+	lrgb: LinearRgbColor,
 } as const;

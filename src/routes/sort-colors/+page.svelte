@@ -17,7 +17,7 @@
 
 	title.set('Farben sortieren');
 
-	let space: ColorSpace = 'oklab';
+	let space: ColorSpace = 'lrgb';
 
 	let colors = [
 		RgbColor.fromNumeric(0xff1e26).color(),
