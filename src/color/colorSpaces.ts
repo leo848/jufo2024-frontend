@@ -2,6 +2,7 @@ import { constrain, rangeMap } from '../utils/math';
 import {
 	Color,
 	type ColorComponent,
+	type CmyComponent,
 	type HsvComponent,
 	type OklabComponent,
 	type RgbComponent
@@ -15,7 +16,10 @@ export abstract class AbstractColor<
 	Component extends ColorComponent
 > {
 	abstract color(): Color;
-	abstract point(): Point3;
+	point(): Point3 {
+		const values = this.values();
+		return new Point3(values[0], values[1], values[2]);
+	}
 	abstract components(): Component[];
 	xyzComponents(): [Component | null, Component | null, Component | null] {
 		const comps = this.components();
@@ -402,7 +406,62 @@ export class LinearRgbColor extends AbstractColor<LinearRgbColor, RgbComponent> 
 	}
 }
 
-export const colorSpaces = ['rgb', 'hsv', 'oklab', 'lrgb'] as const;
+export class CmyColor extends AbstractColor<CmyColor, CmyComponent> {
+	c: number
+	m: number
+	y: number
+
+	constructor(c: number, m: number, y: number) {
+		super();
+		this.c = c;
+		this.m = m;
+		this.y = y;
+	}
+
+	components(): ['c', 'm', 'y'] {
+		return ['c', 'm', 'y']
+	}
+
+	clone(): CmyColor {
+		return new CmyColor(this.c, this.m, this.y);
+	}
+
+	get(key: 'c' | 'm' | 'y'): number {
+		return this[key];
+	}
+
+	with(key: 'c' | 'm' | 'y', value: number): CmyColor {
+		const col = this.clone();
+		col[key] = value;
+		return col;
+	}
+
+	gradientTexture(key: 'c' | 'm' | 'y'): HTMLCanvasElement {
+		return linearGradient(new CmyColor(0, 0, 0), key);
+	}
+
+	neededGradientPoints(_key: 'c' | 'm' | 'y'): number {
+		return 15;
+	}
+
+	color(): Color {
+		return new Color(
+			1 - this.c,
+			1 - this.m,
+			1 - this.y,
+		)
+	}
+
+	static fromRgb(r: number, g: number, b: number): CmyColor {
+		return new CmyColor(
+			1 - r,
+			1 - g,
+			1 - b,
+		)
+	}
+}
+
+export const colorSpaces = ['rgb', 'hsv', 'oklab', 'lrgb', 'cmy'] as const;
 
 export type ColorSpace = (typeof colorSpaces)[number];
 
@@ -411,4 +470,5 @@ export const colorSpaceClasses = {
 	hsv: HsvColor,
 	oklab: OklabColor,
 	lrgb: LinearRgbColor,
+	cmy: CmyColor,
 } as const;

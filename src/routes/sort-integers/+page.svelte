@@ -136,7 +136,7 @@
 
 	{#if currentStep == 1}
 		<Gallery class="gap-4 md:grid-cols-4 grid-cols-2 mx-4 my-4">
-			<Card transition={scale} size="lg" class="col-span-1">
+			<Card size="lg" class="col-span-1">
 				<Button
 					class="mt-2 text-md"
 					color="red"
@@ -156,7 +156,7 @@
 					Fortfahren</Button
 				>
 			</Card>
-			<Card transition={scale} size="lg" class="col-span-2">
+			<Card size="lg" class="col-span-2">
 				<Toast class="mx-0" bind:open={error}>Gib bitte eine Zahl zwischen 0 und 999 ein.</Toast>
 				<Gallery class="gap-6 grid-cols-2">
 					<div>
@@ -172,7 +172,6 @@
 			{#each numbers as number, index (number.id)}
 				<div animate:flip={{ duration: 200, delay: index * 50 }}>
 					<Card
-						transition={scale}
 						on:click={() => {
 							numbers.splice(index, 1);
 							numbers = numbers;

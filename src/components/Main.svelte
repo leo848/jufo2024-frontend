@@ -1,5 +1,4 @@
 <script lang="ts">
-	import { scale } from 'svelte/transition';
 	import { Card, Gallery } from 'flowbite-svelte';
 	import Container from './Container.svelte';
 
@@ -38,7 +37,6 @@
 	<Gallery class="gap-4 md:grid-cols-1 mx-4 xl:mx-16 xl:mx-16 mt-4">
 		{#each displayCards as card, i (card.text)}
 			<Card
-				transition={scale}
 				img={card.img}
 				horizontal
 				reverse={i % 2 == 0}

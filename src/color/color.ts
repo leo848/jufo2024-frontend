@@ -103,4 +103,6 @@ export const hsvComponentSchema = z.enum(['h', 's', 'v']);
 export type HsvComponent = z.infer<typeof hsvComponentSchema>;
 export const oklabComponentSchema = z.enum(['l', 'a', 'b']);
 export type OklabComponent = z.infer<typeof oklabComponentSchema>;
-export type ColorComponent = RgbComponent | HsvComponent | OklabComponent;
+export const cmyComponentSchema = z.enum(['c', 'm', 'y']);
+export type CmyComponent = z.infer<typeof cmyComponentSchema>;
+export type ColorComponent = RgbComponent | HsvComponent | OklabComponent | CmyComponent;
