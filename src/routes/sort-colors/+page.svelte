@@ -17,7 +17,7 @@
 
 	title.set('Farben sortieren');
 
-	let space: ColorSpace = 'lrgb';
+	let space: ColorSpace = 'cmy';
 
 	let colors = [
 		RgbColor.fromNumeric(0xff1e26).color(),
