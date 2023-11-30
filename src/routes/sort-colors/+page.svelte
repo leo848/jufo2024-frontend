@@ -44,7 +44,7 @@
 		const { left: x, bottom: y } = target.getBoundingClientRect();
 		selection = {
 			index,
-			position: { x, y },
+			position: { x, y }
 		};
 	}
 
@@ -200,7 +200,7 @@
 
 {#if selection !== null}
 	<div
-		class="p-2 bg-clip-padding bg-gray-300 backdrop-filter backdrop-blur-md bg-opacity-20 border border-gray-700 text-white rounded-lg z-10 flex flex-col"
+		class="p-2 bg-clip-padding bg-gray-300 backdrop-filter backdrop-blur-md bg-opacity-20 border border-gray-700 text-white rounded-lg z-20 flex flex-col"
 		transition:scale
 		style={`position: fixed; left: ${selection.position.x}px; top: ${selection.position.y}px`}
 	>
@@ -325,7 +325,14 @@
 				</div>
 			{/if}
 			<div class="h-full m-0 min-h-[420px]">
-				<PointChart {colors} {edges} {ballSize} {space} bind:selection />
+				<PointChart
+					{colors}
+					{edges}
+					{ballSize}
+					{space}
+					on:pick={(evt) => (selection = evt.detail)}
+					selectedIndex={selection?.index}
+				/>
 			</div>
 		</Card>
 		<Card class="rounded-xl col-span-12 md:col-span-6 lg:col-span-5 xl:col-span-3 max-w-none">

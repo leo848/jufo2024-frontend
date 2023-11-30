@@ -7,7 +7,7 @@
 	import type { Color } from '../color/color';
 	import { cubicOut } from 'svelte/easing';
 	import { tweened } from 'svelte/motion';
-	import { type Point3, axes } from '../geom/point';
+	import { Point3, axes } from '../geom/point';
 	import { createEventDispatcher, type EventDispatcher } from 'svelte';
 
 	extend({
@@ -22,11 +22,9 @@
 	export let colors: Color[];
 	export let edges: [Point3, Point3, Color | undefined][];
 	export let ballSize: number = 0.5;
-	export let selection: {
-		index: number;
-		colorPickerOpen?: boolean;
-		position: { x: number; y: number };
-	} | null = null;
+	export let selectedIndex: number | null = null;
+
+	export let canvas: HTMLCanvasElement;
 
 	let axisTextures = new Array(3).fill(null).map((_, index) => {
 		const spaced = new RgbColor(0, 0, 0).color().space(space);
@@ -74,12 +72,56 @@
 	$: $ballSizeAnim = ballSize;
 
 	let cameraPosition = [5, 5, 20] as [number, number, number];
+	let cameraRef: THREE.PerspectiveCamera;
 
-	const dispatch: EventDispatcher<{ pick: number }> = createEventDispatcher();
+	let meshes: (undefined | THREE.Mesh)[] = new Array(colors.length).fill(undefined);
+
 	const raycaster = new THREE.Raycaster();
 
+	const dispatch = createEventDispatcher<{
+		pick: { index: number; position: { x: number; y: number } } | null;
+	}>();
+
 	export function tryPick(evt: MouseEvent) {
-		selection = null;
+		dispatch('pick', null);
+
+		const rect = canvas.getBoundingClientRect();
+		const canvasRelativePos = {
+			x: ((evt.clientX - rect.left) * canvas.width) / rect.width,
+			y: ((evt.clientY - rect.top) * canvas.height) / rect.height
+		};
+		const pickPos = {
+			x: (canvasRelativePos.x / canvas.width) * 2 - 1,
+			y: (canvasRelativePos.y / canvas.height) * -2 + 1
+		};
+
+		raycaster.setFromCamera(new THREE.Vector2(pickPos.x, pickPos.y), cameraRef);
+		const intersectedObjects = raycaster.intersectObjects(
+			meshes.filter((m) => m != null).map((m) => m as THREE.Mesh)
+		);
+
+		if (intersectedObjects.length >= 1) {
+			const point = intersectedObjects[0].object.position;
+
+			const index = colors.findIndex((p) => {
+				let diff = p
+					.space(space)
+					.point()
+					.scale(10)
+					.delta(new Point3(point.x, point.y, point.z))
+					.mag();
+				return diff < 0.01;
+			});
+			if (index === selectedIndex) {
+				dispatch('pick', null);
+				return;
+			}
+
+			dispatch('pick', {
+				index: index as number,
+				position: { x: evt.clientX + 5, y: evt.clientY + 5 }
+			});
+		}
 	}
 
 	/*background={new THREE.Color(0x0c0c0c)}
@@ -89,7 +131,7 @@
 </script>
 
 {#each colors as color, index (color.rgb().numeric())}
-	{@const selected = selection?.index === index}
+	{@const selected = selectedIndex === index}
 	{@const displayPoint = color.space(space).point().scale(10)}
 	{#if selected}
 		{#each axes as comp, index}
@@ -112,6 +154,7 @@
 			metalness: selected ? 0 : 0.8,
 			color: color.rgb().numeric()
 		})}
+		bind:ref={meshes[index]}
 		castShadow
 	/>
 {/each}
@@ -158,7 +201,13 @@
 	</T.Group>
 {/each}
 
-<T.PerspectiveCamera let:ref makeDefault position={cameraPosition} target={[5, 5, 5]}>
+<T.PerspectiveCamera
+	bind:ref={cameraRef}
+	let:ref
+	makeDefault
+	position={cameraPosition}
+	target={[5, 5, 5]}
+>
 	<T.OrbitControls
 		args={[ref, renderer.domElement]}
 		maxPolarAngle={Math.PI * 0.51}
