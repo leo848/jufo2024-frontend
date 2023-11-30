@@ -126,6 +126,12 @@
 							<div>{compNames.rgb[comp]} = {Math.round(proxies.rgb[comp] * 100)}%</div>
 						{/each}
 					</div>
+					<div class="flex flex-col justify-around align-stretch">
+						<Button color="alternative" on:click={randomColor}>Zufällig</Button><br />
+						<Button color="alternative" on:click={complement}>Komplementär</Button><br />
+						<Button color="alternative" on:click={compoSwap}>Komponententausch</Button><br />
+						<Button color="alternative" on:click={gray}>Grauwert</Button><br />
+					</div>
 					<div>
 						<div class="h-64 w-64">
 							<GradientDiagram
@@ -137,12 +143,6 @@
 								color={modalColor}
 							/>
 						</div>
-					</div>
-					<div class="flex flex-col justify-around align-stretch">
-						<Button color="alternative" on:click={randomColor}>Zufällig</Button><br />
-						<Button color="alternative" on:click={complement}>Komplementär</Button><br />
-						<Button color="alternative" on:click={compoSwap}>Komponententausch</Button><br />
-						<Button color="alternative" on:click={gray}>Grauwert</Button><br />
 					</div>
 				</div>
 			</TabItem>
