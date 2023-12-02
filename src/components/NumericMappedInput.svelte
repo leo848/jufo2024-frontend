@@ -36,14 +36,14 @@
 <div class="flex flex-row text-xl">
 	<div class="w-6 flex flex-col justify-stretch">
 		<button
-			class="w-6 bg-gray-600 disabled:bg-gray-700 h-full text-sm text-center"
+			class="w-6 bg-gray-600 hover:bg-gray-500 transition-all disabled:bg-gray-700 h-full text-sm text-center"
 			disabled={displayValue > max - step}
 			on:click={increment}
 		>
 			▲
 		</button>
 		<button
-			class="w-6 bg-gray-600 disabled:bg-gray-700 h-full text-sm text-center"
+			class="w-6 bg-gray-600 hover:bg-gray-500 transition-all disabled:bg-gray-700 h-full text-sm text-center"
 			disabled={displayValue < min + step}
 			on:click={decrement}
 		>
