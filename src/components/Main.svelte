@@ -36,13 +36,7 @@
 <Container>
 	<Gallery class="gap-4 md:grid-cols-1 mx-4 xl:mx-16 xl:mx-16 mt-4">
 		{#each displayCards as card, i (card.text)}
-			<Card
-				img={card.img}
-				horizontal
-				reverse={i % 2 == 0}
-				href={card.href}
-				class="mb-4"
-			>
+			<Card img={card.img} horizontal reverse={i % 2 == 0} href={card.href} class="mb-4">
 				<h5 class="mb-2 text-3xl font-bold tracking-tight text-gray-900 dark:text-white">
 					{card.text}
 				</h5>

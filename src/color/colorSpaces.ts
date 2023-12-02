@@ -356,9 +356,9 @@ export class OklabColor extends AbstractColor<OklabColor, OklabComponent> {
 }
 
 export class LinearRgbColor extends AbstractColor<LinearRgbColor, RgbComponent> {
-	r: number
-	g: number
-	b: number
+	r: number;
+	g: number;
+	b: number;
 
 	constructor(r: number, g: number, b: number) {
 		super();
@@ -375,8 +375,8 @@ export class LinearRgbColor extends AbstractColor<LinearRgbColor, RgbComponent> 
 		return new Color(toGamma(this.r), toGamma(this.g), toGamma(this.b));
 	}
 
-	components(): ['r','g','b'] {
-		return ['r','g','b']
+	components(): ['r', 'g', 'b'] {
+		return ['r', 'g', 'b'];
 	}
 
 	static fromRgb(r: number, g: number, b: number): LinearRgbColor {
@@ -407,9 +407,9 @@ export class LinearRgbColor extends AbstractColor<LinearRgbColor, RgbComponent> 
 }
 
 export class CmyColor extends AbstractColor<CmyColor, CmyComponent> {
-	c: number
-	m: number
-	y: number
+	c: number;
+	m: number;
+	y: number;
 
 	constructor(c: number, m: number, y: number) {
 		super();
@@ -419,7 +419,7 @@ export class CmyColor extends AbstractColor<CmyColor, CmyComponent> {
 	}
 
 	components(): ['c', 'm', 'y'] {
-		return ['c', 'm', 'y']
+		return ['c', 'm', 'y'];
 	}
 
 	clone(): CmyColor {
@@ -445,19 +445,11 @@ export class CmyColor extends AbstractColor<CmyColor, CmyComponent> {
 	}
 
 	color(): Color {
-		return new Color(
-			1 - this.c,
-			1 - this.m,
-			1 - this.y,
-		)
+		return new Color(1 - this.c, 1 - this.m, 1 - this.y);
 	}
 
 	static fromRgb(r: number, g: number, b: number): CmyColor {
-		return new CmyColor(
-			1 - r,
-			1 - g,
-			1 - b,
-		)
+		return new CmyColor(1 - r, 1 - g, 1 - b);
 	}
 }
 
@@ -470,5 +462,5 @@ export const colorSpaceClasses = {
 	hsv: HsvColor,
 	oklab: OklabColor,
 	lrgb: LinearRgbColor,
-	cmy: CmyColor,
+	cmy: CmyColor
 } as const;

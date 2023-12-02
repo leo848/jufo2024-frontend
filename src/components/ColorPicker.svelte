@@ -2,7 +2,14 @@
 	import { Button, Modal, Spinner, TabItem, Tabs } from 'flowbite-svelte';
 	import { Color } from '../color/color';
 	import { blur } from 'svelte/transition';
-	import { HsvColor, OklabColor, RgbColor, LinearRgbColor, CmyColor, type ColorSpace } from '../color/colorSpaces';
+	import {
+		HsvColor,
+		OklabColor,
+		RgbColor,
+		LinearRgbColor,
+		CmyColor,
+		type ColorSpace
+	} from '../color/colorSpaces';
 	import GradientRange from './GradientRange.svelte';
 	import GradientDiagram from './GradientDiagram.svelte';
 	import DeltaBadge from './DeltaBadge.svelte';
@@ -14,7 +21,8 @@
 	let modal = true;
 	let modalColor = value.clone();
 
-	let space: ColorSpace = 'rgb';
+	export let defaultSpace: ColorSpace = 'rgb';
+	let space: ColorSpace = defaultSpace;
 
 	const compNames = {
 		rgb: { r: 'Rot', g: 'Grün', b: 'Blau' },
@@ -29,7 +37,7 @@
 		hsv: modalColor.proxy(HsvColor),
 		oklab: modalColor.proxy(OklabColor),
 		lrgb: modalColor.proxy(LinearRgbColor),
-		cmy: modalColor.proxy(CmyColor),
+		cmy: modalColor.proxy(CmyColor)
 	} as const;
 
 	$: colorMetadata = modalColor.name();
@@ -112,7 +120,7 @@
 			defaultClass="flex rounded-lg divide-x divide-gray-200 shadow dark:divide-gray-700"
 			inactiveClasses="dark:bg-gray-600"
 		>
-			<TabItem open class="w-full" on:click={() => (space = 'rgb')}>
+			<TabItem open={space == 'rgb'} class="w-full" on:click={() => (space = 'rgb')}>
 				<div class="text-xl" slot="title">sRGB</div>
 				<div class="flex flex-row justify-between gap-8 h-full">
 					<div class="stretch w-full">
@@ -148,7 +156,7 @@
 					</div>
 				</div>
 			</TabItem>
-			<TabItem class="w-full" on:click={() => (space = 'lrgb')}>
+			<TabItem open={space == 'lrgb'} class="w-full" on:click={() => (space = 'lrgb')}>
 				<div class="text-xl" slot="title">linear RGB</div>
 				<div class="flex flex-row justify-between gap-8 h-full">
 					<div class="stretch w-full">
@@ -178,7 +186,7 @@
 					</div>
 				</div>
 			</TabItem>
-			<TabItem class="w-full" on:click={() => (space = 'cmy')}>
+			<TabItem open={space == 'cmy'} class="w-full" on:click={() => (space = 'cmy')}>
 				<div class="text-xl" slot="title">CMY</div>
 				<div class="flex flex-row justify-between gap-8 h-full">
 					<div class="stretch w-full">
@@ -208,7 +216,7 @@
 					</div>
 				</div>
 			</TabItem>
-			<TabItem class="w-full" on:click={() => (space = 'hsv')}>
+			<TabItem open={space == 'hsv'} class="w-full" on:click={() => (space = 'hsv')}>
 				<div class="text-xl" slot="title">HSV</div>
 				<div class="flex flex-row justify-between gap-8 h-full">
 					<div class="stretch w-full">
@@ -238,7 +246,7 @@
 					</div>
 				</div>
 			</TabItem>
-			<TabItem class="w-full" on:click={() => (space = 'oklab')}>
+			<TabItem open={space == 'oklab'} class="w-full" on:click={() => (space = 'oklab')}>
 				<div class="text-xl" slot="title">OKLAB</div>
 				<div class="flex flex-row justify-between gap-8 h-full">
 					<div class="stretch w-full">

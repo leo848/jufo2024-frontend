@@ -17,7 +17,7 @@
 
 	title.set('Farben sortieren');
 
-	let space: ColorSpace = 'cmy';
+	let space: ColorSpace = 'oklab';
 
 	let colors = [
 		RgbColor.fromNumeric(0xff1e26).color(),
@@ -188,6 +188,7 @@
 
 {#if selection !== null && selection.colorPickerOpen}
 	<ColorPicker
+		defaultSpace={space}
 		value={colors[selection.index]}
 		on:choose={(color) => {
 			console.log(color);
