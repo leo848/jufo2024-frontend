@@ -1,7 +1,6 @@
 <script lang="ts">
 	import { createEventDispatcher } from 'svelte';
-	import * as Icon from 'flowbite-svelte-icons';
-	import { ArrowKeyUp } from 'flowbite-svelte';
+	import {fade, scale, slide} from 'svelte/transition';
 
 	export let value: number;
 
@@ -51,6 +50,7 @@
 		</button>
 	</div>
 	<input
+	 in:scale
 		class="w-14 px-2 text-xl text-white bg-gray-700 border-none rounded-r-md overflow-hidden text-center border-l-4 border-gray-500"
 		{max}
 		{min}
