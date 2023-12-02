@@ -14,10 +14,7 @@
 		OrbitControls
 	});
 
-	const { renderer, renderMode } = useThrelte();
-
-	renderMode.set('always');
-
+	export let projection: 'orthographic' | 'perspective' = 'orthographic';
 	export let space: ColorSpace;
 	export let colors: Color[];
 	export let edges: [Point3, Point3, Color | undefined][];
@@ -25,6 +22,10 @@
 	export let selectedIndex: number | null = null;
 
 	export let canvas: HTMLCanvasElement;
+
+	const { renderer, renderMode } = useThrelte();
+
+	renderMode.set('always');
 
 	let axisTextures = new Array(3).fill(null).map((_, index) => {
 		const spaced = new RgbColor(0, 0, 0).color().space(space);
@@ -71,8 +72,9 @@
 	const ballSizeAnim = tweened(ballSize, { duration: 250, easing: cubicOut });
 	$: $ballSizeAnim = ballSize;
 
-	let cameraPosition = [5, 5, 20] as [number, number, number];
-	let cameraRef: THREE.PerspectiveCamera;
+	let cameraPosition: [number, number, number] = [5, 5, 20];
+	let cameraRefOrth: THREE.OrthographicCamera;
+	let cameraRefPers: THREE.PerspectiveCamera;
 
 	let meshes: (undefined | THREE.Mesh)[] = new Array(colors.length).fill(undefined);
 
@@ -95,7 +97,7 @@
 			y: (canvasRelativePos.y / canvas.height) * -2 + 1
 		};
 
-		raycaster.setFromCamera(new THREE.Vector2(pickPos.x, pickPos.y), cameraRef);
+		raycaster.setFromCamera(new THREE.Vector2(pickPos.x, pickPos.y), cameraRefOrth);
 		const intersectedObjects = raycaster.intersectObjects(
 			meshes.filter((m) => m != null).map((m) => m as THREE.Mesh)
 		);
@@ -201,18 +203,38 @@
 	</T.Group>
 {/each}
 
-<T.PerspectiveCamera
-	bind:ref={cameraRef}
-	let:ref
-	makeDefault
-	position={cameraPosition}
-	target={[5, 5, 5]}
->
-	<T.OrbitControls
-		args={[ref, renderer.domElement]}
-		maxPolarAngle={Math.PI * 0.51}
-		maxDistance={30}
-		enablePan={false}
+{#if projection == 'orthographic'}
+	<T.OrthographicCamera
+		args={[canvas.width / -2, canvas.width / 2, canvas.height / 2, canvas.height / -2, 1, 100]}
+		bind:ref={cameraRefOrth}
+		zoom={25}
+		let:ref
+		makeDefault
+		position={cameraPosition}
 		target={[5, 5, 5]}
-	/>
-</T.PerspectiveCamera>
+	>
+		<T.OrbitControls
+			args={[ref, renderer.domElement]}
+			maxPolarAngle={Math.PI * 0.51}
+			maxDistance={10}
+			enablePan={false}
+			target={[5, 5, 5]}
+		/>
+	</T.OrthographicCamera>
+{:else if projection == 'perspective'}
+	<T.PerspectiveCamera
+		bind:ref={cameraRefPers}
+		let:ref
+		makeDefault
+		position={cameraPosition}
+		target={[5, 5, 5]}
+	>
+		<T.OrbitControls
+			args={[ref, renderer.domElement]}
+			maxPolarAngle={Math.PI * 0.51}
+			maxDistance={25}
+			enablePan={false}
+			target={[5, 5, 5]}
+		/>
+	</T.PerspectiveCamera>
+{/if}

@@ -149,6 +149,7 @@
 	}
 
 	let ballSize = 0.4;
+	let projection: 'perspective' | 'orthographic' = 'perspective';
 	let threeDOptions: {
 		ballSizeChange: 0 | -1 | 1;
 		showOptions: boolean;
@@ -285,7 +286,7 @@
 			{#if threeDOptions.showOptions}
 				<div>
 					<div
-						class="flex flex-row justify-between items-center py-2 text-2xl text-white threedoptions-parent p-2 border-transparent m-0"
+						class="flex flex-row justify-start gap-4 items-center py-2 text-2xl text-white threedoptions-parent p-2 border-transparent m-0"
 						transition:slide={{ axis: 'y' }}
 					>
 						<div
@@ -322,6 +323,22 @@
 								<Icon.PlusSolid />
 							</button>
 						</div>
+						<div
+							class="persp-setting bg-gray-700 rounded-xl flex flex-row text-base text-gray-300 threedoptions-child"
+						>
+							<button
+								class={` bg-gray-${projection == 'perspective' ? 600 : 700} rounded-l-xl p-3`}
+								on:click={() => (projection = 'perspective')}
+							>
+								PERS
+							</button>
+							<button
+								class={` bg-gray-${projection == 'orthographic' ? 600 : 700} rounded-r-xl p-3`}
+								on:click={() => (projection = 'orthographic')}
+							>
+								ORTH
+							</button>
+						</div>
 					</div>
 				</div>
 			{/if}
@@ -330,6 +347,7 @@
 					{colors}
 					{edges}
 					{ballSize}
+					{projection}
 					{space}
 					on:pick={(evt) => (selection = evt.detail)}
 					selectedIndex={selection?.index}
