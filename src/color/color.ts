@@ -14,10 +14,16 @@ export class Color {
 	#g: number;
 	#b: number;
 
+	#cached: {
+		colorNameMetadata?: ColorNameMetadata;
+	}
+
 	constructor(r: number, g: number, b: number) {
 		this.#r = r;
 		this.#g = g;
 		this.#b = b;
+
+		this.#cached = {};
 	}
 
 	rgbMap(f: (comp: number) => number): Color {
@@ -89,11 +95,15 @@ export class Color {
 		this.#r = color.#r;
 		this.#g = color.#g;
 		this.#b = color.#b;
+		this.#cached = {};
 		return this;
 	}
 
 	async name(): Promise<ColorNameMetadata> {
-		return await getColorName(this.rgb());
+		if (this.#cached.colorNameMetadata) return this.#cached.colorNameMetadata;
+		const meta = await getColorName(this.rgb());
+		this.#cached.colorNameMetadata = meta;
+		return meta;
 	}
 }
 
