@@ -14,6 +14,7 @@
 	import GradientDiagram from './GradientDiagram.svelte';
 	import DeltaBadge from './DeltaBadge.svelte';
 	import { createEventDispatcher, type EventDispatcher } from 'svelte';
+	import NumericMappedInput from './NumericMappedInput.svelte';
 
 	export let value: Color;
 	// export const open = () => (modal = true);
@@ -125,13 +126,21 @@
 				<div class="flex flex-row justify-between gap-8 h-full">
 					<div class="stretch w-full">
 						{#each proxies.rgb.components() as comp (comp)}
-							<div class="h-10 mt-4">
+							<div class="h-10 mt-4 flex flex-row gap-4">
 								<GradientRange
 									bind:value={proxies.rgb[comp]}
 									space="rgb"
 									{comp}
 									color={modalColor}
 								/>
+								{#key proxies.rgb[comp]}
+									<NumericMappedInput
+										on:set={(n) => (proxies.rgb[comp] = n.detail)}
+										bind:value={proxies.rgb[comp]}
+										mapDisplay={(n) => Math.round(n * 100)}
+										mapValue={(n) => n / 100}
+									/>
+								{/key}
 							</div>
 							<div>{compNames.rgb[comp]} = {Math.round(proxies.rgb[comp] * 100)}%</div>
 						{/each}

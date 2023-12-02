@@ -24,7 +24,7 @@
 	});
 
 	function keySep(strings: string[]): string {
-		return strings.join('|SEP|');
+		return strings.join('|SEP|␞');
 	}
 
 	function addIgnore(title: string, origin: string) {
@@ -36,7 +36,7 @@
 </script>
 
 <div class="complete min-h-screen dark:bg-gray-900">
-	<Navbar let:toggle color="primary">
+	<Navbar let:toggle color="primary" class="max-lg:py-0 max-lg:px-0">
 		<NavBrand href="/">
 			<span class="self-center whitespace-nowrap text-3xl font-semibold">jufo2024</span>
 		</NavBrand>
