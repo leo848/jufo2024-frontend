@@ -97,7 +97,10 @@
 			y: (canvasRelativePos.y / canvas.height) * -2 + 1
 		};
 
-		raycaster.setFromCamera(new THREE.Vector2(pickPos.x, pickPos.y), cameraRefOrth);
+		raycaster.setFromCamera(
+			new THREE.Vector2(pickPos.x, pickPos.y),
+			projection === 'orthographic' ? cameraRefOrth : cameraRefPers
+		);
 		const intersectedObjects = raycaster.intersectObjects(
 			meshes.filter((m) => m != null).map((m) => m as THREE.Mesh)
 		);
