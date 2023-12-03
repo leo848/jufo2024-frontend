@@ -39,6 +39,10 @@
 	}
 
 	function initialize() {
+		if (!wrapperDiv) {
+			return;
+		}
+
 		observer.observe(wrapperDiv);
 
 		width = canvas.width = wrapperDiv.offsetWidth;
