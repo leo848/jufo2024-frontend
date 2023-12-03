@@ -23,9 +23,11 @@
 
 	export let canvas: HTMLCanvasElement;
 
-	const { renderer, renderMode } = useThrelte();
+	const { renderer, renderMode, advance } = useThrelte();
 
-	renderMode.set('always');
+	renderMode.set('manual');
+	advance();
+	$: colors, edges, advance();
 
 	let axisTextures = new Array(3).fill(null).map((_, index) => {
 		const spaced = new RgbColor(0, 0, 0).color().space(space);
@@ -68,6 +70,12 @@
 		[-5, 0.001, 5],
 		[5, 0.001, -5]
 	] as const;
+
+	for (const evtTypeSuffix of ['move','down','up','enter','leave'] as const) {
+
+		const evtType = "mouse" + evtTypeSuffix;
+		canvas.addEventListener(evtType, advance);
+	}
 
 	const ballSizeAnim = tweened(ballSize, { duration: 250, easing: cubicOut });
 	$: $ballSizeAnim = ballSize;
