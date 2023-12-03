@@ -8,7 +8,7 @@
 	import { cubicOut } from 'svelte/easing';
 	import { tweened } from 'svelte/motion';
 	import { Point3, axes } from '../geom/point';
-	import { createEventDispatcher, type EventDispatcher } from 'svelte';
+	import { createEventDispatcher } from 'svelte';
 
 	extend({
 		OrbitControls
@@ -139,7 +139,7 @@
 	{@const selected = selectedIndex === index}
 	{@const displayPoint = color.space(space).point().scale(10)}
 	{#if selected}
-		{#each axes as comp, index}
+		{#each axes as comp}
 			{@const end = displayPoint.with(0, comp)}
 			{@const deltaVector = displayPoint.delta(end)}
 			{@const distance = deltaVector.mag()}

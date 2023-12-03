@@ -10,11 +10,13 @@
 		CmyColor,
 		type ColorSpace
 	} from '../color/colorSpaces';
+	import type { ColorNameList } from '../color/colorName';
 	import GradientRange from './GradientRange.svelte';
 	import GradientDiagram from './GradientDiagram.svelte';
 	import DeltaBadge from './DeltaBadge.svelte';
 	import { createEventDispatcher, type EventDispatcher } from 'svelte';
 	import NumericMappedInput from './NumericMappedInput.svelte';
+	import ColorNameListPopover from './ColorNameListPopover.svelte';
 
 	export let value: Color;
 	// export const open = () => (modal = true);
@@ -24,6 +26,9 @@
 
 	export let defaultSpace: ColorSpace = 'rgb';
 	let space: ColorSpace = defaultSpace;
+
+	export let defaultColorNameList: ColorNameList = 'default';
+	let colorNameList = defaultColorNameList;
 
 	const compNames = {
 		rgb: { r: 'Rot', g: 'Grün', b: 'Blau' },
@@ -41,7 +46,7 @@
 		cmy: modalColor.proxy(CmyColor)
 	} as const;
 
-	$: colorMetadata = modalColor.name();
+	$: colorMetadata = modalColor.name(colorNameList);
 
 	const dispatch: EventDispatcher<{ choose: Color; cancel: undefined }> = createEventDispatcher();
 
@@ -86,9 +91,14 @@
 					{#await colorMetadata}
 						<Spinner />
 					{:then meta}
-						<h3 class="text-3xl 2xl:text-4xl text-white">
+						<button id="color-picker-title-thing" class="text-3xl 2xl:text-4xl text-white">
 							{meta.name}
-						</h3>
+						</button>
+						<ColorNameListPopover
+							color={modalColor}
+							bind:value={colorNameList}
+							triggeredBy="#color-picker-title-thing"
+						/>
 						<DeltaBadge
 							type="pos"
 							value={meta.distance}

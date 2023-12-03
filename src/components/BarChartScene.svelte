@@ -1,6 +1,6 @@
 <script lang="ts">
 	import * as THREE from 'three';
-	import { Canvas, T, extend, useThrelte } from '@threlte/core';
+	import { T, extend, useThrelte } from '@threlte/core';
 	import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 
 	const { renderer, renderMode } = useThrelte();

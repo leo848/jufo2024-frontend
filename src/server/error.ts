@@ -105,6 +105,11 @@ function colorNameApiToDisplayErrorRaw(error: ColorNameApiError): Omit<DisplayEr
 		};
 	} else if (type === 'serde') {
 		return serdeError(error.original, error.error);
+	} else if (type === 'invalidKey') {
+		return {
+			title: `Keine Liste: ${error.key}`,
+			description: `Angefragt wurde, eine Farbe nach der Liste "${error.key}" zu benennen. Zu dieser Liste wurde kein Eintrag gefunden.`
+		};
 	}
 	assertNever(error);
 }

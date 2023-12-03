@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { createEventDispatcher } from 'svelte';
-	import {fade, scale, slide} from 'svelte/transition';
+	import { scale } from 'svelte/transition';
 
 	export let value: number;
 
@@ -33,7 +33,7 @@
 </script>
 
 <div class="flex flex-row text-xl">
-	<div class="w-6 flex flex-col justify-stretch rounded-l-md overflow-hidden ">
+	<div class="w-6 flex flex-col justify-stretch rounded-l-md overflow-hidden">
 		<button
 			class="w-6 bg-gray-600 hover:bg-gray-500 transition-all disabled:bg-gray-700 h-full text-sm text-center"
 			disabled={displayValue > max - step}
@@ -50,7 +50,7 @@
 		</button>
 	</div>
 	<input
-	 in:scale
+		in:scale
 		class="w-14 px-2 text-xl text-white bg-gray-700 border-none rounded-r-md overflow-hidden text-center border-l-4 border-gray-500"
 		{max}
 		{min}

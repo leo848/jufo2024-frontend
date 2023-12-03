@@ -18,7 +18,6 @@
 	} from 'flowbite-svelte';
 
 	import { onDestroy } from 'svelte';
-	import { scale } from 'svelte/transition';
 	import { flip } from 'svelte/animate';
 	import * as Icon from 'flowbite-svelte-icons';
 	import { title } from '../../ui/navbar';

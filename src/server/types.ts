@@ -33,6 +33,10 @@ export const colorNameApiError = z.discriminatedUnion('type', [
 		type: z.literal('serde'),
 		error: z.string(),
 		original: z.string()
+	}),
+	z.object({
+		type: z.literal('invalidKey'),
+		key: z.string()
 	})
 ]);
 

@@ -7,7 +7,7 @@ import {
 	type ColorSpace,
 	colorSpaceClasses
 } from './colorSpaces';
-import { getColorName, type ColorNameMetadata } from './colorName';
+import { getColorName, type ColorNameMetadata, type ColorNameList } from './colorName';
 
 export class Color {
 	#r: number;
@@ -15,15 +15,17 @@ export class Color {
 	#b: number;
 
 	#cached: {
-		colorNameMetadata?: ColorNameMetadata;
-	}
+		colorNameMetadata: Partial<Record<ColorNameList, ColorNameMetadata>>;
+	};
 
 	constructor(r: number, g: number, b: number) {
 		this.#r = r;
 		this.#g = g;
 		this.#b = b;
 
-		this.#cached = {};
+		this.#cached = {
+			colorNameMetadata: {}
+		};
 	}
 
 	rgbMap(f: (comp: number) => number): Color {
@@ -95,14 +97,18 @@ export class Color {
 		this.#r = color.#r;
 		this.#g = color.#g;
 		this.#b = color.#b;
-		this.#cached = {};
+		this.#cached = {
+			colorNameMetadata: {}
+		};
 		return this;
 	}
 
-	async name(): Promise<ColorNameMetadata> {
-		if (this.#cached.colorNameMetadata) return this.#cached.colorNameMetadata;
-		const meta = await getColorName(this.rgb());
-		this.#cached.colorNameMetadata = meta;
+	async name(nameList?: ColorNameList): Promise<ColorNameMetadata> {
+		const list = nameList || 'default';
+		const cacheItem = this.#cached.colorNameMetadata[list];
+		if (cacheItem) return cacheItem;
+		const meta = await getColorName(this.rgb(), { list: nameList });
+		if (nameList) this.#cached.colorNameMetadata[nameList] = meta;
 		return meta;
 	}
 }
