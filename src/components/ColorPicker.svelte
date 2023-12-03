@@ -180,13 +180,21 @@
 				<div class="flex flex-row justify-between gap-8 h-full">
 					<div class="stretch w-full">
 						{#each proxies.lrgb.components() as comp (comp)}
-							<div class="h-10 mt-4">
+							<div class="h-10 mt-4 flex flex-row gap-4">
 								<GradientRange
 									bind:value={proxies.lrgb[comp]}
 									space="lrgb"
 									{comp}
 									color={modalColor}
 								/>
+								{#key proxies.rgb[comp]}
+									<NumericMappedInput
+										on:set={(n) => (proxies.lrgb[comp] = n.detail)}
+										bind:value={proxies.lrgb[comp]}
+										mapDisplay={(n) => Math.round(n * 100)}
+										mapValue={(n) => n / 100}
+									/>
+								{/key}
 							</div>
 							<div>{compNames.lrgb[comp]} = {Math.round(proxies.lrgb[comp] * 100)}%</div>
 						{/each}
@@ -210,13 +218,21 @@
 				<div class="flex flex-row justify-between gap-8 h-full">
 					<div class="stretch w-full">
 						{#each proxies.cmy.components() as comp (comp)}
-							<div class="h-10 mt-4">
+							<div class="h-10 mt-4 flex flex-row gap-4">
 								<GradientRange
 									bind:value={proxies.cmy[comp]}
 									space="cmy"
 									{comp}
 									color={modalColor}
 								/>
+								{#key proxies.cmy[comp]}
+									<NumericMappedInput
+										on:set={(n) => (proxies.cmy[comp] = n.detail)}
+										bind:value={proxies.cmy[comp]}
+										mapDisplay={(n) => Math.round(n * 100)}
+										mapValue={(n) => n / 100}
+									/>
+								{/key}
 							</div>
 							<div>{compNames.cmy[comp]} = {Math.round(proxies.cmy[comp] * 100)}%</div>
 						{/each}
@@ -240,13 +256,21 @@
 				<div class="flex flex-row justify-between gap-8 h-full">
 					<div class="stretch w-full">
 						{#each proxies.hsv.components() as comp (comp)}
-							<div class="h-10 mt-4">
+							<div class="h-10 mt-4 flex flex-row gap-4">
 								<GradientRange
 									bind:value={proxies.hsv[comp]}
 									space="hsv"
 									{comp}
 									color={modalColor}
 								/>
+								{#key proxies.hsv[comp]}
+									<NumericMappedInput
+										on:set={(n) => (proxies.hsv[comp] = n.detail)}
+										bind:value={proxies.hsv[comp]}
+										mapDisplay={(n) => Math.round(n * 100)}
+										mapValue={(n) => n / 100}
+									/>
+								{/key}
 							</div>
 							<div>{compNames.hsv[comp]} = {Math.round(proxies.hsv[comp] * 100)}%</div>
 						{/each}
@@ -270,13 +294,21 @@
 				<div class="flex flex-row justify-between gap-8 h-full">
 					<div class="stretch w-full">
 						{#each proxies.oklab.components() as comp (comp)}
-							<div class="h-10 mt-4">
+							<div class="h-10 mt-4 flex flex-row gap-4">
 								<GradientRange
 									bind:value={proxies.oklab[comp]}
 									space="oklab"
 									{comp}
 									color={modalColor}
 								/>
+								{#key proxies.oklab[comp]}
+									<NumericMappedInput
+										on:set={(n) => (proxies.oklab[comp] = n.detail)}
+										bind:value={proxies.oklab[comp]}
+										mapDisplay={(n) => Math.round(n * 100)}
+										mapValue={(n) => n / 100}
+									/>
+								{/key}
 							</div>
 							<div>{compNames.oklab[comp]} = {Math.round(proxies.oklab[comp] * 100)}%</div>
 						{/each}
