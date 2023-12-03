@@ -17,11 +17,11 @@
 			desc: 'Farben in beliebigem Farbraum eingeben und nach einzelnen Komponenten oder mit eigener TSP-Metrik optimal oder heuristisch sortieren'
 		},
 		{
-			img: '/fabian-oelkers-mond.png',
+			img: '/shubbam-dhage-vector.png',
 			reverse: true,
-			href: '/',
-			text: 'Gar nichts tun',
-			desc: 'Einfach mal entspannen und keine Aktion ausführen'
+			href: '/sort-vectors',
+			text: 'Vektoren sortieren',
+			desc: 'n-dimensionale Vektoren sortieren'
 		}
 	];
 	let displayCards: typeof cards = [];
