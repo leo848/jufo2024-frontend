@@ -38,7 +38,7 @@
 		if (Math.abs(value) < 0.001) {
 			return null;
 		} else {
-			return '±' + formatter.format(value);
+			return 'Δ ' + formatter.format(value);
 		}
 	}
 </script>
