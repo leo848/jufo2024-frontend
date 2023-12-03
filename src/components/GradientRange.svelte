@@ -17,6 +17,8 @@
 	export let comp: ColorComponent;
 	export let color: Color;
 
+	const observer = new ResizeObserver(initialize);
+
 	const displayValue = tweened(value, { duration: 200, easing: sineIn });
 	$: displayValue.set(value);
 
@@ -27,7 +29,7 @@
 		}
 
 		// eslint-disable-next-line
-		const amount = spaced.neededGradientPoints(comp as any);
+		const amount = spaced.neededGradientPoints(comp as never);
 		const gradientPoints = new Array(amount);
 		for (let i = 0; i < amount; i++) {
 			const testValue = i / (amount - 1);
@@ -36,7 +38,9 @@
 		return { points: gradientPoints, current: spaced.with(comp as never, value).css() };
 	}
 
-	onMount(() => {
+	function initialize() {
+		observer.observe(wrapperDiv);
+
 		width = canvas.width = wrapperDiv.offsetWidth;
 		height = canvas.height = wrapperDiv.offsetHeight;
 		const context = canvas.getContext('2d');
@@ -69,7 +73,9 @@
 		canvas.addEventListener('mousemove', mouseMoveEvent, false);
 		canvas.addEventListener('mouseleave', mouseUpEvent);
 		canvas.addEventListener('touchmove', touchMoveEvent);
-	});
+	}
+
+	onMount(initialize);
 
 	const rectPad = { x: 0, y: 5 };
 	$: if (color && ctx) {
