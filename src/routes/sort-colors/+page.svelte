@@ -204,6 +204,7 @@
 			}
 			selection = null;
 		}}
+		on:cancel={() => (selection = null)}
 	/>
 {/if}
 

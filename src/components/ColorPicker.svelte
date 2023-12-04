@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { Button, Modal, Spinner, TabItem, Tabs } from 'flowbite-svelte';
 	import { Color } from '../color/color';
-	import { blur } from 'svelte/transition';
+	import { blur, scale, slide } from 'svelte/transition';
 	import {
 		HsvColor,
 		OklabColor,
@@ -17,6 +17,8 @@
 	import { createEventDispatcher, type EventDispatcher } from 'svelte';
 	import NumericMappedInput from './NumericMappedInput.svelte';
 	import ColorNameListPopover from './ColorNameListPopover.svelte';
+	import { ExclamationCircleOutline } from 'flowbite-svelte-icons';
+	import WarningGamutPopover from './WarningGamutPopover.svelte';
 
 	export let value: Color;
 	// export const open = () => (modal = true);
@@ -87,7 +89,29 @@
 			<p class="text-2xl 2xl:text-4xl text-bold 2xl:my-2 text-white">Farbauswahl</p>
 		</svelte:fragment>
 		<div class="flex flex-row gap-8">
-			<div class="color-preview" style={'background-color: ' + modalColor.rgb().css()} />
+			<div class="color-preview" style={'background-color: ' + modalColor.rgb().css()}>
+				{#if !proxies[space].approxEqualsValues(proxies[space]
+						.color()
+						.rgb()
+						.color()
+						.space(space)
+						.values(), 0.05)}
+					<button
+						transition:scale
+						id="warning-gamut"
+						class="rounded-full bg-red-600 text-red-200 self-center mr-4"
+					>
+						<ExclamationCircleOutline size="xl" />
+					</button>
+					<WarningGamutPopover
+						triggeredBy="#warning-gamut"
+						color={modalColor}
+						on:limit={() => {
+							modalColor = proxies[space].color().rgb().color();
+						}}
+					/>
+				{/if}
+			</div>
 			<div class="flex flex-col grow justify-between">
 				<div class="flex justify-start">
 					{#await colorMetadata}

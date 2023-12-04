@@ -45,6 +45,13 @@ export abstract class AbstractColor<
 	fancyCss(): string | null {
 		return null;
 	}
+	approxEqualsValues(other: [number, number, number], threshold: number = 0.01) {
+		return (
+			this.values()
+				.map((v, i) => Math.abs(v - other[i]))
+				.reduce((a, b) => a + b) < threshold
+		);
+	}
 }
 
 export class RgbColor extends AbstractColor<RgbColor, RgbComponent> {
