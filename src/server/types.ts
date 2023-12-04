@@ -112,7 +112,8 @@ export const serverOutput = z.discriminatedUnion('type', [
 	serverOutputLog,
 	serverOutputSortedNumbers,
 	serverOutputPathCreation,
-	serverOutputLatency
+	serverOutputLatency,
+	serverOutputPathImprovement,
 ]);
 
 export type ServerOutput = z.infer<typeof serverOutput>;
