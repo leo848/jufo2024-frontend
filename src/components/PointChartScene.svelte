@@ -26,7 +26,6 @@
 	const { renderer, renderMode, advance } = useThrelte();
 
 	renderMode.set('manual');
-	advance();
 	$: colors, edges, space, projection, ballSize, selectedIndex, advance();
 
 	let axisTextures = new Array(3).fill(null).map((_, index) => {
@@ -135,6 +134,8 @@
 			});
 		}
 	}
+
+	requestAnimationFrame(advance);
 
 	/*background={new THREE.Color(0x0c0c0c)}
 		fog={new THREE.FogExp2(0x0c0c0c, 0.015)}
