@@ -5,7 +5,7 @@
 	import { Point3 } from '../../geom/point';
 	import { factorial } from '../../utils/math';
 	import { flip } from 'svelte/animate';
-	import { fly, scale, slide } from 'svelte/transition';
+	import { scale } from 'svelte/transition';
 	import * as Icon from 'flowbite-svelte-icons';
 	import { onDestroy, type ComponentType } from 'svelte';
 	import PointChart from '../../components/PointChart.svelte';
@@ -31,7 +31,7 @@
 
 	let selection: {
 		index: number;
-		appendIndex: number | null;
+		appendIndex?: number | null;
 		colorPickerOpen?: boolean;
 		position: { x: number; y: number };
 	} | null = null;
