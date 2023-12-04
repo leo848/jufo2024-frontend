@@ -38,6 +38,7 @@ export const availableColorNameLists = [
 	'osxcrayons',
 	'ral',
 	'sanzoWadaI',
+	'spanish',
 	'thesaurus',
 	'werner',
 	'windows',
@@ -68,7 +69,8 @@ export const colorNameListNames: Record<ColorNameList, string> = {
 	chineseTraditional: 'Traditionell Chinesisch',
 	default: 'Standard',
 	bestOf: 'Best-of',
-	ridgway: 'Ridgways Nomenklatur'
+	ridgway: 'Ridgways Nomenklatur',
+	spanish: "Spanisch"
 };
 
 export type ColorNameList = z.infer<typeof colorNameListSchema>;
