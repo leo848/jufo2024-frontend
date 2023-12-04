@@ -9,7 +9,7 @@
 	import { onDestroy } from 'svelte';
 	import PointChart from '../../components/PointChart.svelte';
 	import { registerCallback, unregisterCallback } from '../../server/websocket';
-	import { serverOutputPathCreation } from '../../server/types';
+	import { serverOutputPathCreation, serverOutputPathImprovement } from '../../server/types';
 	import { tweened } from 'svelte/motion';
 	import type { Color } from '../../color/color';
 	import { title } from '../../ui/navbar';
@@ -90,15 +90,19 @@
 		// ballSizeShowControls: true,
 	};
 
-	let callbackId = registerCallback(serverOutputPathCreation, (pc) => {
+	function pathToEdges(path: number[][]): [Point3, Point3][] {
+		let edges = [];
+		for (let i = 0; i < path.length - 1; i++) {
+			edges.push([Point3.fromArray(path[i]), Point3.fromArray(path[i + 1])] as [Point3, Point3]);
+		}
+		return edges;
+	}
+
+	let callbackIdCreation = registerCallback(serverOutputPathCreation, (pc) => {
 		path = null;
 		if (pc.donePath) {
 			path = pc.donePath.map(Point3.fromArray);
-			edges = [];
-			for (let i = 0; i < pc.donePath.length - 1; i++) {
-				edges.push([Point3.fromArray(pc.donePath[i]), Point3.fromArray(pc.donePath[i + 1])]);
-			}
-			console.log(pc);
+			edges = pathToEdges(pc.donePath);
 			colors = pc.donePath.map(
 				(arr) =>
 					colors.find((color) => color.space(space).point().equals(Point3.fromArray(arr))) ||
@@ -110,7 +114,16 @@
 			edges = pc.currentEdges.map(([from, to]) => [Point3.fromArray(from), Point3.fromArray(to)]);
 		}
 	});
-	onDestroy(() => unregisterCallback(callbackId));
+	onDestroy(() => unregisterCallback(callbackIdCreation));
+
+	let callbackIdImprovement = registerCallback(serverOutputPathImprovement, (pi) => {
+		console.log(pi);
+		edges = pathToEdges(pi.currentPath);
+		if (pi.done) {
+			path = pi.currentPath.map(Point3.fromArray);
+		}
+	});
+	onDestroy(() => unregisterCallback(callbackIdImprovement));
 </script>
 
 {#if selection !== null && selection.colorPickerOpen}
