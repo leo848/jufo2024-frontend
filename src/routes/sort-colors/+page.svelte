@@ -33,6 +33,7 @@
 	let selection: {
 		index: number;
 		appendIndex?: number | null;
+		color?: Color,
 		colorPickerOpen?: boolean;
 		position: { x: number; y: number };
 	} | null = null;
@@ -132,12 +133,18 @@
 
 	let progress = { ongoing: false, value: 0 as null | number };
 
-	function addRandomColor() {
-		colors = [...colors, new RgbColor(Math.random(), Math.random(), Math.random()).color()];
-	}
-
 	function assertColor(n: unknown): Color {
 		return n as Color;
+	}
+
+	function addColor() {
+		selection = {
+			index: colors.length - 1,
+			color: new RgbColor(Math.random(), Math.random(), Math.random()).color(),
+			appendIndex: colors.length,
+			position: {x: -1000, y: -1000},
+			colorPickerOpen: true,
+		}
 	}
 
 	let ballSize = 0.4;
@@ -183,7 +190,7 @@
 	<ColorPicker
 		valid={(color) => !colors.some((storedColor) => storedColor.approxEquals(color))}
 		defaultSpace={space}
-		value={colors[selection.index]}
+		value={selection.color ?? colors[selection.index]}
 		on:choose={(color) => {
 			if (selection) {
 				if (selection.appendIndex != null) {
@@ -267,15 +274,13 @@
 		</div>
 		<div class="stretch" />
 		<div>
-			<div
+			<button
 				class="color-button h-16 w-16 bg-white text-6xl flex align-baseline justify-center items-center"
-				on:click={addRandomColor}
-				role="button"
-				tabindex="0"
-				on:keypress={addRandomColor}
+				on:click={addColor}
+				on:keypress={addColor}
 			>
 				+
-			</div>
+			</button>
 		</div>
 	</div>
 	<div
