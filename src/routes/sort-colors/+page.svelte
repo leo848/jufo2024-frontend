@@ -1,21 +1,21 @@
 <script lang="ts">
-	import { Card, Progressbar, Spinner } from 'flowbite-svelte';
+	import { Card, Spinner } from 'flowbite-svelte';
 	import ColorPicker from '../../components/ColorPicker.svelte';
 	import { RgbColor, type ColorSpace } from '../../color/colorSpaces';
 	import { Point3 } from '../../geom/point';
-	import { factorial } from '../../utils/math';
 	import { flip } from 'svelte/animate';
 	import { scale } from 'svelte/transition';
 	import * as Icon from 'flowbite-svelte-icons';
-	import { onDestroy, type ComponentType } from 'svelte';
+	import { onDestroy } from 'svelte';
 	import PointChart from '../../components/PointChart.svelte';
-	import { registerCallback, sendWebsocket, unregisterCallback } from '../../server/websocket';
+	import { registerCallback, unregisterCallback } from '../../server/websocket';
 	import { serverOutputPathCreation } from '../../server/types';
 	import { tweened } from 'svelte/motion';
 	import type { Color } from '../../color/color';
 	import { title } from '../../ui/navbar';
 	import { gradient } from '../../ui/color';
 	import PointChartOptions from '../../components/PointChartOptions.svelte';
+	import PathAlgorithms from '../../components/PathAlgorithms.svelte';
 
 	title.set('Farben sortieren');
 
@@ -33,7 +33,7 @@
 	let selection: {
 		index: number;
 		appendIndex?: number | null;
-		color?: Color,
+		color?: Color;
 		colorPickerOpen?: boolean;
 		position: { x: number; y: number };
 	} | null = null;
@@ -64,75 +64,6 @@
 		chainLength.set(lengthAcc);
 	}
 
-	const constructionItems: {
-		name: string;
-		description: string;
-		icon: ComponentType;
-		index: number;
-		expectedTime?: (n: number) => null | number;
-		send: (() => void) | null;
-	}[] = (
-		[
-			{
-				name: 'Manuell',
-				description: 'Manuelle Auswahl der Punkte in einer Reihenfolge',
-				method: null,
-				expectedTime: () => null,
-				icon: Icon.AnnotationOutline
-			},
-			{
-				name: 'Greedy',
-				description: 'Greedy-Algorithmus',
-				method: 'greedy',
-				icon: Icon.DollarOutline
-			},
-			{
-				name: 'Nearest Neighbor',
-				description: 'Nächster Nachbar',
-				method: 'nearestNeighbor',
-				expectedTime: (n: number) => Math.min(n / 2, 5),
-				icon: Icon.PhoneOutline
-			},
-			{
-				name: 'Brute Force',
-				description: 'Teste alle möglichen Kombinationen',
-				method: 'bruteForce',
-				expectedTime: (n: number) => factorial(n) / 360,
-				icon: Icon.HourglassOutline
-			},
-			{
-				name: 'Optimal (Concorde)',
-				description: 'Finde die optimale Lösung mittels des externen Tools Concorde',
-				method: null,
-				icon: Icon.WandMagicSparklesOutline
-			}
-		] as const
-	).map((e, i) => {
-		const payload =
-			e.method &&
-			(() =>
-				({
-					type: 'action',
-					action: {
-						type: 'createPath',
-						method: { type: e.method },
-						dimensions: 3,
-						values: colors.map((color) => color.space(space).point().values())
-					}
-				} as const));
-		const send = payload && (() => sendWebsocket(payload()));
-		return Object.assign({}, e, { index: i, send });
-	});
-	let selectedConstructionItem: null | number = null;
-	let displayConstructionItems = constructionItems;
-	$: {
-		let find = constructionItems.find((e) => e.index === selectedConstructionItem);
-		displayConstructionItems = find === undefined ? constructionItems : [find];
-	}
-	$: constructionOpen = selectedConstructionItem !== null;
-
-	let progress = { ongoing: false, value: 0 as null | number };
-
 	function assertColor(n: unknown): Color {
 		return n as Color;
 	}
@@ -142,9 +73,9 @@
 			index: colors.length - 1,
 			color: new RgbColor(Math.random(), Math.random(), Math.random()).color(),
 			appendIndex: colors.length,
-			position: {x: -1000, y: -1000},
-			colorPickerOpen: true,
-		}
+			position: { x: -1000, y: -1000 },
+			colorPickerOpen: true
+		};
 	}
 
 	let ballSize = 0.4;
@@ -162,7 +93,6 @@
 	let callbackId = registerCallback(serverOutputPathCreation, (pc) => {
 		path = null;
 		if (pc.donePath) {
-			progress.ongoing = false;
 			path = pc.donePath.map(Point3.fromArray);
 			edges = [];
 			for (let i = 0; i < pc.donePath.length - 1; i++) {
@@ -177,12 +107,9 @@
 					})()
 			);
 		} else {
-			progress.ongoing = true;
-			progress.value = pc.progress ?? null;
 			edges = pc.currentEdges.map(([from, to]) => [Point3.fromArray(from), Point3.fromArray(to)]);
 		}
 	});
-
 	onDestroy(() => unregisterCallback(callbackId));
 </script>
 
@@ -323,66 +250,8 @@
 				</div>
 			</div>
 		</Card>
-		<Card class="rounded-xl col-span-12 md:col-span-6 lg:col-span-7 xl:col-span-4 max-w-none">
-			<p class="text-2xl xl:text-3xl dark:text-white bg-gray-700 p-4 -m-6 rounded-t-xl mb-4">
-				Konstruktion
-			</p>
-			<div class="text-xl grow flex flex-col">
-				{#each displayConstructionItems as { name, icon, index } (index)}
-					<div
-						animate:flip={{ duration: 200 }}
-						transition:scale
-						class="transition"
-						on:click={() => (selectedConstructionItem = constructionOpen ? null : index)}
-						role="button"
-						on:keydown={() => {}}
-						tabindex="0"
-					>
-						<div class="bg-gray-700 p-4 mb-4 rounded-xl border border-gray-600">
-							<div class="flex items-center justify-between">
-								<Icon.AngleRightSolid
-									class="transition"
-									style={`transform: rotate(${constructionOpen ? 90 : 0}deg)`}
-								/>
-								<span class="font-bold text-2xl">
-									{name}
-								</span>
-								<svelte:component this={icon} />
-							</div>
-						</div>
-					</div>
-				{/each}
-				{#if selectedConstructionItem !== null}
-					{@const { description, send, expectedTime } = constructionItems[selectedConstructionItem]}
-					<div class="flex flex-col justify-between grow">
-						<div>
-							<div class="rounded-xl" in:scale={{ delay: 150 }}>{description}</div>
-							{#if expectedTime}
-								{@const time = expectedTime(colors.length)}
-								{#if time === null}
-									<div>Erwartete Zeit: beliebig</div>
-								{:else if time < 1}
-									<div>Erwartete Zeit: <b>&lt;1</b> Sekunde</div>
-								{:else}
-									<div>Erwartete Zeit: <b>{expectedTime(colors.length)}</b> Sekunden</div>
-								{/if}
-							{/if}
-						</div>
-						{#if send}
-							{#if !progress.ongoing}
-								<button on:click={send} class="rounded-xl text-white bg-primary-800 p-4"
-									>Ausführen</button
-								>
-							{:else if progress.value === null}
-								<Spinner />
-							{:else}
-								<Progressbar progress={progress.value * 100} />
-							{/if}
-						{/if}
-					</div>
-				{/if}
-			</div>
-		</Card>
+
+		<PathAlgorithms points={colors.map((color) => color.space(space).point().values())} />
 	</div>
 </div>
 

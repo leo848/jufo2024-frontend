@@ -1,4 +1,4 @@
-import type {Color} from "../color/color";
+import type { Color } from '../color/color';
 
 export function gradient(colors: Color[]) {
 	let str = 'linear-gradient(90deg, ';
@@ -11,4 +11,3 @@ export function gradient(colors: Color[]) {
 	str = str.substring(0, str.length - 2) + ')';
 	return str;
 }
-
