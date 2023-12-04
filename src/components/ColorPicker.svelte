@@ -30,6 +30,8 @@
 	export let defaultColorNameList: ColorNameList = 'default';
 	let colorNameList = defaultColorNameList;
 
+	export let valid: (color: Color) => boolean = () => true;
+
 	const compNames = {
 		rgb: { r: 'Rot', g: 'Grün', b: 'Blau' },
 		lrgb: { r: 'Rot', g: 'Grün', b: 'Blau' },
@@ -340,6 +342,7 @@
 		</Tabs>
 		<svelte:fragment slot="footer">
 			<Button
+				disabled={!valid(modalColor)}
 				on:click={() => {
 					value = modalColor;
 					modal = false;

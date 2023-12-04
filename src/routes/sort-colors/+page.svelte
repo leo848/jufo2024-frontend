@@ -30,6 +30,7 @@
 
 	let selection: {
 		index: number;
+		appendIndex: number | null;
 		colorPickerOpen?: boolean;
 		position: { x: number; y: number };
 	} | null = null;
@@ -44,6 +45,7 @@
 		const { left: x, bottom: y } = target.getBoundingClientRect();
 		selection = {
 			index,
+			appendIndex: null,
 			position: { x, y }
 		};
 	}
@@ -189,13 +191,18 @@
 
 {#if selection !== null && selection.colorPickerOpen}
 	<ColorPicker
+		valid={(color) => !colors.some((storedColor) => storedColor.approxEquals(color))}
 		defaultSpace={space}
 		value={colors[selection.index]}
 		on:choose={(color) => {
-			console.log(color);
-			if (selection && selection.index !== null) {
-				colors[selection.index] = assertColor(color.detail);
+			if (selection) {
+				if (selection.appendIndex !== null) {
+					colors = colors.toSpliced(selection.appendIndex + 1, 0, color.detail);
+				} else if (selection.index !== null) {
+					colors[selection.index] = assertColor(color.detail);
+				}
 			}
+			selection = null;
 		}}
 	/>
 {/if}
@@ -211,9 +218,9 @@
 		{:then meta}
 			<div class="text-3xl px-2">{meta.name}</div>
 		{/await}
-		<div class="flex flew-row mt-4 gap-4">
+		<div class="flex flew-row mt-4 gap-2">
 			<button
-				class="text-base p-2 bg-gray-500 rounded-lg"
+				class="text-base p-2 bg-gray-500 hover:bg-gray-400 transition-all rounded-lg"
 				on:click={() => {
 					if (selection) {
 						selection.colorPickerOpen = true;
@@ -223,7 +230,18 @@
 				<Icon.PenNibOutline size="xl" />
 			</button>
 			<button
-				class="text-base p-2 bg-gray-500 rounded-lg"
+				class="text-base p-2 bg-gray-500 rounded-lg hover:bg-gray-400 transition-all"
+				on:click={() => {
+					if (selection) {
+						selection.appendIndex = selection.index;
+						selection.colorPickerOpen = true;
+					}
+				}}
+			>
+				<Icon.FolderDuplicateOutline size="xl" />
+			</button>
+			<button
+				class="text-base p-2 bg-gray-500 rounded-lg hover:bg-gray-400 transition-all"
 				on:click={() => {
 					if (selection) {
 						colors = colors.toSpliced(selection.index, 1);

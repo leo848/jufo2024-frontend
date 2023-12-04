@@ -111,6 +111,10 @@ export class Color {
 		if (nameList) this.#cached.colorNameMetadata[nameList] = meta;
 		return meta;
 	}
+
+	approxEquals(other: Color): boolean {
+		return this.rgb().numeric() == other.rgb().numeric();
+	}
 }
 
 export const rgbComponentSchema = z.enum(['r', 'g', 'b']);
