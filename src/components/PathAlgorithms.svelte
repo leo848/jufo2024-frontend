@@ -141,7 +141,7 @@
 				</div>
 				{#if send}
 					{#if !progress.ongoing}
-						<button on:click={send} class="rounded-xl text-white bg-primary-800 p-4"
+						<button on:click={send} class="rounded-xl text-white bg-gray-700 hover:bg-gray-600 transition-all p-4"
 							>Ausführen</button
 						>
 					{:else if progress.value === null}
