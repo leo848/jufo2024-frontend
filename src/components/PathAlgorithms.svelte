@@ -84,7 +84,31 @@
 			const send = payload && (() => sendWebsocket(payload()));
 			return Object.assign({}, e, { index: i, send });
 		}),
-		improvement: []
+		improvement: (
+			[
+				{
+					name: 'Rotieren',
+					description: 'Den Pfad eindimensional rotieren',
+					method: 'rotate',
+					icon: Icon.RotateOutline
+				}
+			] as const
+		).map((e, i) => {
+			const payload =
+				e.method &&
+				(() =>
+					({
+						type: 'action',
+						action: {
+							type: 'improvePath',
+							method: { type: e.method },
+							dimensions,
+							path: points
+						}
+					} as const));
+			const send = payload && (() => sendWebsocket(payload()));
+			return Object.assign({}, e, { index: i, send });
+		})
 	};
 
 	let selectedItem: ForAction<null | number> = { construction: null, improvement: null };

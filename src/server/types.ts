@@ -62,7 +62,7 @@ const action = z.discriminatedUnion('type', [
 		path: z.array(z.array(z.number())),
 		method: z.discriminatedUnion('type', [
 			z.object({ type: z.literal('rotate') }),
-			z.object({ type: z.literal('twoOpt') }),
+			z.object({ type: z.literal('twoOpt') })
 		])
 	})
 ]);
@@ -106,7 +106,7 @@ export const serverOutputPathImprovement = z.object({
 	done: z.boolean(),
 	currentPath: z.array(z.array(z.number())),
 	progress: z.optional(z.number().gte(0).lte(1))
-})
+});
 export const serverOutput = z.discriminatedUnion('type', [
 	serverOutputError,
 	serverOutputLog,
