@@ -3,7 +3,8 @@
 	import { slide, fly } from 'svelte/transition';
 
 	export let options: {
-		ballSizeChange: number;
+		ballSizeChange: -1 | 0 | 1;
+		showOptions: boolean;
 	};
 	export let ballSize: number;
 	export let projection: string;
