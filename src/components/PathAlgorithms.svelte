@@ -109,7 +109,7 @@
 				on:click={() => (selectedConstructionItem = constructionOpen ? null : index)}
 				disabled={progress.ongoing}
 			>
-				<div class="bg-gray-700 p-4 mb-4 rounded-xl border border-gray-600">
+				<div class="bg-gray-700 hover:bg-gray-600 transition-all p-4 mb-4 rounded-xl border border-gray-600">
 					<div class="flex items-center justify-between">
 						<Icon.AngleRightSolid
 							class="transition"
