@@ -70,7 +70,7 @@ export const colorNameListNames: Record<ColorNameList, string> = {
 	default: 'Standard',
 	bestOf: 'Best-of',
 	ridgway: 'Ridgways Nomenklatur',
-	spanish: "Spanisch"
+	spanish: 'Spanisch'
 };
 
 export type ColorNameList = z.infer<typeof colorNameListSchema>;
@@ -92,7 +92,7 @@ const colorNameListsApiResponse = z.object({
 });
 
 export type ColorNameListsMetadata = z.infer<typeof colorNameListsApiResponse>;
-export type ColorNameListMetadata = ColorNameListsMetadata['listDescriptions'][ColorNameList];
+export type ColorNameListMetadata = ColorNameListsMetadata['listDescriptions'][ColorNameList] & {};
 
 let cachedColorNameLists: null | ColorNameListsMetadata = null;
 
@@ -128,7 +128,9 @@ export async function getColorNameListInfo(
 	colorNameList: ColorNameList
 ): Promise<ColorNameListMetadata> {
 	const lists = await getColorNameLists();
-	return lists.listDescriptions[colorNameList];
+	const descs = lists.listDescriptions[colorNameList];
+	if (!descs) return Promise.reject();
+	return descs;
 }
 
 export async function getColorName(

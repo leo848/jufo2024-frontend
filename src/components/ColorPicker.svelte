@@ -10,7 +10,7 @@
 		CmyColor,
 		type ColorSpace
 	} from '../color/colorSpaces';
-	import type { ColorNameList } from '../color/colorName';
+	import { type ColorNameList, getColorNameListInfo } from '../color/colorName';
 	import GradientRange from './GradientRange.svelte';
 	import GradientDiagram from './GradientDiagram.svelte';
 	import DeltaBadge from './DeltaBadge.svelte';
@@ -91,8 +91,18 @@
 					{#await colorMetadata}
 						<Spinner />
 					{:then meta}
-						<button id="color-picker-title-thing" class="text-3xl 2xl:text-4xl text-white">
+						<div class="text-3xl 2xl:text-4xl text-white">
 							{meta.name}
+						</div>
+						<button
+							id="color-picker-title-thing"
+							class="border border-2 border-gray-700 hover:border-gray-500 transition-all rounded-xl text-white px-2 ml-4 mr-n2 text-base self-end opacity-50 flex flex-row items-center"
+						>
+							{#await getColorNameListInfo(colorNameList)}
+								<Spinner size="sm" />
+							{:then info}
+								{info.title}
+							{/await}
 						</button>
 						<ColorNameListPopover
 							color={modalColor}
