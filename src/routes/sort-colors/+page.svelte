@@ -98,18 +98,22 @@
 		return edges;
 	}
 
+	function setColorsFromPath(path: number[][]) {
+		colors = path.map(
+			(arr) =>
+				colors.find((color) => color.space(space).point().equals(Point3.fromArray(arr))) ||
+				(() => {
+					throw new Error('Invalid: returned invalid color not in list');
+				})()
+		);
+	}
+
 	let callbackIdCreation = registerCallback(serverOutputPathCreation, (pc) => {
 		path = null;
 		if (pc.donePath) {
 			path = pc.donePath.map(Point3.fromArray);
 			edges = pathToEdges(pc.donePath);
-			colors = pc.donePath.map(
-				(arr) =>
-					colors.find((color) => color.space(space).point().equals(Point3.fromArray(arr))) ||
-					(() => {
-						throw new Error('Invalid: returned invalid color not in list');
-					})()
-			);
+			setColorsFromPath(pc.donePath);
 		} else {
 			edges = pc.currentEdges.map(([from, to]) => [Point3.fromArray(from), Point3.fromArray(to)]);
 		}
@@ -121,6 +125,7 @@
 		edges = pathToEdges(pi.currentPath);
 		if (pi.done) {
 			path = pi.currentPath.map(Point3.fromArray);
+			setColorsFromPath(pi.currentPath);
 		}
 	});
 	onDestroy(() => unregisterCallback(callbackIdImprovement));
