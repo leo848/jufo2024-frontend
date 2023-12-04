@@ -13,6 +13,7 @@
 	export let dimensions = 3;
 
 	let progress = { ongoing: false, value: 0 as null | number };
+	let path: number[][] | null = null;
 
 	const constructionItems: {
 		name: string;
@@ -85,9 +86,11 @@
 	let callbackId = registerCallback(serverOutputPathCreation, (pc) => {
 		if (pc.donePath) {
 			progress.ongoing = false;
+			path = pc.donePath;
 		} else {
 			progress.ongoing = true;
 			progress.value = pc.progress ?? null;
+			path = null;
 		}
 	});
 	onDestroy(() => unregisterCallback(callbackId));
@@ -99,14 +102,12 @@
 	</p>
 	<div class="text-xl grow flex flex-col">
 		{#each displayConstructionItems as { name, icon, index } (index)}
-			<div
+			<button
 				animate:flip={{ duration: 200 }}
 				transition:scale
 				class="transition"
 				on:click={() => (selectedConstructionItem = constructionOpen ? null : index)}
-				role="button"
-				on:keydown={() => {}}
-				tabindex="0"
+				disabled={progress.ongoing}
 			>
 				<div class="bg-gray-700 p-4 mb-4 rounded-xl border border-gray-600">
 					<div class="flex items-center justify-between">
@@ -120,7 +121,7 @@
 						<svelte:component this={icon} />
 					</div>
 				</div>
-			</div>
+			</button>
 		{/each}
 		{#if selectedConstructionItem !== null}
 			{@const { description, send, expectedTime } = constructionItems[selectedConstructionItem]}
