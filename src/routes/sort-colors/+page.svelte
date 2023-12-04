@@ -14,6 +14,7 @@
 	import { tweened } from 'svelte/motion';
 	import type { Color } from '../../color/color';
 	import { title } from '../../ui/navbar';
+	import { gradient } from '../../ui/color';
 	import PointChartOptions from '../../components/PointChartOptions.svelte';
 
 	title.set('Farben sortieren');
@@ -139,18 +140,6 @@
 		return n as Color;
 	}
 
-	function gradient(colors: Color[]) {
-		let str = 'linear-gradient(90deg, ';
-		for (let i = 0; i < colors.length; i++) {
-			const v = i / colors.length;
-			const v2 = (i + 1) / colors.length;
-			str += colors[i].rgb().css() + ' ' + v * 100 + '%, ';
-			str += colors[i].rgb().css() + ' ' + v2 * 100 + '%, ';
-		}
-		str = str.substring(0, str.length - 2) + ')';
-		return str;
-	}
-
 	let ballSize = 0.4;
 	let projection: 'perspective' | 'orthographic' = 'perspective';
 	let threeDOptions: {
@@ -197,9 +186,9 @@
 		value={colors[selection.index]}
 		on:choose={(color) => {
 			if (selection) {
-				if (selection.appendIndex !== null) {
+				if (selection.appendIndex != null) {
 					colors = colors.toSpliced(selection.appendIndex + 1, 0, color.detail);
-				} else if (selection.index !== null) {
+				} else if (selection.index != null) {
 					colors[selection.index] = assertColor(color.detail);
 				}
 			}
