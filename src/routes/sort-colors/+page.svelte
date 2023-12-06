@@ -16,6 +16,7 @@
 	import { gradient } from '../../ui/color';
 	import PointChartOptions from '../../components/PointChartOptions.svelte';
 	import PathAlgorithms from '../../components/PathAlgorithms.svelte';
+	import ColorAddPopover from '../../components/ColorAddPopover.svelte';
 
 	title.set('Farben sortieren');
 
@@ -199,7 +200,7 @@
 
 <div class="w-full h-2 hover:h-28 transition-all" style={`background: ${gradient(colors)}`} />
 <div class="mx-10">
-	<div class="flex flex-row justify-between align-center mt-8">
+	<div class="flex flex-row justify-between align-center mt-8 gap-4">
 		<div class="flex flex-row flex-wrap justify-start 2xl:gap-8 gap-2 items-stretch h-16">
 			{#each colors as color, index (color)}
 				<div animate:flip>
@@ -217,15 +218,21 @@
 				</div>
 			{/each}
 		</div>
-		<div class="stretch" />
-		<div>
-			<button
-				class="color-button h-16 w-16 bg-white text-6xl flex align-baseline justify-center items-center"
-				on:click={addColor}
-				on:keypress={addColor}
-			>
-				+
-			</button>
+		<div class="grow" />
+		<div class="flex flex-row gap-4">
+		<button
+			class="color-button h-16 w-16 bg-gray-600 hover:bg-gray-500 transition-all text-6xl flex align-baseline justify-center items-center"
+			on:click={addColor}
+		>
+			<Icon.PlusSolid size="xl" color="white" />
+		</button>
+		<button
+			id="tooltip-color-edit"
+			class="color-button h-16 w-16 bg-gray-600 hover:bg-gray-500 transition-all flex align-baseline justify-center items-center"
+		>
+			<Icon.DotsHorizontalOutline size="xl" color="white" />
+		</button>
+		<ColorAddPopover bind:colors triggeredBy="#tooltip-color-edit" />
 		</div>
 	</div>
 	<div
@@ -269,7 +276,10 @@
 			</div>
 		</Card>
 
-		<PathAlgorithms points={colors.map((color) => color.space(space).point().values())} />
+		<PathAlgorithms
+			on:deletePath={() => (path = null)}
+			points={colors.map((color) => color.space(space).point().values())}
+		/>
 	</div>
 </div>
 

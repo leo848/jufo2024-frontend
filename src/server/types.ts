@@ -55,7 +55,7 @@ const action = z.discriminatedUnion('type', [
 			z.object({ type: z.literal('bruteForce') }),
 			z.object({ type: z.literal('greedy') }),
 			z.object({ type: z.literal('random') }),
-			z.object({ type: z.literal('transmute') }),
+			z.object({ type: z.literal('transmute') })
 		])
 	}),
 	z.object({
@@ -116,7 +116,7 @@ export const serverOutput = z.discriminatedUnion('type', [
 	serverOutputSortedNumbers,
 	serverOutputPathCreation,
 	serverOutputLatency,
-	serverOutputPathImprovement,
+	serverOutputPathImprovement
 ]);
 
 export type ServerOutput = z.infer<typeof serverOutput>;

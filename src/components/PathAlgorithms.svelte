@@ -7,7 +7,7 @@
 	import { Card, Spinner, Progressbar } from 'flowbite-svelte';
 	import { flip } from 'svelte/animate';
 	import { scale } from 'svelte/transition';
-	import { onDestroy } from 'svelte';
+	import { createEventDispatcher, onDestroy } from 'svelte';
 
 	export let points: number[][];
 	export let dimensions = 3;
@@ -37,11 +37,12 @@
 			[
 				{
 					name: 'Zufällig',
-					description: 'Die Punkte werden zufällig nacheinander ausgewählt und so zu einem Pfad zusammengefügt.',
+					description:
+						'Die Punkte werden zufällig nacheinander ausgewählt und so zu einem Pfad zusammengefügt.',
 					method: 'random',
 					complexity: 'O(n)',
 					expectedTime: () => null,
-					icon: Icon.ShuffleOutline,
+					icon: Icon.ShuffleOutline
 				},
 				{
 					name: 'Aktuelle Anordnung',
@@ -52,14 +53,16 @@
 				},
 				{
 					name: 'Greedy',
-					description: 'Der Greedy-Algorithmus wählt stets die kürzeste Kante aus, bei deren Auswahl kein Zyklus entsteht.',
+					description:
+						'Der Greedy-Algorithmus wählt stets die kürzeste Kante aus, bei deren Auswahl kein Zyklus entsteht.',
 					method: 'greedy',
 					complexity: 'O(n²)',
 					icon: Icon.DollarOutline
 				},
 				{
 					name: 'Nearest Neighbor',
-					description: 'Die Methode des nächsten Nachbarn beginnt mit dem Anfangspunkt und wählt stets den nächsten Punkt, der noch nicht besucht wurde, und baut so den Pfad auf.',
+					description:
+						'Die Methode des nächsten Nachbarn beginnt mit dem Anfangspunkt und wählt stets den nächsten Punkt, der noch nicht besucht wurde, und baut so den Pfad auf.',
 					method: 'nearestNeighbor',
 					complexity: 'O(n³)',
 					expectedTime: (n: number) => Math.min(n / 2, 5),
@@ -67,7 +70,8 @@
 				},
 				{
 					name: 'Brute Force',
-					description: 'Alle möglichen Permutationen der Punkte werden ausprobiert und die minimale wird gewählt.',
+					description:
+						'Alle möglichen Permutationen der Punkte werden ausprobiert und die minimale wird gewählt.',
 					method: 'bruteForce',
 					complexity: 'O(n!)',
 					expectedTime: (n: number) => factorial(n) / 360,
@@ -107,10 +111,11 @@
 				},
 				{
 					name: '2-opt',
-					description: 'Beim 2-opt-Verfahren werden Überkreuzungen zweier Kanten gesucht und durch Tauschen der Knoten behoben.',
+					description:
+						'Beim 2-opt-Verfahren werden Überkreuzungen zweier Kanten gesucht und durch Tauschen der Knoten behoben.',
 					method: 'twoOpt',
 					complexity: 'O(n¹⁰)',
-					icon: Icon.SwatchbookOutline,
+					icon: Icon.SwatchbookOutline
 				}
 			] as const
 		).map((e, i) => {
@@ -158,6 +163,8 @@
 		}
 	});
 	onDestroy(() => unregisterCallback(callbackId));
+
+	let dispatch = createEventDispatcher<{ deletePath: null }>();
 </script>
 
 <Card class="rounded-xl col-span-12 md:col-span-6 lg:col-span-7 xl:col-span-4 max-w-none">
@@ -190,7 +197,8 @@
 			</button>
 		{/each}
 		{#if selectedItemAction !== null}
-			{@const { description, send, expectedTime, complexity } = items[currentAction][selectedItemAction]}
+			{@const { description, send, expectedTime, complexity } =
+				items[currentAction][selectedItemAction]}
 			<div class="flex flex-col justify-between grow">
 				<div>
 					<div class="rounded-xl mb-4" in:scale={{ delay: 150 }}>{description}</div>
