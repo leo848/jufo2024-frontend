@@ -53,7 +53,9 @@ const action = z.discriminatedUnion('type', [
 		method: z.discriminatedUnion('type', [
 			z.object({ type: z.literal('nearestNeighbor') }),
 			z.object({ type: z.literal('bruteForce') }),
-			z.object({ type: z.literal('greedy') })
+			z.object({ type: z.literal('greedy') }),
+			z.object({ type: z.literal('random') }),
+			z.object({ type: z.literal('transmute') }),
 		])
 	}),
 	z.object({

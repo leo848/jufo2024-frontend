@@ -35,28 +35,34 @@
 		construction: (
 			[
 				{
-					name: 'Manuell',
-					description: 'Manuelle Auswahl der Punkte in einer Reihenfolge',
-					method: null,
+					name: 'Zufällig',
+					description: 'Die Punkte werden zufällig nacheinander ausgewählt und so zu einem Pfad zusammengefügt.',
+					method: 'random',
 					expectedTime: () => null,
-					icon: Icon.AnnotationOutline
+					icon: Icon.ShuffleOutline,
+				},
+				{
+					name: 'Aktuelle Anordnung',
+					description: 'Die aktuelle Anordnung der Punkte wird als Pfad interpretiert.',
+					method: 'transmute',
+					icon: Icon.CameraFotoOutline
 				},
 				{
 					name: 'Greedy',
-					description: 'Greedy-Algorithmus',
+					description: 'Der Greedy-Algorithmus wählt stets die kürzeste Kante aus, bei deren Auswahl kein Zyklus entsteht.',
 					method: 'greedy',
 					icon: Icon.DollarOutline
 				},
 				{
 					name: 'Nearest Neighbor',
-					description: 'Nächster Nachbar',
+					description: 'Die Methode des nächsten Nachbarn beginnt mit dem Anfangspunkt und wählt stets den nächsten Punkt, der noch nicht besucht wurde, und baut so den Pfad auf.',
 					method: 'nearestNeighbor',
 					expectedTime: (n: number) => Math.min(n / 2, 5),
 					icon: Icon.PhoneOutline
 				},
 				{
 					name: 'Brute Force',
-					description: 'Teste alle möglichen Kombinationen',
+					description: 'Alle möglichen Permutationen der Punkte werden ausprobiert und die minimale wird gewählt.',
 					method: 'bruteForce',
 					expectedTime: (n: number) => factorial(n) / 360,
 					icon: Icon.HourglassOutline
@@ -88,13 +94,13 @@
 			[
 				{
 					name: 'Rotieren',
-					description: 'Den Pfad eindimensional rotieren',
+					description: 'Der Pfad wird eindimensional rotiert und so das beste Ergebnis gefunden.',
 					method: 'rotate',
 					icon: Icon.RotateOutline
 				},
 				{
 					name: '2-opt',
-					description: 'Lokale Suche: 2-opt-Verfahren',
+					description: 'Beim 2-opt-Verfahren werden Überkreuzungen zweier Kanten gesucht und durch Tauschen der Knoten behoben.',
 					method: 'twoOpt',
 					icon: Icon.SwatchbookOutline,
 				}
@@ -179,7 +185,7 @@
 			{@const { description, send, expectedTime } = items[currentAction][selectedItemAction]}
 			<div class="flex flex-col justify-between grow">
 				<div>
-					<div class="rounded-xl" in:scale={{ delay: 150 }}>{description}</div>
+					<div class="rounded-xl mb-4" in:scale={{ delay: 150 }}>{description}</div>
 					{#if expectedTime}
 						{@const time = expectedTime(points.length)}
 						{#if time === null}
