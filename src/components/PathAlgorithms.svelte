@@ -165,6 +165,11 @@
 	onDestroy(() => unregisterCallback(callbackId));
 
 	let dispatch = createEventDispatcher<{ deletePath: null }>();
+
+	export function invalidate() {
+		path = null;
+		selectedItem = { construction: null, improvement: null };
+	}
 </script>
 
 <Card class="rounded-xl col-span-12 md:col-span-6 lg:col-span-7 xl:col-span-4 max-w-none">

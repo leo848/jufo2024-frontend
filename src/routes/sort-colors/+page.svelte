@@ -17,6 +17,7 @@
 	import PointChartOptions from '../../components/PointChartOptions.svelte';
 	import PathAlgorithms from '../../components/PathAlgorithms.svelte';
 	import ColorAddPopover from '../../components/ColorAddPopover.svelte';
+	import ColorsLock from '../../components/ColorsLock.svelte';
 
 	title.set('Farben sortieren');
 
@@ -30,6 +31,8 @@
 		RgbColor.fromNumeric(0x001a98).color(),
 		RgbColor.fromNumeric(0x760088).color()
 	]; // pride flag
+	let colorsLocked = false;
+	let invalidate: (callback: () => void) => () => void;
 
 	let selection: {
 		index: number;
@@ -55,6 +58,7 @@
 	}
 
 	let path: Point3[] | null = null;
+
 	let edges: [Point3, Point3, Color?][] = [];
 	let chainLength = tweened(0);
 	$: if (path !== null) {
@@ -63,6 +67,15 @@
 			lengthAcc += path[i].distanceTo(path[i + 1]);
 		}
 		chainLength.set(lengthAcc);
+	} else {
+		chainLength.set(0);
+	}
+
+	let invalidateAlgorithms: () => void;
+	function blowUp() {
+		path = null;
+		edges = [];
+		invalidateAlgorithms();
 	}
 
 	function assertColor(n: unknown): Color {
@@ -100,6 +113,7 @@
 	}
 
 	function setColorsFromPath(path: number[][]) {
+		colorsLocked = true;
 		colors = path.map(
 			(arr) =>
 				colors.find((color) => color.space(space).point().equals(Point3.fromArray(arr))) ||
@@ -111,6 +125,7 @@
 
 	let callbackIdCreation = registerCallback(serverOutputPathCreation, (pc) => {
 		path = null;
+		colorsLocked = true;
 		if (pc.donePath) {
 			path = pc.donePath.map(Point3.fromArray);
 			edges = pathToEdges(pc.donePath);
@@ -165,32 +180,32 @@
 		<div class="flex flew-row mt-4 gap-2">
 			<button
 				class="text-base p-2 bg-gray-500 hover:bg-gray-400 transition-all rounded-lg"
-				on:click={() => {
+				on:click={invalidate(() => {
 					if (selection) {
 						selection.colorPickerOpen = true;
 					}
-				}}
+				})}
 			>
 				<Icon.PenNibOutline size="xl" />
 			</button>
 			<button
 				class="text-base p-2 bg-gray-500 rounded-lg hover:bg-gray-400 transition-all"
-				on:click={() => {
+				on:click={invalidate(() => {
 					if (selection) {
 						selection.appendIndex = selection.index;
 						selection.colorPickerOpen = true;
 					}
-				}}
+				})}
 			>
 				<Icon.FolderDuplicateOutline size="xl" />
 			</button>
 			<button
 				class="text-base p-2 bg-gray-500 rounded-lg hover:bg-gray-400 transition-all"
-				on:click={() => {
+				on:click={invalidate(() => {
 					if (selection) {
 						colors = colors.toSpliced(selection.index, 1);
 					}
-				}}
+				})}
 			>
 				<Icon.TrashBinOutline size="xl" />
 			</button>
@@ -220,19 +235,20 @@
 		</div>
 		<div class="grow" />
 		<div class="flex flex-row gap-4">
-		<button
-			class="color-button h-16 w-16 bg-gray-600 hover:bg-gray-500 transition-all text-6xl flex align-baseline justify-center items-center"
-			on:click={addColor}
-		>
-			<Icon.PlusSolid size="xl" color="white" />
-		</button>
-		<button
-			id="tooltip-color-edit"
-			class="color-button h-16 w-16 bg-gray-600 hover:bg-gray-500 transition-all flex align-baseline justify-center items-center"
-		>
-			<Icon.DotsHorizontalOutline size="xl" color="white" />
-		</button>
-		<ColorAddPopover bind:colors triggeredBy="#tooltip-color-edit" />
+			<ColorsLock on:blowUp={blowUp} bind:invalidate bind:locked={colorsLocked} />
+			<button
+				class="color-button h-16 w-16 bg-gray-600 hover:bg-gray-500 transition-all text-6xl flex align-baseline justify-center items-center"
+				on:click={invalidate(addColor)}
+			>
+				<Icon.PlusSolid size="xl" color="white" />
+			</button>
+			<button
+				id="tooltip-color-edit"
+				class="color-button h-16 w-16 bg-gray-600 hover:bg-gray-500 transition-all flex align-baseline justify-center items-center"
+			>
+				<Icon.DotsHorizontalOutline size="xl" color="white" />
+			</button>
+			<ColorAddPopover bind:colors triggeredBy="#tooltip-color-edit" />
 		</div>
 	</div>
 	<div
@@ -278,6 +294,7 @@
 
 		<PathAlgorithms
 			on:deletePath={() => (path = null)}
+			bind:invalidate={invalidateAlgorithms}
 			points={colors.map((color) => color.space(space).point().values())}
 		/>
 	</div>
