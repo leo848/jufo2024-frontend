@@ -78,7 +78,7 @@
 	}
 </script>
 
-<div class="inline-block transition color-picker">
+<div class="inline-block transition color-picker h-n4 m-0 p-0">
 	<Modal
 		bind:open={modal}
 		backdropClass="modal-background"

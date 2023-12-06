@@ -5,6 +5,7 @@
 
 	export let colors: Color[];
 	export let triggeredBy: string;
+	export let invalidate: (callback: () => void) => () => void;
 
 	let howManyRandomToAdd = 1;
 	function addRandom() {
@@ -23,12 +24,12 @@
 			<button
 				class="mt-2 p-2 rounded-lg bg-gray-700 text-white hover:bg-gray-600 transition-all"
 				disabled={colors.length === 0}
-				on:click={() => (colors = [])}>Alle löschen</button
+				on:click={invalidate(() => (colors = []))}>Alle löschen</button
 			>
 			<div class="flex flex-row gap-2">
 				<button
 					class="mt-2 p-2 rounded-lg bg-gray-700 text-white hover:bg-gray-600 transition-all"
-					on:click={addRandom}>Zufällige hinzufügen</button
+					on:click={invalidate(addRandom)}>Zufällige hinzufügen</button
 				>
 				<input
 					type="number"

@@ -60,7 +60,7 @@
 			<Icon.ArrowDownSolid />
 		</div>
 	</div>
-	<Popover class="zindex9">
+	<Popover class="zindex9" trigger="click">
 		<div class="min-w-20 m-4 zindex9">
 			<p class="mb-2 text-xl font-bold">Serververbindung</p>
 			<GradientButton

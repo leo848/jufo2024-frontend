@@ -248,7 +248,7 @@
 			>
 				<Icon.DotsHorizontalOutline size="xl" color="white" />
 			</button>
-			<ColorAddPopover bind:colors triggeredBy="#tooltip-color-edit" />
+			<ColorAddPopover {invalidate} bind:colors triggeredBy="#tooltip-color-edit" />
 		</div>
 	</div>
 	<div
