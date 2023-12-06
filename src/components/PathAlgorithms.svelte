@@ -91,6 +91,12 @@
 					description: 'Den Pfad eindimensional rotieren',
 					method: 'rotate',
 					icon: Icon.RotateOutline
+				},
+				{
+					name: '2-opt',
+					description: 'Lokale Suche: 2-opt-Verfahren',
+					method: 'twoOpt',
+					icon: Icon.SwatchbookOutline,
 				}
 			] as const
 		).map((e, i) => {
