@@ -28,6 +28,7 @@
 			description: string;
 			icon: ComponentType;
 			index: number;
+			complexity?: string;
 			expectedTime?: (n: number) => null | number;
 			send: (() => void) | null;
 		}[]
@@ -38,6 +39,7 @@
 					name: 'Zufällig',
 					description: 'Die Punkte werden zufällig nacheinander ausgewählt und so zu einem Pfad zusammengefügt.',
 					method: 'random',
+					complexity: 'O(n)',
 					expectedTime: () => null,
 					icon: Icon.ShuffleOutline,
 				},
@@ -45,18 +47,21 @@
 					name: 'Aktuelle Anordnung',
 					description: 'Die aktuelle Anordnung der Punkte wird als Pfad interpretiert.',
 					method: 'transmute',
+					complexity: 'O(1)',
 					icon: Icon.CameraFotoOutline
 				},
 				{
 					name: 'Greedy',
 					description: 'Der Greedy-Algorithmus wählt stets die kürzeste Kante aus, bei deren Auswahl kein Zyklus entsteht.',
 					method: 'greedy',
+					complexity: 'O(n²)',
 					icon: Icon.DollarOutline
 				},
 				{
 					name: 'Nearest Neighbor',
 					description: 'Die Methode des nächsten Nachbarn beginnt mit dem Anfangspunkt und wählt stets den nächsten Punkt, der noch nicht besucht wurde, und baut so den Pfad auf.',
 					method: 'nearestNeighbor',
+					complexity: 'O(n³)',
 					expectedTime: (n: number) => Math.min(n / 2, 5),
 					icon: Icon.PhoneOutline
 				},
@@ -64,6 +69,7 @@
 					name: 'Brute Force',
 					description: 'Alle möglichen Permutationen der Punkte werden ausprobiert und die minimale wird gewählt.',
 					method: 'bruteForce',
+					complexity: 'O(n!)',
 					expectedTime: (n: number) => factorial(n) / 360,
 					icon: Icon.HourglassOutline
 				},
@@ -96,12 +102,14 @@
 					name: 'Rotieren',
 					description: 'Der Pfad wird eindimensional rotiert und so das beste Ergebnis gefunden.',
 					method: 'rotate',
+					complexity: 'O(n)',
 					icon: Icon.RotateOutline
 				},
 				{
 					name: '2-opt',
 					description: 'Beim 2-opt-Verfahren werden Überkreuzungen zweier Kanten gesucht und durch Tauschen der Knoten behoben.',
 					method: 'twoOpt',
+					complexity: 'O(n¹⁰)',
 					icon: Icon.SwatchbookOutline,
 				}
 			] as const
@@ -160,7 +168,7 @@
 		{#each displayItems[currentAction] as item (item.index)}
 			<button
 				animate:flip={{ duration: 200 }}
-				transition:scale
+				in:scale
 				class="transition"
 				on:click={() => (selectedItem[currentAction] = open(currentAction) ? null : item.index)}
 				disabled={progress.ongoing}
@@ -182,7 +190,7 @@
 			</button>
 		{/each}
 		{#if selectedItemAction !== null}
-			{@const { description, send, expectedTime } = items[currentAction][selectedItemAction]}
+			{@const { description, send, expectedTime, complexity } = items[currentAction][selectedItemAction]}
 			<div class="flex flex-col justify-between grow">
 				<div>
 					<div class="rounded-xl mb-4" in:scale={{ delay: 150 }}>{description}</div>
@@ -195,6 +203,9 @@
 						{:else}
 							<div>Erwartete Zeit: <b>{time}</b> Sekunden</div>
 						{/if}
+					{/if}
+					{#if complexity}
+						<div>Komplexität: <b>{complexity}</b></div>
 					{/if}
 				</div>
 				{#if send}
