@@ -156,7 +156,7 @@
 			if (selection) {
 				if (selection.appendIndex != null) {
 					colors = colors.toSpliced(selection.appendIndex + 1, 0, color.detail);
-				} else if (selection.index != null) {
+				} else if (selection.index != null && selection.index in colors) {
 					colors[selection.index] = assertColor(color.detail);
 				}
 			}
@@ -166,7 +166,7 @@
 	/>
 {/if}
 
-{#if selection !== null && colors.length > selection.index}
+{#if selection !== null && colors.length > selection.index && selection.index !== -1}
 	<div
 		class="p-2 bg-clip-padding bg-gray-300 backdrop-filter backdrop-blur-md bg-opacity-20 border border-gray-700 text-white rounded-lg z-20 flex flex-col"
 		transition:scale
@@ -202,7 +202,7 @@
 			<button
 				class="text-base p-2 bg-gray-500 rounded-lg hover:bg-gray-400 transition-all"
 				on:click={invalidate(() => {
-					if (selection) {
+					if (selection && colors.length > selection.index) {
 						colors = colors.toSpliced(selection.index, 1);
 					}
 				})}
