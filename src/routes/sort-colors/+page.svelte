@@ -18,6 +18,7 @@
 	import PathAlgorithms from '../../components/PathAlgorithms.svelte';
 	import ColorAddPopover from '../../components/ColorAddPopover.svelte';
 	import ColorsLock from '../../components/ColorsLock.svelte';
+	import ColorDisplay from '../../components/ColorDisplay.svelte';
 
 	title.set('Farben sortieren');
 
@@ -181,13 +182,43 @@
 				{/await}
 			{/key}
 		</div>
-		<div>
+		<div class="my-2">
+			<ColorDisplay
+				color={colors[selection.index]}
+				on:click={() => {
+					if (selection) {
+						selection.colorPickerOpen = true;
+					}
+				}}
+				size="xs"
+			/>
 			w<sub>{selection.index + 1}</sub> =
 			{colors[selection.index].space(space).point()}
 		</div>
 		{#if selection.index !== 0}
 			<div>
-				d(w<sub>{selection.index}</sub>, w<sub>{selection.index + 1}</sub>) =
+				d(
+				<ColorDisplay
+					color={colors[selection.index - 1]}
+					on:click={() => {
+						if (selection) {
+							selection.index -= 1;
+							selection.colorPickerOpen = true;
+						}
+					}}
+					size="xs"
+				/>
+				w<sub>{selection.index}</sub>,
+				<ColorDisplay
+					color={colors[selection.index]}
+					on:click={() => {
+						if (selection) {
+							selection.colorPickerOpen = true;
+						}
+					}}
+					size="xs"
+				/>
+				w<sub>{selection.index + 1}</sub>) =
 				{colors[selection.index - 1]
 					.space(space)
 					.point()
@@ -197,7 +228,28 @@
 		{/if}
 		{#if selection.index !== colors.length - 1}
 			<div>
-				d(w<sub>{selection.index + 1}</sub>, w<sub>{selection.index + 2}</sub>) =
+				d(
+				<ColorDisplay
+					color={colors[selection.index]}
+					on:click={() => {
+						if (selection) {
+							selection.colorPickerOpen = true;
+						}
+					}}
+					size="xs"
+				/>
+				w<sub>{selection.index + 1}</sub>,
+				<ColorDisplay
+					color={colors[selection.index + 1]}
+					on:click={() => {
+						if (selection) {
+							selection.index += 1;
+							selection.colorPickerOpen = true;
+						}
+					}}
+					size="xs"
+				/>
+				w<sub>{selection.index + 2}</sub>) =
 				{colors[selection.index]
 					.space(space)
 					.point()
@@ -247,17 +299,14 @@
 		<div class="flex flex-row flex-wrap justify-start 2xl:gap-8 gap-2 items-stretch h-16">
 			{#each colors as color, index (color)}
 				<div animate:flip>
-					<button
-						class="color-button w-full grow transition-all"
-						style={`background-color: ${color.rgb().css()}; ${
-							selection?.index === index ? 'transform: scale(1.1); border-color: white' : ''
-						}`}
+					<ColorDisplay
+						{color}
+						selected={selection?.index === index}
 						on:click={(evt) => {
 							selectCard(evt, index);
 						}}
-					>
-						<div class="h-16 w-16" />
-					</button>
+						size="md"
+					/>
 				</div>
 			{/each}
 		</div>
