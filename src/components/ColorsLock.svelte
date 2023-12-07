@@ -23,13 +23,15 @@
 		};
 	}
 
-	$: buttonStyle = $anim ? `filter: contrast(${$anim * 5 + 1}) invert(${$anim}); transform: scale(${$anim / 3 + 1})` : "";
+	$: buttonStyle = $anim
+		? `filter: contrast(${$anim * 5 + 1}) invert(${$anim}); transform: scale(${$anim / 3 + 1})`
+		: '';
 </script>
 
 <button
 	class="color-button h-16 w-16 bg-gray-600 hover:bg-gray-500 transition-all text-6xl flex align-baseline justify-center items-center"
 	on:click={() => (locked = !locked)}
- style={buttonStyle}
+	style={buttonStyle}
 >
 	{#if locked}
 		<Icon.LockSolid size="xl" color="white" />

@@ -68,6 +68,10 @@ export class Point3 {
 			floatsSimilar(this.z, other.z)
 		);
 	}
+
+	toString(): string {
+		return `[${this.x.toFixed(2)}, ${this.y.toFixed(2)}, ${this.z.toFixed(2)}]`;
+	}
 }
 
 export class Vec3 {

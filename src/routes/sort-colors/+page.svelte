@@ -168,18 +168,46 @@
 
 {#if selection !== null && colors.length > selection.index && selection.index !== -1}
 	<div
-		class="p-2 bg-clip-padding bg-gray-300 backdrop-filter backdrop-blur-md bg-opacity-20 border border-gray-700 text-white rounded-lg z-20 flex flex-col"
+		class="p-2 bg-clip-padding bg-gray-300 backdrop-filter backdrop-blur-md bg-opacity-20 border border-gray-700 text-white rounded-lg z-20 flex flex-col px-4"
 		transition:scale
 		style={`position: fixed; left: ${selection.position.x}px; top: ${selection.position.y}px`}
 	>
-		{#await colors[selection.index].name()}
-			<Spinner />
-		{:then meta}
-			<div class="text-3xl px-2">{meta.name}</div>
-		{/await}
-		<div class="flex flew-row mt-4 gap-2">
+		<div>
+			{#key selection.index}
+				{#await colors[selection.index].name()}
+					<Spinner />
+				{:then meta}
+					<div class="text-3xl">{meta.name}</div>
+				{/await}
+			{/key}
+		</div>
+		<div>
+			w<sub>{selection.index + 1}</sub> =
+			{colors[selection.index].space(space).point()}
+		</div>
+		{#if selection.index !== 0}
+			<div>
+				d(w<sub>{selection.index}</sub>, w<sub>{selection.index + 1}</sub>) =
+				{colors[selection.index - 1]
+					.space(space)
+					.point()
+					.distanceTo(colors[selection.index].space(space).point())
+					.toFixed(2)}
+			</div>
+		{/if}
+		{#if selection.index !== colors.length - 1}
+			<div>
+				d(w<sub>{selection.index + 1}</sub>, w<sub>{selection.index + 2}</sub>) =
+				{colors[selection.index]
+					.space(space)
+					.point()
+					.distanceTo(colors[selection.index + 1].space(space).point())
+					.toFixed(2)}
+			</div>
+		{/if}
+		<div class="flex flew-row mt-4 gap-2 -mx-2">
 			<button
-				class="text-base p-2 bg-gray-500 hover:bg-gray-400 transition-all rounded-lg"
+				class="text-base p-2 bg-white bg-opacity-10 hover:bg-gray-400 transition-all rounded-lg"
 				on:click={invalidate(() => {
 					if (selection) {
 						selection.colorPickerOpen = true;
@@ -189,7 +217,7 @@
 				<Icon.PenNibOutline size="xl" />
 			</button>
 			<button
-				class="text-base p-2 bg-gray-500 rounded-lg hover:bg-gray-400 transition-all"
+				class="text-base p-2 bg-white bg-opacity-10 rounded-lg hover:bg-gray-400 transition-all"
 				on:click={invalidate(() => {
 					if (selection) {
 						selection.appendIndex = selection.index;
@@ -200,7 +228,7 @@
 				<Icon.FolderDuplicateOutline size="xl" />
 			</button>
 			<button
-				class="text-base p-2 bg-gray-500 rounded-lg hover:bg-gray-400 transition-all"
+				class="text-base p-2 bg-white bg-opacity-10 rounded-lg hover:bg-gray-400 transition-all"
 				on:click={invalidate(() => {
 					if (selection && colors.length > selection.index) {
 						colors = colors.toSpliced(selection.index, 1);
