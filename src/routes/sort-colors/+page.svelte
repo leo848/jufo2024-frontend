@@ -147,7 +147,7 @@
 	onDestroy(() => unregisterCallback(callbackIdImprovement));
 </script>
 
-{#if selection !== null && selection.colorPickerOpen}
+{#if selection !== null && selection.colorPickerOpen && colors.length > selection.index}
 	<ColorPicker
 		valid={(color) => !colors.some((storedColor) => storedColor.approxEquals(color))}
 		defaultSpace={space}
@@ -166,7 +166,7 @@
 	/>
 {/if}
 
-{#if selection !== null}
+{#if selection !== null && colors.length > selection.index}
 	<div
 		class="p-2 bg-clip-padding bg-gray-300 backdrop-filter backdrop-blur-md bg-opacity-20 border border-gray-700 text-white rounded-lg z-20 flex flex-col"
 		transition:scale
