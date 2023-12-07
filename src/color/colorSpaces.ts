@@ -173,7 +173,9 @@ export class HsvColor extends AbstractColor<HsvColor, HsvComponent> {
 	static fromRgb(r: number, g: number, b: number): HsvColor {
 		const [max, min] = [Math.max(r, g, b), Math.min(r, g, b)];
 		const delta = max - min;
-		const h = delta < 0.001 ? 0 : HsvColor.#calculateHue(r, g, b, max, delta);
+		let h = delta < 0.001 ? 0 : HsvColor.#calculateHue(r, g, b, max, delta);
+		if (h > 1) h -= 1;
+		if (h < 0) h += 1;
 		const s = max < 0.001 ? 0 : delta / max;
 		const v = max;
 		return new HsvColor(h, s, v);
