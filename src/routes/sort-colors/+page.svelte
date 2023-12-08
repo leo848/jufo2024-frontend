@@ -320,6 +320,12 @@
 				<Icon.PlusSolid size="xl" color="white" />
 			</button>
 			<button
+				id="tooltip-storage"
+				class="color-button h-16 w-16 bg-gray-600 hover:bg-gray-500 transition-all flex align-baseline justify-center items-center"
+			>
+				<Icon.ArchiveSolid size="xl" color="white" />
+			</button>
+			<button
 				id="tooltip-color-edit"
 				class="color-button h-16 w-16 bg-gray-600 hover:bg-gray-500 transition-all flex align-baseline justify-center items-center"
 			>
