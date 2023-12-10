@@ -9,6 +9,12 @@ import {
 } from './colorSpaces';
 import { getColorName, type ColorNameMetadata, type ColorNameList } from './colorName';
 
+export type PlainColor = {
+	r: number;
+	g: number;
+	b: number;
+};
+
 export class Color {
 	#r: number;
 	#g: number;
@@ -63,6 +69,10 @@ export class Color {
 		return new Color(this.#r, this.#g, this.#b);
 	}
 
+	plain(): PlainColor {
+		return { r: this.#r, g: this.#g, b: this.#b };
+	}
+
 	proxy<
 		Color extends AbstractColor<Color, Comp>,
 		Comp extends ColorComponent,
@@ -114,6 +124,10 @@ export class Color {
 
 	approxEquals(other: Color): boolean {
 		return this.rgb().numeric() == other.rgb().numeric();
+	}
+
+	toJSON(): PlainColor {
+		return this.plain();
 	}
 }
 

@@ -34,7 +34,7 @@
 				<input
 					type="number"
 					class="bg-gray-700 rounded-lg w-16 p-0 mt-2 border-none text-white text-xl text-center"
-	 				on:submit={invalidate(addRandom)}
+					on:submit={invalidate(addRandom)}
 					bind:value={howManyRandomToAdd}
 				/>
 			</div>

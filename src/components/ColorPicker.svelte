@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { Button, Modal, Spinner, TabItem, Tabs } from 'flowbite-svelte';
 	import { Color } from '../color/color';
-	import { blur, scale, slide } from 'svelte/transition';
+	import { blur, scale } from 'svelte/transition';
 	import {
 		HsvColor,
 		OklabColor,

@@ -19,6 +19,7 @@
 	import ColorAddPopover from '../../components/ColorAddPopover.svelte';
 	import ColorsLock from '../../components/ColorsLock.svelte';
 	import ColorDisplay from '../../components/ColorDisplay.svelte';
+	import ListStoragePopover from '../../components/ListStoragePopover.svelte';
 
 	title.set('Farben sortieren');
 
@@ -325,6 +326,7 @@
 			>
 				<Icon.ArchiveSolid size="xl" color="white" />
 			</button>
+			<ListStoragePopover {invalidate} bind:colors triggeredBy="#tooltip-storage" />
 			<button
 				id="tooltip-color-edit"
 				class="color-button h-16 w-16 bg-gray-600 hover:bg-gray-500 transition-all flex align-baseline justify-center items-center"
