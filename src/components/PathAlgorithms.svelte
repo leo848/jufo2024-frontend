@@ -36,6 +36,13 @@
 		construction: (
 			[
 				{
+					name: 'Aktuelle Anordnung',
+					description: 'Die aktuelle Anordnung der Punkte wird als Pfad interpretiert.',
+					method: 'transmute',
+					complexity: 'O(1)',
+					icon: Icon.CameraFotoOutline
+				},
+				{
 					name: 'Zufällig',
 					description:
 						'Die Punkte werden zufällig nacheinander ausgewählt und so zu einem Pfad zusammengefügt.',
@@ -45,19 +52,13 @@
 					icon: Icon.ShuffleOutline
 				},
 				{
-					name: 'Aktuelle Anordnung',
-					description: 'Die aktuelle Anordnung der Punkte wird als Pfad interpretiert.',
-					method: 'transmute',
-					complexity: 'O(1)',
-					icon: Icon.CameraFotoOutline
-				},
-				{
-					name: 'Greedy',
+					name: 'Brute Force',
 					description:
-						'Der Greedy-Algorithmus wählt stets die kürzeste Kante aus, bei deren Auswahl kein Zyklus entsteht.',
-					method: 'greedy',
-					complexity: 'O(n²)',
-					icon: Icon.DollarOutline
+						'Alle möglichen Permutationen der Punkte werden ausprobiert und die minimale wird gewählt.',
+					method: 'bruteForce',
+					complexity: 'O(n!)',
+					expectedTime: (n: number) => factorial(n) / 360,
+					icon: Icon.HourglassOutline
 				},
 				{
 					name: 'Nearest Neighbor',
@@ -69,13 +70,20 @@
 					icon: Icon.PhoneOutline
 				},
 				{
-					name: 'Brute Force',
+					name: 'Greedy',
 					description:
-						'Alle möglichen Permutationen der Punkte werden ausprobiert und die minimale wird gewählt.',
-					method: 'bruteForce',
-					complexity: 'O(n!)',
-					expectedTime: (n: number) => factorial(n) / 360,
-					icon: Icon.HourglassOutline
+						'Der Greedy-Algorithmus wählt stets die kürzeste Kante aus, bei deren Auswahl kein Zyklus entsteht.',
+					method: 'greedy',
+					complexity: 'O(n²)',
+					icon: Icon.DollarOutline
+				},
+				{
+					name: 'Christofides',
+					description:
+					'Der Christofides-Algorithmus baut zuerst den kürzesten Baum auf, der alle Knoten beinhaltet, und erstellt daraus mittels eines Eulerwegs einen Hamilton-Pfad.',
+					method: 'christofides',
+					complexity: 'O(n⁴)',
+					icon: Icon.ShareNodesOutline,
 				},
 				{
 					name: 'Optimal (Concorde)',
