@@ -3,7 +3,7 @@
 	import * as Icon from 'flowbite-svelte-icons';
 	import { factorial } from '../utils/math';
 	import { sendWebsocket, registerCallback, unregisterCallback } from '../server/websocket';
-	import { serverOutputPathCreation } from '../server/types';
+	import { serverOutputPathCreation, serverOutputPathImprovement } from '../server/types';
 	import { Card, Spinner, Progressbar } from 'flowbite-svelte';
 	import { flip } from 'svelte/animate';
 	import { scale } from 'svelte/transition';
@@ -178,6 +178,17 @@
 		}
 	});
 	onDestroy(() => unregisterCallback(callbackId));
+
+	let callbackId2 = registerCallback(serverOutputPathImprovement, (pi) => {
+		if (pi.done) {
+			progress.ongoing = false;
+		} else {
+			progress.ongoing = true;
+			progress.value = pi.progress ?? null;
+		}
+		path = pi.currentPath;
+	})
+	onDestroy(() => unregisterCallback(callbackId2));
 
 	let dispatch = createEventDispatcher<{ deletePath: null }>();
 
