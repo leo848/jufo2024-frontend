@@ -122,8 +122,15 @@
 					description:
 						'Beim 2-opt-Verfahren werden Überkreuzungen zweier Kanten gesucht und durch Tauschen der Knoten behoben.',
 					method: 'twoOpt',
-					complexity: 'O(n¹⁰)',
+					complexity: 'O(n²)',
 					icon: Icon.SwatchbookOutline
+				},
+				{
+					name: '3-opt',
+					description: 'Beim 3-opt-Verfahren werden drei Kanten getauscht.',
+					method: 'threeOpt',
+					complexity: 'O(n³)',
+					icon: Icon.SwatchbookSolid,
 				}
 			] as const
 		).map((e, i) => {

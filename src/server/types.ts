@@ -65,7 +65,8 @@ const action = z.discriminatedUnion('type', [
 		path: z.array(z.array(z.number())),
 		method: z.discriminatedUnion('type', [
 			z.object({ type: z.literal('rotate') }),
-			z.object({ type: z.literal('twoOpt') })
+			z.object({ type: z.literal('twoOpt') }),
+			z.object({ type: z.literal('threeOpt') }),
 		])
 	})
 ]);
