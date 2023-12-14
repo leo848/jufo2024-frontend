@@ -116,15 +116,18 @@
 					{/each}
 				{:else}
 					<button
-						class="bg-gray-700 hover:bg-gray-600 transition-all p-2 my-2 color-white w-full align-start flex flex-row rounded mb-4"
+						class="bg-gray-700 hover:bg-gray-600 transition-all p-2 my-2 color-white w-full align-center justify-between flex flex-row rounded mb-4"
 						on:click={() => (selectedColorList = null)}
 					>
-						<span>Zurück</span>
+						<Icon.ArrowLeftSolid />
+						<div>Zurück</div>
 					</button>
 					<div class="text-2xl text-white align-center">{selectedColorList.name}</div>
-					{#each selectedColorList.colors as color}
-						<ColorDisplay {color} size="sm" />
-					{/each}
+					<div class="max-h-64 overflow-y-scroll">
+						{#each selectedColorList.colors as color}
+							<ColorDisplay {color} size="sm" />
+						{/each}
+					</div>
 					<button
 						class="text-xl bg-gray-700 hover:bg-gray-600 transition-all p-2 my-2 color-white w-full align-start flex flex-row rounded"
 						on:click={invalidate(() => selectedColorList && load(selectedColorList))}
