@@ -1,11 +1,26 @@
 <script lang="ts">
 	import { title } from '../../ui/navbar';
+	import type { Point3 } from '../../geom/point';
+	import PathProperties from '../../components/PathProperties.svelte';
+	import PathAlgorithms from '../../components/PathAlgorithms.svelte';
+	import { Card } from 'flowbite-svelte';
 
 	title.set('Vektoren sortieren');
 
 	let dim = 3;
 	let data: number[][] = randomVectors(dim, 30);
 	$: length = data.length;
+
+	let path: Point3[] | null = null;
+	let edges: [Point3, Point3][] = [];
+
+	let invalidateAlgorithms: () => void;
+
+	function blowUp() {
+		path = null;
+		edges = [];
+		invalidateAlgorithms();
+	}
 
 	function randomVectors(dim: number, amount: number): number[][] {
 		let vectors: number[][] = [];
@@ -23,8 +38,8 @@
 	}
 </script>
 
-<div class="mt-4">
-	<div class="flex-row flex gap-4 ml-10 overflow-x-scroll">
+<div class="mt-4 pb-10 mx-10">
+	<div class="flex-row flex gap-4 overflow-x-scroll">
 		<div class="flex-col flex p-2 gap-2 rounded self-end">
 			<div class="text-4xl text-center" />
 			{#each { length: dim } as _, comp}
@@ -43,5 +58,18 @@
 				{/each}
 			</div>
 		{/each}
+	</div>
+	<div
+		class="mt-8 grid grid-cols-12 gap-8 auto-cols-max align-stretch justify-stretch justify-items-stretch"
+	>
+		<Card class="rounded-xl col-span-12 xl:col-span-5 max-w-none xl:p-0 mb-0" />
+
+		<PathProperties {path} {length} />
+
+		<PathAlgorithms
+			on:deletePath={() => (path = null)}
+			bind:invalidate={invalidateAlgorithms}
+			points={data}
+		/>
 	</div>
 </div>
