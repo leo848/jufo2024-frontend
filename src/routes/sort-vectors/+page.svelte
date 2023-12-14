@@ -18,10 +18,10 @@
 	let path: number[][] | null = null;
 	let edges: [number[], number[]][] = [];
 
-	let invalidateAlgorithms: () => void;
-
+	let scrollElement: HTMLElement;
 	$: duplicates = data.some((v1, i1) => data.some((v2, i2) => i1 != i2 && vectorEquals(v1, v2)));
 
+	let invalidateAlgorithms: () => void;
 	function blowUp() {
 		path = null;
 		edges = [];
@@ -70,6 +70,7 @@
 
 	function addEmptyVector() {
 		data = [...data, (emptyVector(dim))]
+		requestAnimationFrame(() => scrollElement.scrollTo({ behavior: "smooth", left: scrollElement.scrollWidth, top: 0 }));
 	}
 
 	function getName(index: number): string {
@@ -107,7 +108,7 @@
 </script>
 
 <div class="mt-4 pb-10 mx-10">
-	<div class="flex-row flex gap-4 overflow-x-scroll">
+	<div class="flex-row flex gap-4 overflow-x-scroll" bind:this={scrollElement}>
 		<div class="flex-col flex p-2 gap-2 rounded self-end">
 			<div class="text-4xl text-center" />
 			{#each { length: dim } as _, comp}
