@@ -8,10 +8,11 @@
 	import { onDestroy } from 'svelte';
 	import { flip } from 'svelte/animate';
 	import PathProperties from '../../components/PathProperties.svelte';
+	import ForceDirectedGraph from '../../components/ForceDirectedGraph.svelte';
 
 	title.set('Vektoren sortieren');
 
-	let dim = 3;
+	let dim = 4;
 
 	function incrementDim() {
 		dim += 1;
@@ -185,6 +186,12 @@
 			>
 				<div>Ansicht des Graphen</div>
 				<button class="bg-gray-600 rounded-xl p-2" disabled><Icon.CogOutline /></button>
+			</div>
+			<div class="h-full m-0 min-h-[420px]">
+				<ForceDirectedGraph
+					{points}
+					{edges}
+				/>
 			</div>
 		</Card>
 
