@@ -1,5 +1,5 @@
-import {euclideanDist} from "../geom/dist";
-import {Vec2} from "./vector";
+import { euclideanDist } from '../geom/dist';
+import { Vec2 } from './vector';
 
 export class Particle {
 	pos: Vec2;
@@ -11,7 +11,19 @@ export class Particle {
 
 	radius: number;
 
-	constructor({ radius, name, vector, x, y}: { radius ?: number, name: string, vector: number[], x: number, y: number }) {
+	constructor({
+		radius,
+		name,
+		vector,
+		x,
+		y
+	}: {
+		radius?: number;
+		name: string;
+		vector: number[];
+		x: number;
+		y: number;
+	}) {
 		this.name = name;
 		this.vector = vector;
 		this.pos = new Vec2(x, y);
@@ -39,17 +51,17 @@ export class Particle {
 	draw(ctx: CanvasRenderingContext2D) {
 		ctx.lineWidth = 2;
 		ctx.fillStyle = '#444';
-		ctx.strokeStyle = '#ccc'
+		ctx.strokeStyle = '#ccc';
 
 		ctx.beginPath();
 		ctx.ellipse(this.pos.x, this.pos.y, this.radius, this.radius, 0, 0, Math.PI * 2);
 		ctx.stroke();
 		ctx.fill();
 
-		ctx.textAlign = "center";
-		ctx.textBaseline = "middle";
-		ctx.font = "24px sans-serif"
-		ctx.fillStyle = "white";
+		ctx.textAlign = 'center';
+		ctx.textBaseline = 'middle';
+		ctx.font = '24px sans-serif';
+		ctx.fillStyle = 'white';
 		ctx.fillText(this.name, this.pos.x, this.pos.y + 2);
 	}
 }

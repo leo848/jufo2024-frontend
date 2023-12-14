@@ -1,4 +1,4 @@
-import {dist, type DistanceType} from "../geom/dist";
+import { dist, type DistanceType } from '../geom/dist';
 
 export class Vec2 {
 	x: number;
@@ -10,7 +10,7 @@ export class Vec2 {
 	}
 
 	static zero(): Vec2 {
-		return new Vec2(0, 0)
+		return new Vec2(0, 0);
 	}
 
 	static random(): Vec2 {
@@ -33,8 +33,8 @@ export class Vec2 {
 		return this.mul(1 / factor);
 	}
 
-	dist(other: Vec2, measure: DistanceType = "euclidean"): number {
-		return dist(this.array(), other.array(), measure)
+	dist(other: Vec2, measure: DistanceType = 'euclidean'): number {
+		return dist(this.array(), other.array(), measure);
 	}
 
 	magSq() {

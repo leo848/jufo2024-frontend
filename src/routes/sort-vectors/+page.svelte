@@ -23,7 +23,7 @@
 
 	let data: number[][] = randomVectors(dim, 10);
 	$: length = data.length;
-	$: points = data.map(p => vectorLength(p, dim));
+	$: points = data.map((p) => vectorLength(p, dim));
 
 	let path: number[][] | null = null;
 	let edges: [number[], number[]][] = [];
@@ -135,10 +135,16 @@
 	<div class="flex-row flex gap-4 overflow-x-scroll" bind:this={scrollElement}>
 		<div class="flex-col flex p-2 gap-2 rounded self-end">
 			<div class="flex flex-row justify-stretch gap-2 justify-items-center">
-				<button class="bg-gray-800 hover:bg-gray-700 transition-all text-white py-2 rounded grow flex flex-row justify-center" on:click={() => dim -= 1}>
+				<button
+					class="bg-gray-800 hover:bg-gray-700 transition-all text-white py-2 rounded grow flex flex-row justify-center"
+					on:click={() => (dim -= 1)}
+				>
 					<Icon.MinusSolid />
 				</button>
-				<button class="bg-gray-800 hover:bg-gray-700 transition-all text-white py-2 rounded grow flex flex-row justify-center" on:click={incrementDim}>
+				<button
+					class="bg-gray-800 hover:bg-gray-700 transition-all text-white py-2 rounded grow flex flex-row justify-center"
+					on:click={incrementDim}
+				>
 					<Icon.PlusSolid />
 				</button>
 			</div>
@@ -188,10 +194,7 @@
 				<button class="bg-gray-600 rounded-xl p-2" disabled><Icon.CogOutline /></button>
 			</div>
 			<div class="h-full m-0 min-h-[420px]">
-				<ForceDirectedGraph
-					{points}
-					{edges}
-				/>
+				<ForceDirectedGraph {points} {edges} />
 			</div>
 		</Card>
 
@@ -201,7 +204,7 @@
 			on:deletePath={() => (path = null)}
 			bind:invalidate={invalidateAlgorithms}
 			dimensions={dim}
-	  		{points}
+			{points}
 		/>
 	</div>
 </div>
