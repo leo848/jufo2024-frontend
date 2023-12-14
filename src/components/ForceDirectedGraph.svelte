@@ -24,6 +24,8 @@
 
 		applyForces();
 
+		const totalAcc = particles.map(p => p.acc.mag()).reduce((a, b) => a + b);
+
 		for (const particle of particles) {
 			particle.update();
 		}
@@ -39,6 +41,13 @@
 		for (const particle of particles) {
 			particle.draw(ctx);
 		}
+
+		const totalVel = particles.map(p => p.vel.mag()).reduce((a,b) => a + b);
+
+		ctx.textAlign = "left";
+		ctx.textBaseline = "hanging";
+		const energy = (totalVel + totalAcc * 10).toFixed(1);
+		ctx.fillText(energy, 10, 10);
 	}
 
 	$: if (particles.length) {
