@@ -10,6 +10,7 @@
 		type ColorListStorage
 	} from '../color/list';
 	import ColorDisplay from './ColorDisplay.svelte';
+	import {gradient} from '../ui/color';
 
 	export let colors: Color[];
 	export let triggeredBy: string;
@@ -105,13 +106,16 @@
 						</div>
 						{#each Object.keys(colorLists[key]) as colorName}
 							{@const colorList = colorLists[key][colorName]}
-							<button
-								class="text-xl bg-gray-700 hover:bg-gray-600 transition-all p-2 my-2 color-white w-full items-center justify-between flex flex-row rounded"
-								on:click={() => (selectedColorList = colorList)}
-							>
-								<div>{colorList.name}</div>
-								<div><Icon.ArrowRightSolid /></div>
-							</button>
+							<div class="my-4 rounded overflow-hidden">
+								<div class="h-2 w-full" style={`background: ${gradient(colorList.colors)}`} />
+								<button
+									class="text-xl bg-gray-700 hover:bg-gray-600 transition-all p-2 color-white w-full items-center justify-between flex flex-row"
+									on:click={() => (selectedColorList = colorList)}
+								>
+									<div class="text-white">{colorList.name}</div>
+									<div><Icon.ArrowRightSolid /></div>
+								</button>
+							</div>
 						{/each}
 					{/each}
 				{:else}
