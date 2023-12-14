@@ -28,6 +28,11 @@
 		invalidateAlgorithms();
 	}
 
+	function setValue(evt: InputEvent, i: number, comp: number) {
+		let elt = evt.target as HTMLInputElement;
+		data[i][comp] = +elt.value;
+	}
+
 	function randomVectors(dim: number, amount: number): number[][] {
 		let vectors: number[][] = [];
 		while (vectors.length < amount) {
@@ -121,8 +126,11 @@
 				<div class="text-4xl text-gray-300 text-center mb-2">{@html name}</div>
 				{#each vector as _, comp}
 					<input
-						class="bg-gray-700 text-white text-2xl py-2 px-4 rounded w-20 text-center"
-						bind:value={data[index][comp]}
+						type="number"
+						step="0.00001"
+						class="w-20 px-4 py-2 text-2xl text-white bg-gray-700 border-none rounded overflow-hidden text-center"
+						value={data[index][comp]}
+						on:change={evt => setValue(evt, index, comp)}
 					/>
 				{/each}
 			</div>
@@ -133,8 +141,8 @@
 			</div>
 			{#each { length: dim } as _}
 				<input
+					type="number"
 					class="bg-gray-700 text-white text-2xl py-2 px-4 rounded w-20 text-center"
-	 				disabled
 	 				value={0}
 				/>
 			{/each}
@@ -162,3 +170,17 @@
 		/>
 	</div>
 </div>
+
+<style>
+	input::-webkit-outer-spin-button,
+	input::-webkit-inner-spin-button {
+		/* display: none; <- Crashes Chrome on hover */
+		-webkit-appearance: none;
+		margin: 0; /* <-- Apparently some margin are still there even though it's hidden */
+	}
+
+	input[type='number'] {
+		-moz-appearance: textfield; /* Firefox */
+		appearance: textfield;
+	}
+</style>
