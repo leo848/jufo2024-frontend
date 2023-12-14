@@ -80,10 +80,10 @@
 				{
 					name: 'Christofides',
 					description:
-					'Der Christofides-Algorithmus baut zuerst den kürzesten Baum auf, der alle Knoten beinhaltet, und erstellt daraus mittels eines Eulerwegs einen Hamilton-Pfad.',
+						'Der Christofides-Algorithmus baut zuerst den kürzesten Baum auf, der alle Knoten beinhaltet, und erstellt daraus mittels eines Eulerwegs einen Hamilton-Pfad.',
 					method: 'christofides',
 					complexity: 'O(n⁴)',
-					icon: Icon.ShareNodesOutline,
+					icon: Icon.ShareNodesOutline
 				},
 				{
 					name: 'Optimal (Concorde)',
@@ -130,7 +130,7 @@
 					description: 'Beim 3-opt-Verfahren werden drei Kanten getauscht.',
 					method: 'threeOpt',
 					complexity: 'O(n³)',
-					icon: Icon.SwatchbookSolid,
+					icon: Icon.SwatchbookSolid
 				}
 			] as const
 		).map((e, i) => {
@@ -187,7 +187,7 @@
 			progress.value = pi.progress ?? null;
 		}
 		path = pi.currentPath;
-	})
+	});
 	onDestroy(() => unregisterCallback(callbackId2));
 
 	let dispatch = createEventDispatcher<{ deletePath: null }>();

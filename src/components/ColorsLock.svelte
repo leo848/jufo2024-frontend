@@ -12,8 +12,9 @@
 
 	const dispatch = createEventDispatcher<{ blowUp: null }>();
 
-	export function invalidate(callback: Callback): () => void {
-		return () => {
+	export function invalidate(callback: Callback): (evt?: Event) => void {
+		return (evt) => {
+			if (evt) evt.preventDefault();
 			if (!locked) {
 				dispatch('blowUp');
 				callback();

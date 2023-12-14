@@ -3,10 +3,10 @@ import { RgbColor } from './colorSpaces';
 import { deepMap } from '../utils/deepMap';
 
 export const colorListCategories = ['default', 'custom'] as const;
-type ColorListCategory = (typeof colorListCategories)[number];
+export type ColorListCategory = (typeof colorListCategories)[number];
 
 export type ColorList = { name: string; description?: string; colors: Color[] };
-type ColorListStorage = Record<ColorListCategory, Record<string, ColorList>>;
+export type ColorListStorage = Record<ColorListCategory, Record<string, ColorList>>;
 
 const defaultStorage: ColorListStorage = {
 	default: {

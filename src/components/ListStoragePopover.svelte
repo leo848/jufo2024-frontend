@@ -6,8 +6,10 @@
 		loadColorLists,
 		saveColorList,
 		colorListCategories,
-		type ColorList
+		type ColorList,
+		type ColorListStorage
 	} from '../color/list';
+	import ColorDisplay from './ColorDisplay.svelte';
 
 	export let colors: Color[];
 	export let triggeredBy: string;
@@ -16,7 +18,12 @@
 	let saveName: string;
 	let description: string;
 
-	$: colorLists = loadColorLists();
+	let key = 0;
+
+	let colorLists: ColorListStorage = loadColorLists();
+	// $: key, (colorLists = loadColorLists());
+
+	let selectedColorList: null | ColorList = null;
 
 	function randomSaveName() {
 		function randomHex() {
@@ -30,6 +37,7 @@
 	}
 
 	function save() {
+		key++;
 		saveColorList({
 			colors,
 			name: saveName,
@@ -51,7 +59,7 @@
 </script>
 
 <Popover {triggeredBy} trigger="click" placement="bottom">
-	<div class="w-full flex flex-col text-xl">
+	<div class="w-full flex flex-col">
 		<div class="w-[20rem] text-2xl text-white">Liste speichern / laden</div>
 		<Tabs
 			style="full"
@@ -90,20 +98,40 @@
 			</TabItem>
 
 			<TabItem title="Laden" class="w-full">
-				{#each colorListCategories as key}
-					<div class="mt-4 first:mt-0 text-sm bg-gray-600 align-center px-2 py-1 rounded">
-						{translate(key)}
-					</div>
-					{#each Object.keys(colorLists[key]) as colorName}
-						{@const colorList = colorLists[key][colorName]}
-						<button
-							class="text-xl bg-gray-700 hover:bg-gray-600 transition-all p-2 my-2 color-white w-full align-start flex flex-row"
-							on:click={invalidate(() => load(colorList))}
-						>
-							<span>{colorList.name}</span>
-						</button>
+				{#if selectedColorList === null}
+					{#each colorListCategories as key}
+						<div class="mt-4 first:mt-0 text-sm bg-gray-600 align-center px-2 py-1 rounded">
+							{translate(key)}
+						</div>
+						{#each Object.keys(colorLists[key]) as colorName}
+							{@const colorList = colorLists[key][colorName]}
+							<button
+								class="text-xl bg-gray-700 hover:bg-gray-600 transition-all p-2 my-2 color-white w-full items-center justify-between flex flex-row rounded"
+								on:click={() => (selectedColorList = colorList)}
+							>
+								<div>{colorList.name}</div>
+								<div><Icon.ArrowRightSolid /></div>
+							</button>
+						{/each}
 					{/each}
-				{/each}
+				{:else}
+					<button
+						class="bg-gray-700 hover:bg-gray-600 transition-all p-2 my-2 color-white w-full align-start flex flex-row rounded mb-4"
+						on:click={() => (selectedColorList = null)}
+					>
+						<span>Zurück</span>
+					</button>
+					<div class="text-2xl text-white align-center">{selectedColorList.name}</div>
+					{#each selectedColorList.colors as color}
+						<ColorDisplay {color} size="sm" />
+					{/each}
+					<button
+						class="text-xl bg-gray-700 hover:bg-gray-600 transition-all p-2 my-2 color-white w-full align-start flex flex-row rounded"
+						on:click={invalidate(() => selectedColorList && load(selectedColorList))}
+					>
+						<span>Laden</span>
+					</button>
+				{/if}
 			</TabItem>
 		</Tabs>
 	</div>
