@@ -2,17 +2,20 @@
 	import { Card } from 'flowbite-svelte';
 	import type { Point3 } from '../geom/point';
 	import { tweened } from 'svelte/motion';
-	import {cubicIn} from 'svelte/easing';
-	import {constrain} from '../utils/math';
+	import { cubicIn } from 'svelte/easing';
+	import { constrain } from '../utils/math';
 
-	export let path: Point3[]| null = null;
+	export let path: Point3[] | null = null;
 	export let length: number = path?.length || 0;
 
 	let chainLength = tweened(0);
 
-	let displayLength = tweened(length, { duration(from, to) {
-		return constrain(to - from, 10, 100) * 10;
-	}, easing: cubicIn });
+	let displayLength = tweened(length, {
+		duration(from, to) {
+			return constrain(to - from, 10, 100) * 10;
+		},
+		easing: cubicIn
+	});
 	$: displayLength.set(length);
 
 	$: if (path !== null) {
@@ -32,15 +35,21 @@
 	</p>
 	<div class="text-xl tabular-nums">
 		<div class="grid grid-cols-2 gap-4">
-			<div class="col-span-2 rounded-2xl bg-gray-700 py-4 text-gray-400 flex-col flex justify-around items-center">
+			<div
+				class="col-span-2 rounded-2xl bg-gray-700 py-4 text-gray-400 flex-col flex justify-around items-center"
+			>
 				<div class="text-8xl">{$chainLength.toFixed(2)}</div>
 				<div>Kettenlänge</div>
 			</div>
-			<div class="col-span-1 rounded-2xl bg-gray-700 py-4 text-gray-400 flex-col flex justify-around items-center">
+			<div
+				class="col-span-1 rounded-2xl bg-gray-700 py-4 text-gray-400 flex-col flex justify-around items-center"
+			>
 				<div class="text-5xl">{$displayLength.toFixed(0)}</div>
 				<div>Anzahl</div>
 			</div>
-			<div class="col-span-1 rounded-2xl bg-gray-700 py-4 text-gray-400 flex-col flex justify-around items-center">
+			<div
+				class="col-span-1 rounded-2xl bg-gray-700 py-4 text-gray-400 flex-col flex justify-around items-center"
+			>
 				<div class="text-5xl">{($chainLength / length).toFixed(3)}</div>
 				<div>Ø Distanz</div>
 			</div>

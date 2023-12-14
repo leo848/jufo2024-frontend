@@ -10,7 +10,7 @@
 		type ColorListStorage
 	} from '../color/list';
 	import ColorDisplay from './ColorDisplay.svelte';
-	import {gradient} from '../ui/color';
+	import { gradient } from '../ui/color';
 
 	export let colors: Color[];
 	export let triggeredBy: string;
