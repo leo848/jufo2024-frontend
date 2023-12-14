@@ -28,8 +28,8 @@
 		invalidateAlgorithms();
 	}
 
-	function setValue(evt: InputEvent, i: number, comp: number) {
-		let elt = evt.target as HTMLInputElement;
+	function setValue(evt: { currentTarget: HTMLInputElement }, i: number, comp: number) {
+		let elt = evt.currentTarget;
 		data[i][comp] = +elt.value;
 	}
 
