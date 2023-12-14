@@ -10,7 +10,6 @@
 	import PointChart from '../../components/PointChart.svelte';
 	import { registerCallback, unregisterCallback } from '../../server/websocket';
 	import { serverOutputPathCreation, serverOutputPathImprovement } from '../../server/types';
-	import { tweened } from 'svelte/motion';
 	import type { Color } from '../../color/color';
 	import { title } from '../../ui/navbar';
 	import { gradient } from '../../ui/color';
@@ -20,6 +19,7 @@
 	import ColorsLock from '../../components/ColorsLock.svelte';
 	import ColorDisplay from '../../components/ColorDisplay.svelte';
 	import ListStoragePopover from '../../components/ListStoragePopover.svelte';
+	import PathProperties from '../../components/PathProperties.svelte';
 
 	title.set('Farben sortieren');
 
@@ -62,16 +62,6 @@
 	let path: Point3[] | null = null;
 
 	let edges: [Point3, Point3, Color?][] = [];
-	let chainLength = tweened(0);
-	$: if (path !== null) {
-		let lengthAcc = 0;
-		for (let i = 0; i < path.length - 1; i++) {
-			lengthAcc += path[i].distanceTo(path[i + 1]);
-		}
-		chainLength.set(lengthAcc);
-	} else {
-		chainLength.set(0);
-	}
 
 	let invalidateAlgorithms: () => void;
 	function blowUp() {
@@ -365,17 +355,8 @@
 				/>
 			</div>
 		</Card>
-		<Card class="rounded-xl col-span-12 md:col-span-6 lg:col-span-5 xl:col-span-3 max-w-none">
-			<p class="text-2xl xl:text-3xl dark:text-white bg-gray-700 p-4 -m-6 rounded-t-xl mb-4">
-				Eigenschaften
-			</p>
-			<div class="text-xl">
-				<div class="flex-col">
-					<div>Anzahl: {colors.length}</div>
-					<div>Kettenlänge: {$chainLength.toFixed(2)}</div>
-				</div>
-			</div>
-		</Card>
+
+		<PathProperties {path} length={colors.length} />
 
 		<PathAlgorithms
 			on:deletePath={() => (path = null)}
