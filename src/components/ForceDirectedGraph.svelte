@@ -22,7 +22,7 @@
 		ctx.fillStyle = 'rgb(31 41 55)';
 		ctx.fillRect(0, 0, width, height);
 
-		applyForces();
+		const totalResistance = applyForces();
 
 		const totalAcc = particles.map(p => p.acc.mag()).reduce((a, b) => a + b);
 
@@ -47,7 +47,8 @@
 		ctx.textAlign = "left";
 		ctx.textBaseline = "hanging";
 		const energy = (totalVel + totalAcc * 10).toFixed(1);
-		ctx.fillText(energy, 10, 10);
+
+		ctx.fillText(totalResistance.toFixed(1), 10, 10);
 	}
 
 	$: if (particles.length) {
@@ -87,7 +88,8 @@
 
 	onDestroy(() => callback && clearInterval(callback));
 
-	function applyForces() {
+	function applyForces(): number {
+		let resistance = 0;
 		const center = new Vec2(width / 2, height / 2);
 		for (const particle1 of particles) {
 			// Zentrumskraft
@@ -97,6 +99,7 @@
 				let delta = particle2.pos.sub(particle1.pos);
 				let displayDist = delta.mag();
 				let trueDist = particle1.dist(particle2) * 20;
+				resistance += Math.abs(trueDist - displayDist) / 20;
 
 				const force = particle2.pos.sub(particle1.pos).mul(displayDist - trueDist);
 				// Kraft hin zu Distanz wie in realem Graph
@@ -109,6 +112,7 @@
 				// }
 			}
 		}
+		return resistance
 	}
 
 	onMount(() => {
