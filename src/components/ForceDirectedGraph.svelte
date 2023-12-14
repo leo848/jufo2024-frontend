@@ -24,7 +24,7 @@
 
 		const totalResistance = applyForces();
 
-		const totalAcc = particles.map(p => p.acc.mag()).reduce((a, b) => a + b);
+		const totalAcc = particles.map((p) => p.acc.mag()).reduce((a, b) => a + b);
 
 		for (const particle of particles) {
 			particle.update();
@@ -42,10 +42,10 @@
 			particle.draw(ctx);
 		}
 
-		const totalVel = particles.map(p => p.vel.mag()).reduce((a,b) => a + b);
+		const totalVel = particles.map((p) => p.vel.mag()).reduce((a, b) => a + b);
 
-		ctx.textAlign = "left";
-		ctx.textBaseline = "hanging";
+		ctx.textAlign = 'left';
+		ctx.textBaseline = 'hanging';
 		const energy = (totalVel + totalAcc * 10).toFixed(1);
 
 		ctx.fillText(totalResistance.toFixed(1), 10, 10);
@@ -70,20 +70,20 @@
 		let oldParticles = particles;
 		particles = [];
 		for (let i = 0; i < vectors.length; i++) {
-		let {x, y} = oldParticles.find(p => p.name == vectors[i].name)?.pos ?? {
-		x: Math.random() * width,
-		y: Math.random() * height,
-		};
+			let { x, y } = oldParticles.find((p) => p.name == vectors[i].name)?.pos ?? {
+				x: Math.random() * width,
+				y: Math.random() * height
+			};
 			particles.push(
 				new Particle({
 					radius: 20,
 					name: vectors[i].name,
 					vector: vectors[i].inner,
-						x, y
-					})
-				);
+					x,
+					y
+				})
+			);
 		}
-
 	}
 
 	onDestroy(() => callback && clearInterval(callback));
@@ -112,7 +112,7 @@
 				// }
 			}
 		}
-		return resistance
+		return resistance;
 	}
 
 	onMount(() => {
