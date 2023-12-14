@@ -356,7 +356,7 @@
 			</div>
 		</Card>
 
-		<PathProperties {path} length={colors.length} />
+		<PathProperties path={path?.map((point) => point.values())} length={colors.length} />
 
 		<PathAlgorithms
 			on:deletePath={() => (path = null)}

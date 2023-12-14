@@ -1,11 +1,10 @@
 <script lang="ts">
 	import { Card } from 'flowbite-svelte';
-	import type { Point3 } from '../geom/point';
 	import { tweened } from 'svelte/motion';
 	import { cubicIn } from 'svelte/easing';
 	import { constrain } from '../utils/math';
 
-	export let path: Point3[] | null = null;
+	export let path: number[][] | null = null;
 	export let length: number = path?.length || 0;
 
 	let chainLength = tweened(0);
@@ -18,15 +17,31 @@
 	});
 	$: displayLength.set(length);
 
+	function distance(point1: number[], point2: number[]) {
+		let distSq = 0;
+		for (let comp = 0; comp < point1.length; comp++) {
+			let diff = point1[comp] - point2[comp];
+			distSq += diff * diff;
+		}
+		return Math.sqrt(distSq);
+	}
+
 	$: if (path !== null) {
 		let lengthAcc = 0;
 		for (let i = 0; i < path.length - 1; i++) {
-			lengthAcc += path[i].distanceTo(path[i + 1]);
+			lengthAcc += distance(path[i], path[i + 1]);
 		}
 		chainLength.set(lengthAcc);
 	} else {
 		chainLength.set(0);
 	}
+
+	$: chainLengthDisplay = $chainLength.toFixed(
+		Math.max(2 - Math.max(0, Math.log10($chainLength)), 0)
+	);
+	$: averageDistDisplay = ($chainLength / length).toFixed(
+		Math.max(2 - Math.max(0, Math.log10($chainLength / length)), 0)
+	);
 </script>
 
 <Card class="rounded-xl col-span-12 md:col-span-6 lg:col-span-5 xl:col-span-3 max-w-none">
@@ -38,7 +53,7 @@
 			<div
 				class="col-span-2 rounded-2xl bg-gray-700 py-4 text-gray-400 flex-col flex justify-around items-center"
 			>
-				<div class="text-8xl">{$chainLength.toFixed(2)}</div>
+				<div class="text-8xl">{chainLengthDisplay}</div>
 				<div>Kettenlänge</div>
 			</div>
 			<div
@@ -50,7 +65,7 @@
 			<div
 				class="col-span-1 rounded-2xl bg-gray-700 py-4 text-gray-400 flex-col flex justify-around items-center"
 			>
-				<div class="text-5xl">{($chainLength / length).toFixed(3)}</div>
+				<div class="text-5xl">{averageDistDisplay}</div>
 				<div>Ø Distanz</div>
 			</div>
 		</div>
