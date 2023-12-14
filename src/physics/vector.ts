@@ -57,3 +57,5 @@ export class Vec2 {
 		return [this.x, this.y];
 	}
 }
+
+export type NamedVector = { inner: number[]; name: string };

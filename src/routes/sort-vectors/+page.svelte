@@ -5,6 +5,7 @@
 	import * as Icon from 'flowbite-svelte-icons';
 	import { registerCallback, unregisterCallback } from '../../server/websocket';
 	import { serverOutputPathCreation, serverOutputPathImprovement } from '../../server/types';
+	import type { NamedVector } from '../../physics/vector';
 	import { onDestroy } from 'svelte';
 	import { flip } from 'svelte/animate';
 	import PathProperties from '../../components/PathProperties.svelte';
@@ -17,19 +18,24 @@
 	function incrementDim() {
 		dim += 1;
 		for (let i = 0; i < length; i++) {
-			data[i] = vectorLength(data[i], dim);
+			vectorLength(data[i], dim);
 		}
 	}
 
-	let data: number[][] = randomVectors(dim, 10);
+	let data: NamedVector[] = randomVectors(dim, 2);
 	$: length = data.length;
-	$: points = data.map((p) => vectorLength(p, dim));
+	$: points = data.map((p) => {
+		vectorLength(p, dim);
+		return p;
+	});
 
 	let path: number[][] | null = null;
-	let edges: [number[], number[]][] = [];
+	let edges: [number, number][] = [];
 
 	let scrollElement: HTMLElement;
-	$: duplicates = data.some((v1, i1) => data.some((v2, i2) => i1 != i2 && vectorEquals(v1, v2)));
+	$: duplicates = data.some((v1, i1) =>
+		data.some((v2, i2) => i1 != i2 && vectorEquals(v1.inner, v2.inner))
+	);
 
 	let invalidateAlgorithms: () => void;
 	function blowUp() {
@@ -40,28 +46,32 @@
 
 	function setValue(evt: { currentTarget: HTMLInputElement }, i: number, comp: number) {
 		let elt = evt.currentTarget;
-		data[i][comp] = +elt.value;
+		data[i].inner[comp] = +elt.value;
 	}
 
-	function vectorLength(v: number[], dim: number): number[] {
-		if (v.length >= dim) return v.slice(0, dim);
-		let arr = v.slice();
-		while (arr.length < dim) arr.push(0);
-		return arr;
+	function vectorLength(v: NamedVector, dim: number) {
+		if (v.inner.length >= dim) {
+			v.inner = v.inner.slice(0, dim);
+		} else {
+			let arr = v.inner.slice();
+			while (arr.length < dim) arr.push(0);
+			v.inner = arr;
+		}
 	}
 
-	function randomVectors(dim: number, amount: number): number[][] {
-		let vectors: number[][] = [];
+	function randomVectors(dim: number, amount: number): NamedVector[] {
+		let vectors: NamedVector[] = [];
 		while (vectors.length < amount) {
-			vectors.push([]);
+			let namedVector: NamedVector = { inner: [], name: getName(vectors.length) };
+			vectors.push(namedVector);
 			for (let comp = 0; comp < dim; comp++) {
-				vectors[vectors.length - 1].push(Math.floor(Math.random() * 10));
+				namedVector.inner.push(Math.floor(Math.random() * 10));
 			}
 			for (let i = 0; i < vectors.length - 1; i++) {
 				const vector = vectors[i];
 				let equal = true;
 				for (let comp = 0; comp < dim; comp++) {
-					if (vector[comp] !== vectors[vectors.length - 1][comp]) {
+					if (vector.inner[comp] !== vectors[vectors.length - 1].inner[comp]) {
 						equal = false;
 						break;
 					}
@@ -84,14 +94,18 @@
 	}
 
 	function vectorEquals(v1: number[], v2: number[]) {
-		for (let i = 0; i < v1.length; i++) {
+		const dim = Math.min(v1.length, v2.length);
+		for (let i = 0; i < dim; i++) {
 			if (v1[i] !== v2[i]) return false;
 		}
 		return true;
 	}
 
 	function addEmptyVector() {
-		data = [...data, emptyVector(dim)];
+		data = [...data, { name: getName(data.length), inner: emptyVector(dim) }];
+		if (data.length == 27) {
+			data.map((named, index) => (named.name = getName(index)));
+		}
 		requestAnimationFrame(() =>
 			scrollElement.scrollTo({ behavior: 'smooth', left: scrollElement.scrollWidth, top: 0 })
 		);
@@ -101,12 +115,35 @@
 		return length > 26 || index > 25 ? `v<sub>${index + 1}</sub>` : String.fromCharCode(97 + index);
 	}
 
-	function pathToEdges(path: number[][]): [number[], number[]][] {
+	function pathToEdges(path: number[][]): [number, number][] {
 		let edges = [];
 		for (let i = 0; i < path.length - 1; i++) {
-			edges.push([path[i], path[i + 1]] as [number[], number[]]);
+			let edge = edgeToIndices([path[i], path[i + 1]]);
+			edges.push(edge);
 		}
 		return edges;
+	}
+
+	function edgeToIndices(edge: [number[], number[]]): [number, number] {
+		let indices: [number, number] = edge.map(
+			(arr) =>
+				data.findIndex((named) => vectorEquals(named.inner, arr)) ??
+				(() => {
+					console.error(arr, data[0].inner);
+					throw new Error('Could not find in list');
+				})()
+		) as [number, number];
+		return indices;
+	}
+
+	function setDataFromPath(path: number[][]) {
+		data = path.map(
+			(arr) =>
+				data.find((named) => vectorEquals(named.inner, arr)) ??
+				(() => {
+					throw new Error('Invalid: returned invalid vector not in list');
+				})()
+		);
 	}
 
 	let callbackIdCreation = registerCallback(serverOutputPathCreation, (pc) => {
@@ -114,9 +151,9 @@
 		if (pc.donePath) {
 			path = pc.donePath;
 			edges = pathToEdges(pc.donePath);
-			data = pc.donePath;
+			setDataFromPath(pc.donePath);
 		} else {
-			edges = pc.currentEdges;
+			edges = pc.currentEdges.map(edgeToIndices);
 		}
 	});
 	onDestroy(() => unregisterCallback(callbackIdCreation));
@@ -125,7 +162,7 @@
 		edges = pathToEdges(pi.currentPath);
 		path = pi.currentPath;
 		if (pi.done) {
-			data = pi.currentPath;
+			setDataFromPath(pi.currentPath);
 		}
 	});
 	onDestroy(() => unregisterCallback(callbackIdImprovement));
@@ -152,16 +189,15 @@
 				<div class="bg-gray-800 text-white text-2xl py-2 px-6 rounded">x<sub>{comp + 1}</sub></div>
 			{/each}
 		</div>
-		{#each data as vector, index (vector.join(',') + (duplicates ? `index${index}` : ''))}
-			{@const name = getName(index)}
+		{#each data as vector, index (vector.name)}
 			<div class="bg-gray-800 flex-col flex p-2 gap-2 rounded" animate:flip>
-				<div class="text-4xl text-gray-300 text-center mb-2">{@html name}</div>
+				<div class="text-4xl text-gray-300 text-center mb-2">{@html vector.name}</div>
 				{#each { length: dim } as _, comp}
 					<input
 						type="number"
 						step="0.00001"
 						class="w-20 px-4 py-2 text-2xl text-white bg-gray-700 border-none rounded overflow-hidden text-center"
-						value={data[index][comp]}
+						value={data[index].inner[comp]}
 						on:change={(evt) => setValue(evt, index, comp)}
 					/>
 				{/each}
@@ -194,7 +230,7 @@
 				<button class="bg-gray-600 rounded-xl p-2" disabled><Icon.CogOutline /></button>
 			</div>
 			<div class="h-full m-0 min-h-[420px]">
-				<ForceDirectedGraph {points} {edges} />
+				<ForceDirectedGraph vectors={points} {edges} />
 			</div>
 		</Card>
 
@@ -204,7 +240,7 @@
 			on:deletePath={() => (path = null)}
 			bind:invalidate={invalidateAlgorithms}
 			dimensions={dim}
-			{points}
+			points={points.map((named) => named.inner)}
 		/>
 	</div>
 </div>

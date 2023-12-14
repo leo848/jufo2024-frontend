@@ -1,11 +1,10 @@
 <script lang="ts">
 	import { onDestroy, onMount } from 'svelte';
 	import { Particle } from '../physics/particle';
-	import { Vec2 } from '../physics/vector';
-	import { euclideanDist } from '../geom/dist';
+	import { Vec2, type NamedVector } from '../physics/vector';
 
-	export let edges: [number[], number[]][];
-	export let points: number[][];
+	export let edges: [number, number][]; // indices
+	export let vectors: NamedVector[];
 
 	let wrapperDiv: HTMLDivElement;
 	let canvas: HTMLCanvasElement;
@@ -27,14 +26,54 @@
 
 		for (const particle of particles) {
 			particle.update();
+		}
+
+		ctx.strokeStyle = 'white';
+		ctx.lineWidth = 3;
+		for (const [fromIdx, toIdx] of edges) {
+			ctx.moveTo(particles[fromIdx].pos.x, particles[fromIdx].pos.y);
+			ctx.lineTo(particles[toIdx].pos.x, particles[toIdx].pos.y);
+			ctx.stroke();
+		}
+
+		for (const particle of particles) {
 			particle.draw(ctx);
 		}
 	}
 
 	$: if (particles.length) {
-		for (let i = 0; i < points.length; i++) {
-			if (particles[i]) particles[i].vector = points[i];
+		for (let i = 0; i < vectors.length; i++) {
+			if (particles[i]) {
+				if (particles[i].name != vectors[i].name) {
+					fullParticleUpdate();
+					break;
+				}
+				particles[i].vector = vectors[i].inner;
+			} else {
+				fullParticleUpdate();
+				break;
+			}
 		}
+	}
+
+	function fullParticleUpdate() {
+		let oldParticles = particles;
+		particles = [];
+		for (let i = 0; i < vectors.length; i++) {
+		let {x, y} = oldParticles.find(p => p.name == vectors[i].name)?.pos ?? {
+		x: Math.random() * width,
+		y: Math.random() * height,
+		};
+			particles.push(
+				new Particle({
+					radius: 20,
+					name: vectors[i].name,
+					vector: vectors[i].inner,
+						x, y
+					})
+				);
+		}
+
 	}
 
 	onDestroy(() => callback && clearInterval(callback));
@@ -70,18 +109,7 @@
 		if (!context) throw new Error('could not get canvas context');
 		ctx = context;
 
-		for (let i = 0; i < points.length; i++) {
-			particles.push(
-				new Particle({
-					radius: 20,
-					name: i + 1 + '',
-					vector: points[i],
-					x: Math.random() * width,
-					y: Math.random() * height
-				})
-			);
-		}
-
+		fullParticleUpdate();
 		callback = setInterval(render, 60);
 	});
 </script>

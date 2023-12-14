@@ -108,7 +108,7 @@
 		colorsLocked = true;
 		colors = path.map(
 			(arr) =>
-				colors.find((color) => color.space(space).point().equals(Point3.fromArray(arr))) ||
+				colors.find((color) => color.space(space).point().equals(Point3.fromArray(arr))) ??
 				(() => {
 					throw new Error('Invalid: returned invalid color not in list');
 				})()
