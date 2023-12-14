@@ -12,8 +12,17 @@
 	title.set('Vektoren sortieren');
 
 	let dim = 3;
+
+	function incrementDim() {
+		dim += 1;
+		for (let i = 0; i < length; i++) {
+			data[i] = vectorLength(data[i], dim);
+		}
+	}
+
 	let data: number[][] = randomVectors(dim, 10);
 	$: length = data.length;
+	$: points = data.map(p => vectorLength(p, dim));
 
 	let path: number[][] | null = null;
 	let edges: [number[], number[]][] = [];
@@ -31,6 +40,13 @@
 	function setValue(evt: { currentTarget: HTMLInputElement }, i: number, comp: number) {
 		let elt = evt.currentTarget;
 		data[i][comp] = +elt.value;
+	}
+
+	function vectorLength(v: number[], dim: number): number[] {
+		if (v.length >= dim) return v.slice(0, dim);
+		let arr = v.slice();
+		while (arr.length < dim) arr.push(0);
+		return arr;
 	}
 
 	function randomVectors(dim: number, amount: number): number[][] {
@@ -117,16 +133,23 @@
 <div class="mt-4 pb-10 mx-10">
 	<div class="flex-row flex gap-4 overflow-x-scroll" bind:this={scrollElement}>
 		<div class="flex-col flex p-2 gap-2 rounded self-end">
-			<div class="text-4xl text-center" />
+			<div class="flex flex-row justify-stretch gap-2 justify-items-center">
+				<button class="bg-gray-800 hover:bg-gray-700 transition-all text-white py-2 rounded grow flex flex-row justify-center" on:click={() => dim -= 1}>
+					<Icon.MinusSolid />
+				</button>
+				<button class="bg-gray-800 hover:bg-gray-700 transition-all text-white py-2 rounded grow flex flex-row justify-center" on:click={incrementDim}>
+					<Icon.PlusSolid />
+				</button>
+			</div>
 			{#each { length: dim } as _, comp}
-				<div class="bg-gray-800 text-white text-2xl py-2 px-4 rounded">x<sub>{comp + 1}</sub></div>
+				<div class="bg-gray-800 text-white text-2xl py-2 px-6 rounded">x<sub>{comp + 1}</sub></div>
 			{/each}
 		</div>
 		{#each data as vector, index (vector.join(',') + (duplicates ? `index${index}` : ''))}
 			{@const name = getName(index)}
 			<div class="bg-gray-800 flex-col flex p-2 gap-2 rounded" animate:flip>
 				<div class="text-4xl text-gray-300 text-center mb-2">{@html name}</div>
-				{#each vector as _, comp}
+				{#each { length: dim } as _, comp}
 					<input
 						type="number"
 						step="0.00001"
@@ -147,7 +170,7 @@
 			{#each { length: dim } as _}
 				<input
 					type="number"
-					class="bg-gray-700 text-white text-2xl py-2 px-4 rounded w-20 text-center"
+					class="w-20 px-4 py-2 text-2xl text-white bg-gray-700 border-none rounded overflow-hidden text-center"
 					value={0}
 				/>
 			{/each}
@@ -171,7 +194,7 @@
 			on:deletePath={() => (path = null)}
 			bind:invalidate={invalidateAlgorithms}
 			dimensions={dim}
-			points={data}
+	  		{points}
 		/>
 	</div>
 </div>
