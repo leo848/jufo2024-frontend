@@ -26,7 +26,7 @@
 		return Math.sqrt(distSq);
 	}
 
-	$: if (path !== null) {
+	$: if (path != null) {
 		let lengthAcc = 0;
 		for (let i = 0; i < path.length - 1; i++) {
 			lengthAcc += distance(path[i], path[i + 1]);
