@@ -1,7 +1,5 @@
 <script lang="ts">
 	import { title } from '../../ui/navbar';
-	import type { Point3 } from '../../geom/point';
-	import PathProperties from '../../components/PathProperties.svelte';
 	import PathAlgorithms from '../../components/PathAlgorithms.svelte';
 	import { Card } from 'flowbite-svelte';
 	import * as Icon from 'flowbite-svelte-icons';
@@ -9,17 +7,20 @@
 	import { serverOutputPathCreation, serverOutputPathImprovement } from '../../server/types';
 	import { onDestroy } from 'svelte';
 	import { flip } from 'svelte/animate';
+	import PathProperties from '../../components/PathProperties.svelte';
 
 	title.set('Vektoren sortieren');
 
 	let dim = 3;
-	let data: number[][] = randomVectors(dim, 30);
+	let data: number[][] = randomVectors(dim, 10);
 	$: length = data.length;
 
 	let path: number[][] | null = null;
 	let edges: [number[], number[]][] = [];
 
 	let invalidateAlgorithms: () => void;
+
+	$: duplicates = data.some((v1, i1) => data.some((v2, i2) => i1 != i2 && vectorEquals(v1, v2)));
 
 	function blowUp() {
 		path = null;
@@ -52,8 +53,27 @@
 		return vectors;
 	}
 
+	function emptyVector(dim: number): number[] {
+		let vector = [];
+		for (let i = 0; i < dim; i++) {
+			vector.push(0);
+		}
+		return vector;
+	}
+
+	function vectorEquals(v1: number[], v2: number[]) {
+		for (let i = 0; i < v1.length; i++) {
+			if (v1[i] !== v2[i]) return false;
+		}
+		return true;
+	}
+
+	function addEmptyVector() {
+		data = [...data, (emptyVector(dim))]
+	}
+
 	function getName(index: number): string {
-		return length > 26 ? `v<sub>${index + 1}</sub>` : String.fromCharCode(97 + index);
+		return length > 26 || index > 25 ? `v<sub>${index + 1}</sub>` : String.fromCharCode(97 + index);
 	}
 
 	function pathToEdges(path: number[][]): [number[], number[]][] {
@@ -94,7 +114,7 @@
 				<div class="bg-gray-800 text-white text-2xl py-2 px-4 rounded">x<sub>{comp + 1}</sub></div>
 			{/each}
 		</div>
-		{#each data as vector, index (vector.join(','))}
+		{#each data as vector, index (vector.join(',') + (duplicates ? `index${index}` : ""))}
 			{@const name = getName(index)}
 			<div class="bg-gray-800 flex-col flex p-2 gap-2 rounded" animate:flip>
 				<div class="text-4xl text-gray-300 text-center mb-2">{@html name}</div>
@@ -106,6 +126,18 @@
 				{/each}
 			</div>
 		{/each}
+		<button class="bg-gray-800 flex-col flex p-2 gap-2 rounded opacity-50" on:click={addEmptyVector}>
+			<div class="text-4xl text-gray-300 text-center mb-2">
+				{@html getName(length)}
+			</div>
+			{#each { length: dim } as _}
+				<input
+					class="bg-gray-700 text-white text-2xl py-2 px-4 rounded w-20 text-center"
+	 				disabled
+	 				value={0}
+				/>
+			{/each}
+		</button>
 	</div>
 	<div
 		class="mt-8 grid grid-cols-12 gap-8 auto-cols-max align-stretch justify-stretch justify-items-stretch"
