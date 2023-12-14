@@ -38,13 +38,13 @@
 		while (vectors.length < amount) {
 			vectors.push([]);
 			for (let comp = 0; comp < dim; comp++) {
-				vectors[vectors.length-1].push(Math.floor(Math.random() * 10));
+				vectors[vectors.length - 1].push(Math.floor(Math.random() * 10));
 			}
-			for (let i = 0; i < vectors.length-1; i++) {
+			for (let i = 0; i < vectors.length - 1; i++) {
 				const vector = vectors[i];
 				let equal = true;
 				for (let comp = 0; comp < dim; comp++) {
-					if (vector[comp] !== vectors[vectors.length-1][comp]) {
+					if (vector[comp] !== vectors[vectors.length - 1][comp]) {
 						equal = false;
 						break;
 					}
@@ -74,8 +74,10 @@
 	}
 
 	function addEmptyVector() {
-		data = [...data, (emptyVector(dim))]
-		requestAnimationFrame(() => scrollElement.scrollTo({ behavior: "smooth", left: scrollElement.scrollWidth, top: 0 }));
+		data = [...data, emptyVector(dim)];
+		requestAnimationFrame(() =>
+			scrollElement.scrollTo({ behavior: 'smooth', left: scrollElement.scrollWidth, top: 0 })
+		);
 	}
 
 	function getName(index: number): string {
@@ -120,7 +122,7 @@
 				<div class="bg-gray-800 text-white text-2xl py-2 px-4 rounded">x<sub>{comp + 1}</sub></div>
 			{/each}
 		</div>
-		{#each data as vector, index (vector.join(',') + (duplicates ? `index${index}` : ""))}
+		{#each data as vector, index (vector.join(',') + (duplicates ? `index${index}` : ''))}
 			{@const name = getName(index)}
 			<div class="bg-gray-800 flex-col flex p-2 gap-2 rounded" animate:flip>
 				<div class="text-4xl text-gray-300 text-center mb-2">{@html name}</div>
@@ -130,12 +132,15 @@
 						step="0.00001"
 						class="w-20 px-4 py-2 text-2xl text-white bg-gray-700 border-none rounded overflow-hidden text-center"
 						value={data[index][comp]}
-						on:change={evt => setValue(evt, index, comp)}
+						on:change={(evt) => setValue(evt, index, comp)}
 					/>
 				{/each}
 			</div>
 		{/each}
-		<button class="bg-gray-800 flex-col flex p-2 gap-2 rounded opacity-50" on:click={addEmptyVector}>
+		<button
+			class="bg-gray-800 flex-col flex p-2 gap-2 rounded opacity-50"
+			on:click={addEmptyVector}
+		>
 			<div class="text-4xl text-gray-300 text-center mb-2">
 				{@html getName(length)}
 			</div>
@@ -143,7 +148,7 @@
 				<input
 					type="number"
 					class="bg-gray-700 text-white text-2xl py-2 px-4 rounded w-20 text-center"
-	 				value={0}
+					value={0}
 				/>
 			{/each}
 		</button>
