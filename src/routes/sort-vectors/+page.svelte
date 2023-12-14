@@ -29,10 +29,24 @@
 
 	function randomVectors(dim: number, amount: number): number[][] {
 		let vectors: number[][] = [];
-		for (let i = 0; i < amount; i++) {
+		while (vectors.length < amount) {
 			vectors.push([]);
 			for (let comp = 0; comp < dim; comp++) {
-				vectors[i].push(Math.floor(Math.random() * 10));
+				vectors[vectors.length-1].push(Math.floor(Math.random() * 10));
+			}
+			for (let i = 0; i < vectors.length-1; i++) {
+				const vector = vectors[i];
+				let equal = true;
+				for (let comp = 0; comp < dim; comp++) {
+					if (vector[comp] !== vectors[vectors.length-1][comp]) {
+						equal = false;
+						break;
+					}
+				}
+				if (equal) {
+					vectors.pop();
+					break;
+				}
 			}
 		}
 		return vectors;
