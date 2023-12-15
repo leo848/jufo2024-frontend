@@ -158,8 +158,10 @@
 	onDestroy(() => unregisterCallback(callbackIdCreation));
 
 	let callbackIdImprovement = registerCallback(serverOutputPathImprovement, (pi) => {
-		edges = pathToEdges(pi.currentPath);
-		path = pi.currentPath;
+		if (pi.better) {
+			edges = pathToEdges(pi.currentPath);
+			path = pi.currentPath;
+		}
 		if (pi.done) {
 			setDataFromPath(pi.currentPath);
 		}

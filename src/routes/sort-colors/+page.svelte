@@ -130,8 +130,10 @@
 
 	let callbackIdImprovement = registerCallback(serverOutputPathImprovement, (pi) => {
 		console.log(pi);
-		edges = pathToEdges(pi.currentPath);
-		path = pi.currentPath.map(Point3.fromArray);
+		if (pi.better) {
+			edges = pathToEdges(pi.currentPath);
+			path = pi.currentPath.map(Point3.fromArray);
+		}
 		if (pi.done) {
 			setColorsFromPath(pi.currentPath);
 		}

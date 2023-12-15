@@ -109,6 +109,7 @@ export const serverOutputPathCreation = z.object({
 export const serverOutputPathImprovement = z.object({
 	type: z.literal('pathImprovement'),
 	done: z.boolean(),
+	better: z.boolean(),
 	currentPath: z.array(z.array(z.number())),
 	progress: z.optional(z.number().gte(0).lte(1))
 });
