@@ -15,6 +15,23 @@ Ohne Backend können allerdings keine Algorithmen ausgeführt werden. Für die I
 ## Funktionen
 
 - Natürliche Zahlen mittels verschiedener Sortieralgorithmen sortieren
-- Farben in verschiedenen Farbräumen eingeben
-- Farben mittels [color-names](https://github.com/meodai/color-names) beliebig benennen
-- Liste von Farben erzeugen
+  - Aktuell implementiert: Bubble Sort, Selection Sort, Insertion Sort
+  - visualisiert als Karten, sowie als (dreidimensionales) Balkendiagramm
+- Farben sortieren
+  - Farben auswählen
+    - Farbräume: sRGB, linear sRGB, HSV, CMY, oklab
+    - Farbauswahl
+      - automatische Konvertierung zu CSS-Farben und Hexadezimalwert
+      - Regler mit adaptivem Farbverlauf
+      - zweidimensionale Auswahl aus Diagramm
+    - Farbbenennung
+      - mittels [color-names](https://github.com/meodai/color-names) benennen
+      - Auswahl der Namenliste: HTML-Farben, X11-Farben, und viele mehr (siehe dieses Repo)
+      - Distanz zur benannten Farbe anzeigen, Farben normalisieren
+  - Liste von Farben erzeugen
+  - Farben im interaktiven dreidimensionalen Diagramm anzeigen
+- Vektoren sortieren
+  - Vektoren einer beliebigen Dimension eingeben
+  - Kräftebasierte Graphendarstellung
+    - physikalische Simulation (Hooke)
+    - mehrdimensionalen Graphen in 2D darstellen
