@@ -4,13 +4,15 @@
 	import { factorial } from '../utils/math';
 	import { sendWebsocket, registerCallback, unregisterCallback } from '../server/websocket';
 	import { serverOutputPathCreation, serverOutputPathImprovement } from '../server/types';
-	import { Card, Spinner, Progressbar } from 'flowbite-svelte';
+	import { Card, Spinner, Progressbar, Range } from 'flowbite-svelte';
 	import { flip } from 'svelte/animate';
 	import { scale } from 'svelte/transition';
 	import { createEventDispatcher, onDestroy } from 'svelte';
 
 	export let points: number[][];
 	export let dimensions = 3;
+
+	let latency = 100;
 
 	let progress = { ongoing: false, value: 0 as null | number };
 	let path: number[][] | null = null;
@@ -98,6 +100,7 @@
 				(() =>
 					({
 						type: 'action',
+						latency,
 						action: {
 							type: 'createPath',
 							method: { type: e.method },
@@ -139,6 +142,7 @@
 				(() =>
 					({
 						type: 'action',
+						latency,
 						action: {
 							type: 'improvePath',
 							method: { type: e.method },
@@ -246,6 +250,8 @@
 					{#if complexity}
 						<div>Komplexität: <b>{complexity}</b></div>
 					{/if}
+					<div class="mt-2">Latenz: <b>{latency}</b>ms</div>
+					<input type="range" bind:value={latency} min={0} max={250} class="w-full bg-transparent text-white grayscale" />
 				</div>
 				{#if send}
 					{#if !progress.ongoing}
