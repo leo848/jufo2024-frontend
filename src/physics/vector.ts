@@ -49,7 +49,7 @@ export class Vec2 {
 		return this.div(this.mag());
 	}
 
-	setMag(mag: number) {
+	setMag(mag: number): Vec2 {
 		return this.normalize().mul(mag);
 	}
 

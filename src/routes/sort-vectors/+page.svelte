@@ -18,15 +18,14 @@
 	function incrementDim() {
 		dim += 1;
 		for (let i = 0; i < length; i++) {
-			vectorLength(data[i], dim);
+			data[i].inner = vectorLength(data[i].inner, dim);
 		}
 	}
 
-	let data: NamedVector[] = randomVectors(dim, 2);
+	let data: NamedVector[] = randomVectors(dim, 8);
 	$: length = data.length;
 	$: points = data.map((p) => {
-		vectorLength(p, dim);
-		return p;
+		return { ...p, inner: vectorLength(p.inner, dim) };
 	});
 
 	let path: number[][] | null = null;
@@ -49,13 +48,13 @@
 		data[i].inner[comp] = +elt.value;
 	}
 
-	function vectorLength(v: NamedVector, dim: number) {
-		if (v.inner.length >= dim) {
-			v.inner = v.inner.slice(0, dim);
+	function vectorLength(v: number[], dim: number): number[] {
+		if (v.length >= dim) {
+			return v.slice(0, dim);
 		} else {
-			let arr = v.inner.slice();
+			let arr = v.slice();
 			while (arr.length < dim) arr.push(0);
-			v.inner = arr;
+			return arr;
 		}
 	}
 
@@ -240,7 +239,7 @@
 			on:deletePath={() => (path = null)}
 			bind:invalidate={invalidateAlgorithms}
 			dimensions={dim}
-			points={points.map((named) => named.inner)}
+	  points={points.map(p => p.inner)}
 		/>
 	</div>
 </div>
