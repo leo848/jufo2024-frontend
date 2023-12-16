@@ -12,18 +12,22 @@
 		},
 		{
 			img: '/robert-katzki-colors.png',
-			reverse: false,
 			href: '/sort-colors',
 			text: 'Farben sortieren',
 			desc: 'Farben in beliebigem Farbraum eingeben und nach einzelnen Komponenten oder mit eigener TSP-Metrik optimal oder heuristisch sortieren'
 		},
 		{
 			img: '/shubbam-dhage-vector.png',
-			reverse: true,
 			href: '/sort-vectors',
 			text: 'Vektoren sortieren',
 			desc: 'n-dimensionale Vektoren sortieren'
 		},
+		{
+			img: '/joel-de-vriend-metro.png',
+			href: '/sort-places',
+			text: 'Optimale U-Bahn-Linie',
+			desc: 'Finde die optimale U-Bahn-Linie (oder eine andere Anwendung des geografischen Hamilton-Pfads) für einen beliebigen Stadtteil. '
+		}
 	];
 	let displayCards: typeof cards = [];
 
