@@ -15,6 +15,9 @@
 
 	let particles: Particle[] = [];
 
+	let frozen = false;
+	$: width, height, edges, vectors, frozen = false;
+
 	function render() {
 		if (ctx == null) return;
 		// ctx.translate(width / 2, height / 2)
@@ -26,8 +29,10 @@
 
 		const totalAcc = particles.map((p) => p.acc.mag()).reduce((a, b) => a + b);
 
-		for (const particle of particles) {
-			particle.update();
+		if (!frozen) {
+			for (const particle of particles) {
+				particle.update();
+			}
 		}
 
 		ctx.strokeStyle = 'white';
@@ -48,8 +53,9 @@
 		ctx.textAlign = 'left';
 		ctx.textBaseline = 'hanging';
 		const energy = totalVel + totalAcc * 10;
+		if (energy < 1) frozen = true;
 
-		ctx.fillText(energy.toFixed(1), 10, 10);
+		if (!frozen) ctx.fillText(energy.toFixed(1), 10, 10);
 	}
 
 	$: if (particles.length) {
@@ -70,10 +76,11 @@
 	function fullParticleUpdate() {
 		let oldParticles = particles;
 		particles = [];
+		let minDim = Math.min(width, height);
 		for (let i = 0; i < vectors.length; i++) {
 			let { x, y } = oldParticles.find((p) => p.name == vectors[i].name)?.pos ?? {
-				x: Math.random() * width,
-				y: Math.random() * height
+				x: Math.sin(i / vectors.length * 2 * Math.PI) * minDim / 3 + width / 2,
+				y: Math.cos(i / vectors.length * 2 * Math.PI) * minDim / 3 + height / 2
 			};
 			particles.push(
 				new Particle({
@@ -90,6 +97,7 @@
 	onDestroy(() => callback && clearInterval(callback));
 
 	function applyForces() {
+		if (frozen) return;
 		const center = new Vec2(width / 2, height / 2);
 		for (const particle1 of particles) {
 			// Zentrumskraft
