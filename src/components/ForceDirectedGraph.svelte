@@ -16,7 +16,7 @@
 	let particles: Particle[] = [];
 
 	let frozen = false;
-	$: width, height, edges, vectors, frozen = false;
+	$: width, height, edges, vectors, (frozen = false);
 
 	function render() {
 		if (ctx == null) return;
@@ -27,7 +27,7 @@
 
 		applyForces();
 
-		const totalAcc = particles.map((p) => p.acc.mag()).reduce((a, b) => a + b);
+		const totalAcc = particles.map((p) => p.acc.mag()).reduce((a, b) => a + b, 0);
 
 		if (!frozen) {
 			for (const particle of particles) {
@@ -48,7 +48,7 @@
 			particle.draw(ctx);
 		}
 
-		const totalVel = particles.map((p) => p.vel.mag()).reduce((a, b) => a + b);
+		const totalVel = particles.map((p) => p.vel.mag()).reduce((a, b) => a + b, 0);
 
 		ctx.textAlign = 'left';
 		ctx.textBaseline = 'hanging';
@@ -58,18 +58,16 @@
 		if (!frozen) ctx.fillText(energy.toFixed(1), 10, 10);
 	}
 
-	$: if (particles.length) {
-		for (let i = 0; i < vectors.length; i++) {
-			if (particles[i]) {
-				if (particles[i].name != vectors[i].name) {
-					fullParticleUpdate();
-					break;
-				}
-				particles[i].vector = vectors[i].inner;
-			} else {
+	$: for (let i = 0; i < vectors.length; i++) {
+		if (particles[i]) {
+			if (particles[i].name != vectors[i].name) {
 				fullParticleUpdate();
 				break;
 			}
+			particles[i].vector = vectors[i].inner;
+		} else {
+			fullParticleUpdate();
+			break;
 		}
 	}
 
@@ -79,8 +77,8 @@
 		let minDim = Math.min(width, height);
 		for (let i = 0; i < vectors.length; i++) {
 			let { x, y } = oldParticles.find((p) => p.name == vectors[i].name)?.pos ?? {
-				x: Math.sin(i / vectors.length * 2 * Math.PI) * minDim / 3 + width / 2,
-				y: Math.cos(i / vectors.length * 2 * Math.PI) * minDim / 3 + height / 2
+				x: (Math.sin((i / vectors.length) * 2 * Math.PI) * minDim) / 3 + width / 2,
+				y: (Math.cos((i / vectors.length) * 2 * Math.PI) * minDim) / 3 + height / 2
 			};
 			particles.push(
 				new Particle({

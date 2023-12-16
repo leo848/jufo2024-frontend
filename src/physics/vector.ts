@@ -1,3 +1,4 @@
+import { z } from 'zod';
 import { dist, type DistanceType } from '../geom/dist';
 
 export class Vec2 {
@@ -58,4 +59,5 @@ export class Vec2 {
 	}
 }
 
-export type NamedVector = { inner: number[]; name: string };
+export const NamedVector = z.object({ inner: z.array(z.number()), name: z.string() });
+export type NamedVector = z.infer<typeof NamedVector>;

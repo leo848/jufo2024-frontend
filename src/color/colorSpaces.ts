@@ -278,7 +278,7 @@ export class HslColor extends AbstractColor<HslColor, HslComponent> {
 	}
 
 	static fromRgb(r: number, g: number, b: number): HslColor {
-		const {abs} = Math;
+		const { abs } = Math;
 		const [max, min] = [Math.max(r, g, b), Math.min(r, g, b)];
 		const delta = max - min;
 		let h = delta < 0.001 ? 0 : HslColor.#calculateHue(r, g, b, max, delta);
@@ -314,7 +314,7 @@ export class HslColor extends AbstractColor<HslColor, HslComponent> {
 	}
 
 	color(): Color {
-		const {abs} = Math;
+		const { abs } = Math;
 		const sixty_deg = 1 / 6;
 		const { h, s, l } = this;
 		const chroma = s * (1 - abs(2 * l - 1));
@@ -344,8 +344,8 @@ export class HslColor extends AbstractColor<HslColor, HslComponent> {
 		}
 	}
 
-	components(): ['h','s','l'] {
-		return ['h','s','l'];
+	components(): ['h', 's', 'l'] {
+		return ['h', 's', 'l'];
 	}
 
 	get(key: 'h' | 's' | 'l'): number {

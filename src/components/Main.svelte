@@ -40,7 +40,13 @@
 <Gallery class="gap-4 grid-cols-1 lg:grid-cols-2 mx-32 mt-4">
 	{#each displayCards as card, i (card.text)}
 		<div transition:scale>
-			<Card img={card.img} horizontal reverse={i % 2 == i % 4} href={card.href} class="mb-4 h-full w-full">
+			<Card
+				img={card.img}
+				horizontal
+				reverse={i % 2 == i % 4}
+				href={card.href}
+				class="mb-4 h-full w-full"
+			>
 				<h5 class="mb-2 text-3xl font-bold tracking-tight text-gray-900 dark:text-white">
 					{card.text}
 				</h5>

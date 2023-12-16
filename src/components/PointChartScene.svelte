@@ -91,7 +91,7 @@
 	}>();
 
 	let mounted = false;
-	onMount(() => mounted = true);
+	onMount(() => (mounted = true));
 
 	export function tryPick(evt: MouseEvent) {
 		dispatch('pick', null);
@@ -162,7 +162,8 @@
 			</T.Mesh>
 		{/each}
 	{/if}
-	{#if mounted} <!-- Reaktivität – für #19 -->
+	{#if mounted}
+		<!-- Reaktivität – für #19 -->
 		<T.Mesh
 			geometry={new THREE.SphereGeometry($ballSizeAnim * (selected ? 1.1 : 1.0))}
 			position={displayPoint.values()}

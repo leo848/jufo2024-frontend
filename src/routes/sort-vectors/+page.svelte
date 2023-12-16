@@ -22,7 +22,7 @@
 		}
 	}
 
-	let data: NamedVector[] = randomVectors(dim, 8);
+	let data: NamedVector[] = [];
 	$: length = data.length;
 	$: points = data.map((p) => {
 		return { ...p, inner: vectorLength(p.inner, dim) };
