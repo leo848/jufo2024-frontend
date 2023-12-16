@@ -5,7 +5,8 @@ import {
 	type CmyComponent,
 	type HsvComponent,
 	type OklabComponent,
-	type RgbComponent
+	type RgbComponent,
+	type HslComponent
 } from './color';
 import { linearGradient } from './gradient';
 import { toGamma, toLinear } from './linearity';
@@ -248,7 +249,7 @@ export class HsvColor extends AbstractColor<HsvColor, HsvComponent> {
 
 	neededGradientPoints(key: 'h' | 's' | 'v'): number {
 		if (key === 'h') return 38;
-		else return 2;
+		else return 3;
 	}
 
 	gradientTexture(key: 'h' | 's' | 'v'): HTMLCanvasElement {
@@ -261,6 +262,121 @@ export class HsvColor extends AbstractColor<HsvColor, HsvComponent> {
 
 	xyzComponents(): [null, 'v', null] {
 		return [null, 'v', null];
+	}
+}
+
+export class HslColor extends AbstractColor<HslColor, HslComponent> {
+	h: number;
+	s: number;
+	l: number;
+
+	constructor(h: number, s: number, l: number) {
+		super();
+		this.h = h;
+		this.s = s;
+		this.l = l;
+	}
+
+	static fromRgb(r: number, g: number, b: number): HslColor {
+		const {abs} = Math;
+		const [max, min] = [Math.max(r, g, b), Math.min(r, g, b)];
+		const delta = max - min;
+		let h = delta < 0.001 ? 0 : HslColor.#calculateHue(r, g, b, max, delta);
+		if (h > 1) h -= 1;
+		if (h < 0) h += 1;
+		const l = (max + min) / 2;
+		const s = max < 0.001 ? 0 : delta / (1 - abs(2 * l - 1));
+		return new HslColor(h, s, l);
+	}
+
+	static #calculateHue(r: number, g: number, b: number, max: number, delta: number) {
+		const sixty_deg = 1 / 6;
+		if (max === r) {
+			return sixty_deg * (((g - b) / delta) % 6);
+		} else if (max === g) {
+			return sixty_deg * ((b - r) / delta + 2);
+		} else if (max === b) {
+			return sixty_deg * ((r - g) / delta + 4);
+		} else throw new Error('Invalid value for max');
+	}
+
+	point(): Point3 {
+		const { h, s, l } = this;
+		const angle = h * 2 * Math.PI;
+		const radius = s;
+		const height = l;
+
+		return new Point3(
+			(radius * Math.cos(angle)) / 2 + 0.5,
+			height,
+			(radius * Math.sin(angle)) / 2 + 0.5
+		);
+	}
+
+	color(): Color {
+		const {abs} = Math;
+		const sixty_deg = 1 / 6;
+		const { h, s, l } = this;
+		const chroma = s * (1 - abs(2 * l - 1));
+		const normalHue = h / sixty_deg;
+		const x = chroma * (1 - Math.abs((normalHue % 2) - 1));
+		const min = l - chroma / 2;
+		const [r1, g1, b1] = HslColor.#calculateRgb(normalHue, chroma, x);
+		const [r, g, b] = [r1 + min, g1 + min, b1 + min];
+		return new Color(r, g, b);
+	}
+
+	static #calculateRgb(hue: number, c: number, x: number): [number, number, number] {
+		if (hue >= 0 && hue < 1) {
+			return [c, x, 0];
+		} else if (hue < 2) {
+			return [x, c, 0];
+		} else if (hue < 3) {
+			return [0, c, x];
+		} else if (hue < 4) {
+			return [0, x, c];
+		} else if (hue < 5) {
+			return [x, 0, c];
+		} else if (hue <= 6) {
+			return [c, 0, x];
+		} else {
+			throw new Error('Invalid hue: ' + hue);
+		}
+	}
+
+	components(): ['h','s','l'] {
+		return ['h','s','l'];
+	}
+
+	get(key: 'h' | 's' | 'l'): number {
+		return this[key];
+	}
+
+	with(key: 'h' | 's' | 'l', value: number): HslColor {
+		const color = this.clone();
+		color[key] = value;
+		return color;
+	}
+
+	clone(): HslColor {
+		return new HslColor(this.h, this.s, this.l);
+	}
+
+	values(): [number, number, number] {
+		return [this.h, this.s, this.l];
+	}
+
+	xyzComponents(): [null, 'l', null] {
+		return [null, 'l', null];
+	}
+
+	gradientTexture(key: 'h' | 's' | 'l'): HTMLCanvasElement {
+		return linearGradient(new HslColor(0, 1, 0.5), key);
+	}
+
+	neededGradientPoints(key: 'h' | 's' | 'l'): number {
+		if (key === 'h') return 38;
+		else return 3;
 	}
 }
 
@@ -462,13 +578,14 @@ export class CmyColor extends AbstractColor<CmyColor, CmyComponent> {
 	}
 }
 
-export const colorSpaces = ['rgb', 'hsv', 'oklab', 'lrgb', 'cmy'] as const;
+export const colorSpaces = ['rgb', 'hsv', 'hsl', 'oklab', 'lrgb', 'cmy'] as const;
 
 export type ColorSpace = (typeof colorSpaces)[number];
 
 export const colorSpaceClasses = {
 	rgb: RgbColor,
 	hsv: HsvColor,
+	hsl: HslColor,
 	oklab: OklabColor,
 	lrgb: LinearRgbColor,
 	cmy: CmyColor

@@ -4,6 +4,7 @@
 	import { blur, scale } from 'svelte/transition';
 	import {
 		HsvColor,
+		HslColor,
 		OklabColor,
 		RgbColor,
 		LinearRgbColor,
@@ -39,12 +40,14 @@
 		lrgb: { r: 'Rot', g: 'Grün', b: 'Blau' },
 		cmy: { c: 'Cyan', m: 'Magenta', y: 'Gelb (Yellow)' },
 		hsv: { h: 'Farbton (Hue)', s: 'Sättigung', v: 'Farbwert' },
+		hsl: { h: 'Farbton (Hue)', s: 'Sättigung', l: 'Helligkeit (Lightness)' },
 		oklab: { l: 'Helligkeit (Lightness)', a: 'Farbwert A', b: 'Farbwert B' }
 	} as const;
 
 	$: proxies = {
 		rgb: modalColor.proxy(RgbColor),
 		hsv: modalColor.proxy(HsvColor),
+		hsl: modalColor.proxy(HslColor),
 		oklab: modalColor.proxy(OklabColor),
 		lrgb: modalColor.proxy(LinearRgbColor),
 		cmy: modalColor.proxy(CmyColor)
@@ -319,6 +322,44 @@
 								space="hsv"
 								compX="h"
 								compY="v"
+								color={modalColor}
+							/>
+						</div>
+					</div>
+				</div>
+			</TabItem>
+			<TabItem open={space == 'hsl'} class="w-full" on:click={() => (space = 'hsl')}>
+				<div class="text-xl" slot="title">HSL</div>
+				<div class="flex flex-row justify-between gap-8 h-full">
+					<div class="stretch w-full">
+						{#each proxies.hsl.components() as comp (comp)}
+							<div class="h-10 mt-4 flex flex-row gap-4">
+								<GradientRange
+									bind:value={proxies.hsl[comp]}
+									space="hsl"
+									{comp}
+									color={modalColor}
+								/>
+								{#key proxies.hsl[comp]}
+									<NumericMappedInput
+										on:set={(n) => (proxies.hsl[comp] = n.detail)}
+										bind:value={proxies.hsl[comp]}
+										mapDisplay={(n) => Math.round(n * 100)}
+										mapValue={(n) => n / 100}
+									/>
+								{/key}
+							</div>
+							<div>{compNames.hsl[comp]} = {Math.round(proxies.hsl[comp] * 100)}%</div>
+						{/each}
+					</div>
+					<div>
+						<div class="h-64 w-64">
+							<GradientDiagram
+								bind:valueX={proxies.hsl.h}
+								bind:valueY={proxies.hsl.s}
+								space="hsl"
+								compX="h"
+								compY="s"
 								color={modalColor}
 							/>
 						</div>
