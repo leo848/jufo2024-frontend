@@ -42,19 +42,19 @@
 
 	const algorithms = [
 		{
-			key: 'bubbleSort',
+			key: 'bubble',
 			name: 'Bubble Sort',
 			desc: 'Beim Bubble-Sort-Verfahren handelt es sich um einen simplen Sortieralgorithmus, der asymptotisch eine quadratische Laufzeit benötigt.',
 			img: '/platinumportfolio-bubble.png'
 		},
 		{
-			key: 'selectionSort',
+			key: 'selection',
 			name: 'Selection Sort',
 			desc: 'Beim Selection Sort wird wiederholt das minimale Element ausgewählt und so einsortiert, dass ein Teil der Liste sortiert bleibt.',
 			img: '/victoriano-izquierdo-selection.png'
 		},
 		{
-			key: 'insertionSort',
+			key: 'insertion',
 			name: 'Insertion Sort',
 			desc: 'Beim Insertion Sort wird jeweils das nächste Element so lange in die links sortierte Teilliste eingefügt, bis diese sortiert ist.',
 			img: '/pan-xiaozhen-insert.png'

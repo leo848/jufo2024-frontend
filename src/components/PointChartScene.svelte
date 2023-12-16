@@ -8,7 +8,7 @@
 	import { cubicOut } from 'svelte/easing';
 	import { tweened } from 'svelte/motion';
 	import { Point3, axes } from '../geom/point';
-	import { createEventDispatcher } from 'svelte';
+	import { createEventDispatcher, onMount } from 'svelte';
 
 	extend({
 		OrbitControls
@@ -90,6 +90,9 @@
 		pick: { index: number; position: { x: number; y: number } } | null;
 	}>();
 
+	let mounted = false;
+	onMount(() => mounted = true);
+
 	export function tryPick(evt: MouseEvent) {
 		dispatch('pick', null);
 
@@ -159,17 +162,19 @@
 			</T.Mesh>
 		{/each}
 	{/if}
-	<T.Mesh
-		geometry={new THREE.SphereGeometry($ballSizeAnim * (selected ? 1.1 : 1.0))}
-		position={displayPoint.values()}
-		material={new THREE.MeshStandardMaterial({
-			roughness: selected ? 0.5 : 0.6,
-			metalness: selected ? 0 : 0.8,
-			color: color.rgb().numeric()
-		})}
-		bind:ref={meshes[index]}
-		castShadow
-	/>
+	{#if mounted} <!-- Reaktivität – für #19 -->
+		<T.Mesh
+			geometry={new THREE.SphereGeometry($ballSizeAnim * (selected ? 1.1 : 1.0))}
+			position={displayPoint.values()}
+			material={new THREE.MeshStandardMaterial({
+				roughness: selected ? 0.5 : 0.6,
+				metalness: selected ? 0 : 0.8,
+				color: color.rgb().numeric()
+			})}
+			bind:ref={meshes[index]}
+			castShadow
+		/>
+	{/if}
 {/each}
 
 {#each edges as [pointA, pointB] ([pointA, pointB])}
