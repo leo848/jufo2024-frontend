@@ -149,8 +149,8 @@
 		path = null;
 		if (pc.donePath) {
 			path = pc.donePath;
-			edges = pathToEdges(pc.donePath);
 			setDataFromPath(pc.donePath);
+			edges = pathToEdges(pc.donePath);
 		} else {
 			edges = pc.currentEdges.map(edgeToIndices);
 		}
@@ -159,12 +159,12 @@
 
 	let callbackIdImprovement = registerCallback(serverOutputPathImprovement, (pi) => {
 		if (pi.better) {
-			edges = pathToEdges(pi.currentPath);
 			path = pi.currentPath;
 		}
 		if (pi.done) {
 			setDataFromPath(pi.currentPath);
 		}
+		edges = pathToEdges(pi.currentPath);
 	});
 	onDestroy(() => unregisterCallback(callbackIdImprovement));
 </script>
