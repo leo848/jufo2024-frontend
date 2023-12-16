@@ -299,6 +299,7 @@
 							selectCard(evt, index);
 						}}
 						size="md"
+						tooltip={selection?.index !== index}
 					/>
 				</div>
 			{/each}
