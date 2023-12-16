@@ -205,16 +205,24 @@
 	}
 </script>
 
-<Card class={`rounded-xl col-span-12 md:col-span-6 lg:col-span-7 xl:col-span-${horizontal ? 6 : 4} max-w-none`}>
+<Card
+	class={`rounded-xl col-span-12 md:col-span-6 lg:col-span-7 xl:col-span-${
+		horizontal ? 6 : 4
+	} max-w-none`}
+>
 	<p class="text-2xl xl:text-3xl dark:text-white bg-gray-700 p-4 -m-6 rounded-t-xl mb-4">
 		{name[currentAction]}
 	</p>
-	<div class={`text-xl grow grid grid-cols-${horizontal && selectedItem[currentAction] === null ? 2 : 1}`}>
+	<div
+		class={`text-xl grow grid grid-cols-${
+			horizontal && selectedItem[currentAction] === null ? 2 : 1
+		}`}
+	>
 		{#each displayItems[currentAction] as item (item.index)}
 			<button
 				animate:flip={{ duration: 200 }}
 				in:scale
-				class={`transition ${horizontal ? "even:ml-2 odd:mr-2": ""}`}
+				class={`transition ${horizontal ? 'even:ml-2 odd:mr-2' : ''}`}
 				on:click={() => (selectedItem[currentAction] = open(currentAction) ? null : item.index)}
 				disabled={progress.ongoing}
 			>

@@ -5,16 +5,22 @@
 	import OpenLayersMap from '../../components/OpenLayersMap.svelte';
 	import PathProperties from '../../components/PathProperties.svelte';
 	import PathAlgorithms from '../../components/PathAlgorithms.svelte';
+	import type { NamedPoint } from '../../geom/coordPoint';
 
-	title.set("Orte sortieren");
+	title.set('Orte sortieren');
 
-	type NamedPoint = {
-		name: string;
-		lat: number,
-		lon: number,
-	}
-
-	let points: NamedPoint[] = [];
+	let points: NamedPoint[] = [
+		{
+			name: 'Aachener Dom',
+			lat: 50.7745,
+			lng: 6.08382
+		},
+		{
+			name: 'Informatik-Fakultät',
+			lat: 50.77932,
+			lng: 6.05888
+		}
+	];
 
 	let path: null | number[][] = [];
 	let invalidateAlgorithms: () => {};
@@ -24,7 +30,9 @@
 	<div
 		class="mt-8 grid grid-cols-12 gap-8 auto-cols-max align-stretch justify-stretch justify-items-stretch"
 	>
-		<Card class="rounded-xl overflow-hidden col-span-12 xl:col-span-6 xl:row-span-2 max-w-none xl:p-0 mb-0">
+		<Card
+			class="rounded-xl overflow-hidden col-span-12 xl:col-span-6 xl:row-span-2 max-w-none xl:p-0 mb-0"
+		>
 			<div
 				class="text-2xl xl:text-3xl dark:text-white bg-gray-700 p-4 rounded-t-xl flex flex-row justify-between items-center"
 			>
@@ -32,7 +40,7 @@
 				<button class="bg-gray-600 rounded-xl p-2" disabled><Icon.CogOutline /></button>
 			</div>
 			<div class="h-full m-0">
-				<OpenLayersMap />
+				<OpenLayersMap bind:points />
 			</div>
 		</Card>
 
@@ -43,7 +51,7 @@
 			bind:invalidate={invalidateAlgorithms}
 			dimensions={2}
 			horizontal
-			points={points.map((p) => [p.lat, p.lon])}
+			points={points.map((p) => [p.lat, p.lng])}
 		/>
 	</div>
 </div>
