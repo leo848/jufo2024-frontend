@@ -15,6 +15,8 @@
 	"devDependencies": {
 		"@sveltejs/adapter-auto": "^2.1.1",
 		"@sveltejs/kit": "^1.27.6",
+		"@types/leaflet": "^1.9.8",
+		"@types/staticmaps": "^1.12.5",
 		"@typescript-eslint/eslint-plugin": "^6.13.1",
 		"@typescript-eslint/parser": "^6.13.1",
 		"autoprefixer": "^10.4.16",
@@ -39,6 +41,8 @@
 	"dependencies": {
 		"@threlte/core": "^7.0.2",
 		"@types/three": "^0.158.3",
+		"leaflet": "^1.9.4",
+		"osm": "^1.0.0",
 		"tailwind-merge": "^2.1.0",
 		"three": "^0.158.0",
 		"zod": "^3.22.4"
