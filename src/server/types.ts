@@ -44,7 +44,7 @@ const action = z.discriminatedUnion('type', [
 	z.object({
 		type: z.literal('sortNumbers'),
 		numbers: z.array(z.number()),
-		algorithm: z.enum(['bubbleSort', 'selectionSort', 'insertionSort'])
+		algorithm: z.enum(['bubble', 'selection', 'insertion'])
 	}),
 	z.object({
 		type: z.literal('createPath'),
