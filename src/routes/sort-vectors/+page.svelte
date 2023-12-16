@@ -241,7 +241,7 @@
 			on:deletePath={() => (path = null)}
 			bind:invalidate={invalidateAlgorithms}
 			dimensions={dim}
-	  points={points.map(p => p.inner)}
+			points={points.map((p) => p.inner)}
 		/>
 	</div>
 </div>

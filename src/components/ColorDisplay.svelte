@@ -1,9 +1,11 @@
 <script lang="ts">
+	import { Tooltip } from 'flowbite-svelte';
 	import type { Color } from '../color/color';
 
 	export let color: Color;
 	export let selected: boolean = false;
 	export let size: 'xs' | 'sm' | 'md' | 'lg' | 'xl' = 'md';
+	export let tooltip: boolean = true;
 
 	$: sizeRem = (
 		{
@@ -28,3 +30,8 @@
 >
 	<div class={sizeClass} />
 </button>
+{#if tooltip}
+	{#await color.name() then meta}
+		<Tooltip>{meta.name}</Tooltip>
+	{/await}
+{/if}

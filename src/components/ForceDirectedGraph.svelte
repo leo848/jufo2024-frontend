@@ -46,7 +46,7 @@
 
 		ctx.textAlign = 'left';
 		ctx.textBaseline = 'hanging';
-		const energy = (totalVel + totalAcc * 10);
+		const energy = totalVel + totalAcc * 10;
 
 		ctx.fillText(energy.toFixed(1), 10, 10);
 	}
@@ -99,7 +99,7 @@
 				let displayDist = delta.mag();
 				let trueDist = particle1.dist(particle2) * 20;
 
-				const factor = (displayDist - trueDist);
+				const factor = displayDist - trueDist;
 				const force = particle2.pos.sub(particle1.pos).mul(factor);
 				// Kraft hin zu Distanz wie in realem Graph
 				particle1.applyForce(force.mul(0.00003));

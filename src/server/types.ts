@@ -72,7 +72,11 @@ const action = z.discriminatedUnion('type', [
 ]);
 
 const serverInputLog = z.object({ type: z.literal('log'), message: z.string() });
-const serverInputAction = z.object({ type: z.literal('action'), action, latency: z.number().optional() });
+const serverInputAction = z.object({
+	type: z.literal('action'),
+	action,
+	latency: z.number().optional()
+});
 const serverInputLatency = z.object({ type: z.literal('latency') });
 const serverInput = z.discriminatedUnion('type', [
 	serverInputLog,

@@ -170,7 +170,7 @@
 	$: open = (kind: ActionKind) => selectedItem[kind] !== null;
 
 	let latencySlider = 1;
-	$: latency = [ 0, 100, 250, 500, 1000, 2000 ][latencySlider];
+	$: latency = [0, 100, 250, 500, 1000, 2000][latencySlider];
 
 	let callbackId = registerCallback(serverOutputPathCreation, (pc) => {
 		if (pc.donePath) {
@@ -251,7 +251,8 @@
 					{#if complexity}
 						<div>Komplexität: <b>{complexity}</b></div>
 					{/if}
-					<div class="mt-2">Latenz:
+					<div class="mt-2">
+						Latenz:
 						{#if latency == 0}
 							<b>keine</b>
 						{:else if latency < 1000}
@@ -260,7 +261,13 @@
 							<b>{(latency / 1000).toFixed(0)}</b>s
 						{/if}
 					</div>
-					<input type="range" bind:value={latencySlider} min={0} max={5} class="w-full bg-transparent text-white grayscale" />
+					<input
+						type="range"
+						bind:value={latencySlider}
+						min={0}
+						max={5}
+						class="w-full bg-transparent text-white grayscale"
+					/>
 				</div>
 				{#if send}
 					{#if !progress.ongoing}
