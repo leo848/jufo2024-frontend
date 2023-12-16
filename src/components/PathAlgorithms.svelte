@@ -12,8 +12,6 @@
 	export let points: number[][];
 	export let dimensions = 3;
 
-	let latency = 100;
-
 	let progress = { ongoing: false, value: 0 as null | number };
 	let path: number[][] | null = null;
 
@@ -171,6 +169,9 @@
 	}
 	$: open = (kind: ActionKind) => selectedItem[kind] !== null;
 
+	let latencySlider = 1;
+	$: latency = [ 0, 100, 250, 500, 1000, 2000 ][latencySlider];
+
 	let callbackId = registerCallback(serverOutputPathCreation, (pc) => {
 		if (pc.donePath) {
 			progress.ongoing = false;
@@ -250,8 +251,16 @@
 					{#if complexity}
 						<div>Komplexität: <b>{complexity}</b></div>
 					{/if}
-					<div class="mt-2">Latenz: <b>{latency}</b>ms</div>
-					<input type="range" bind:value={latency} min={0} max={250} class="w-full bg-transparent text-white grayscale" />
+					<div class="mt-2">Latenz:
+						{#if latency == 0}
+							<b>keine</b>
+						{:else if latency < 1000}
+							<b>{latency}</b>ms
+						{:else}
+							<b>{(latency / 1000).toFixed(0)}</b>s
+						{/if}
+					</div>
+					<input type="range" bind:value={latencySlider} min={0} max={5} class="w-full bg-transparent text-white grayscale" />
 				</div>
 				{#if send}
 					{#if !progress.ongoing}
