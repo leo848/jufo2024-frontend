@@ -23,7 +23,7 @@
 			href: '/sort-vectors',
 			text: 'Vektoren sortieren',
 			desc: 'n-dimensionale Vektoren sortieren'
-		}
+		},
 	];
 	let displayCards: typeof cards = [];
 
@@ -34,19 +34,17 @@
 	});
 </script>
 
-<Container>
-	<Gallery class="gap-4 md:grid-cols-1 mx-4 xl:mx-16 xl:mx-16 mt-4">
-		{#each displayCards as card, i (card.text)}
-			<div transition:scale>
-				<Card img={card.img} horizontal reverse={i % 2 == 0} href={card.href} class="mb-4">
-					<h5 class="mb-2 text-3xl font-bold tracking-tight text-gray-900 dark:text-white">
-						{card.text}
-					</h5>
-					<p class="font-normal text-gray-700 dark:text-gray-400 leading-tight">
-						{card.desc}
-					</p>
-				</Card>
-			</div>
-		{/each}
-	</Gallery>
-</Container>
+<Gallery class="gap-4 md:grid-cols-2 mx-32 mt-4">
+	{#each displayCards as card, i (card.text)}
+		<div transition:scale>
+			<Card img={card.img} horizontal reverse={i % 2 == i % 4} href={card.href} class="mb-4">
+				<h5 class="mb-2 text-3xl font-bold tracking-tight text-gray-900 dark:text-white">
+					{card.text}
+				</h5>
+				<p class="font-normal text-gray-700 dark:text-gray-400 leading-tight">
+					{card.desc}
+				</p>
+			</Card>
+		</div>
+	{/each}
+</Gallery>
