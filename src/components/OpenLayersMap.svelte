@@ -27,5 +27,5 @@
 	});
 </script>
 
-<div class="h-[420px]" bind:this={wrapperDiv}>
+<div class="h-full" bind:this={wrapperDiv}>
 </div>

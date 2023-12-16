@@ -7,6 +7,8 @@
 	export let path: number[][] | null = null;
 	export let length: number = path?.length || 0;
 
+	export let horizontal: boolean = false;
+
 	let chainLength = tweened(0);
 
 	let displayLength = tweened(length, {
@@ -44,12 +46,12 @@
 	);
 </script>
 
-<Card class="rounded-xl col-span-12 md:col-span-6 lg:col-span-5 xl:col-span-3 max-w-none">
+<Card class={` rounded-xl col-span-12 md:col-span-6 lg:col-span-5 xl:col-span-${ horizontal ? 6 : 3 } max-w-none` }>
 	<p class="text-2xl xl:text-3xl dark:text-white bg-gray-700 p-4 -m-6 rounded-t-xl mb-4">
 		Eigenschaften
 	</p>
 	<div class="text-xl tabular-nums">
-		<div class="grid grid-cols-2 gap-4">
+		<div class={`grid grid-cols-${horizontal ? 4 : 2 } gap-4`}>
 			<div
 				class="col-span-2 rounded-2xl bg-gray-700 py-4 text-gray-400 flex-col flex justify-around items-center"
 			>
