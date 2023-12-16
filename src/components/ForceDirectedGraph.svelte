@@ -15,6 +15,7 @@
 
 	let particles: Particle[] = [];
 
+
 	function render() {
 		if (ctx == null) return;
 		// ctx.translate(width / 2, height / 2)
@@ -38,7 +39,8 @@
 			ctx.stroke();
 		}
 
-		for (const particle of particles) {
+		for (let i = particles.length - 1; i >= 0; i--) {
+			const particle = particles[i];
 			particle.draw(ctx);
 		}
 
