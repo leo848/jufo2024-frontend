@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { Card, Gallery } from 'flowbite-svelte';
 	import Container from './Container.svelte';
-	import {scale} from 'svelte/transition';
+	import { scale } from 'svelte/transition';
 
 	const cards = [
 		{

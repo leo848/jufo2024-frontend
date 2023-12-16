@@ -7,7 +7,7 @@
 
 	export let space: ColorSpace;
 	export let colors: Color[];
-	export let edges: [Point3, Point3, Color?][];
+	export let edges: [Point3, Point3, Color | undefined][];
 	export let projection: 'orthographic' | 'perspective' = 'orthographic';
 	export let ballSize: number = 0.5;
 	export let selectedIndex: number | null = null;

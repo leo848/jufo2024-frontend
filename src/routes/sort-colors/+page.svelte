@@ -61,7 +61,7 @@
 
 	let path: Point3[] | null = null;
 
-	let edges: [Point3, Point3, Color?][] = [];
+	let edges: [Point3, Point3, Color | undefined][] = [];
 
 	let invalidateAlgorithms: () => void;
 	function blowUp() {
@@ -96,10 +96,15 @@
 		// ballSizeShowControls: true,
 	};
 
-	function pathToEdges(path: number[][]): [Point3, Point3][] {
+	function pathToEdges(path: number[][]): [Point3, Point3, undefined][] {
 		let edges = [];
 		for (let i = 0; i < path.length - 1; i++) {
-			edges.push([Point3.fromArray(path[i]), Point3.fromArray(path[i + 1])] as [Point3, Point3]);
+			let arr: [Point3, Point3, undefined] = [
+				Point3.fromArray(path[i]),
+				Point3.fromArray(path[i + 1]),
+				undefined
+			];
+			edges.push(arr);
 		}
 		return edges;
 	}
@@ -123,7 +128,11 @@
 			edges = pathToEdges(pc.donePath);
 			setColorsFromPath(pc.donePath);
 		} else {
-			edges = pc.currentEdges.map(([from, to]) => [Point3.fromArray(from), Point3.fromArray(to)]);
+			edges = pc.currentEdges.map(([from, to]) => [
+				Point3.fromArray(from),
+				Point3.fromArray(to),
+				undefined
+			]);
 		}
 	});
 	onDestroy(() => unregisterCallback(callbackIdCreation));

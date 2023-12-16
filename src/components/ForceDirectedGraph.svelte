@@ -15,7 +15,6 @@
 
 	let particles: Particle[] = [];
 
-
 	function render() {
 		if (ctx == null) return;
 		// ctx.translate(width / 2, height / 2)

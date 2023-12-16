@@ -55,7 +55,7 @@
 		lastUpdate.grad = new Date().getTime();
 
 		// eslint-disable-next-line
-		const amount = spaced.neededGradientPoints(compX as any);
+		const amount = spaced.neededGradientPoints(compX as never);
 		const yCount = 15;
 		const gradients: CanvasGradient[] = new Array(yCount);
 		for (let y = 0; y < yCount; y++) {

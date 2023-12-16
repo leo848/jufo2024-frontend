@@ -21,7 +21,7 @@
 	import { flip } from 'svelte/animate';
 	import * as Icon from 'flowbite-svelte-icons';
 	import { title } from '../../ui/navbar';
-	import {scale} from 'svelte/transition';
+	import { scale } from 'svelte/transition';
 
 	title.set('Zahlen sortieren');
 
