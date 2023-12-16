@@ -1,6 +1,6 @@
 # jufo2024-frontend
 
-Dieses Repository enthält den Code für die Frontend-Webanwendung des Jugend forscht-Projekts "sorting the colors: Dimensionsbezogene Generalisierung vergleichsbasierter Sortierung".
+Dieses Repository enthält den Code für die Frontend-Webanwendung des Jugend forscht-Projekts "sorting the colors: Dimensionsbezogene Generalisierung vergleichsbasierter Sortierung". Die Webanwendung ist in [Svelte](svelte.dev) geschrieben.
 
 ## Installation (Entwicklung)
 
