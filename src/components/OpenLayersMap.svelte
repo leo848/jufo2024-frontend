@@ -18,8 +18,10 @@
 		}).addTo(map);
 		
 		L.marker([50.77450, 6.08382]).addTo(map)
-			.bindPopup('A pretty CSS popup.<br> Easily customizable.')
-			.openPopup();
+			.bindPopup('Aachener Dom');
+
+		L.marker([50.77932, 6.05888]).addTo(map)
+			.bindPopup('Informatik-Fakultät');
 
 		console.log(map);
 	});
