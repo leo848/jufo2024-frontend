@@ -21,6 +21,7 @@
 	import { flip } from 'svelte/animate';
 	import * as Icon from 'flowbite-svelte-icons';
 	import { title } from '../../ui/navbar';
+	import {scale} from 'svelte/transition';
 
 	title.set('Zahlen sortieren');
 
@@ -169,7 +170,7 @@
 				</Gallery>
 			</Card>
 			{#each numbers as number, index (number.id)}
-				<div animate:flip={{ duration: 200, delay: index * 50 }}>
+				<div animate:flip={{ duration: 200, delay: index * 50 }} transition:scale>
 					<Card
 						on:click={() => {
 							numbers.splice(index, 1);
