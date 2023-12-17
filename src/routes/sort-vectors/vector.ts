@@ -61,3 +61,11 @@ export class Vec2 {
 
 export const NamedVector = z.object({ inner: z.array(z.number()), name: z.string() });
 export type NamedVector = z.infer<typeof NamedVector>;
+
+export function toUrlString(v: NamedVector[]): string {
+	return v.map(n => n.inner.join("-")).join("_");
+}
+
+export function fromUrlString(s: string, name: (index: number) => string): NamedVector[] | null {
+	return s.split("_").map((vString, index) => ({ name: name(index), inner: vString.split("-").map(Number) }));
+}

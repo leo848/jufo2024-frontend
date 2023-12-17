@@ -5,12 +5,14 @@
 	import * as Icon from 'flowbite-svelte-icons';
 	import { registerCallback, unregisterCallback } from '../../server/websocket';
 	import { serverOutputPathCreation, serverOutputPathImprovement } from '../../server/types';
-	import type { NamedVector } from './vector';
-	import { onDestroy } from 'svelte';
+	import { fromUrlString, type NamedVector } from './vector';
+	import { onDestroy, onMount } from 'svelte';
 	import { flip } from 'svelte/animate';
+	import { page } from '$app/stores';
 	import { writable, type Writable } from 'svelte/store';
 	import PathProperties from '../../components/PathProperties.svelte';
 	import ForceDirectedGraph from './ForceDirectedGraph.svelte';
+	import {goto} from '$app/navigation';
 
 	title.set('Vektoren sortieren');
 
@@ -24,10 +26,26 @@
 	}
 
 	let data: Writable<NamedVector[]> = writable([]);
+
+	(() => {
+		let queryString = $page.url.searchParams.get('v');
+		if (queryString == null) return;
+		let newData = fromUrlString(queryString, getName);
+		if (newData == null) return;
+		$data = newData;
+		dim = $data.map(v => v.inner.length).reduce((a,b) => Math.max(a,b));
+		$data.forEach(v => v.inner = vectorLength(v.inner, dim));
+	})();
+
 	$: length = $data.length;
 	$: points = $data.map((p) => {
 		return { ...p, inner: vectorLength(p.inner, dim) };
 	});
+
+	$: {
+		$page.url.searchParams.set('v', $data.map(v => v.inner.join("-")).join("_"));
+		goto(`?${$page.url.searchParams.toString()}`, { keepFocus: true, replaceState: true, noScroll: true });
+	}
 
 	let path: number[][] | null = null;
 	let edges: [number, number][] = [];
