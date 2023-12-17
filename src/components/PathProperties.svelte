@@ -44,6 +44,8 @@
 	$: averageDistDisplay = ($chainLength / length).toFixed(
 		Math.max(2 - Math.max(0, Math.log10($chainLength / length)), 0)
 	);
+
+	const _tailwind = [ "grid-cols-4", "grid-cols-2", "xl:col-span-2", "xl-col-span-4" ];
 </script>
 
 <Card

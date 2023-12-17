@@ -214,7 +214,7 @@
 		{name[currentAction]}
 	</p>
 	<div
-		class={`text-xl grow grid grid-cols-${
+		class={`text-xl grid grid-cols-${
 			horizontal && selectedItem[currentAction] === null ? 2 : 1
 		}`}
 	>
