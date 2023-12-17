@@ -2,12 +2,12 @@
 	import * as THREE from 'three';
 	import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 	import { T, extend, useThrelte } from '@threlte/core';
-	import type { ColorSpace } from '../color/colorSpaces';
-	import { RgbColor } from '../color/colorSpaces';
-	import type { Color } from '../color/color';
+	import type { ColorSpace } from '../../color/colorSpaces';
+	import { RgbColor } from '../../color/colorSpaces';
+	import type { Color } from '../../color/color';
 	import { cubicOut } from 'svelte/easing';
 	import { tweened } from 'svelte/motion';
-	import { Point3, axes } from '../geom/point';
+	import { Point3, axes } from '../../geom/point';
 	import { createEventDispatcher, onMount } from 'svelte';
 
 	extend({

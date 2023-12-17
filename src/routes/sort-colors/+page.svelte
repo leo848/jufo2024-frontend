@@ -1,24 +1,24 @@
 <script lang="ts">
 	import { Card, Spinner } from 'flowbite-svelte';
-	import ColorPicker from '../../components/ColorPicker.svelte';
+	import ColorPicker from './ColorPicker.svelte';
 	import { RgbColor, type ColorSpace } from '../../color/colorSpaces';
 	import { Point3 } from '../../geom/point';
 	import { flip } from 'svelte/animate';
 	import { scale } from 'svelte/transition';
 	import * as Icon from 'flowbite-svelte-icons';
 	import { onDestroy } from 'svelte';
-	import PointChart from '../../components/PointChart.svelte';
+	import PointChart from './PointChart.svelte';
 	import { registerCallback, unregisterCallback } from '../../server/websocket';
 	import { serverOutputPathCreation, serverOutputPathImprovement } from '../../server/types';
 	import type { Color } from '../../color/color';
 	import { title } from '../../ui/navbar';
 	import { gradient } from '../../ui/color';
-	import PointChartOptions from '../../components/PointChartOptions.svelte';
+	import PointChartOptions from './PointChartOptions.svelte';
 	import PathAlgorithms from '../../components/PathAlgorithms.svelte';
-	import ColorAddPopover from '../../components/ColorAddPopover.svelte';
-	import ColorsLock from '../../components/ColorsLock.svelte';
-	import ColorDisplay from '../../components/ColorDisplay.svelte';
-	import ListStoragePopover from '../../components/ListStoragePopover.svelte';
+	import ColorAddPopover from './ColorAddPopover.svelte';
+	import ColorsLock from './ColorsLock.svelte';
+	import ColorDisplay from './ColorDisplay.svelte';
+	import ListStoragePopover from './ListStoragePopover.svelte';
 	import PathProperties from '../../components/PathProperties.svelte';
 
 	title.set('Farben sortieren');

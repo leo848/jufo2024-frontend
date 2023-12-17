@@ -5,8 +5,8 @@
 		availableColorNameLists,
 		getColorNameListInfo,
 		colorNameListNames
-	} from '../color/colorName';
-	import type { Color } from '../color/color';
+	} from '../../color/colorName';
+	import type { Color } from '../../color/color';
 	import { scale } from 'svelte/transition';
 
 	export let triggeredBy: string;

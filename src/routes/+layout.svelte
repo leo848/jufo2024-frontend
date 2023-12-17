@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { Navbar, NavBrand, NavUl, NavLi, NavHamburger, Toast, Button } from 'flowbite-svelte';
-	import ServerStatus from '../components/ServerStatus.svelte';
+	import ServerStatus from './ServerStatus.svelte';
 
 	import { onMount } from 'svelte';
 

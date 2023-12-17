@@ -1,5 +1,5 @@
 <script lang="ts">
-	import Main from '../components/Main.svelte';
+	import Main from './Main.svelte';
 
 	import { title } from '../ui/navbar';
 

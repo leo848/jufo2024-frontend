@@ -1,8 +1,8 @@
 <script lang="ts">
 	import { Canvas } from '@threlte/core';
-	import type { ColorSpace } from '../color/colorSpaces';
-	import type { Color } from '../color/color';
-	import type { Point3 } from '../geom/point';
+	import type { ColorSpace } from '../../color/colorSpaces';
+	import type { Color } from '../../color/color';
+	import type { Point3 } from '../../geom/point';
 	import PointChartScene from './PointChartScene.svelte';
 
 	export let space: ColorSpace;

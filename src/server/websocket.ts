@@ -17,7 +17,7 @@ export function getStatus(): ServerStatus & { type: 'status' } {
 	return { type: 'status', status: states[websocket.readyState] };
 }
 
-let interval: null | number = null;
+let interval: null | NodeJS.Timeout = null;
 export function setStatusCallback(callback: (ss: ServerStatus) => void) {
 	statusCallback = callback;
 

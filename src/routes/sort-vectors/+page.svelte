@@ -9,7 +9,7 @@
 	import { onDestroy } from 'svelte';
 	import { flip } from 'svelte/animate';
 	import PathProperties from '../../components/PathProperties.svelte';
-	import ForceDirectedGraph from '../../components/ForceDirectedGraph.svelte';
+	import ForceDirectedGraph from './ForceDirectedGraph.svelte';
 
 	title.set('Vektoren sortieren');
 

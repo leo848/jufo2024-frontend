@@ -3,7 +3,7 @@
 	import L, { type LatLngLiteral } from 'leaflet';
 	import 'leaflet/dist/leaflet.css';
 	import 'leaflet/dist/images/marker-icon.png';
-	import type { CoordPoint, NamedPoint } from '../geom/coordPoint';
+	import type { CoordPoint, NamedPoint } from '../../geom/coordPoint';
 	import { scale } from 'svelte/transition';
 
 	export let points: NamedPoint[];

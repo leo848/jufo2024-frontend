@@ -1,16 +1,16 @@
 <script lang="ts">
 	import { Popover, TabItem, Tabs } from 'flowbite-svelte';
 	import * as Icon from 'flowbite-svelte-icons';
-	import type { Color } from '../color/color';
+	import type { Color } from '../../color/color';
 	import {
 		loadColorLists,
 		saveColorList,
 		colorListCategories,
 		type ColorList,
 		type ColorListStorage
-	} from '../color/list';
+	} from '../../color/list';
 	import ColorDisplay from './ColorDisplay.svelte';
-	import { gradient } from '../ui/color';
+	import { gradient } from '../../ui/color';
 
 	export let colors: Color[];
 	export let triggeredBy: string;

@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { Tooltip } from 'flowbite-svelte';
-	import type { Color } from '../color/color';
+	import type { Color } from '../../color/color';
 
 	export let color: Color;
 	export let selected: boolean = false;

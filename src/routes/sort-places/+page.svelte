@@ -2,7 +2,7 @@
 	import { title } from '../../ui/navbar';
 	import { Card } from 'flowbite-svelte';
 	import * as Icon from 'flowbite-svelte-icons';
-	import OpenLayersMap from '../../components/OpenLayersMap.svelte';
+	import OpenLayersMap from './OpenLayersMap.svelte';
 	import PathProperties from '../../components/PathProperties.svelte';
 	import PathAlgorithms from '../../components/PathAlgorithms.svelte';
 	import { type CoordPoint, type NamedPoint, coordSimilar } from '../../geom/coordPoint';

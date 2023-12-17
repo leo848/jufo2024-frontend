@@ -1,6 +1,6 @@
 <script lang="ts">
 	import Container from '../../components/Container.svelte';
-	import BarChart from '../../components/BarChart.svelte';
+	import BarChart from './BarChart.svelte';
 	import { registerCallback, sendWebsocket, unregisterCallback } from '../../server/websocket';
 	import { type ServerInput, serverOutputSortedNumbers } from '../../server/types';
 

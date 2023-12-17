@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { Button, Modal, Spinner, TabItem, Tabs } from 'flowbite-svelte';
-	import { Color } from '../color/color';
+	import { Color } from '../../color/color';
 	import { blur, scale } from 'svelte/transition';
 	import {
 		HsvColor,
@@ -10,13 +10,13 @@
 		LinearRgbColor,
 		CmyColor,
 		type ColorSpace
-	} from '../color/colorSpaces';
-	import { type ColorNameList, getColorNameListInfo } from '../color/colorName';
+	} from '../../color/colorSpaces';
+	import { type ColorNameList, getColorNameListInfo } from '../../color/colorName';
 	import GradientRange from './GradientRange.svelte';
 	import GradientDiagram from './GradientDiagram.svelte';
 	import DeltaBadge from './DeltaBadge.svelte';
 	import { createEventDispatcher, type EventDispatcher } from 'svelte';
-	import NumericMappedInput from './NumericMappedInput.svelte';
+	import NumericMappedInput from '../../components/NumericMappedInput.svelte';
 	import ColorNameListPopover from './ColorNameListPopover.svelte';
 	import { ExclamationCircleOutline } from 'flowbite-svelte-icons';
 	import WarningGamutPopover from './WarningGamutPopover.svelte';

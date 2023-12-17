@@ -1,8 +1,8 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
-	import { rangeMap } from '../utils/math';
-	import type { Color, ColorComponent } from '../color/color';
-	import type { ColorSpace } from '../color/colorSpaces';
+	import { rangeMap } from '../../utils/math';
+	import type { Color, ColorComponent } from '../../color/color';
+	import type { ColorSpace } from '../../color/colorSpaces';
 	import { tweened } from 'svelte/motion';
 
 	let wrapperDiv: HTMLDivElement;
@@ -25,7 +25,7 @@
 		displayValueY.set(valueY);
 	}
 
-	const lastUpdate = { timeout: 0, grad: new Date().getTime(), render: new Date().getTime() };
+	const lastUpdate = { timeout: null as null|NodeJS.Timeout, grad: new Date().getTime(), render: new Date().getTime() };
 	let points: CanvasGradient[] = [];
 	function getCurrent(): { current: string } {
 		return {
@@ -48,7 +48,7 @@
 		}
 		const current = spaced.with(compX as never, valueX).css();
 		if (points.length > 0 && new Date().getTime() - lastUpdate.grad < 1000) {
-			clearTimeout(lastUpdate.timeout);
+			lastUpdate.timeout && clearTimeout(lastUpdate.timeout);
 			lastUpdate.timeout = setTimeout(() => (ctx = ctx), 1000);
 			return { gradients: points, current };
 		}
@@ -77,7 +77,7 @@
 	}
 
 	let lastGradientUpdate = {
-		timeout: 0,
+		timeout: null as null | NodeJS.Timeout,
 		grad: new Date().getTime(),
 		render: new Date().getTime(),
 		imageData: null as null | ImageData
@@ -87,7 +87,7 @@
 			lastGradientUpdate.imageData != null &&
 			new Date().getTime() - lastGradientUpdate.grad < 1000
 		) {
-			clearTimeout(lastGradientUpdate.timeout);
+			lastGradientUpdate.timeout && clearTimeout(lastGradientUpdate.timeout);
 			lastGradientUpdate.timeout = setTimeout(() => (ctx = ctx), 1000);
 			return lastGradientUpdate.imageData;
 		}

@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { Popover } from 'flowbite-svelte';
-	import type { Color } from '../color/color';
-	import { RgbColor } from '../color/colorSpaces';
+	import type { Color } from '../../color/color';
+	import { RgbColor } from '../../color/colorSpaces';
 
 	export let colors: Color[];
 	export let triggeredBy: string;

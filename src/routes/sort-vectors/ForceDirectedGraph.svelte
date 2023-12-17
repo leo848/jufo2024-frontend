@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { onDestroy, onMount } from 'svelte';
-	import { Particle } from '../physics/particle';
-	import { Vec2, type NamedVector } from '../physics/vector';
+	import { Particle } from '../../physics/particle';
+	import { Vec2, type NamedVector } from '../../physics/vector';
 
 	export let edges: [number, number][]; // indices
 	export let vectors: NamedVector[];
@@ -11,7 +11,7 @@
 	let ctx: CanvasRenderingContext2D | null = null;
 	let width = 0,
 		height = 0;
-	let callback: null | number = null;
+	let callback: null | NodeJS.Timeout = null;
 
 	let particles: Particle[] = [];
 

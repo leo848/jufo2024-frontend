@@ -1,8 +1,8 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
-	import { rangeMap } from '../utils/math';
-	import type { Color, ColorComponent } from '../color/color';
-	import type { ColorSpace } from '../color/colorSpaces';
+	import { rangeMap } from '../../utils/math';
+	import type { Color, ColorComponent } from '../../color/color';
+	import type { ColorSpace } from '../../color/colorSpaces';
 	import { tweened } from 'svelte/motion';
 	import { sineIn } from 'svelte/easing';
 

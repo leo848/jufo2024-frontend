@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { Popover } from 'flowbite-svelte';
 	import { createEventDispatcher } from 'svelte';
-	import type { Color } from '../color/color';
+	import type { Color } from '../../color/color';
 
 	export let triggeredBy: string;
 	export let color: Color;

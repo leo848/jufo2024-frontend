@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { assertNever } from '../server/types';
+	import { assertNever } from '../../server/types';
 
 	export let value: number;
 	export let type: 'negpos' | 'pos' = 'negpos';
