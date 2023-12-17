@@ -17,7 +17,7 @@
 
 	$: if (map) {
 		markers.forEach((m) => m.removeFrom(map));
-		markers = points.map((p) => L.marker(p, { riseOnHover: true, riseOffset: 10 }));
+		markers = points.map((p) => L.marker(p, { opacity: 0.8 }));
 		markers.forEach((m) => m.addTo(map));
 	}
 
