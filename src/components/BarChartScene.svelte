@@ -2,7 +2,6 @@
 	import * as THREE from 'three';
 	import { T, extend, useThrelte } from '@threlte/core';
 	import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
-	import { tweened } from 'svelte/motion';
 
 	const { renderer, renderMode } = useThrelte();
 
@@ -24,14 +23,6 @@
 				({ index, highlight }, accIndex) => (values[index] = { value: accIndex + 1, highlight })
 			);
 		content = content;
-	}
-	let animValues = tweened(values.map(v => v.value), { duration: 500 });
-	$: {
-		if (values.length === $animValues.length) {
-			animValues.set(values.map(v => v.value))
-		} else {
-			animValues = tweened(values.map(v => v.value), { duration: 500 });
-		}
 	}
 
 	function material(highlight: 'compare' | 'swap' | 'correct' | undefined): THREE.Material {
@@ -62,8 +53,8 @@
 
 {#each values as { value, highlight }, index (value)}
 	<T.Mesh
-		geometry={new THREE.CylinderGeometry(1 / len / 2, 1 / len / 2, $animValues[index] / len, 12)}
-		position={position(index, $animValues[index])}
+		geometry={new THREE.CylinderGeometry(1 / len / 2, 1 / len / 2, value / len, 12)}
+		position={position(index, value)}
 		material={material(highlight)}
 		castShadow
 	/>
