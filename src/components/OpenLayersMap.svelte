@@ -3,10 +3,11 @@
 	import L, { type LatLngLiteral } from 'leaflet';
 	import 'leaflet/dist/leaflet.css';
 	import 'leaflet/dist/images/marker-icon.png';
-	import type { NamedPoint } from '../geom/coordPoint';
+	import type { CoordPoint, NamedPoint } from '../geom/coordPoint';
 	import { scale } from 'svelte/transition';
 
 	export let points: NamedPoint[];
+	export let edges: [CoordPoint, CoordPoint][];
 
 	let wrapperDiv: HTMLDivElement;
 	let selectElt: HTMLDivElement;
@@ -18,6 +19,13 @@
 		markers.forEach((m) => m.removeFrom(map));
 		markers = points.map((p) => L.marker(p, { riseOnHover: true, riseOffset: 10 }));
 		markers.forEach((m) => m.addTo(map));
+	}
+
+	let edgeLines: L.Path[] = [];
+	$: {
+		edgeLines.forEach((l) => l.removeFrom(map));
+		edgeLines = edges.map((edge) => new L.Polyline([edge]));
+		edgeLines.forEach((l) => l.addTo(map));
 	}
 
 	let selection: null | {

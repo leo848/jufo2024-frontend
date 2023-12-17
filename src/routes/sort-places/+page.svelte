@@ -5,7 +5,10 @@
 	import OpenLayersMap from '../../components/OpenLayersMap.svelte';
 	import PathProperties from '../../components/PathProperties.svelte';
 	import PathAlgorithms from '../../components/PathAlgorithms.svelte';
-	import type { NamedPoint } from '../../geom/coordPoint';
+	import { type CoordPoint, type NamedPoint, coordSimilar } from '../../geom/coordPoint';
+	import { registerCallback, unregisterCallback } from '../../server/websocket';
+	import { serverOutputPathCreation, serverOutputPathImprovement } from '../../server/types';
+	import { onDestroy } from 'svelte';
 
 	title.set('Orte sortieren');
 
@@ -21,9 +24,59 @@
 			lng: 6.05888
 		}
 	];
+	$: length = points.length;
+
+	let edges: [CoordPoint, CoordPoint][] = [];
 
 	let path: null | number[][] = [];
 	let invalidateAlgorithms: () => {};
+
+	function setDataFromPath(path: number[][]) {
+		points = path.map(
+			(arr) =>
+				points.find((point) => coordSimilar(point, { lat: arr[0], lng: arr[1] })) ??
+				(() => {
+					throw new Error('Invalid: returned invalid vector not in list');
+				})()
+		);
+	}
+
+	function pathToEdges(path: number[][]): [CoordPoint, CoordPoint][] {
+		let edges = [];
+		for (let i = 0; i < path.length - 1; i++) {
+			const from = { lat: path[i][0], lng: path[i][1] };
+			const to = { lat: path[i + 1][0], lng: path[i + 1][1] };
+			const edge: [CoordPoint, CoordPoint] = [from, to];
+			edges.push(edge);
+		}
+		return edges;
+	}
+
+	let callbackIdCreation = registerCallback(serverOutputPathCreation, (pc) => {
+		path = null;
+		if (pc.donePath) {
+			path = pc.donePath;
+			setDataFromPath(pc.donePath);
+			edges = pathToEdges(pc.donePath);
+		} else {
+			edges = pc.currentEdges.map(([from, to]) => [
+				{ lat: from[0], lng: from[1] },
+				{ lat: to[0], lng: to[1] }
+			]);
+		}
+	});
+	onDestroy(() => unregisterCallback(callbackIdCreation));
+
+	let callbackIdImprovement = registerCallback(serverOutputPathImprovement, (pi) => {
+		if (pi.better) {
+			path = pi.currentPath;
+		}
+		if (pi.done) {
+			setDataFromPath(pi.currentPath);
+		}
+		edges = pathToEdges(pi.currentPath);
+	});
+	onDestroy(() => unregisterCallback(callbackIdImprovement));
 </script>
 
 <div class="mt-4 pb-10 mx-10">
@@ -40,7 +93,7 @@
 				<button class="bg-gray-600 rounded-xl p-2" disabled><Icon.CogOutline /></button>
 			</div>
 			<div class="h-full m-0">
-				<OpenLayersMap bind:points />
+				<OpenLayersMap bind:points {edges} />
 			</div>
 		</Card>
 
