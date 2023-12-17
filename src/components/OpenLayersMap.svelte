@@ -17,8 +17,14 @@
 
 	$: if (map) {
 		markers.forEach((m) => m.removeFrom(map));
-		markers = points.map((p) => L.marker(p, { opacity: 0.8 }));
-		markers.forEach((m) => m.addTo(map));
+		markers = points.map((p) => {
+			const marker = L.marker(p, { opacity: 0.8 });
+			marker.bindTooltip(p.name);
+			return marker;
+		});
+		markers.forEach((m) => {
+			m.addTo(map);
+		});
 	}
 
 	let edgeLines: L.Path[] = [];
