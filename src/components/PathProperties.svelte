@@ -47,7 +47,7 @@
 </script>
 
 <Card
-	class={` rounded-xl col-span-12 md:col-span-6 lg:col-span-5 xl:col-span-${
+	class={` rounded-xl col-span-12 md:col-span-6 xl:col-span-${
 		horizontal ? 6 : 3
 	} max-w-none`}
 >

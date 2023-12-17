@@ -203,12 +203,12 @@
 		path = null;
 		selectedItem = { construction: null, improvement: null };
 	}
+
+	let _tailwind = ["xl:col-span-4", "xl:col-span-6"];
 </script>
 
 <Card
-	class={`rounded-xl col-span-12 md:col-span-6 lg:col-span-7 xl:col-span-${
-		horizontal ? 6 : 4
-	} max-w-none`}
+	class={`rounded-xl col-span-12 md:col-span-6 xl:col-span-${horizontal ? 6 : 4} max-w-none`}
 >
 	<p class="text-2xl xl:text-3xl dark:text-white bg-gray-700 p-4 -m-6 rounded-t-xl mb-4">
 		{name[currentAction]}

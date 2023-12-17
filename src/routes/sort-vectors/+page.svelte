@@ -5,9 +5,10 @@
 	import * as Icon from 'flowbite-svelte-icons';
 	import { registerCallback, unregisterCallback } from '../../server/websocket';
 	import { serverOutputPathCreation, serverOutputPathImprovement } from '../../server/types';
-	import type { NamedVector } from '../../physics/vector';
+	import type { NamedVector } from './vector';
 	import { onDestroy } from 'svelte';
 	import { flip } from 'svelte/animate';
+	import { writable, type Writable } from 'svelte/store';
 	import PathProperties from '../../components/PathProperties.svelte';
 	import ForceDirectedGraph from './ForceDirectedGraph.svelte';
 
@@ -18,13 +19,13 @@
 	function incrementDim() {
 		dim += 1;
 		for (let i = 0; i < length; i++) {
-			data[i].inner = vectorLength(data[i].inner, dim);
+			$data[i].inner = vectorLength($data[i].inner, dim);
 		}
 	}
 
-	let data: NamedVector[] = [];
-	$: length = data.length;
-	$: points = data.map((p) => {
+	let data: Writable<NamedVector[]> = writable([]);
+	$: length = $data.length;
+	$: points = $data.map((p) => {
 		return { ...p, inner: vectorLength(p.inner, dim) };
 	});
 
@@ -32,8 +33,8 @@
 	let edges: [number, number][] = [];
 
 	let scrollElement: HTMLElement;
-	$: duplicates = data.some((v1, i1) =>
-		data.some((v2, i2) => i1 != i2 && vectorEquals(v1.inner, v2.inner))
+	$: duplicates = $data.some((v1, i1) =>
+		$data.some((v2, i2) => i1 != i2 && vectorEquals(v1.inner, v2.inner))
 	);
 
 	let invalidateAlgorithms: () => void;
@@ -45,7 +46,7 @@
 
 	function setValue(evt: { currentTarget: HTMLInputElement }, i: number, comp: number) {
 		let elt = evt.currentTarget;
-		data[i].inner[comp] = +elt.value;
+		$data[i].inner[comp] = +elt.value;
 	}
 
 	function vectorLength(v: number[], dim: number): number[] {
@@ -101,9 +102,9 @@
 	}
 
 	function addEmptyVector() {
-		data = [...data, { name: getName(data.length), inner: emptyVector(dim) }];
-		if (data.length == 27) {
-			data.map((named, index) => (named.name = getName(index)));
+		$data = [...$data, { name: getName($data.length), inner: emptyVector(dim) }];
+		if ($data.length == 27) {
+			$data.map((named, index) => (named.name = getName(index)));
 		}
 		requestAnimationFrame(() =>
 			scrollElement.scrollTo({ behavior: 'smooth', left: scrollElement.scrollWidth, top: 0 })
@@ -126,9 +127,9 @@
 	function edgeToIndices(edge: [number[], number[]]): [number, number] {
 		let indices: [number, number] = edge.map(
 			(arr) =>
-				data.findIndex((named) => vectorEquals(named.inner, arr)) ??
+				$data.findIndex((named) => vectorEquals(named.inner, arr)) ??
 				(() => {
-					console.error(arr, data[0].inner);
+					console.error(arr, $data[0].inner);
 					throw new Error('Could not find in list');
 				})()
 		) as [number, number];
@@ -136,9 +137,9 @@
 	}
 
 	function setDataFromPath(path: number[][]) {
-		data = path.map(
+		$data = path.map(
 			(arr) =>
-				data.find((named) => vectorEquals(named.inner, arr)) ??
+				$data.find((named) => vectorEquals(named.inner, arr)) ??
 				(() => {
 					throw new Error('Invalid: returned invalid vector not in list');
 				})()
@@ -190,7 +191,7 @@
 				<div class="bg-gray-800 text-white text-2xl py-2 px-6 rounded">x<sub>{comp + 1}</sub></div>
 			{/each}
 		</div>
-		{#each data as vector, index (vector.name)}
+		{#each $data as vector, index (vector.name)}
 			<div class="bg-gray-800 flex-col flex p-2 gap-2 rounded" animate:flip>
 				<div class="text-4xl text-gray-300 text-center mb-2">{@html vector.name}</div>
 				{#each { length: dim } as _, comp}
@@ -198,7 +199,7 @@
 						type="number"
 						step="0.00001"
 						class="w-20 px-4 py-2 text-2xl text-white bg-gray-700 border-none rounded overflow-hidden text-center"
-						value={data[index].inner[comp]}
+						value={vector.inner[comp]}
 						on:change={(evt) => setValue(evt, index, comp)}
 					/>
 				{/each}

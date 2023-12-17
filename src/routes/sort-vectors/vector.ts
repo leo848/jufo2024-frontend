@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { dist, type DistanceType } from '../geom/dist';
+import { dist, type DistanceType } from '../../geom/dist';
 
 export class Vec2 {
 	x: number;

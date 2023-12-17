@@ -1,4 +1,4 @@
-import { euclideanDist } from '../geom/dist';
+import { euclideanDist } from '../../geom/dist';
 import { Vec2 } from './vector';
 
 export class Particle {

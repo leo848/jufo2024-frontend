@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { onDestroy, onMount } from 'svelte';
-	import { Particle } from '../../physics/particle';
-	import { Vec2, type NamedVector } from '../../physics/vector';
+	import { Particle } from './particle';
+	import { Vec2, type NamedVector } from './vector';
 
 	export let edges: [number, number][]; // indices
 	export let vectors: NamedVector[];
