@@ -39,9 +39,9 @@
 
 	onMount(() => {
 		map = L.map(wrapperDiv, {
-			center: [50.7745, 6.08382],
+			center: center(points),
 			zoom: 13,
-			minZoom: 12,
+			minZoom: 10,
 			attributionControl: false
 			// maxBounds: [[ 50.7, 6.0 ], [ 50.8, 6.1 ]]
 		});
@@ -77,6 +77,13 @@
 			requestAnimationFrame(() => selectionPopup.openOn(map));
 		});
 	});
+
+	function center(points: CoordPoint[]): CoordPoint {
+		return {
+			lat: points.map(p => p.lat).reduce((a,b) => a + b, 0) / points.length,
+			lng: points.map(p => p.lng).reduce((a,b) => a + b, 0) / points.length,
+		}
+	}
 
 	function addSelection() {
 		if (selection == null) return;

@@ -9,21 +9,11 @@
 	import { registerCallback, unregisterCallback } from '../../server/websocket';
 	import { serverOutputPathCreation, serverOutputPathImprovement } from '../../server/types';
 	import { onDestroy } from 'svelte';
+	import presets from './presets';
 
 	title.set('Orte sortieren');
 
-	let points: NamedPoint[] = [
-		{
-			name: 'Aachener Dom',
-			lat: 50.7745,
-			lng: 6.08382
-		},
-		{
-			name: 'Informatik-Fakultät',
-			lat: 50.77932,
-			lng: 6.05888
-		}
-	];
+	let points: NamedPoint[] = presets[0].values;
 	$: length = points.length;
 
 	let edges: [CoordPoint, CoordPoint][] = [];
