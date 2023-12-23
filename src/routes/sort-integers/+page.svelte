@@ -97,6 +97,7 @@
 	function serverSend(numbers: number[]) {
 		sendWebsocket({
 			type: 'action',
+			latency: 500,
 			action: {
 				type: 'sortNumbers',
 				algorithm: selectedAlgorithm,
