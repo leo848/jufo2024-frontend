@@ -25,7 +25,11 @@
 		displayValueY.set(valueY);
 	}
 
-	const lastUpdate = { timeout: null as null|NodeJS.Timeout, grad: new Date().getTime(), render: new Date().getTime() };
+	const lastUpdate = {
+		timeout: null as null | NodeJS.Timeout,
+		grad: new Date().getTime(),
+		render: new Date().getTime()
+	};
 	let points: CanvasGradient[] = [];
 	function getCurrent(): { current: string } {
 		return {

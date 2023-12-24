@@ -86,9 +86,9 @@
 
 	function center(points: CoordPoint[]): CoordPoint {
 		return {
-			lat: points.map(p => p.lat).reduce((a,b) => a + b, 0) / points.length,
-			lng: points.map(p => p.lng).reduce((a,b) => a + b, 0) / points.length,
-		}
+			lat: points.map((p) => p.lat).reduce((a, b) => a + b, 0) / points.length,
+			lng: points.map((p) => p.lng).reduce((a, b) => a + b, 0) / points.length
+		};
 	}
 
 	function addSelection() {

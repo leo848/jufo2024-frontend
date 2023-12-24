@@ -2,6 +2,7 @@
 	import * as THREE from 'three';
 	import { T, extend, useThrelte } from '@threlte/core';
 	import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
+	import { assertNever, type Highlight } from '../../server/types';
 
 	const { renderer, renderMode } = useThrelte();
 
@@ -25,18 +26,31 @@
 		content = content;
 	}
 
-	function material(highlight: 'compare' | 'swap' | 'correct' | undefined): THREE.Material {
+	function getColor(highlight: Highlight | undefined): number {
+		if (highlight === undefined) {
+			return 0xcdcdcd;
+		} else if (highlight === 'consider') {
+			return 0xababab;
+		} else if (highlight === 'compare') {
+			return 0xffaa00;
+		} else if (highlight === 'swap') {
+			return 0xff66cc;
+		} else if (highlight === 'correct') {
+			return 0x00ff44;
+		} else if (highlight === 'smaller') {
+			return 0xbbffbb;
+		} else if (highlight === 'larger') {
+			return 0xffbbbb;
+		} else {
+			return assertNever(highlight);
+		}
+	}
+
+	function material(highlight: Highlight | undefined): THREE.Material {
 		return new THREE.MeshStandardMaterial({
 			roughness: 0.56,
 			metalness: 0.7,
-			color:
-				highlight === 'compare'
-					? 0xffaa00
-					: highlight === 'swap'
-					? 0xff66cc
-					: highlight === 'correct'
-					? 0x00ff44
-					: 0xcdcdcd
+			color: getColor(highlight)
 			/* reflectivity: .5,
 			combine: THREE.MixOperation, */
 		});
@@ -78,9 +92,6 @@
 	<T is={new THREE.GridHelper(50, 50, 0x444444, 0x555555)} position={[0, 0.001, 0]} />
 </T.Group>
 
-background={new THREE.Color('papayawhip')}
-fog={new THREE.FogExp2('papayawhip', 0.05)}
-antialias shadows >
 {#each values as { value, highlight }, index (value)}
 	<T.Mesh
 		geometry={new THREE.CylinderGeometry(1 / len / 2, 1 / len / 2, value / len, 12)}

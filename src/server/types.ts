@@ -44,7 +44,7 @@ const action = z.discriminatedUnion('type', [
 	z.object({
 		type: z.literal('sortNumbers'),
 		numbers: z.array(z.number()),
-		algorithm: z.enum(['bubble', 'selection', 'insertion'])
+		algorithm: z.enum(['bubble', 'selection', 'insertion', 'quick', 'merge'])
 	}),
 	z.object({
 		type: z.literal('createPath'),
@@ -98,11 +98,12 @@ export const serverOutputLatency = z.object({
 	type: z.literal('latency'),
 	timeMillis: z.number()
 });
+export const Highlight = z.enum(['compare', 'swap', 'correct', 'consider', 'smaller', 'larger']);
 export const serverOutputSortedNumbers = z.object({
 	type: z.literal('sortedNumbers'),
 	done: z.boolean(),
 	numbers: z.array(z.number()),
-	highlight: z.array(z.tuple([z.number(), z.enum(['compare', 'swap', 'correct'])]))
+	highlight: z.array(z.tuple([z.number(), Highlight]))
 });
 export const serverOutputPathCreation = z.object({
 	type: z.literal('pathCreation'),
@@ -127,6 +128,7 @@ export const serverOutput = z.discriminatedUnion('type', [
 ]);
 
 export type ServerOutput = z.infer<typeof serverOutput>;
+export type Highlight = z.infer<typeof Highlight>;
 
 export type ClientError = z.infer<typeof clientError>;
 export type ColorNameApiError = z.infer<typeof colorNameApiError>;

@@ -12,7 +12,7 @@
 	import { writable, type Writable } from 'svelte/store';
 	import PathProperties from '../../components/PathProperties.svelte';
 	import ForceDirectedGraph from './ForceDirectedGraph.svelte';
-	import {goto} from '$app/navigation';
+	import { goto } from '$app/navigation';
 
 	title.set('Vektoren sortieren');
 
@@ -33,8 +33,8 @@
 		let newData = fromUrlString(queryString, getName);
 		if (newData == null) return;
 		$data = newData;
-		dim = $data.map(v => v.inner.length).reduce((a,b) => Math.max(a,b));
-		$data.forEach(v => v.inner = vectorLength(v.inner, dim));
+		dim = $data.map((v) => v.inner.length).reduce((a, b) => Math.max(a, b));
+		$data.forEach((v) => (v.inner = vectorLength(v.inner, dim)));
 	})();
 
 	$: length = $data.length;
@@ -43,8 +43,12 @@
 	});
 
 	$: {
-		$page.url.searchParams.set('v', $data.map(v => v.inner.join("-")).join("_"));
-		goto(`?${$page.url.searchParams.toString()}`, { keepFocus: true, replaceState: true, noScroll: true });
+		$page.url.searchParams.set('v', $data.map((v) => v.inner.join('-')).join('_'));
+		goto(`?${$page.url.searchParams.toString()}`, {
+			keepFocus: true,
+			replaceState: true,
+			noScroll: true
+		});
 	}
 
 	let path: number[][] | null = null;

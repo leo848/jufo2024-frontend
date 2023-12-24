@@ -45,14 +45,10 @@
 		Math.max(2 - Math.max(0, Math.log10($chainLength / length)), 0)
 	);
 
-	const _tailwind = [ "grid-cols-4", "grid-cols-2", "xl:col-span-2", "xl-col-span-4" ];
+	const _tailwind = ['grid-cols-4', 'grid-cols-2', 'xl:col-span-2', 'xl-col-span-4'];
 </script>
 
-<Card
-	class={` rounded-xl col-span-12 md:col-span-6 xl:col-span-${
-		horizontal ? 6 : 3
-	} max-w-none`}
->
+<Card class={` rounded-xl col-span-12 md:col-span-6 xl:col-span-${horizontal ? 6 : 3} max-w-none`}>
 	<p class="text-2xl xl:text-3xl dark:text-white bg-gray-700 p-4 -m-6 rounded-t-xl mb-4">
 		Eigenschaften
 	</p>

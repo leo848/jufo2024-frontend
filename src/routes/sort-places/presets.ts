@@ -123,7 +123,7 @@ const presets: {
 		]
 	},
 	{
-		name: "Aachen simpel",
+		name: 'Aachen simpel',
 		// prettier-ignore
 		values: [
 			{ name: 'Aachener Dom', lat: 50.7745, lng: 6.08382 },

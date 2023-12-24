@@ -2,7 +2,12 @@
 	import Container from '../../components/Container.svelte';
 	import BarChart from './BarChart.svelte';
 	import { registerCallback, sendWebsocket, unregisterCallback } from '../../server/websocket';
-	import { type ServerInput, serverOutputSortedNumbers } from '../../server/types';
+	import {
+		type ServerInput,
+		type Highlight,
+		serverOutputSortedNumbers,
+		assertNever
+	} from '../../server/types';
 
 	import {
 		Card,
@@ -58,6 +63,12 @@
 			name: 'Insertion Sort',
 			desc: 'Beim Insertion Sort wird jeweils das nächste Element so lange in die links sortierte Teilliste eingefügt, bis diese sortiert ist.',
 			img: '/pan-xiaozhen-insert.png'
+		},
+		{
+			key: 'quick',
+			name: 'Quick Sort',
+			desc: 'Die Liste wird in zwei Teillisten partitioniert, und der Algorithmus auf diesen Teillisten wiederholt.',
+			img: undefined
 		}
 	] as const;
 	let selectedAlgorithm: (ServerInput & {
@@ -115,6 +126,26 @@
 					numbers[j] = temp;
 				}
 			}
+		}
+	}
+
+	function colorClass(highlight: Highlight | undefined): string {
+		if (highlight === undefined) {
+			return 'dark:bg-gray-700';
+		} else if (highlight == 'compare') {
+			return 'dark:bg-[orange]';
+		} else if (highlight === 'swap') {
+			return 'dark:bg-[violet]';
+		} else if (highlight === 'correct') {
+			return 'dark:bg-[green]';
+		} else if (highlight === 'consider') {
+			return 'dark:bg-gray-600';
+		} else if (highlight === 'smaller') {
+			return 'dark:bg-[lightgreen]';
+		} else if (highlight === 'larger') {
+			return 'dark:bg-[lightred]';
+		} else {
+			return assertNever(highlight);
 		}
 	}
 
@@ -229,15 +260,7 @@
 				<Gallery class="gap-4 md:grid-cols-4 grid-cols-2 m-4">
 					{#each numbers as { value, highlight } (value)}
 						<div animate:flip={{ duration: 200 }}>
-							<Card
-								class={highlight === 'compare'
-									? 'dark:bg-[orange]'
-									: highlight === 'swap'
-									? 'dark:bg-[violet]'
-									: highlight === 'correct'
-									? 'dark:bg-[green]'
-									: 'dark:bg-gray-700'}
-							>
+							<Card class={colorClass(highlight)}>
 								<h5
 									class="px-0 mb-2 text-6xl font-light mx-auto tracking-tight text-gray-900 dark:text-white"
 								>
