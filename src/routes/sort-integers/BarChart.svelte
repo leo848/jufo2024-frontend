@@ -2,8 +2,9 @@
 	import * as THREE from 'three';
 	import { Canvas, T } from '@threlte/core';
 	import BarChartScene from './BarChartScene.svelte';
+	import type {Highlight} from '../../server/types';
 
-	export let content: { value: number; highlight?: 'compare' | 'swap' | 'correct' }[];
+	export let content: { value: number; highlight?: Highlight }[];
 </script>
 
 <div class="chart">

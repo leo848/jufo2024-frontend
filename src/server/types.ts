@@ -98,7 +98,7 @@ export const serverOutputLatency = z.object({
 	type: z.literal('latency'),
 	timeMillis: z.number()
 });
-export const Highlight = z.enum(['compare', 'swap', 'correct', 'consider', 'smaller', 'larger']);
+export const Highlight = z.enum(['compare', 'swap', 'correct', 'consider', 'smaller', 'larger', 'pivot']);
 export const serverOutputSortedNumbers = z.object({
 	type: z.literal('sortedNumbers'),
 	done: z.boolean(),

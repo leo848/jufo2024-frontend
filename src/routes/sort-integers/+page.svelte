@@ -35,7 +35,7 @@
 		return _id++;
 	}
 
-	let numbers: { value: number; id: number; highlight?: 'compare' | 'swap' | 'correct' }[] =
+	let numbers: { value: number; id: number; highlight?: Highlight }[] =
 		[]; /* [1, 2, 3, 4, 5, 6, 7, 8].map(
 		(value) => ({ value, id: genId(), highlight: false })
 	); */
@@ -141,9 +141,11 @@
 		} else if (highlight === 'consider') {
 			return 'dark:bg-gray-600';
 		} else if (highlight === 'smaller') {
-			return 'dark:bg-[lightgreen]';
-		} else if (highlight === 'larger') {
 			return 'dark:bg-[lightred]';
+		} else if (highlight === 'larger') {
+			return 'dark:bg-[lightgreen]';
+		} else if (highlight === 'pivot') {
+			return 'dark:bg-[blue]';
 		} else {
 			return assertNever(highlight);
 		}

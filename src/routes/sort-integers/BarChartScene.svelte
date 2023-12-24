@@ -12,9 +12,9 @@
 
 	renderMode.set('always');
 
-	export let content: { value: number; highlight?: 'compare' | 'swap' | 'correct' }[];
+	export let content: { value: number; highlight?: Highlight }[];
 
-	let values: { value: number; highlight?: 'compare' | 'swap' | 'correct' }[] = [];
+	let values: { value: number; highlight?: Highlight }[] = [];
 	$: {
 		values = new Array(content.length);
 		content
@@ -28,9 +28,9 @@
 
 	function getColor(highlight: Highlight | undefined): number {
 		if (highlight === undefined) {
-			return 0xcdcdcd;
-		} else if (highlight === 'consider') {
 			return 0xababab;
+		} else if (highlight === 'consider') {
+			return 0xffffff;
 		} else if (highlight === 'compare') {
 			return 0xffaa00;
 		} else if (highlight === 'swap') {
@@ -38,9 +38,11 @@
 		} else if (highlight === 'correct') {
 			return 0x00ff44;
 		} else if (highlight === 'smaller') {
-			return 0xbbffbb;
+			return 0x9999bb;
 		} else if (highlight === 'larger') {
-			return 0xffbbbb;
+			return 0x5555bb;
+		} else if (highlight === "pivot") {
+			return 0x7777ff;
 		} else {
 			return assertNever(highlight);
 		}
