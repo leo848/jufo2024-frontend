@@ -69,6 +69,12 @@
 			name: 'Quick Sort',
 			desc: 'Die Liste wird in zwei Teillisten partitioniert, und der Algorithmus auf diesen Teillisten wiederholt.',
 			img: undefined
+		},
+		{
+			key: 'merge',
+			name: 'Merge Sort',
+			desc: 'Zwei Teillisten werden mittels Merge Sort sortiert und dann zusammengefügt.',
+			img: undefined
 		}
 	] as const;
 	let selectedAlgorithm: (ServerInput & {
