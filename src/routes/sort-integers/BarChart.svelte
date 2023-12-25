@@ -2,7 +2,7 @@
 	import * as THREE from 'three';
 	import { Canvas, T } from '@threlte/core';
 	import BarChartScene from './BarChartScene.svelte';
-	import type {Highlight} from '../../server/types';
+	import type { Highlight } from '../../server/types';
 
 	export let content: { value: number; highlight?: Highlight }[];
 </script>

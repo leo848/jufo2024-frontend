@@ -41,7 +41,7 @@
 			return 0x9999bb;
 		} else if (highlight === 'larger') {
 			return 0x5555bb;
-		} else if (highlight === "pivot") {
+		} else if (highlight === 'pivot') {
 			return 0x7777ff;
 		} else {
 			return assertNever(highlight);
