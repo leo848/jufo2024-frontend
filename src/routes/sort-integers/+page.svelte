@@ -137,21 +137,21 @@
 
 	function colorClass(highlight: Highlight | undefined): string {
 		if (highlight === undefined) {
-			return 'dark:bg-gray-700';
+			return 'dark:bg-[#484848]';
 		} else if (highlight == 'compare') {
-			return 'dark:bg-[orange]';
+			return 'dark:bg-[#5f4f30]';
 		} else if (highlight === 'swap') {
-			return 'dark:bg-[violet]';
+			return 'dark:bg-[#3e305f]';
 		} else if (highlight === 'correct') {
-			return 'dark:bg-[green]';
+			return 'dark:bg-[#355f30]';
 		} else if (highlight === 'consider') {
-			return 'dark:bg-gray-600';
+			return 'dark:bg-[#6a6a6a]';
 		} else if (highlight === 'smaller') {
-			return 'dark:bg-[lightred]';
+			return 'dark:bg-[#456484]';
 		} else if (highlight === 'larger') {
-			return 'dark:bg-[lightgreen]';
+			return 'dark:bg-[#223141]';
 		} else if (highlight === 'pivot') {
-			return 'dark:bg-[blue]';
+			return 'dark:bg-[#1c4773]';
 		} else {
 			return assertNever(highlight);
 		}
