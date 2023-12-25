@@ -26,6 +26,7 @@ export const availableColorNameLists = [
 	'bestOf',
 	'wikipedia',
 	'french',
+	'german',
 	'ridgway',
 	'risograph',
 	'basic',
@@ -70,7 +71,8 @@ export const colorNameListNames: Record<ColorNameList, string> = {
 	default: 'Standard',
 	bestOf: 'Best-of',
 	ridgway: 'Ridgways Nomenklatur',
-	spanish: 'Spanisch'
+	spanish: 'Spanisch',
+	german: 'Deutsch'
 };
 
 export type ColorNameList = z.infer<typeof colorNameListSchema>;
