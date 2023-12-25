@@ -177,10 +177,12 @@
 	>
 		<div>
 			{#key selection.index}
-				{#await colors[selection.index].name()}
+				{#await (colors[selection.index] ?? { name() {} }).name()}
 					<Spinner />
 				{:then meta}
-					<div class="text-3xl">{meta.name}</div>
+					{#if meta}
+						<div class="text-3xl">{meta.name}</div>
+					{/if}
 				{/await}
 			{/key}
 		</div>
@@ -362,7 +364,7 @@
 					{ballSize}
 					{projection}
 					{space}
-					on:pick={(evt) => (selection = evt.detail)}
+					on:pick={(evt) => (console.log(evt.detail), (selection = evt.detail))}
 					selectedIndex={selection?.index}
 				/>
 			</div>

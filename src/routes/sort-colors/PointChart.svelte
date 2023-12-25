@@ -17,14 +17,24 @@
 		shadows*/
 
 	let tryPick: (evt: MouseEvent) => void;
+	let getHoveredIndex: (evt: MouseEvent) => number | null;
 
 	let div: HTMLDivElement;
 	$: canvas = div && div.getElementsByTagName('canvas')[0];
+
+	let cursor: 'pointer' | 'default' = 'default';
+
+	function updateCursor(evt: MouseEvent) {
+		let selection = getHoveredIndex(evt) !== null;
+		cursor = selection ? 'pointer' : 'default';
+	}
 </script>
 
 <div
 	class="chart cursor-default"
 	on:click={tryPick}
+	on:mousemove={updateCursor}
+	style:cursor
 	bind:this={div}
 	role="button"
 	tabindex="0"
@@ -34,6 +44,7 @@
 		{#if canvas}
 			<PointChartScene
 				bind:tryPick
+				bind:getHoveredIndex
 				{space}
 				{colors}
 				{edges}

@@ -93,9 +93,7 @@
 	let mounted = false;
 	onMount(() => (mounted = true));
 
-	export function tryPick(evt: MouseEvent) {
-		dispatch('pick', null);
-
+	export function getHoveredIndex(evt: MouseEvent): number | null {
 		const rect = canvas.getBoundingClientRect();
 		const canvasRelativePos = {
 			x: ((evt.clientX - rect.left) * canvas.width) / rect.width,
@@ -126,16 +124,26 @@
 					.mag();
 				return diff < 0.01;
 			});
-			if (index === selectedIndex) {
-				dispatch('pick', null);
-				return;
-			}
 
-			dispatch('pick', {
-				index: index as number,
-				position: { x: evt.clientX + 5, y: evt.clientY + 5 }
-			});
+			if (index !== -1) {
+				return index;
+			} else return null;
+		} else return null;
+	}
+
+	export function tryPick(evt: MouseEvent) {
+		dispatch('pick', null);
+
+		const index = getHoveredIndex(evt);
+		if (index === selectedIndex) {
+			dispatch('pick', null);
+			return;
 		}
+
+		dispatch('pick', {
+			index: index ?? -1,
+			position: { x: evt.clientX + 5, y: evt.clientY + 5 }
+		});
 	}
 
 	requestAnimationFrame(advance);
