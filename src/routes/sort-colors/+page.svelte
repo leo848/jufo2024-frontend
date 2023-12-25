@@ -138,7 +138,6 @@
 	onDestroy(() => unregisterCallback(callbackIdCreation));
 
 	let callbackIdImprovement = registerCallback(serverOutputPathImprovement, (pi) => {
-		console.log(pi);
 		if (pi.better) {
 			edges = pathToEdges(pi.currentPath);
 			path = pi.currentPath.map(Point3.fromArray);
@@ -364,7 +363,7 @@
 					{ballSize}
 					{projection}
 					{space}
-					on:pick={(evt) => (console.log(evt.detail), (selection = evt.detail))}
+					on:pick={(evt) => (selection = evt.detail)}
 					selectedIndex={selection?.index}
 				/>
 			</div>
