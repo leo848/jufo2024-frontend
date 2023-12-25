@@ -39,7 +39,7 @@
 	}
 
 	$: chainLengthDisplay = $chainLength.toFixed(
-		Math.max(2 - Math.max(0, Math.log10($chainLength)), 0)
+		Math.max(3 - Math.max(0, Math.log10($chainLength)), 0)
 	);
 	$: averageDistDisplay = ($chainLength / length).toFixed(
 		Math.max(2 - Math.max(0, Math.log10($chainLength / length)), 0)
