@@ -1,7 +1,12 @@
 <script lang="ts">
 	import * as Icon from 'flowbite-svelte-icons';
-	import { onMount } from 'svelte';
-	import { connectionData, reconnectWebsocket, setStatusCallback } from '../server/websocket';
+	import { onDestroy, onMount } from 'svelte';
+	import {
+		connectionData,
+		reconnectWebsocket,
+		setStatusCallback,
+		updateConnectionData
+	} from '../server/websocket';
 	import { type ServerStatus, assertNever } from '../server/types';
 	import { relativeTimeFromDates } from '../utils/time';
 	import { Badge, GradientButton, Popover } from 'flowbite-svelte';
@@ -29,6 +34,16 @@
 	$: upClass = ['icon', 'up', act($upload > 0)].join(' ');
 	$: downClass = ['icon', 'up', act($download > 0)].join(' ');
 
+	let interval: null | NodeJS.Timeout = null;
+	let popupElt: HTMLElement | null = null;
+	$: if (popupElt == null) {
+		if (interval !== null) clearInterval(interval);
+	} else {
+		if (interval !== null) clearInterval(interval);
+		interval = setInterval(updateConnectionData, 5000);
+	}
+	onDestroy(() => interval && clearInterval(interval));
+
 	onMount(() => {
 		setStatusCallback((ss: ServerStatus) => {
 			if (ss.type === 'status') {
@@ -52,7 +67,13 @@
 </script>
 
 <div>
-	<div class={className} role="button" tabindex="0" on:keypress={() => {}}>
+	<div
+		class={className}
+		on:click={updateConnectionData}
+		role="button"
+		tabindex="0"
+		on:keypress={() => {}}
+	>
 		<div class={upClass} style={'opacity: ' + $upload}>
 			<Icon.ArrowUpSolid />
 		</div>
@@ -61,7 +82,7 @@
 		</div>
 	</div>
 	<Popover class="zindex9" trigger="click">
-		<div class="min-w-20 m-4 zindex9">
+		<div bind:this={popupElt} class="min-w-20 m-2 zindex9">
 			<p class="mb-2 text-xl font-bold">Serververbindung</p>
 			<GradientButton
 				color="teal"
@@ -76,6 +97,13 @@
 				<div>Neu verbinden</div>
 			</GradientButton>
 			<div class="font-normal min-w-40">
+				{#if setting === 'offline'}
+					<p class="mb-3">Verbindung getrennt</p>
+				{:else if setting === 'loading'}
+					<p class="mb-3">Verbindung wird hergestellt...</p>
+				{:else if setting === 'online'}
+					<p class="mb-3">Verbindung hergestellt</p>
+				{/if}
 				{#each extractors as { key, title, icon }}
 					{#if $connectionData[key]}
 						<div class="flex justify-between items-center">
@@ -90,6 +118,22 @@
 						</div>
 					{/if}
 				{/each}
+				{#if $connectionData.latency}
+					<div class="flex justify-between items-center">
+						<p class="mb-3">
+							<b>Latenz</b><br />
+							<Badge color="dark" border large>
+								<Icon.UploadOutline class="w-3 h-3 mr-2" />
+								{$connectionData.latency.serverToClient}ms
+							</Badge>
+							<Badge color="dark" border large>
+								<Icon.DownloadOutline class="w-3 h-3 mr-2" />
+								{$connectionData.latency.clientToServer}ms
+							</Badge>
+						</p>
+						<svelte:component this={Icon.ClockOutline} class="ml-4" />
+					</div>
+				{/if}
 			</div>
 		</div>
 	</Popover>

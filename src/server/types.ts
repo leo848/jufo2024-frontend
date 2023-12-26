@@ -155,7 +155,7 @@ export const serverStatus = z.discriminatedUnion('type', [
 export type ServerStatus = z.infer<typeof serverStatus>;
 
 export type ConnectionData = {
-	firstConnected: Date;
+	firstConnected: Date | null;
 	lastRequest: Date | null;
 	lastResponse: Date | null;
 	latency: {

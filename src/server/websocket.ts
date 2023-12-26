@@ -14,7 +14,16 @@ let statusCallback: (ss: ServerStatus) => void = () => {};
 
 export function getStatus(): ServerStatus & { type: 'status' } {
 	const states = ['loading', 'online', 'offline', 'offline'] as const;
-	return { type: 'status', status: states[websocket.readyState] };
+	const status = states[websocket.readyState];
+	if (status != 'online') {
+		connectionData.set({
+			firstConnected: null,
+			lastRequest: null,
+			lastResponse: null,
+			latency: null
+		});
+	}
+	return { type: 'status', status };
 }
 
 let interval: null | NodeJS.Timeout = null;
@@ -36,7 +45,7 @@ export const connectionData: Writable<ConnectionData> = writable({
 	lastResponse: null,
 	latency: null
 });
-// updateConnectionData();
+setTimeout(() => updateConnectionData(), 1000);
 
 const onerror = (e: Event) => {
 	statusCallback({
@@ -108,6 +117,12 @@ export function reconnectWebsocket(): boolean {
 	try {
 		websocket = new WebSocket(uri);
 	} catch (e) {
+		connectionData.update((cd) => ({
+			...cd,
+			firstConnected: null,
+			lastRequest: null,
+			lastResponse: null
+		}));
 		console.error(e);
 		return false;
 	}
@@ -121,7 +136,7 @@ export function reconnectWebsocket(): boolean {
 		lastResponse: null
 	}));
 
-	// updateConnectionData();
+	setTimeout(() => updateConnectionData(), 1000);
 
 	return true;
 }
@@ -171,33 +186,26 @@ export function unregisterCallback(id: number) {
 }
 
 export function updateConnectionData(): Writable<ConnectionData> {
-	connectionData.subscribe((c: ConnectionData) => {
-		if (
-			!c.latency ||
-			new Date().getMilliseconds() - c.latency.requestTime.getMilliseconds() > 2000
-		) {
-			const beforeTime = new Date();
-			sendWebsocket({
-				type: 'latency'
-			});
+	const beforeTime = new Date();
+	sendWebsocket({
+		type: 'latency'
+	});
 
-			const millis = (date: Date) => date.getTime() * 1000 + date.getMilliseconds();
+	const millis = (date: Date) => date.getTime();
 
-			const id = registerCallback(serverOutputLatency, (l) => {
-				const afterTime = new Date();
-				connectionData.update((c) => ({
-					...c,
-					latency: {
-						requestTime: beforeTime,
-						serverToClient: millis(afterTime) - l.timeMillis,
-						clientToServer: l.timeMillis - millis(beforeTime)
-					}
-				}));
+	const id = registerCallback(serverOutputLatency, (l) => {
+		const afterTime = new Date();
+		connectionData.update((c) => ({
+			...c,
+			latency: {
+				requestTime: beforeTime,
+				serverToClient: millis(afterTime) - l.timeMillis,
+				clientToServer: l.timeMillis - millis(beforeTime)
+			}
+		}));
 
-				unregisterCallback(id);
-			});
-		}
-	})();
+		unregisterCallback(id);
+	});
 
 	return connectionData;
 }
