@@ -140,7 +140,8 @@
 		}
 	}
 
-	onMount(() => {
+	function mount() {
+		if (callback) clearInterval(callback);
 		width = canvas.width = wrapperDiv.offsetWidth;
 		height = canvas.height = wrapperDiv.offsetHeight;
 		const context = canvas.getContext('2d');
@@ -149,9 +150,17 @@
 
 		fullParticleUpdate();
 		callback = setInterval(render, 60);
-	});
+	}
+
+	onMount(mount);
 </script>
 
 <div class="w-full h-full" bind:this={wrapperDiv}>
-	<canvas bind:this={canvas} />
+	<canvas bind:this={canvas} style={vectors.length === 0 ? "display: none" : ""} />
+	{#if vectors.length === 0}
+		<div class="m-4 p-4 bg-gray-700 rounded">
+			<div class="text-4xl text-white">Keine Vektoren hinzugefügt</div>
+			<div>Füge durch Klicken auf "a" den ersten Vektor hinzu!</div>
+		</div>
+	{/if}
 </div>
