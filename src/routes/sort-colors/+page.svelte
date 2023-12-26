@@ -21,6 +21,7 @@
 	import ListStoragePopover from './ListStoragePopover.svelte';
 	import PathProperties from '../../components/PathProperties.svelte';
 	import { goto } from '$app/navigation';
+	import Window from '../../components/Window.svelte';
 
 	title.set('Farben sortieren');
 
@@ -363,17 +364,13 @@
 	<div
 		class="mt-8 grid grid-cols-12 gap-8 auto-cols-max align-stretch justify-stretch justify-items-stretch"
 	>
-		<Card class="rounded-xl col-span-12 xl:col-span-5 max-w-none xl:p-0 mb-0">
-			<div
-				class="text-2xl xl:text-3xl dark:text-white bg-gray-700 p-4 rounded-t-xl flex flex-row justify-between items-center"
-			>
-				<div>3D-Darstellung</div>
-				<button
-					class="bg-gray-600 rounded-xl p-2"
-					on:click={() => (threeDOptions.showOptions = !threeDOptions.showOptions)}
-					><Icon.CogOutline /></button
-				>
-			</div>
+		<Window
+			title="3D-Darstellung"
+			options
+			on:optionClick={() => (threeDOptions.showOptions = !threeDOptions.showOptions)}
+			mdCol={12}
+			xlCol={5}
+		>
 			{#if threeDOptions.showOptions}
 				<PointChartOptions bind:options={threeDOptions} bind:projection bind:ballSize />
 			{/if}
@@ -388,7 +385,7 @@
 					selectedIndex={selection?.index}
 				/>
 			</div>
-		</Card>
+		</Window>
 
 		<PathProperties path={path?.map((point) => point.values())} length={colors.length} />
 

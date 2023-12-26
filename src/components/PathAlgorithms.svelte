@@ -8,6 +8,7 @@
 	import { flip } from 'svelte/animate';
 	import { scale } from 'svelte/transition';
 	import { createEventDispatcher, onDestroy } from 'svelte';
+	import Window from './Window.svelte';
 
 	export let points: number[][];
 	export let dimensions = 3;
@@ -207,23 +208,22 @@
 	let _tailwind = ['xl:col-span-4', 'xl:col-span-6'];
 </script>
 
-<Card class={`rounded-xl col-span-12 md:col-span-6 xl:col-span-${horizontal ? 6 : 4} max-w-none`}>
-	<p class="text-2xl xl:text-3xl dark:text-white bg-gray-700 p-4 -m-6 rounded-t-xl mb-4">
-		{name[currentAction]}
-	</p>
+<Window title={name[currentAction]} mdCol={6} xlCol={horizontal ? 6 : 4}>
 	<div
-		class={`text-xl grid grid-cols-${horizontal && selectedItem[currentAction] === null ? 2 : 1}`}
+		class={`text-xl grid grid-cols-${
+			horizontal && selectedItem[currentAction] === null ? 2 : 1
+		} m-4`}
 	>
 		{#each displayItems[currentAction] as item (item.index)}
 			<button
 				animate:flip={{ duration: 200 }}
 				in:scale
-				class={`transition ${horizontal ? 'even:ml-2 odd:mr-2' : ''}`}
+				class={`transition ${horizontal ? 'even:ml-2 odd:mr-2' : ''} mb-4 last:mb-0`}
 				on:click={() => (selectedItem[currentAction] = open(currentAction) ? null : item.index)}
 				disabled={progress.ongoing}
 			>
 				<div
-					class="bg-gray-700 hover:bg-gray-600 transition-all p-2 mb-4 rounded-xl border border-gray-600"
+					class="bg-gray-700 hover:bg-gray-600 transition-all p-2 rounded-xl border border-gray-600"
 				>
 					<div class="flex items-center justify-between">
 						<Icon.AngleRightSolid
@@ -291,4 +291,4 @@
 			</div>
 		{/if}
 	</div>
-</Card>
+</Window>

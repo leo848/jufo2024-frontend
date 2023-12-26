@@ -10,6 +10,7 @@
 	import { serverOutputPathCreation, serverOutputPathImprovement } from '../../server/types';
 	import { onDestroy } from 'svelte';
 	import presets from './presets';
+	import Window from '../../components/Window.svelte';
 
 	title.set('Orte sortieren');
 
@@ -73,19 +74,11 @@
 	<div
 		class="mt-8 grid grid-cols-12 gap-8 auto-cols-max align-stretch justify-stretch justify-items-stretch"
 	>
-		<Card
-			class="rounded-xl overflow-hidden col-span-12 xl:col-span-6 xl:row-span-2 max-w-none xl:p-0 mb-0"
-		>
-			<div
-				class="text-2xl xl:text-3xl dark:text-white bg-gray-700 p-4 rounded-t-xl flex flex-row justify-between items-center"
-			>
-				<div>Karte</div>
-				<button class="bg-gray-600 rounded-xl p-2" disabled><Icon.CogOutline /></button>
-			</div>
+		<Window title="Karte" options row={2}>
 			<div class="h-full m-0">
 				<OpenLayersMap bind:points {edges} />
 			</div>
-		</Card>
+		</Window>
 
 		<PathProperties {path} {length} horizontal />
 
