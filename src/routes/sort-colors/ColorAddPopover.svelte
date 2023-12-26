@@ -2,6 +2,7 @@
 	import { Popover } from 'flowbite-svelte';
 	import type { Color } from '../../color/color';
 	import { RgbColor } from '../../color/colorSpaces';
+	import Window from '../../components/Window.svelte';
 
 	export let colors: Color[];
 	export let triggeredBy: string;
@@ -17,16 +18,15 @@
 	}
 </script>
 
-<Popover {triggeredBy} placement="bottom" trigger="click">
-	<div>
-		<div class="max-w-xs flex flex-col text-xl">
-			<div class="text-2xl text-white">Farben anpassen</div>
+<Popover {triggeredBy} defaultClass="" placement="bottom" trigger="click">
+	<Window title="Farben anpassen">
+		<div class="max-w-xs flex flex-col text-xl p-4">
 			<button
-				class="mt-2 mx-2 p-2 rounded-lg bg-gray-700 text-white hover:bg-gray-600 transition-all"
+				class="p-2 rounded-lg bg-gray-700 text-white hover:bg-gray-600 transition-all"
 				disabled={colors.length === 0}
 				on:click={invalidate(() => (colors = []))}>Alle löschen</button
 			>
-			<div class="flex flex-row gap-2 mx-2">
+			<div class="flex flex-row gap-2">
 				<button
 					class="mt-2 p-2 rounded-lg bg-gray-700 text-white hover:bg-gray-600 transition-all"
 					on:click={invalidate(addRandom)}>Zufällige hinzufügen</button
@@ -39,7 +39,7 @@
 				/>
 			</div>
 		</div>
-	</div>
+	</Window>
 </Popover>
 
 <style>
