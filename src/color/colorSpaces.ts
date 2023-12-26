@@ -378,6 +378,16 @@ export class HslColor extends AbstractColor<HslColor, HslComponent> {
 		if (key === 'h') return 38;
 		else return 3;
 	}
+
+	fancyCss(): string {
+		const h = Math.round(this.h * 360) + "";
+		const s = Math.round(this.s * 100) + "%";
+		const l = Math.round(this.l * 100) + "%";
+		const hStyle = `color: color-mix(in oklab, #ccc, hsl(${h} 100% 50%))`;
+		const sStyle = `color: color-mix(in oklab, #ccc, hsl(0 ${s} 50%))`;
+		const lStyle = `color: color-mix(in oklab, #ccc 60%, hsl(0 0% ${l}))`;
+		return `hsl(<span style="${hStyle}">${h}</span> <span style="${sStyle}">${s}</span> <span style="${lStyle}">${l}</span>)`;
+	}
 }
 
 export class OklabColor extends AbstractColor<OklabColor, OklabComponent> {
