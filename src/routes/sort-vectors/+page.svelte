@@ -27,6 +27,7 @@
 
 	let data: Writable<NamedVector[]> = writable([]);
 
+	let redraw: () => void;
 	(() => {
 		let queryString = $page.url.searchParams.get('v');
 		if (queryString == null) return;
@@ -35,6 +36,7 @@
 		$data = newData;
 		dim = $data.map((v) => v.inner.length).reduce((a, b) => Math.max(a, b));
 		$data.forEach((v) => (v.inner = vectorLength(v.inner, dim)));
+		requestAnimationFrame(() => redraw());
 	})();
 
 	$: length = $data.length;
@@ -43,7 +45,7 @@
 	});
 
 	$: {
-		$page.url.searchParams.set('v', $data.map((v) => v.inner.join('-')).join('_'));
+		$page.url.searchParams.set('v', $data.map((v) => v.inner.join('i')).join('o'));
 		goto(`?${$page.url.searchParams.toString()}`, {
 			keepFocus: true,
 			replaceState: true,
@@ -254,7 +256,7 @@
 				<button class="bg-gray-600 rounded-xl p-2" disabled><Icon.CogOutline /></button>
 			</div>
 			<div class="h-full m-0 min-h-[420px]">
-				<ForceDirectedGraph vectors={points} {edges} />
+				<ForceDirectedGraph bind:redraw vectors={points} {edges} />
 			</div>
 		</Card>
 

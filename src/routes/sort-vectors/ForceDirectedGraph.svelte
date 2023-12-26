@@ -2,6 +2,7 @@
 	import { onDestroy, onMount } from 'svelte';
 	import { Particle } from './particle';
 	import { Vec2, type NamedVector } from './vector';
+	import { euclideanDist } from '../../geom/dist';
 
 	export let edges: [number, number][]; // indices
 	export let vectors: NamedVector[];
@@ -14,9 +15,11 @@
 	let callback: null | NodeJS.Timeout = null;
 
 	let particles: Particle[] = [];
+	let averageTrueDist = 1;
 
 	let frozen = false;
 	$: width, height, edges, vectors, (frozen = false);
+	$: averageTrueDist = calculateAverageTrueDist(vectors);
 
 	function render() {
 		if (ctx == null) return;
@@ -71,12 +74,12 @@
 		}
 	}
 
-	function fullParticleUpdate() {
+	function fullParticleUpdate(force: boolean = false) {
 		let oldParticles = particles;
 		particles = [];
 		let minDim = Math.min(width, height);
 		for (let i = 0; i < vectors.length; i++) {
-			let { x, y } = oldParticles.find((p) => p.name == vectors[i].name)?.pos ?? {
+			let { x, y } = oldParticles.find((p) => p.name == vectors[i].name && !force)?.pos ?? {
 				x: (Math.sin((i / vectors.length) * 2 * Math.PI) * minDim) / 3 + width / 2,
 				y: (Math.cos((i / vectors.length) * 2 * Math.PI) * minDim) / 3 + height / 2
 			};
@@ -92,6 +95,22 @@
 		}
 	}
 
+	export function redraw() {
+		frozen = false;
+		fullParticleUpdate(true);
+	}
+
+	function calculateAverageTrueDist(vectors: NamedVector[]) {
+		let sum = 1;
+		for (const v1 of vectors) {
+			for (const v2 of vectors) {
+				sum += euclideanDist(v1.inner, v2.inner);
+			}
+		}
+		const avg = sum / (vectors.length + 1) / vectors.length;
+		return avg;
+	}
+
 	onDestroy(() => callback && clearInterval(callback));
 
 	function applyForces() {
@@ -104,9 +123,10 @@
 				if (particle1.pos.dist(particle2.pos) < 0.001) continue;
 				let delta = particle2.pos.sub(particle1.pos);
 				let displayDist = delta.mag();
-				let trueDist = particle1.dist(particle2) * 20;
+				let trueDist = particle1.dist(particle2);
+				let trueDisplayDist = (trueDist * 100) / averageTrueDist;
 
-				const factor = displayDist - trueDist;
+				const factor = displayDist - trueDisplayDist;
 				const force = particle2.pos.sub(particle1.pos).mul(factor);
 				// Kraft hin zu Distanz wie in realem Graph
 				particle1.applyForce(force.mul(0.00003));

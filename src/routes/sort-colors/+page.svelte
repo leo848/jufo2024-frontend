@@ -20,6 +20,7 @@
 	import ColorDisplay from './ColorDisplay.svelte';
 	import ListStoragePopover from './ListStoragePopover.svelte';
 	import PathProperties from '../../components/PathProperties.svelte';
+	import { goto } from '$app/navigation';
 
 	title.set('Farben sortieren');
 
@@ -330,6 +331,26 @@
 				<Icon.ArchiveSolid size="xl" color="white" />
 			</button>
 			<ListStoragePopover {invalidate} bind:colors triggeredBy="#tooltip-storage" />
+			<button
+				class="color-button h-16 w-16 bg-gray-600 hover:bg-gray-500 transition-all flex align-baseline justify-center items-center"
+				on:click={invalidate(() => {
+					goto(
+						'/sort-vectors?v=' +
+							colors
+								.map((c) =>
+									c
+										.space(space)
+										.point()
+										.values()
+										.map((n) => Math.floor(n * 255))
+										.join('i')
+								)
+								.join('o')
+					);
+				})}
+			>
+				<Icon.ColumnOutline size="xl" color="white" />
+			</button>
 			<button
 				id="tooltip-color-edit"
 				class="color-button h-16 w-16 bg-gray-600 hover:bg-gray-500 transition-all flex align-baseline justify-center items-center"
