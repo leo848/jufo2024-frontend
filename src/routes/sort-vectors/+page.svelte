@@ -1,12 +1,11 @@
 <script lang="ts">
 	import { title } from '../../ui/navbar';
 	import PathAlgorithms from '../../components/PathAlgorithms.svelte';
-	import { Card } from 'flowbite-svelte';
 	import * as Icon from 'flowbite-svelte-icons';
 	import { registerCallback, unregisterCallback } from '../../server/websocket';
 	import { serverOutputPathCreation, serverOutputPathImprovement } from '../../server/types';
 	import { fromUrlString, type NamedVector } from './vector';
-	import { onDestroy, onMount } from 'svelte';
+	import { onDestroy } from 'svelte';
 	import { flip } from 'svelte/animate';
 	import { page } from '$app/stores';
 	import { writable, type Writable } from 'svelte/store';
@@ -14,6 +13,7 @@
 	import ForceDirectedGraph from './ForceDirectedGraph.svelte';
 	import { goto } from '$app/navigation';
 	import Window from '../../components/Window.svelte';
+	import type { DistanceType } from '../../geom/dist';
 
 	title.set('Vektoren sortieren');
 
@@ -56,6 +56,8 @@
 
 	let path: number[][] | null = null;
 	let edges: [number, number][] = [];
+
+	let norm: DistanceType = 'euclidean';
 
 	let scrollElement: HTMLElement;
 	$: duplicates = $data.some((v1, i1) =>
@@ -256,8 +258,6 @@
 		</div>
 		<Window title="Optionen" xlCol={4}>
 			<div class="m-4 text-white">
-
-
 				<div class="flex flex-row gap-4">
 					<button
 						class="p-2 inline-flex text-xl gap-4 justify-between items-center justify-items-center bg-gray-700 hover:bg-gray-600 transition-all rounded-xl mb-4"
@@ -278,9 +278,24 @@
 					<div class="bg-gray-600 p-2 rounded-xl"><Icon.RulerCombinedSolid size="xl" /></div>
 					<div>Distanz</div>
 					<div class="flex flex-row">
-						<button class="bg-gray-600 hover:bg-gray-500 text-base transition-all p-2 m-0 rounded-l-xl">Manhattan</button>
-						<button class="bg-gray-500 text-base transition-all p-2 m-0">Euklidisch</button>
-						<button class="bg-gray-600 hover:bg-gray-500 transition-all text-base p-2 m-0 rounded-r-xl">Maximum</button>
+						<button
+							class={`bg-gray-${
+								norm == 'manhattan' ? 500 : 600
+							} hover:bg-gray-500 text-base transition-all p-2 m-0 rounded-l-xl`}
+							on:click={() => (norm = 'manhattan')}>Manhattan</button
+						>
+						<button
+							class={`bg-gray-${
+								norm == 'euclidean' ? 500 : 600
+							} hover:bg-gray-500 text-base transition-all p-2 m-0`}
+							on:click={() => (norm = 'euclidean')}>Euklidisch</button
+						>
+						<button
+							class={`bg-gray-${
+								norm == 'max' ? 500 : 600
+							} hover:bg-gray-500 transition-all text-base p-2 m-0 rounded-r-xl`}
+							on:click={() => (norm = 'max')}>Maximum</button
+						>
 					</div>
 				</div>
 			</div>
@@ -291,11 +306,11 @@
 	>
 		<Window title="Ansicht des Graphen (FDGD)" options xlCol={5}>
 			<div class="h-full m-0 min-h-[420px]">
-				<ForceDirectedGraph bind:redraw vectors={points} {edges} />
+				<ForceDirectedGraph bind:redraw vectors={points} {edges} {norm} />
 			</div>
 		</Window>
 
-		<PathProperties {path} {length} />
+		<PathProperties {path} {length} {norm} />
 
 		<PathAlgorithms
 			on:deletePath={() => (path = null)}

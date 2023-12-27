@@ -2,10 +2,11 @@
 	import { onDestroy, onMount } from 'svelte';
 	import { Particle } from './particle';
 	import { Vec2, type NamedVector } from './vector';
-	import { euclideanDist } from '../../geom/dist';
+	import { dist, type DistanceType } from '../../geom/dist';
 
 	export let edges: [number, number][]; // indices
 	export let vectors: NamedVector[];
+	export let norm: DistanceType = 'euclidean';
 
 	let wrapperDiv: HTMLDivElement;
 	let canvas: HTMLCanvasElement;
@@ -18,8 +19,8 @@
 	let averageTrueDist = 1;
 
 	let frozen = false;
-	$: width, height, edges, vectors, (frozen = false);
-	$: averageTrueDist = calculateAverageTrueDist(vectors);
+	$: width, height, edges, vectors, norm, (frozen = false);
+	$: averageTrueDist = calculateAverageTrueDist(vectors, norm);
 
 	function render() {
 		if (ctx == null) return;
@@ -100,11 +101,11 @@
 		fullParticleUpdate(true);
 	}
 
-	function calculateAverageTrueDist(vectors: NamedVector[]) {
+	function calculateAverageTrueDist(vectors: NamedVector[], norm: DistanceType) {
 		let sum = 1;
 		for (const v1 of vectors) {
 			for (const v2 of vectors) {
-				sum += euclideanDist(v1.inner, v2.inner);
+				sum += dist(v1.inner, v2.inner, norm);
 			}
 		}
 		const avg = sum / (vectors.length + 1) / vectors.length;
@@ -123,7 +124,7 @@
 				if (particle1.pos.dist(particle2.pos) < 0.001) continue;
 				let delta = particle2.pos.sub(particle1.pos);
 				let displayDist = delta.mag();
-				let trueDist = particle1.dist(particle2);
+				let trueDist = particle1.dist(particle2, norm);
 				let trueDisplayDist = (trueDist * 100) / averageTrueDist;
 
 				const factor = displayDist - trueDisplayDist;
@@ -139,6 +140,7 @@
 			}
 		}
 	}
+	$: console.log(norm);
 
 	function mount() {
 		if (callback) clearInterval(callback);

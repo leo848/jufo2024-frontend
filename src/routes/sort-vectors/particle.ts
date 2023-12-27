@@ -1,4 +1,4 @@
-import { euclideanDist } from '../../geom/dist';
+import { euclideanDist, type DistanceType, dist } from '../../geom/dist';
 import { Vec2 } from './vector';
 
 export class Particle {
@@ -36,8 +36,8 @@ export class Particle {
 		this.acc = this.acc.add(force);
 	}
 
-	dist(other: Particle) {
-		return euclideanDist(this.vector, other.vector);
+	dist(other: Particle, norm: DistanceType = 'euclidean') {
+		return dist(this.vector, other.vector, norm);
 	}
 
 	update() {

@@ -3,9 +3,12 @@
 	import { cubicIn } from 'svelte/easing';
 	import { constrain } from '../utils/math';
 	import Window from './Window.svelte';
+	import { dist, type DistanceType } from '../geom/dist';
 
 	export let path: number[][] | null = null;
 	export let length: number = path?.length || 0;
+
+	export let norm: DistanceType = 'euclidean';
 
 	export let horizontal: boolean = false;
 
@@ -19,19 +22,14 @@
 	});
 	$: displayLength.set(length);
 
-	function distance(point1: number[], point2: number[]) {
-		let distSq = 0;
-		for (let comp = 0; comp < point1.length; comp++) {
-			let diff = point1[comp] - point2[comp];
-			distSq += diff * diff;
-		}
-		return Math.sqrt(distSq);
+	function distance(point1: number[], point2: number[], norm: DistanceType) {
+		return dist(point1, point2, norm);
 	}
 
 	$: if (path != null) {
 		let lengthAcc = 0;
 		for (let i = 0; i < path.length - 1; i++) {
-			lengthAcc += distance(path[i], path[i + 1]);
+			lengthAcc += distance(path[i], path[i + 1], norm);
 		}
 		chainLength.set(lengthAcc);
 	} else {
