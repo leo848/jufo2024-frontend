@@ -5,7 +5,7 @@ export type DistanceType = 'euclidean' | 'manhattan' | 'max';
 export function dist(a: number[], b: number[], dist: DistanceType): number {
 	if (dist == 'euclidean') return euclideanDist(a, b);
 	else if (dist == 'manhattan') return manhattanDist(a, b);
-	else if (dist == 'max') return manhattanDist(a, b);
+	else if (dist == 'max') return maxDist(a, b);
 	else {
 		assertNever(dist);
 	}
