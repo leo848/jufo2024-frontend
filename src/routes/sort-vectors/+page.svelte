@@ -58,6 +58,8 @@
 	let path: number[][] | null = null;
 	let edges: [number, number][] = [];
 
+	let locked = false;
+
 	let norm: DistanceType = 'euclidean';
 
 	let scrollElement: HTMLElement;
@@ -65,6 +67,7 @@
 		$data.some((v2, i2) => i1 != i2 && vectorEquals(v1.inner, v2.inner))
 	);
 
+	let invalidate: <T>(callback: (t: T) => void) => ((t: T) => void);
 	let invalidateAlgorithms: () => void;
 	function blowUp() {
 		path = null;
@@ -258,7 +261,7 @@
 			</button>
 		</div>
 		<Window title="Optionen" xlCol={4}>
-			<Options bind:norm={norm} on:delete={() => data.set([])} />
+		<Options bind:locked on:blowUp={blowUp} bind:invalidate bind:norm on:delete={invalidate(() => data.set([]))} />
 		</Window>
 		<Window title="Ansicht des Graphen (FDGD)" options xlCol={5}>
 			<div class="h-full m-0 min-h-[420px]">

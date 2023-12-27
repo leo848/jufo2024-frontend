@@ -2,10 +2,30 @@
 	import * as Icon from "flowbite-svelte-icons";
 	import type {DistanceType} from "../geom/dist";
 	import {createEventDispatcher} from "svelte";
+	import { tweened } from "svelte/motion";
+	import { sineIn } from "svelte/easing";
 
 	export let norm: DistanceType = "euclidean";
 
-	const dispatch = createEventDispatcher<{delete: null}>();
+	const dispatch = createEventDispatcher<{delete: null, blowUp: null, norm: DistanceType}>();
+
+	let lockAnim = tweened(0, { duration: 1500, easing: sineIn });
+	export let locked: boolean;
+
+	export function invalidate<I>(callback: (i: I) => void): (i: I) => void {
+		return (i) => {
+			if (locked) {
+				lockAnim.update(l => l + 1, { duration: 0 }).then(() => lockAnim.set(0, { delay: 250 }));
+			} else {
+				dispatch('blowUp');
+				callback(i);
+			}
+		};
+	}
+
+	$: lockButtonStyle = $lockAnim
+		? `filter: contrast(${$lockAnim * 5 + 1}) invert(${$lockAnim}); transform: scale(${$lockAnim / 3 + 1})`
+		: '';
 </script>
 
 <div class="m-4 text-white">
@@ -19,9 +39,22 @@
 		</button>
 		<button
 			class="p-2 inline-flex text-xl gap-4 justify-between items-center justify-items-center bg-gray-700 hover:bg-gray-600 transition-all rounded-xl mb-4"
+	on:click={() => (locked = !locked)}
 		>
-			<div class="bg-gray-600 p-2 rounded-xl"><Icon.LockOpenSolid size="xl" /></div>
-			<div>Sperren</div>
+			<div class="bg-gray-600 p-2 rounded-xl" style={lockButtonStyle}>
+				{#if locked}
+					<Icon.LockSolid size="xl" />
+				{:else}
+					<Icon.LockOpenSolid size="xl" />
+				{/if}
+			</div>
+			<div>
+				{#if locked}
+					Entsperren
+				{:else}
+					Sperren
+				{/if}
+			</div>
 		</button>
 	</div>
 	<div
@@ -34,19 +67,19 @@
 				class={`bg-gray-${
 					norm == 'manhattan' ? 500 : 600
 				} hover:bg-gray-500 text-base transition-all p-2 m-0 rounded-l-xl`}
-				on:click={() => (norm = 'manhattan')}>Manhattan</button
+				on:click={invalidate(() => (norm = 'manhattan'))}>Manhattan</button
 			>
 			<button
 				class={`bg-gray-${
 					norm == 'euclidean' ? 500 : 600
 				} hover:bg-gray-500 text-base transition-all p-2 m-0`}
-				on:click={() => (norm = 'euclidean')}>Euklidisch</button
+				on:click={invalidate(() => (norm = 'euclidean'))}>Euklidisch</button
 			>
 			<button
 				class={`bg-gray-${
 					norm == 'max' ? 500 : 600
 				} hover:bg-gray-500 transition-all text-base p-2 m-0 rounded-r-xl`}
-				on:click={() => (norm = 'max')}>Maximum</button
+				on:click={invalidate(() => (norm = 'max'))}>Maximum</button
 			>
 		</div>
 	</div>
