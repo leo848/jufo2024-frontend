@@ -199,7 +199,7 @@
 
 <div class="mt-4 pb-10 mx-10">
 	<div
-		class="grid grid-cols-12 gap-8 auto-cols-max align-stretch justify-stretch justify-items-stretch w-full"
+		class="grid grid-cols-12 gap-8 auto-cols-max align-stretch justify-stretch justify-items-stretch"
 	>
 		<div
 			class="flex-row flex gap-4 col-span-12 xl:col-span-8 overflow-x-scroll items-start"
@@ -300,10 +300,6 @@
 				</div>
 			</div>
 		</Window>
-	</div>
-	<div
-		class="mt-8 grid grid-cols-12 gap-8 auto-cols-max align-stretch justify-stretch justify-items-stretch"
-	>
 		<Window title="Ansicht des Graphen (FDGD)" options xlCol={5}>
 			<div class="h-full m-0 min-h-[420px]">
 				<ForceDirectedGraph bind:redraw vectors={points} {edges} {norm} />
