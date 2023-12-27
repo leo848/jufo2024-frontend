@@ -71,7 +71,7 @@
 	let invalidate: <T>(callback: (t: T) => void) => ((t: T) => void);
 	let invalidateAlgorithms: () => void;
 	function blowUp() {
-		blownUp = true;
+		if (path != null) blownUp = true;
 		path = null;
 		edges = [];
 		invalidateAlgorithms();
