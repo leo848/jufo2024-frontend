@@ -256,23 +256,33 @@
 		</div>
 		<Window title="Optionen" xlCol={4}>
 			<div class="m-4 text-white">
-				<button
-					class="p-2 flex text-xl gap-4 justify-between items-center justify-items-center bg-gray-700 rounded-xl mb-4"
-				>
-					<div class="bg-gray-600 p-2 rounded-xl"><Icon.LockOpenSolid size="xl" /></div>
-					<div>Sperren</div>
-				</button>
-				<button
-					class="p-2 flex flex-wrap text-xl gap-4 justify-start items-center bg-gray-700 rounded-xl"
+
+
+				<div class="flex flex-row gap-4">
+					<button
+						class="p-2 inline-flex text-xl gap-4 justify-between items-center justify-items-center bg-gray-700 hover:bg-gray-600 transition-all rounded-xl mb-4"
+					>
+						<div class="bg-gray-600 p-2 rounded-xl"><Icon.TrashBinSolid size="xl" /></div>
+						<div>Löschen</div>
+					</button>
+					<button
+						class="p-2 inline-flex text-xl gap-4 justify-between items-center justify-items-center bg-gray-700 hover:bg-gray-600 transition-all rounded-xl mb-4"
+					>
+						<div class="bg-gray-600 p-2 rounded-xl"><Icon.LockOpenSolid size="xl" /></div>
+						<div>Sperren</div>
+					</button>
+				</div>
+				<div
+					class="p-2 inline-flex flex-wrap text-xl gap-4 justify-start items-center bg-gray-700 rounded-xl"
 				>
 					<div class="bg-gray-600 p-2 rounded-xl"><Icon.RulerCombinedSolid size="xl" /></div>
 					<div>Distanz</div>
-					<div>
-						<button class="bg-gray-600 text-base p-2 rounded-xl">Manhattan</button>
-						<button class="bg-gray-500 text-base p-2 rounded-xl">Euklidsch</button>
-						<button class="bg-gray-600 text-base p-2 rounded-xl">Maximum</button>
+					<div class="flex flex-row">
+						<button class="bg-gray-600 hover:bg-gray-500 text-base transition-all p-2 m-0 rounded-l-xl">Manhattan</button>
+						<button class="bg-gray-500 text-base transition-all p-2 m-0">Euklidisch</button>
+						<button class="bg-gray-600 hover:bg-gray-500 transition-all text-base p-2 m-0 rounded-r-xl">Maximum</button>
 					</div>
-				</button>
+				</div>
 			</div>
 		</Window>
 	</div>
