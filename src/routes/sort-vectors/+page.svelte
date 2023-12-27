@@ -59,6 +59,7 @@
 	let edges: [number, number][] = [];
 
 	let locked = false;
+	let blownUp = false;
 
 	let norm: DistanceType = 'euclidean';
 
@@ -70,6 +71,7 @@
 	let invalidate: <T>(callback: (t: T) => void) => ((t: T) => void);
 	let invalidateAlgorithms: () => void;
 	function blowUp() {
+		blownUp = true;
 		path = null;
 		edges = [];
 		invalidateAlgorithms();
@@ -271,7 +273,7 @@
 			</div>
 		</Window>
 
-		<PathProperties {path} {length} {norm} />
+		<PathProperties {path} {length} {norm} {blownUp} />
 
 		<PathAlgorithms
 			on:deletePath={() => (path = null)}
