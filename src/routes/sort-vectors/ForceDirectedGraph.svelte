@@ -140,7 +140,6 @@
 			}
 		}
 	}
-	$: console.log(norm);
 
 	function mount() {
 		if (callback) clearInterval(callback);
