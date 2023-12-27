@@ -179,6 +179,7 @@
 
 	let callbackIdCreation = registerCallback(serverOutputPathCreation, (pc) => {
 		path = null;
+		locked = true;
 		if (pc.donePath) {
 			path = pc.donePath;
 			setDataFromPath(pc.donePath);
@@ -190,6 +191,7 @@
 	onDestroy(() => unregisterCallback(callbackIdCreation));
 
 	let callbackIdImprovement = registerCallback(serverOutputPathImprovement, (pi) => {
+		locked = true;
 		if (pi.better) {
 			path = pi.currentPath;
 		}
