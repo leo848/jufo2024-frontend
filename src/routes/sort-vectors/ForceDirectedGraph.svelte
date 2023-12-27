@@ -158,9 +158,9 @@
 <div class="w-full h-full" bind:this={wrapperDiv}>
 	<canvas bind:this={canvas} style={vectors.length === 0 ? "display: none" : ""} />
 	{#if vectors.length === 0}
-		<div class="m-4 p-4 bg-gray-700 rounded">
+		<div class="m-10 p-4 bg-gray-700 rounded">
 			<div class="text-4xl text-white">Keine Vektoren hinzugefügt</div>
-			<div>Füge durch Klicken auf "a" den ersten Vektor hinzu!</div>
+			<div class="text-xl">Füge durch Klicken auf "a" den ersten Vektor hinzu!</div>
 		</div>
 	{/if}
 </div>
