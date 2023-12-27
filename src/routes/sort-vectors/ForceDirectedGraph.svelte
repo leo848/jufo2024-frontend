@@ -156,7 +156,7 @@
 </script>
 
 <div class="w-full h-full" bind:this={wrapperDiv}>
-	<canvas bind:this={canvas} style={vectors.length === 0 ? "display: none" : ""} />
+	<canvas bind:this={canvas} style={vectors.length === 0 ? 'display: none' : ''} />
 	{#if vectors.length === 0}
 		<div class="m-10 p-4 bg-gray-700 rounded">
 			<div class="text-4xl text-white">Keine Vektoren hinzugefügt</div>

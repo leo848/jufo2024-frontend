@@ -380,9 +380,9 @@ export class HslColor extends AbstractColor<HslColor, HslComponent> {
 	}
 
 	fancyCss(): string {
-		const h = Math.round(this.h * 360) + "";
-		const s = Math.round(this.s * 100) + "%";
-		const l = Math.round(this.l * 100) + "%";
+		const h = Math.round(this.h * 360) + '';
+		const s = Math.round(this.s * 100) + '%';
+		const l = Math.round(this.l * 100) + '%';
 		const hStyle = `color: color-mix(in oklab, #ccc, hsl(${h} 100% 50%))`;
 		const sStyle = `color: color-mix(in oklab, #ccc, hsl(0 ${s} 50%))`;
 		const lStyle = `color: color-mix(in oklab, #ccc 60%, hsl(0 0% ${l}))`;

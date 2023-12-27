@@ -196,55 +196,85 @@
 </script>
 
 <div class="mt-4 pb-10 mx-10">
-	<div class="flex-row flex gap-4 overflow-x-scroll" bind:this={scrollElement}>
-		<div class="flex-col flex p-2 gap-2 rounded self-end">
-			<div class="flex flex-row justify-stretch gap-2 justify-items-center">
-				<button
-					class="bg-gray-800 hover:bg-gray-700 transition-all text-white py-2 rounded grow flex flex-row justify-center"
-					on:click={() => (dim -= 1)}
-				>
-					<Icon.MinusSolid />
-				</button>
-				<button
-					class="bg-gray-800 hover:bg-gray-700 transition-all text-white py-2 rounded grow flex flex-row justify-center"
-					on:click={incrementDim}
-				>
-					<Icon.PlusSolid />
-				</button>
-			</div>
-			{#each { length: dim } as _, comp}
-				<div class="bg-gray-800 text-white text-2xl py-2 px-6 rounded">x<sub>{comp + 1}</sub></div>
-			{/each}
-		</div>
-		{#each $data as vector, index (vector.name)}
-			<div class="bg-gray-800 flex-col flex p-2 gap-2 rounded" animate:flip>
-				<div class="text-4xl text-gray-300 text-center mb-2">{@html vector.name}</div>
+	<div
+		class="grid grid-cols-12 gap-8 auto-cols-max align-stretch justify-stretch justify-items-stretch w-full"
+	>
+		<div
+			class="flex-row flex gap-4 col-span-12 xl:col-span-8 overflow-x-scroll items-start"
+			bind:this={scrollElement}
+		>
+			<div class="flex-col flex p-2 gap-2 rounded mt-[12px]">
+				<div class="flex flex-row justify-stretch gap-2 justify-items-center">
+					<button
+						class="bg-gray-800 hover:bg-gray-700 transition-all text-white py-2 rounded grow flex flex-row justify-center"
+						on:click={() => (dim -= 1)}
+					>
+						<Icon.MinusSolid />
+					</button>
+					<button
+						class="bg-gray-800 hover:bg-gray-700 transition-all text-white py-2 rounded grow flex flex-row justify-center"
+						on:click={incrementDim}
+					>
+						<Icon.PlusSolid />
+					</button>
+				</div>
 				{#each { length: dim } as _, comp}
-					<input
-						type="number"
-						step="0.00001"
-						class="w-20 px-4 py-2 text-2xl text-white bg-gray-700 border-none rounded overflow-hidden text-center"
-						value={vector.inner[comp]}
-						on:change={(evt) => setValue(evt, index, comp)}
-					/>
+					<div class="bg-gray-800 text-white text-2xl py-2 px-6 rounded">
+						x<sub>{comp + 1}</sub>
+					</div>
 				{/each}
 			</div>
-		{/each}
-		<button
-			class="bg-gray-800 flex-col flex p-2 gap-2 rounded opacity-50"
-			on:click={addEmptyVector}
-		>
-			<div class="text-4xl text-gray-300 text-center mb-2">
-				{@html getName(length)}
-			</div>
-			{#each { length: dim } as _}
-				<input
-					type="number"
-					class="w-20 px-4 py-2 text-2xl text-white bg-gray-700 border-none rounded overflow-hidden text-center"
-					value={0}
-				/>
+			{#each $data as vector, index (vector.name)}
+				<div class="bg-gray-800 flex-col flex p-2 gap-2 rounded" animate:flip>
+					<div class="text-4xl text-gray-300 text-center mb-2">{@html vector.name}</div>
+					{#each { length: dim } as _, comp}
+						<input
+							type="number"
+							step="0.00001"
+							class="w-20 px-4 py-2 text-2xl text-white bg-gray-700 border-none rounded overflow-hidden text-center"
+							value={vector.inner[comp]}
+							on:change={(evt) => setValue(evt, index, comp)}
+						/>
+					{/each}
+				</div>
 			{/each}
-		</button>
+			<button
+				class="bg-gray-800 flex-col flex p-2 gap-2 rounded opacity-50"
+				on:click={addEmptyVector}
+			>
+				<div class="text-4xl text-gray-300 text-center mb-2">
+					{@html getName(length)}
+				</div>
+				{#each { length: dim } as _}
+					<input
+						type="number"
+						class="w-20 px-4 py-2 text-2xl text-white bg-gray-700 border-none rounded overflow-hidden text-center"
+						value={0}
+					/>
+				{/each}
+			</button>
+		</div>
+		<Window title="Optionen" xlCol={4}>
+			<div class="m-4 text-white">
+				<button
+					class="p-2 flex text-xl gap-4 justify-between items-center justify-items-center bg-gray-700 rounded-xl mb-4"
+				>
+					<div class="bg-gray-600 p-2 rounded-xl"><Icon.LockOpenSolid size="xl" /></div>
+					<div>Sperren</div>
+				</button>
+				<button
+					class="p-2 flex flex-wrap text-xl gap-4 justify-start items-center bg-gray-700 rounded-xl"
+				>
+					<div class="bg-gray-600 p-2 rounded-xl"><Icon.RulerCombinedSolid size="xl" /></div>
+					<div>Distanz</div>
+					<div>
+						<button class="bg-gray-600 text-base p-2 rounded-xl">Manhattan</button>
+						<button class="bg-gray-500 text-base p-2 rounded-xl">Euklidsch</button>
+						<button class="bg-gray-600 text-base p-2 rounded-xl">Maximum</button>
+					</div>
+				</button>
+			</div>
+		</Window>
 	</div>
 	<div
 		class="mt-8 grid grid-cols-12 gap-8 auto-cols-max align-stretch justify-stretch justify-items-stretch"
