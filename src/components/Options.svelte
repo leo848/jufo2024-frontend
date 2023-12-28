@@ -1,21 +1,29 @@
 <script lang="ts">
-	import * as Icon from "flowbite-svelte-icons";
-	import type {DistanceType} from "../geom/dist";
-	import {createEventDispatcher} from "svelte";
-	import { tweened } from "svelte/motion";
-	import { sineIn } from "svelte/easing";
+	import * as Icon from 'flowbite-svelte-icons';
+	import type { DistanceType } from '../geom/dist';
+	import { createEventDispatcher } from 'svelte';
+	import { tweened } from 'svelte/motion';
+	import { sineIn } from 'svelte/easing';
 
-	export let norm: DistanceType = "euclidean";
+	export let norm: DistanceType = 'euclidean';
 
-	const dispatch = createEventDispatcher<{add: null, delete: null, blowUp: null, norm: DistanceType}>();
+	const dispatch = createEventDispatcher<{
+		add: null;
+		delete: null;
+		blowUp: null;
+		norm: DistanceType;
+	}>();
 
 	let lockAnim = tweened(0, { duration: 1500, easing: sineIn });
 	export let locked: boolean;
 
-	export function invalidate<I>(callback: (i: I) => void, invalid?:(i: I) => void): (i: I) => void {
+	export function invalidate<I>(
+		callback: (i: I) => void,
+		invalid?: (i: I) => void
+	): (i: I) => void {
 		return (i) => {
 			if (locked) {
-				lockAnim.update(l => l + 1, { duration: 0 }).then(() => lockAnim.set(0, { delay: 250 }));
+				lockAnim.update((l) => l + 1, { duration: 0 }).then(() => lockAnim.set(0, { delay: 250 }));
 				if (invalid) invalid(i);
 			} else {
 				dispatch('blowUp');
@@ -25,7 +33,9 @@
 	}
 
 	$: lockButtonStyle = $lockAnim
-		? `filter: contrast(${$lockAnim * 5 + 1}) invert(${$lockAnim}); transform: scale(${$lockAnim / 3 + 1})`
+		? `filter: contrast(${$lockAnim * 5 + 1}) invert(${$lockAnim}); transform: scale(${
+				$lockAnim / 3 + 1
+		  })`
 		: '';
 </script>
 
@@ -33,21 +43,21 @@
 	<div class="flex flex-row gap-4">
 		<button
 			class="p-2 inline-flex text-xl gap-4 justify-between items-center justify-items-center bg-gray-700 hover:bg-gray-600 transition-all rounded-xl mb-4"
-		   on:click={() => dispatch("add")}
+			on:click={() => dispatch('add')}
 		>
 			<div class="bg-gray-600 p-2 rounded-xl"><Icon.PlusSolid size="xl" /></div>
 			<div>Hinzufügen</div>
 		</button>
 		<button
 			class="p-2 inline-flex text-xl gap-4 justify-between items-center justify-items-center bg-gray-700 hover:bg-gray-600 transition-all rounded-xl mb-4"
-		   on:click={() => dispatch("delete")}
+			on:click={() => dispatch('delete')}
 		>
 			<div class="bg-gray-600 p-2 rounded-xl"><Icon.TrashBinSolid size="xl" /></div>
 			<div>Löschen</div>
 		</button>
 		<button
 			class="p-2 inline-flex text-xl gap-4 justify-between items-center justify-items-center bg-gray-700 hover:bg-gray-600 transition-all rounded-xl mb-4"
-	on:click={() => (locked = !locked)}
+			on:click={() => (locked = !locked)}
 		>
 			<div class="bg-gray-600 p-2 rounded-xl" style={lockButtonStyle}>
 				{#if locked}

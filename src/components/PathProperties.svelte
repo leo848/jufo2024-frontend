@@ -81,7 +81,11 @@
 			<div class="m-10 p-4 bg-gray-700 rounded">
 				{#if blownUp}
 					<div class="text-4xl text-white">Pfad gelöscht</div>
-					<div>Durch eine Änderung der Werte im entsperrten Modus wurde der Pfad gelöscht. Drücke auf <b>Aktuelle Anordnung</b>, um einen Pfad aus der vorliegenden Reihenfolge zu erstellen.</div>
+					<div>
+						Durch eine Änderung der Werte im entsperrten Modus wurde der Pfad gelöscht. Drücke auf <b
+							>Aktuelle Anordnung</b
+						>, um einen Pfad aus der vorliegenden Reihenfolge zu erstellen.
+					</div>
 				{:else}
 					<div class="text-4xl text-white">Kein Pfad</div>
 					<div>Erzeuge einen Pfad mittels der <b>Konstruktion</b>.</div>

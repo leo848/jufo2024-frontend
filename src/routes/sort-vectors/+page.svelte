@@ -68,7 +68,7 @@
 		$data.some((v2, i2) => i1 != i2 && vectorEquals(v1.inner, v2.inner))
 	);
 
-	let invalidate: <T>(callback: (t: T) => void, invalid ?: (t: T) => void) => ((t: T) => void);
+	let invalidate: <T>(callback: (t: T) => void, invalid?: (t: T) => void) => (t: T) => void;
 	let invalidateAlgorithms: () => void;
 	function blowUp() {
 		if (path != null) blownUp = true;
@@ -217,12 +217,16 @@
 				<div class="flex flex-row justify-stretch gap-2 justify-items-center">
 					<button
 						class="bg-gray-800 hover:bg-gray-700 transition-all text-white py-2 rounded grow flex flex-row justify-center"
+						class:opacity-0={locked}
+						disabled={locked}
 						on:click={() => (dim -= 1)}
 					>
 						<Icon.MinusSolid />
 					</button>
 					<button
 						class="bg-gray-800 hover:bg-gray-700 transition-all text-white py-2 rounded grow flex flex-row justify-center"
+						class:opacity-0={locked}
+						disabled={locked}
 						on:click={incrementDim}
 					>
 						<Icon.PlusSolid />
@@ -241,31 +245,44 @@
 						<input
 							type="number"
 							step="0.00001"
+							disabled={locked}
 							class="w-20 px-4 py-2 text-2xl text-white bg-gray-700 border-none rounded overflow-hidden text-center"
 							value={vector.inner[comp]}
-	   on:change={invalidate((evt) => setValue(evt, index, comp), () => vector.inner[comp] = vector.inner[comp])}
+							on:change={invalidate(
+								(evt) => setValue(evt, index, comp),
+								() => (vector.inner[comp] = vector.inner[comp])
+							)}
 						/>
 					{/each}
 				</div>
 			{/each}
-			<button
-				class="bg-gray-800 flex-col flex p-2 gap-2 rounded opacity-50"
-				on:click={addEmptyVector}
-			>
-				<div class="text-4xl text-gray-300 text-center mb-2">
-					{@html getName(length)}
-				</div>
-				{#each { length: dim } as _}
-					<input
-						type="number"
-						class="w-20 px-4 py-2 text-2xl text-white bg-gray-700 border-none rounded overflow-hidden text-center"
-						value={0}
-					/>
-				{/each}
-			</button>
+			{#if !locked}
+				<button
+					class="bg-gray-800 flex-col flex p-2 gap-2 rounded opacity-50"
+					on:click={addEmptyVector}
+				>
+					<div class="text-4xl text-gray-300 text-center mb-2">
+						{@html getName(length)}
+					</div>
+					{#each { length: dim } as _}
+						<input
+							type="number"
+							class="w-20 px-4 py-2 text-2xl text-white bg-gray-700 border-none rounded overflow-hidden text-center"
+							value={0}
+						/>
+					{/each}
+				</button>
+			{/if}
 		</div>
 		<Window title="Optionen" xlCol={4}>
-			<Options bind:locked on:blowUp={blowUp} bind:invalidate bind:norm on:add={invalidate(addEmptyVector)} on:delete={invalidate(() => data.set([]))} />
+			<Options
+				bind:locked
+				on:blowUp={blowUp}
+				bind:invalidate
+				bind:norm
+				on:add={invalidate(addEmptyVector)}
+				on:delete={invalidate(() => data.set([]))}
+			/>
 		</Window>
 		<Window title="Ansicht des Graphen (FDGD)" options xlCol={5}>
 			<div class="h-full m-0 min-h-[420px]">
