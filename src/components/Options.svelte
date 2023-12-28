@@ -7,15 +7,16 @@
 
 	export let norm: DistanceType = "euclidean";
 
-	const dispatch = createEventDispatcher<{delete: null, blowUp: null, norm: DistanceType}>();
+	const dispatch = createEventDispatcher<{add: null, delete: null, blowUp: null, norm: DistanceType}>();
 
 	let lockAnim = tweened(0, { duration: 1500, easing: sineIn });
 	export let locked: boolean;
 
-	export function invalidate<I>(callback: (i: I) => void): (i: I) => void {
+	export function invalidate<I>(callback: (i: I) => void, invalid?:(i: I) => void): (i: I) => void {
 		return (i) => {
 			if (locked) {
 				lockAnim.update(l => l + 1, { duration: 0 }).then(() => lockAnim.set(0, { delay: 250 }));
+				if (invalid) invalid(i);
 			} else {
 				dispatch('blowUp');
 				callback(i);
@@ -30,6 +31,13 @@
 
 <div class="m-4 text-white">
 	<div class="flex flex-row gap-4">
+		<button
+			class="p-2 inline-flex text-xl gap-4 justify-between items-center justify-items-center bg-gray-700 hover:bg-gray-600 transition-all rounded-xl mb-4"
+		   on:click={() => dispatch("add")}
+		>
+			<div class="bg-gray-600 p-2 rounded-xl"><Icon.PlusSolid size="xl" /></div>
+			<div>Hinzufügen</div>
+		</button>
 		<button
 			class="p-2 inline-flex text-xl gap-4 justify-between items-center justify-items-center bg-gray-700 hover:bg-gray-600 transition-all rounded-xl mb-4"
 		   on:click={() => dispatch("delete")}

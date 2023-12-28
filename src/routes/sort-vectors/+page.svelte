@@ -68,7 +68,7 @@
 		$data.some((v2, i2) => i1 != i2 && vectorEquals(v1.inner, v2.inner))
 	);
 
-	let invalidate: <T>(callback: (t: T) => void) => ((t: T) => void);
+	let invalidate: <T>(callback: (t: T) => void, invalid ?: (t: T) => void) => ((t: T) => void);
 	let invalidateAlgorithms: () => void;
 	function blowUp() {
 		if (path != null) blownUp = true;
@@ -243,7 +243,7 @@
 							step="0.00001"
 							class="w-20 px-4 py-2 text-2xl text-white bg-gray-700 border-none rounded overflow-hidden text-center"
 							value={vector.inner[comp]}
-							on:change={(evt) => setValue(evt, index, comp)}
+	   on:change={invalidate((evt) => setValue(evt, index, comp), () => vector.inner[comp] = vector.inner[comp])}
 						/>
 					{/each}
 				</div>
@@ -265,7 +265,7 @@
 			</button>
 		</div>
 		<Window title="Optionen" xlCol={4}>
-		<Options bind:locked on:blowUp={blowUp} bind:invalidate bind:norm on:delete={invalidate(() => data.set([]))} />
+			<Options bind:locked on:blowUp={blowUp} bind:invalidate bind:norm on:add={invalidate(addEmptyVector)} on:delete={invalidate(() => data.set([]))} />
 		</Window>
 		<Window title="Ansicht des Graphen (FDGD)" options xlCol={5}>
 			<div class="h-full m-0 min-h-[420px]">
