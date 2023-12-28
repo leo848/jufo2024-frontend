@@ -45,14 +45,14 @@
 			class="p-2 inline-flex text-xl gap-4 justify-between items-center justify-items-center bg-gray-700 hover:bg-gray-600 transition-all rounded-xl mb-4"
 			on:click={() => dispatch('add')}
 		>
-			<div class="bg-gray-600 p-2 rounded-xl"><Icon.PlusSolid size="xl" /></div>
+			<div class="bg-gray-600 p-2 rounded-xl"><Icon.PlusSolid size="md" /></div>
 			<div>Hinzufügen</div>
 		</button>
 		<button
 			class="p-2 inline-flex text-xl gap-4 justify-between items-center justify-items-center bg-gray-700 hover:bg-gray-600 transition-all rounded-xl mb-4"
 			on:click={() => dispatch('delete')}
 		>
-			<div class="bg-gray-600 p-2 rounded-xl"><Icon.TrashBinSolid size="xl" /></div>
+			<div class="bg-gray-600 p-2 rounded-xl"><Icon.TrashBinSolid size="md" /></div>
 			<div>Löschen</div>
 		</button>
 		<button
@@ -61,9 +61,9 @@
 		>
 			<div class="bg-gray-600 p-2 rounded-xl" style={lockButtonStyle}>
 				{#if locked}
-					<Icon.LockSolid size="xl" />
+					<Icon.LockSolid size="md" />
 				{:else}
-					<Icon.LockOpenSolid size="xl" />
+					<Icon.LockOpenSolid size="md" />
 				{/if}
 			</div>
 			<div>
@@ -78,7 +78,7 @@
 	<div
 		class="p-2 inline-flex flex-wrap text-xl gap-4 justify-start items-center bg-gray-700 rounded-xl"
 	>
-		<div class="bg-gray-600 p-2 rounded-xl"><Icon.RulerCombinedSolid size="xl" /></div>
+		<div class="bg-gray-600 p-2 rounded-xl"><Icon.RulerCombinedSolid size="md" /></div>
 		<div>Distanz</div>
 		<div class="flex flex-row">
 			<button
@@ -105,13 +105,13 @@
 		<button
 			class="p-2 inline-flex text-xl gap-4 justify-between items-center justify-items-center bg-gray-700 hover:bg-gray-600 transition-all rounded-xl"
 		>
-			<div class="bg-gray-600 p-2 rounded-xl"><Icon.DownloadSolid size="xl" /></div>
+			<div class="bg-gray-600 p-2 rounded-xl"><Icon.DownloadSolid size="md" /></div>
 			<div>Laden</div>
 		</button>
 		<button
 			class="p-2 inline-flex text-xl gap-4 justify-between items-center justify-items-center bg-gray-700 hover:bg-gray-600 transition-all rounded-xl"
 		>
-			<div class="bg-gray-600 p-2 rounded-xl"><Icon.UploadSolid size="xl" /></div>
+			<div class="bg-gray-600 p-2 rounded-xl"><Icon.UploadSolid size="md" /></div>
 			<div>Speichern</div>
 		</button>
 	</div>
