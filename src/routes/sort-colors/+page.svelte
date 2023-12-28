@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { Card, Spinner } from 'flowbite-svelte';
+	import { Spinner } from 'flowbite-svelte';
 	import ColorPicker from './ColorPicker.svelte';
 	import { RgbColor, type ColorSpace } from '../../color/colorSpaces';
 	import { Point3 } from '../../geom/point';
@@ -16,12 +16,13 @@
 	import PointChartOptions from './PointChartOptions.svelte';
 	import PathAlgorithms from '../../components/PathAlgorithms.svelte';
 	import ColorAddPopover from './ColorAddPopover.svelte';
-	import ColorsLock from './ColorsLock.svelte';
 	import ColorDisplay from './ColorDisplay.svelte';
 	import ListStoragePopover from './ListStoragePopover.svelte';
 	import PathProperties from '../../components/PathProperties.svelte';
 	import { goto } from '$app/navigation';
+	import type { DistanceType } from '../../geom/dist';
 	import Window from '../../components/Window.svelte';
+	import Options from '../../components/Options.svelte';
 
 	title.set('Farben sortieren');
 
@@ -36,7 +37,7 @@
 		RgbColor.fromNumeric(0x760088).color()
 	]; // pride flag
 	let colorsLocked = false;
-	let invalidate: (callback: () => void) => () => void;
+	let invalidate: <T>(callback: (t: T) => void) => (t: T) => void;
 
 	let selection: {
 		index: number;
@@ -62,6 +63,7 @@
 	}
 
 	let path: Point3[] | null = null;
+	let norm: DistanceType = 'euclidean';
 
 	let edges: [Point3, Point3, Color | undefined][] = [];
 
@@ -300,41 +302,35 @@
 
 <div class="w-full h-2 hover:h-28 transition-all" style={`background: ${gradient(colors)}`} />
 <div class="mx-10">
-	<div class="flex flex-row justify-between align-center mt-8 gap-4">
-		<div class="flex flex-row flex-wrap justify-start 2xl:gap-8 gap-2 items-stretch h-16">
-			{#each colors as color, index (color)}
-				<div animate:flip>
-					<ColorDisplay
-						{color}
-						selected={selection?.index === index}
-						on:click={(evt) => {
-							selectCard(evt, index);
-						}}
-						size="md"
-						tooltip={selection?.index !== index}
-					/>
-				</div>
-			{/each}
+	<div
+		class="mt-8 grid grid-cols-12 gap-8 auto-cols-max align-stretch justify-stretch justify-items-stretch"
+	>
+		<div class="flex flex-row col-span-12 xl:col-span-8 justify-between align-center gap-4">
+			<div class="flex flex-row flex-wrap justify-start 2xl:gap-8 gap-2 items-stretch h-16">
+				{#each colors as color, index (color)}
+					<div animate:flip>
+						<ColorDisplay
+							{color}
+							selected={selection?.index === index}
+							on:click={(evt) => {
+								selectCard(evt, index);
+							}}
+							size="md"
+							tooltip={selection?.index !== index}
+						/>
+					</div>
+				{/each}
+			</div>
 		</div>
-		<div class="grow" />
-		<div class="flex flex-row gap-4">
-			<ColorsLock on:blowUp={blowUp} bind:invalidate bind:locked={colorsLocked} />
-			<button
-				class="color-button h-16 w-16 bg-gray-600 hover:bg-gray-500 transition-all text-6xl flex align-baseline justify-center items-center"
-				on:click={invalidate(addColor)}
-			>
-				<Icon.PlusSolid size="xl" color="white" />
-			</button>
-			<button
-				id="tooltip-storage"
-				class="color-button h-16 w-16 bg-gray-600 hover:bg-gray-500 transition-all flex align-baseline justify-center items-center"
-			>
-				<Icon.ArchiveSolid size="xl" color="white" />
-			</button>
-			<ListStoragePopover {invalidate} bind:colors triggeredBy="#tooltip-storage" />
-			<button
-				class="color-button h-16 w-16 bg-gray-600 hover:bg-gray-500 transition-all flex align-baseline justify-center items-center"
-				on:click={invalidate(() => {
+		<Window title="Optionen" xlCol={4}>
+			<Options
+				on:blowUp={blowUp}
+				bind:invalidate
+				bind:locked={colorsLocked}
+				on:add={invalidate(addColor)}
+				on:delete={invalidate(() => (colors = []))}
+				bind:norm
+				on:asVectors={invalidate(() => {
 					goto(
 						'/sort-vectors?v=' +
 							colors
@@ -349,21 +345,8 @@
 								.join('o')
 					);
 				})}
-			>
-				<Icon.ColumnOutline size="xl" color="white" />
-			</button>
-			<button
-				id="tooltip-color-edit"
-				class="color-button h-16 w-16 bg-gray-600 hover:bg-gray-500 transition-all flex align-baseline justify-center items-center"
-			>
-				<Icon.DotsHorizontalOutline size="xl" color="white" />
-			</button>
-			<ColorAddPopover {invalidate} bind:colors triggeredBy="#tooltip-color-edit" />
-		</div>
-	</div>
-	<div
-		class="mt-8 grid grid-cols-12 gap-8 auto-cols-max align-stretch justify-stretch justify-items-stretch"
-	>
+			/>
+		</Window>
 		<Window
 			title="3D-Darstellung"
 			options
@@ -387,7 +370,7 @@
 			</div>
 		</Window>
 
-		<PathProperties path={path?.map((point) => point.values())} length={colors.length} />
+		<PathProperties path={path?.map((point) => point.values())} length={colors.length} {norm} />
 
 		<PathAlgorithms
 			on:deletePath={() => (path = null)}

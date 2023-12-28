@@ -6,7 +6,7 @@
 
 	export let colors: Color[];
 	export let triggeredBy: string;
-	export let invalidate: (callback: () => void) => () => void;
+	export let invalidate: <T>(callback: (t: T) => void) => (t: T) => void;
 
 	let howManyRandomToAdd = 1;
 	function addRandom() {
