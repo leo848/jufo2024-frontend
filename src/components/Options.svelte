@@ -101,4 +101,18 @@
 			>
 		</div>
 	</div>
+	<div class="flex flex-row gap-4 mt-4">
+		<button
+			class="p-2 inline-flex text-xl gap-4 justify-between items-center justify-items-center bg-gray-700 hover:bg-gray-600 transition-all rounded-xl"
+		>
+			<div class="bg-gray-600 p-2 rounded-xl"><Icon.DownloadSolid size="xl" /></div>
+			<div>Laden</div>
+		</button>
+		<button
+			class="p-2 inline-flex text-xl gap-4 justify-between items-center justify-items-center bg-gray-700 hover:bg-gray-600 transition-all rounded-xl"
+		>
+			<div class="bg-gray-600 p-2 rounded-xl"><Icon.UploadSolid size="xl" /></div>
+			<div>Speichern</div>
+		</button>
+	</div>
 </div>
