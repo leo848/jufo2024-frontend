@@ -7,9 +7,9 @@
 
 	export let norm: DistanceType = 'euclidean';
 
-	type Module = "add" | "delete" | "lock" | "norm" | "load" | "save" | "asVector";
+	type Module = "add" | "delete" | "lock" | "norm" | "load" | "store" | "asVector";
 
-	const defaultShow = new Set([ "add", "delete", "lock", "norm", "load", "save", "asVector" ] as Module[]);
+	const defaultShow = new Set([ "add", "delete", "lock", "norm", "load", "store", "asVector" ] as Module[]);
 	export let show: Module[] = [];
 	export let hide: Module[] = [];
 
