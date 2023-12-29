@@ -379,10 +379,3 @@
 		/>
 	</div>
 </div>
-
-<style>
-	.color-button {
-		border-radius: 10px;
-		border: 3px solid rgba(0, 0, 0, 0.3);
-	}
-</style>
