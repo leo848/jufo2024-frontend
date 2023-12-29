@@ -1,5 +1,5 @@
 import * as THREE from 'three';
-import {dist, type DistanceType} from './dist';
+import { dist, type DistanceType } from './dist';
 
 function floatsSimilar(a: number, b: number): boolean {
 	return Math.abs(a - b) < 0.0001;
@@ -38,8 +38,8 @@ export class Point3 {
 		return new Vec3(other.x - this.x, other.y - this.y, other.z - this.z);
 	}
 
-	distanceTo(other: Point3, norm ?: DistanceType): number {
-		return dist(this.values(), other.values(), norm ?? "euclidean");
+	distanceTo(other: Point3, norm?: DistanceType): number {
+		return dist(this.values(), other.values(), norm ?? 'euclidean');
 	}
 
 	map(f: (comp: number, axis: 'x' | 'y' | 'z') => number): Point3 {

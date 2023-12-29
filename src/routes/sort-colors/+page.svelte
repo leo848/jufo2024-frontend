@@ -324,14 +324,14 @@
 		</div>
 		<Window title="Optionen" xlCol={4}>
 			<Options
-	   			show={["colorSpace"]}
+				show={['colorSpace']}
 				on:blowUp={blowUp}
 				bind:invalidate
 				bind:locked={colorsLocked}
 				on:add={invalidate(addColor)}
 				on:delete={invalidate(() => (colors = []))}
 				bind:norm
-	   			bind:colorSpace={space}
+				bind:colorSpace={space}
 				on:asVectors={invalidate(() => {
 					goto(
 						'/sort-vectors?v=' +
