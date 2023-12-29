@@ -4,16 +4,19 @@
 	import { createEventDispatcher } from 'svelte';
 	import { tweened } from 'svelte/motion';
 	import { sineIn } from 'svelte/easing';
+	import type {ColorSpace} from '../color/colorSpaces';
 
 	export let norm: DistanceType = 'euclidean';
+	export let colorSpace: ColorSpace = 'rgb';
 
-	type Module = 'add' | 'delete' | 'lock' | 'norm' | 'load' | 'store' | 'asVector';
+	type Module = 'add' | 'delete' | 'lock' | 'norm' | 'colorSpace' | 'load' | 'store' | 'asVector';
 
 	const defaultShow = new Set([
 		'add',
 		'delete',
 		'lock',
 		'norm',
+		'colorSpace',
 		'load',
 		'store',
 		'asVector'
@@ -126,6 +129,32 @@
 						norm == 'max' ? 500 : 600
 					} hover:bg-gray-500 transition-all text-base p-2 m-0 rounded-r-xl`}
 					on:click={invalidate(() => (norm = 'max'))}>Maximum</button
+				>
+			</div>
+		</div>
+	{/if}
+	{#if display.has('colorSpace')}
+		<div class="p-2 mt-4 inline-flex flex-wrap gap-4 justify-start items-center bg-gray-700 rounded-xl">
+			<div class="bg-gray-600 p-2 rounded-xl"><Icon.PalleteSolid size="md" /></div>
+			<div>Farbraum</div>
+			<div class="flex flex-row">
+				<button
+					class={`bg-gray-${
+						colorSpace == 'rgb' ? 500 : 600
+					} hover:bg-gray-500 text-base transition-all p-2 m-0 rounded-l-xl`}
+					on:click={invalidate(() => (colorSpace = 'rgb'))}>RGB</button
+				>
+				<button
+					class={`bg-gray-${
+						colorSpace == 'hsv' ? 500 : 600
+					} hover:bg-gray-500 text-base transition-all p-2 m-0`}
+					on:click={invalidate(() => (colorSpace = 'hsv'))}>HSV</button
+				>
+				<button
+					class={`bg-gray-${
+						colorSpace == 'oklab' ? 500 : 600
+					} hover:bg-gray-500 transition-all text-base p-2 m-0 rounded-r-xl`}
+					on:click={invalidate(() => (colorSpace = 'oklab'))}>oklab</button
 				>
 			</div>
 		</div>

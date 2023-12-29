@@ -28,7 +28,7 @@
 	renderMode.set('manual');
 	$: colors, edges, space, projection, ballSize, selectedIndex, advance();
 
-	let axisTextures = new Array(3).fill(null).map((_, index) => {
+	$: axisTextures = new Array(3).fill(null).map((_, index) => {
 		const spaced = new RgbColor(0, 0, 0).color().space(space);
 		const comp = spaced.xyzComponents()[index];
 		if (comp === null) return null;
