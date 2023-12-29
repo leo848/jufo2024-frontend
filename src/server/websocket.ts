@@ -55,10 +55,6 @@ const onerror = (e: Event) => {
 	console.error(e);
 };
 const onmessage = (input: MessageEvent<unknown>) => {
-	statusCallback({
-		type: 'interact',
-		status: 'download'
-	});
 	if (typeof input.data !== 'string') {
 		handleClientError({
 			type: 'binaryData'
@@ -98,18 +94,21 @@ websocket.onmessage = onmessage;
 
 let callbacks: { f: (so: ServerOutput) => void; id: number }[] = [];
 
-export function sendWebsocket(input: ServerInput) {
+export function sendWebsocket(input: ServerInput, options ?: { noLog ?: boolean }) {
+	const noLog = options?.noLog;
 	const status = getStatus();
 	if (status.status === 'offline') {
 		reconnectWebsocket();
 	}
 	statusCallback(getStatus());
 	websocket.send(JSON.stringify(input));
-	connectionData.update((cd) => ({ ...cd, lastRequest: new Date() }));
-	statusCallback({
-		type: 'interact',
-		status: 'upload'
-	});
+	if (!noLog) {
+		connectionData.update((cd) => ({ ...cd, lastRequest: new Date() }));
+		statusCallback({
+			type: 'interact',
+			status: 'upload'
+		});
+	}
 }
 
 export function reconnectWebsocket(): boolean {
@@ -142,6 +141,12 @@ export function reconnectWebsocket(): boolean {
 }
 
 function handleServerOutput(output: ServerOutput) {
+	if (output.type !== 'latency') {
+		statusCallback({
+			type: 'interact',
+			status: 'download'
+		});
+	}
 	if (output.type === 'error') {
 		handleServerError(output.error);
 		return;
@@ -149,10 +154,12 @@ function handleServerOutput(output: ServerOutput) {
 		console.log(output.message);
 		return;
 	} else {
-		connectionData.update((cd) => ({
-			...cd,
-			lastResponse: new Date()
-		}));
+		if (output.type !== 'latency') {
+			connectionData.update((cd) => ({
+				...cd,
+				lastResponse: new Date()
+			}));
+		}
 		for (const { f } of callbacks) {
 			f(output);
 		}
@@ -189,6 +196,8 @@ export function updateConnectionData(): Writable<ConnectionData> {
 	const beforeTime = new Date();
 	sendWebsocket({
 		type: 'latency'
+	}, {
+		noLog: true
 	});
 
 	const millis = (date: Date) => date.getTime();
