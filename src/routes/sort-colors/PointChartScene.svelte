@@ -74,6 +74,11 @@
 		const evtType = 'mouse' + evtTypeSuffix;
 		canvas.addEventListener(evtType, advance);
 	}
+	
+	let displayPoints: { point: Point3, color: Color }[];
+	$: {
+		displayPoints = colors.map(color => ({ point: color.space(space).point().scale(10), color }));
+	}
 
 	const ballSizeAnim = tweened(ballSize, { duration: 250, easing: cubicOut });
 	$: $ballSizeAnim = ballSize;
@@ -154,16 +159,15 @@
 		shadows*/
 </script>
 
-{#each colors as color, index (color.rgb().numeric())}
+{#each displayPoints as { point, color }, index (color.rgb().numeric())}
 	{@const selected = selectedIndex === index}
-	{@const displayPoint = color.space(space).point().scale(10)}
 	{#if selected}
 		{#each axes as comp}
-			{@const end = displayPoint.with(0, comp)}
-			{@const deltaVector = displayPoint.delta(end)}
+			{@const end = point.with(0, comp)}
+			{@const deltaVector = point.delta(end)}
 			{@const distance = deltaVector.mag()}
-			{@const position = displayPoint.add(deltaVector.scale(0.5)).values()}
-			{@const rotation = deltaVector.rotationFromPoint(displayPoint)}
+			{@const position = point.add(deltaVector.scale(0.5)).values()}
+			{@const rotation = deltaVector.rotationFromPoint(point)}
 			<T.Mesh {position} {rotation}>
 				<T.CylinderGeometry args={[0.1, 0.08, distance, 10]} />
 				<T.MeshStandardMaterial roughness={0.8} metalness={0.2} color={0xffffff} />
@@ -174,7 +178,7 @@
 		<!-- Reaktivität – für #19 -->
 		<T.Mesh
 			geometry={new THREE.SphereGeometry($ballSizeAnim * (selected ? 1.1 : 1.0))}
-			position={displayPoint.values()}
+			position={point.values()}
 			material={new THREE.MeshStandardMaterial({
 				roughness: selected ? 0.5 : 0.6,
 				metalness: selected ? 0 : 0.8,
