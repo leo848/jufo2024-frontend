@@ -28,7 +28,7 @@
 	$: {
 		display = new Set(Array.from(defaultShow).concat(show));
 		for (const toHide of hide) {
-			display.delete(hide);
+			display.delete(toHide);
 		}
 	}
 
