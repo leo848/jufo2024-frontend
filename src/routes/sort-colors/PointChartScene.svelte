@@ -79,10 +79,11 @@
 		duration: 500,
 		easing: quadInOut,
 		interpolate(a: { point: Point3; color: Color }[], b: { point: Point3; color: Color }[]) {
+			if (a.length != b.length) return () => b;
 			return (t) => {
-				if (a.length != b.length) return b;
 				return a.map((valueA, index) => {
 					const valueB = b[index];
+					if (valueA.point.equals(valueB.point)) return valueB;
 					return {
 						point: valueA.point.add(valueA.point.delta(valueB.point).scale(t)),
 						color: valueB.color
