@@ -5,6 +5,7 @@
 	import { tweened } from 'svelte/motion';
 	import { sineIn } from 'svelte/easing';
 	import type {ColorSpace} from '../color/colorSpaces';
+	import OptionsButton from './OptionsButton.svelte';
 
 	export let norm: DistanceType = 'euclidean';
 	export let colorSpace: ColorSpace = 'rgb';
@@ -67,45 +68,22 @@
 
 <div class="m-4 text-white">
 	<div class="flex flex-row gap-4">
-		{#if display.has('add')}
-			<button
-				class="p-2 inline-flex gap-4 justify-between items-center justify-items-center bg-gray-700 hover:bg-gray-600 transition-all rounded-xl mb-4"
-				on:click={() => dispatch('add')}
-			>
-				<div class="bg-gray-600 p-2 rounded-xl"><Icon.PlusSolid size="md" /></div>
-				<div>Hinzufügen</div>
-			</button>
-		{/if}
-		{#if display.has('delete')}
-			<button
-				class="p-2 inline-flex gap-4 justify-between items-center justify-items-center bg-gray-700 hover:bg-gray-600 transition-all rounded-xl mb-4"
-				on:click={() => dispatch('delete')}
-			>
-				<div class="bg-gray-600 p-2 rounded-xl"><Icon.TrashBinSolid size="md" /></div>
-				<div>Löschen</div>
-			</button>
-		{/if}
-		{#if display.has('lock')}
-			<button
-				class="p-2 inline-flex gap-4 justify-between items-center justify-items-center bg-gray-700 hover:bg-gray-600 transition-all rounded-xl mb-4"
+		<OptionsButton show={display.has('add')}
+			on:click={() => dispatch('add')}
+			 icon={Icon.PlusSolid}
+			 title="Hinzufügen"
+		 />
+		 <OptionsButton show={display.has('delete')}
+					on:click={() => dispatch('delete')}
+				  icon={Icon.TrashBinSolid}
+				  title="Löschen"
+		  />
+		  <OptionsButton show={display.has('lock')}
 				on:click={() => (locked = !locked)}
-			>
-				<div class="bg-gray-600 p-2 rounded-xl" style={lockButtonStyle}>
-					{#if locked}
-						<Icon.LockSolid size="md" />
-					{:else}
-						<Icon.LockOpenSolid size="md" />
-					{/if}
-				</div>
-				<div>
-					{#if locked}
-						Entsperren
-					{:else}
-						Sperren
-					{/if}
-				</div>
-			</button>
-		{/if}
+				   title={locked ? "Entsperren" : "Sperren"}
+				   icon={locked ? Icon.LockSolid : Icon.LockOpenSolid}
+				   iconStyle={lockButtonStyle}
+		/>
 	</div>
 	{#if display.has('norm')}
 		<div class="p-2 inline-flex flex-wrap gap-4 justify-start items-center bg-gray-700 rounded-xl">
@@ -160,30 +138,8 @@
 		</div>
 	{/if}
 	<div class="flex flex-row gap-4 mt-4">
-		{#if display.has('load')}
-			<button
-				class="p-2 inline-flex gap-4 justify-between items-center justify-items-center bg-gray-700 hover:bg-gray-600 transition-all rounded-xl"
-			>
-				<div class="bg-gray-600 p-2 rounded-xl"><Icon.DownloadSolid size="md" /></div>
-				<div>Laden</div>
-			</button>
-		{/if}
-		{#if display.has('store')}
-			<button
-				class="p-2 inline-flex gap-4 justify-between items-center justify-items-center bg-gray-700 hover:bg-gray-600 transition-all rounded-xl"
-			>
-				<div class="bg-gray-600 p-2 rounded-xl"><Icon.UploadSolid size="md" /></div>
-				<div>Speichern</div>
-			</button>
-		{/if}
-		{#if display.has('asVector')}
-			<button
-				class="p-2 inline-flex gap-4 justify-between items-center justify-items-center bg-gray-700 hover:bg-gray-600 transition-all rounded-xl"
-				on:click={() => dispatch('asVectors')}
-			>
-				<div class="bg-gray-600 p-2 rounded-xl"><Icon.ArrowsRepeat1Solid size="md" /></div>
-				<div>Als Vektoren</div>
-			</button>
-		{/if}
+		<OptionsButton show={display.has('load')} title="Laden" icon={Icon.DownloadSolid} />
+		<OptionsButton show={display.has('store')} title="Speichern" icon={Icon.UploadSolid} />
+		<OptionsButton show={display.has('asVector')} title="Als Vektoren" icon={Icon.ArrowRightBigOutline} on:click={() => dispatch('asVectors')} />
 	</div>
 </div>
