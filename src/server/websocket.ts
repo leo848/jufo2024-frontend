@@ -94,7 +94,7 @@ websocket.onmessage = onmessage;
 
 let callbacks: { f: (so: ServerOutput) => void; id: number }[] = [];
 
-export function sendWebsocket(input: ServerInput, options ?: { noLog ?: boolean }) {
+export function sendWebsocket(input: ServerInput, options?: { noLog?: boolean }) {
 	const noLog = options?.noLog;
 	const status = getStatus();
 	if (status.status === 'offline') {
@@ -194,11 +194,14 @@ export function unregisterCallback(id: number) {
 
 export function updateConnectionData(): Writable<ConnectionData> {
 	const beforeTime = new Date();
-	sendWebsocket({
-		type: 'latency'
-	}, {
-		noLog: true
-	});
+	sendWebsocket(
+		{
+			type: 'latency'
+		},
+		{
+			noLog: true
+		}
+	);
 
 	const millis = (date: Date) => date.getTime();
 

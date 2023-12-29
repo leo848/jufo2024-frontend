@@ -5,10 +5,10 @@
 	import type { ColorSpace } from '../../color/colorSpaces';
 	import { RgbColor } from '../../color/colorSpaces';
 	import type { Color } from '../../color/color';
-	import { cubicOut } from 'svelte/easing';
-	import { tweened } from 'svelte/motion';
+	import { cubicOut, quadInOut } from 'svelte/easing';
 	import { Point3, axes } from '../../geom/point';
 	import { createEventDispatcher, onMount } from 'svelte';
+	import { type Tweened, tweened } from 'svelte/motion';
 
 	extend({
 		OrbitControls
@@ -26,7 +26,7 @@
 	const { renderer, renderMode, advance } = useThrelte();
 
 	renderMode.set('manual');
-	$: colors, edges, space, projection, ballSize, selectedIndex, advance();
+	$: colors, edges, space, projection, ballSize, selectedIndex, $displayPoints, advance();
 
 	$: axisTextures = new Array(3).fill(null).map((_, index) => {
 		const spaced = new RgbColor(0, 0, 0).color().space(space);
@@ -74,10 +74,28 @@
 		const evtType = 'mouse' + evtTypeSuffix;
 		canvas.addEventListener(evtType, advance);
 	}
-	
-	let displayPoints: { point: Point3, color: Color }[];
+
+	let displayPoints: Tweened<{ point: Point3; color: Color }[]> = tweened(undefined, {
+		duration: 500,
+		easing: quadInOut,
+		interpolate(a: { point: Point3; color: Color }[], b: { point: Point3; color: Color }[]) {
+			return (t) => {
+				if (a.length != b.length) return b;
+				return a.map((valueA, index) => {
+					const valueB = b[index];
+					return {
+						point: valueA.point.add(valueA.point.delta(valueB.point).scale(t)),
+						color: valueB.color
+					};
+				});
+			};
+		}
+	});
+
 	$: {
-		displayPoints = colors.map(color => ({ point: color.space(space).point().scale(10), color }));
+		displayPoints.set(
+			colors.map((color) => ({ point: color.space(space).point().scale(10), color }))
+		);
 	}
 
 	const ballSizeAnim = tweened(ballSize, { duration: 250, easing: cubicOut });
@@ -159,7 +177,7 @@
 		shadows*/
 </script>
 
-{#each displayPoints as { point, color }, index (color.rgb().numeric())}
+{#each $displayPoints as { point, color }, index (color.rgb().numeric())}
 	{@const selected = selectedIndex === index}
 	{#if selected}
 		{#each axes as comp}
