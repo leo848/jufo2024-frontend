@@ -229,7 +229,7 @@
 				{colors[selection.index - 1]
 					.space(space)
 					.point()
-					.distanceTo(colors[selection.index].space(space).point())
+					.distanceTo(colors[selection.index].space(space).point(), norm)
 					.toFixed(2)}
 			</div>
 		{/if}
@@ -260,7 +260,7 @@
 				{colors[selection.index]
 					.space(space)
 					.point()
-					.distanceTo(colors[selection.index + 1].space(space).point())
+					.distanceTo(colors[selection.index + 1].space(space).point(), norm)
 					.toFixed(2)}
 			</div>
 		{/if}
