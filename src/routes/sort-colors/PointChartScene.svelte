@@ -28,7 +28,15 @@
 	const { renderer, renderMode, advance } = useThrelte();
 
 	renderMode.set('manual');
-	$: colors, edges, space, projection, ballSize, selectedIndex, $displayPoints, advance();
+	$: colors,
+		edges,
+		space,
+		projection,
+		ballSize,
+		selectedIndex,
+		$displayPoints,
+		$displayEdges,
+		advance();
 
 	$: axisTextures = new Array(3).fill(null).map((_, index) => {
 		const spaced = new RgbColor(0, 0, 0).color().space(space);
@@ -99,6 +107,30 @@
 		displayPoints.set(
 			colors.map((color) => ({ point: color.space(space).point().scale(10), color }))
 		);
+	}
+
+	let displayEdges: Tweened<[Point3, Point3, Color | undefined][]> = tweened(undefined, {
+		duration: 500,
+		easing: quadInOut,
+		interpolate(
+			a: [Point3, Point3, Color | undefined][],
+			b: [Point3, Point3, Color | undefined][]
+		) {
+			if (a.length != b.length) return () => b;
+			return (t) => {
+				return a.map((valueA, index) => {
+					const valueB = b[index];
+					return [
+						valueA[0].add(valueA[0].delta(valueB[0]).scale(t)),
+						valueA[1].add(valueA[1].delta(valueB[1]).scale(t)),
+						undefined
+					];
+				});
+			};
+		}
+	});
+	$: {
+		displayEdges.set(edges);
 	}
 
 	const ballSizeAnim = tweened(ballSize, { duration: 250, easing: cubicOut });
@@ -211,7 +243,7 @@
 	{/if}
 {/each}
 
-{#each edges as [pointA, pointB] ([pointA, pointB])}
+{#each $displayEdges as [pointA, pointB] ([pointA, pointB])}
 	{@const [displayA, displayB] = [pointA.scale(10), pointB.scale(10)]}
 	{#if norm === 'euclidean'}
 		{@const deltaVector = displayA.delta(displayB)}
