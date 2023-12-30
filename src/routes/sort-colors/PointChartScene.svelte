@@ -224,6 +224,9 @@
 		</T.Mesh>
 	{:else}
 		{@const distances = axes.map((axis) => displayA[axis] - displayB[axis])}
+		{@const maxIndex = distances.findIndex(
+			(comp) => Math.abs(Math.abs(comp) - Math.max(...distances.map(Math.abs))) < 0.0001
+		)}
 		{#each axes as axis, index}
 			{@const position = displayA
 				.map((n, _, axIdx) => {
@@ -233,8 +236,11 @@
 				})
 				.values()}
 			{@const rotation = rotations[index]}
+			{@const maxFactor = norm === 'max' ? (index !== maxIndex ? 0.4 : 1) : 1}
 			<T.Mesh {position} rotation={[rotation[0], rotation[1], rotation[2]]}>
-				<T.CylinderGeometry args={[0.08, 0.06, displayA[axis] - displayB[axis], 10]} />
+				<T.CylinderGeometry
+					args={[0.09 * maxFactor, 0.075 * maxFactor, displayA[axis] - displayB[axis], 10]}
+				/>
 				<T.MeshStandardMaterial roughness={0.2} metalness={0.8} color={0xffffff} />
 			</T.Mesh>
 		{/each}
