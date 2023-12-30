@@ -100,7 +100,7 @@
 				on:delete={invalidate(() => (points = []))}
 				bind:norm
 				on:asVectors={invalidate(() => {
-					goto('/sort-vectors?v=' + points.map((p) => [p.lat, p.lng].join('i')).join('o'));
+	   goto('/sort-vectors?v=' + points.map((p) => [p.lat, p.lng].map(f => f.toFixed(5)).join('i')).join('o'));
 				})}
 			/>
 		</Window>
