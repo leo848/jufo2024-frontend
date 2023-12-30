@@ -18,7 +18,6 @@
 		'delete',
 		'lock',
 		'norm',
-		'colorSpace',
 		'load',
 		'store',
 		'asVector'

@@ -124,7 +124,7 @@
 					throw new Error('Invalid: returned invalid color not in list');
 				})()
 		);
-		setTimeout(() => colorsAnim = true);
+		setTimeout(() => (colorsAnim = true));
 	}
 
 	{
@@ -367,7 +367,7 @@
 			<div class="h-full m-0 min-h-[420px]">
 				<PointChart
 					{colors}
-		{colorsAnim}
+					{colorsAnim}
 					{edges}
 					{ballSize}
 					{projection}

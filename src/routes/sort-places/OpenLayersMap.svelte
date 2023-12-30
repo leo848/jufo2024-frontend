@@ -9,6 +9,8 @@
 	export let points: NamedPoint[];
 	export let edges: [CoordPoint, CoordPoint][];
 
+	export let invalidate: <T>(c: (t: T) => void) => (t: T) => void;
+
 	let wrapperDiv: HTMLDivElement;
 	let selectElt: HTMLDivElement;
 	let map: L.Map;
@@ -111,7 +113,7 @@
 				<div>{selection.position.lat.toFixed(5)}°N, {selection.position.lng.toFixed(5)}°E</div>
 				<input type="text" class="mt-4 bg-gray-700 w-full rounded" bind:value={selection.name} />
 				<button
-					on:click|stopPropagation={addSelection}
+					on:click|stopPropagation={invalidate(addSelection)}
 					class="text-xl p-2 bg-gray-600 hover:bg-gray-500 transition-all w-full rounded mt-4"
 					>Hinzufügen</button
 				>

@@ -13,9 +13,7 @@
 </script>
 
 {#if show}
-	<div
-		class="mt-4 inline-flex flex-wrap gap-2 justify-start items-center bg-gray-700 rounded-xl"
-	>
+	<div class="mt-4 inline-flex flex-wrap gap-2 justify-start items-center bg-gray-700 rounded-xl">
 		<div class="bg-gray-600 p-2 rounded-xl"><svelte:component this={icon} size="md" /></div>
 		<div>{title}</div>
 		<div class="flex flex-row">

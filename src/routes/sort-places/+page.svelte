@@ -1,6 +1,5 @@
 <script lang="ts">
 	import { title } from '../../ui/navbar';
-	import { Card } from 'flowbite-svelte';
 	import * as Icon from 'flowbite-svelte-icons';
 	import OpenLayersMap from './OpenLayersMap.svelte';
 	import PathProperties from '../../components/PathProperties.svelte';
@@ -11,16 +10,28 @@
 	import { onDestroy } from 'svelte';
 	import presets from './presets';
 	import Window from '../../components/Window.svelte';
+	import Options from '../../components/Options.svelte';
+	import type { DistanceType } from '../../geom/dist';
+	import { goto } from '$app/navigation';
 
 	title.set('Orte sortieren');
 
 	let points: NamedPoint[] = presets[0].values;
+	let pointsLocked: boolean = false;
 	$: length = points.length;
 
 	let edges: [CoordPoint, CoordPoint][] = [];
+	let norm: DistanceType = 'euclidean';
 
 	let path: null | number[][] = [];
 	let invalidateAlgorithms: () => {};
+	let invalidate: <T>(c: (t: T) => void) => (t: T) => void;
+
+	function blowUp() {
+		path = null;
+		edges = [];
+		invalidateAlgorithms();
+	}
 
 	function setDataFromPath(path: number[][]) {
 		points = path.map(
@@ -74,12 +85,25 @@
 	<div
 		class="mt-8 grid grid-cols-12 gap-8 auto-cols-max align-stretch justify-stretch justify-items-stretch"
 	>
-		<Window title="Karte" options row={2}>
+		<Window title="Karte" options row={3}>
 			<div class="h-full m-0">
-				<OpenLayersMap bind:points {edges} />
+				<OpenLayersMap {invalidate} bind:points {edges} />
 			</div>
 		</Window>
 
+		<Window title="Optionen" xlCol={6}>
+			<Options
+				on:blowUp={blowUp}
+				bind:invalidate
+				bind:locked={pointsLocked}
+				hide={['add']}
+				on:delete={invalidate(() => (points = []))}
+				bind:norm
+				on:asVectors={invalidate(() => {
+					goto('/sort-vectors?v=' + points.map((p) => [p.lat, p.lng].join('i')).join('o'));
+				})}
+			/>
+		</Window>
 		<PathProperties {path} {length} horizontal />
 
 		<PathAlgorithms

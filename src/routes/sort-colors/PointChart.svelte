@@ -57,8 +57,8 @@
 				{canvas}
 				{ballSize}
 				{selectedIndex}
-	   			{edgesAnim}
-	   			{colorsAnim}
+				{edgesAnim}
+				{colorsAnim}
 				on:pick
 			/>
 		{/if}
