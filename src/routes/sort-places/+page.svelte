@@ -23,7 +23,7 @@
 	let edges: [CoordPoint, CoordPoint][] = [];
 	let norm: DistanceType = 'euclidean';
 
-	let path: null | number[][] = [];
+	let path: null | number[][] = null;
 	let invalidateAlgorithms: () => {};
 	let invalidate: <T>(c: (t: T) => void) => (t: T) => void;
 
