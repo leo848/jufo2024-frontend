@@ -366,6 +366,7 @@
 					{ballSize}
 					{projection}
 					{space}
+					{norm}
 					on:pick={(evt) => (selection = evt.detail)}
 					selectedIndex={selection?.index}
 				/>

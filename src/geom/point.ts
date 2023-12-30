@@ -42,8 +42,8 @@ export class Point3 {
 		return dist(this.values(), other.values(), norm ?? 'euclidean');
 	}
 
-	map(f: (comp: number, axis: 'x' | 'y' | 'z') => number): Point3 {
-		return new Point3(f(this.x, 'x'), f(this.y, 'y'), f(this.z, 'z'));
+	map(f: (comp: number, axis: 'x' | 'y' | 'z', idx: number) => number): Point3 {
+		return new Point3(f(this.x, 'x', 0), f(this.y, 'y', 1), f(this.z, 'z', 2));
 	}
 
 	with(value: number, axis: 'x' | 'y' | 'z'): Point3 {

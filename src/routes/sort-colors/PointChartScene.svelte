@@ -9,12 +9,14 @@
 	import { Point3, axes } from '../../geom/point';
 	import { createEventDispatcher, onMount } from 'svelte';
 	import { type Tweened, tweened } from 'svelte/motion';
+	import type { DistanceType } from '../../geom/dist';
 
 	extend({
 		OrbitControls
 	});
 
 	export let projection: 'orthographic' | 'perspective' = 'orthographic';
+	export let norm: DistanceType = 'euclidean';
 	export let space: ColorSpace;
 	export let colors: Color[];
 	export let edges: [Point3, Point3, Color | undefined][];
@@ -211,14 +213,32 @@
 
 {#each edges as [pointA, pointB] ([pointA, pointB])}
 	{@const [displayA, displayB] = [pointA.scale(10), pointB.scale(10)]}
-	{@const deltaVector = displayA.delta(displayB)}
-	{@const distance = deltaVector.mag()}
-	{@const position = displayA.add(deltaVector.scale(0.5)).values()}
-	{@const rotation = deltaVector.rotationFromPoint(displayA)}
-	<T.Mesh {position} {rotation}>
-		<T.CylinderGeometry args={[0.08, 0.06, distance, 10]} />
-		<T.MeshStandardMaterial roughness={0.2} metalness={0.8} color={0xffffff} />
-	</T.Mesh>
+	{#if norm === 'euclidean'}
+		{@const deltaVector = displayA.delta(displayB)}
+		{@const distance = deltaVector.mag()}
+		{@const position = displayA.add(deltaVector.scale(0.5)).values()}
+		{@const rotation = deltaVector.rotationFromPoint(displayA)}
+		<T.Mesh {position} {rotation}>
+			<T.CylinderGeometry args={[0.08, 0.06, distance, 10]} />
+			<T.MeshStandardMaterial roughness={0.2} metalness={0.8} color={0xffffff} />
+		</T.Mesh>
+	{:else}
+		{@const distances = axes.map((axis) => displayA[axis] - displayB[axis])}
+		{#each axes as axis, index}
+			{@const position = displayA
+				.map((n, _, axIdx) => {
+					if (axIdx < index) return n - distances[axIdx];
+					else if (axIdx == index) return n - distances[axIdx] / 2;
+					else return n;
+				})
+				.values()}
+			{@const rotation = rotations[index]}
+			<T.Mesh {position} rotation={[rotation[0], rotation[1], rotation[2]]}>
+				<T.CylinderGeometry args={[0.08, 0.06, displayA[axis] - displayB[axis], 10]} />
+				<T.MeshStandardMaterial roughness={0.2} metalness={0.8} color={0xffffff} />
+			</T.Mesh>
+		{/each}
+	{/if}
 {/each}
 
 <T.AmbientLight intensity={0.5} />
