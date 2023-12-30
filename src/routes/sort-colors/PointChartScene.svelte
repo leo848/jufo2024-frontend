@@ -22,6 +22,8 @@
 	export let edges: [Point3, Point3, Color | undefined][];
 	export let ballSize: number = 0.5;
 	export let selectedIndex: number | null = null;
+	export let colorsAnim: boolean;
+	export let edgesAnim: boolean;
 
 	export let canvas: HTMLCanvasElement;
 
@@ -89,7 +91,7 @@
 		duration: 500,
 		easing: quadInOut,
 		interpolate(a: { point: Point3; color: Color }[], b: { point: Point3; color: Color }[]) {
-			if (a.length != b.length) return () => b;
+			if (!colorsAnim || a.length != b.length) return () => b;
 			return (t) => {
 				return a.map((valueA, index) => {
 					const valueB = b[index];
@@ -116,7 +118,7 @@
 			a: [Point3, Point3, Color | undefined][],
 			b: [Point3, Point3, Color | undefined][]
 		) {
-			if (a.length != b.length) return () => b;
+			if (!edgesAnim || a.length != b.length) return () => b;
 			return (t) => {
 				return a.map((valueA, index) => {
 					const valueB = b[index];

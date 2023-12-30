@@ -38,6 +38,7 @@
 	]; // pride flag
 	let colorsLocked = false;
 	let invalidate: <T>(callback: (t: T) => void) => (t: T) => void;
+	let colorsAnim = true;
 
 	let selection: {
 		index: number;
@@ -115,6 +116,7 @@
 
 	function setColorsFromPath(path: number[][]) {
 		colorsLocked = true;
+		colorsAnim = false;
 		colors = path.map(
 			(arr) =>
 				colors.find((color) => color.space(space).point().equals(Point3.fromArray(arr))) ??
@@ -122,35 +124,38 @@
 					throw new Error('Invalid: returned invalid color not in list');
 				})()
 		);
+		setTimeout(() => colorsAnim = true);
 	}
 
-	let callbackIdCreation = registerCallback(serverOutputPathCreation, (pc) => {
-		path = null;
-		colorsLocked = true;
-		if (pc.donePath) {
-			path = pc.donePath.map(Point3.fromArray);
-			edges = pathToEdges(pc.donePath);
-			setColorsFromPath(pc.donePath);
-		} else {
-			edges = pc.currentEdges.map(([from, to]) => [
-				Point3.fromArray(from),
-				Point3.fromArray(to),
-				undefined
-			]);
-		}
-	});
-	onDestroy(() => unregisterCallback(callbackIdCreation));
+	{
+		let callbackIdCreation = registerCallback(serverOutputPathCreation, (pc) => {
+			path = null;
+			colorsLocked = true;
+			if (pc.donePath) {
+				path = pc.donePath.map(Point3.fromArray);
+				edges = pathToEdges(pc.donePath);
+				setColorsFromPath(pc.donePath);
+			} else {
+				edges = pc.currentEdges.map(([from, to]) => [
+					Point3.fromArray(from),
+					Point3.fromArray(to),
+					undefined
+				]);
+			}
+		});
+		onDestroy(() => unregisterCallback(callbackIdCreation));
 
-	let callbackIdImprovement = registerCallback(serverOutputPathImprovement, (pi) => {
-		if (pi.better) {
-			edges = pathToEdges(pi.currentPath);
-			path = pi.currentPath.map(Point3.fromArray);
-		}
-		if (pi.done) {
-			setColorsFromPath(pi.currentPath);
-		}
-	});
-	onDestroy(() => unregisterCallback(callbackIdImprovement));
+		let callbackIdImprovement = registerCallback(serverOutputPathImprovement, (pi) => {
+			if (pi.better) {
+				edges = pathToEdges(pi.currentPath);
+				path = pi.currentPath.map(Point3.fromArray);
+			}
+			if (pi.done) {
+				setColorsFromPath(pi.currentPath);
+			}
+		});
+		onDestroy(() => unregisterCallback(callbackIdImprovement));
+	}
 </script>
 
 {#if selection !== null && selection.colorPickerOpen && colors.length > selection.index}
@@ -362,6 +367,7 @@
 			<div class="h-full m-0 min-h-[420px]">
 				<PointChart
 					{colors}
+		{colorsAnim}
 					{edges}
 					{ballSize}
 					{projection}

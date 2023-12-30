@@ -8,7 +8,9 @@
 
 	export let space: ColorSpace;
 	export let colors: Color[];
+	export let colorsAnim: boolean = true;
 	export let edges: [Point3, Point3, Color | undefined][];
+	export let edgesAnim: boolean = true;
 	export let projection: 'orthographic' | 'perspective' = 'orthographic';
 	export let norm: DistanceType;
 	export let ballSize: number = 0.5;
@@ -55,6 +57,8 @@
 				{canvas}
 				{ballSize}
 				{selectedIndex}
+	   			{edgesAnim}
+	   			{colorsAnim}
 				on:pick
 			/>
 		{/if}
