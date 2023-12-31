@@ -27,13 +27,17 @@
 	let invalidateAlgorithms: () => {};
 	let invalidate: <T>(c: (t: T) => void) => (t: T) => void;
 
+	let blownUp = false;
+
 	function blowUp() {
+		blownUp = true;
 		path = null;
 		edges = [];
 		invalidateAlgorithms();
 	}
 
 	function setDataFromPath(path: number[][]) {
+		pointsLocked = true;
 		points = path.map(
 			(arr) =>
 				points.find((point) => coordSimilar(point, { lat: arr[0], lng: arr[1] })) ??
@@ -111,6 +115,7 @@
 			bind:invalidate={invalidateAlgorithms}
 			dimensions={2}
 			horizontal
+	  		{blownUp}
 			points={points.map((p) => [p.lat, p.lng])}
 		/>
 	</div>
