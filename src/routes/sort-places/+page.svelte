@@ -29,7 +29,7 @@
 	let blownUp = false;
 
 	function blowUp() {
-		blownUp = true;
+		if (path != null) blownUp = true;
 		path = null;
 		edges = [];
 		invalidateAlgorithms();
