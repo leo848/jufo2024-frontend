@@ -15,7 +15,7 @@
 
 	title.set('Orte sortieren');
 
-	let points: NamedPoint[] = presets[0].values;
+	let points: NamedPoint[] = presets[2].values;
 	let pointsLocked: boolean = false;
 	$: length = points.length;
 

@@ -129,6 +129,21 @@ const presets: {
 			{ name: 'Aachener Dom', lat: 50.7745, lng: 6.08382 },
 			{ name: 'Informatik-Fakultät', lat: 50.77932, lng: 6.05888 }
 		]
+	},
+	{
+		name: 'New York City',
+		values: [
+		  { "name": "One World Trade Center", "lat": 40.71274, "lng": -74.01339 },
+		  { "name": "Empire State Building", "lat": 40.74844, "lng": -73.98565 },
+		  { "name": "Chrysler Building", "lat": 40.75174, "lng": -73.97560 },
+		  { "name": "Bank of America Tower", "lat": 40.75856, "lng": -73.98295 },
+		  { "name": "The New York Times Building", "lat": 40.75652, "lng": -73.99035 },
+		  { "name": "One Bryant Park", "lat": 40.75566, "lng": -73.98342 },
+		  { "name": "432 Park Avenue", "lat": 40.76144, "lng": -73.97137 },
+		  { "name": "One57", "lat": 40.76526, "lng": -73.97923 },
+		  { "name": "30 Hudson Yards", "lat": 40.75362, "lng": -74.00164 },
+		  { "name": "MetLife Building", "lat": 40.75462, "lng": -73.97645 }
+		]
 	}
 ];
 
