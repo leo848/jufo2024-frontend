@@ -1,6 +1,5 @@
 <script lang="ts">
 	import { title } from '../../ui/navbar';
-	import * as Icon from 'flowbite-svelte-icons';
 	import OpenLayersMap from './OpenLayersMap.svelte';
 	import PathProperties from '../../components/PathProperties.svelte';
 	import PathAlgorithms from '../../components/PathAlgorithms.svelte';
@@ -108,14 +107,13 @@
 				})}
 			/>
 		</Window>
-		<PathProperties {path} {length} horizontal />
+		<PathProperties {path} {length} {blownUp} horizontal />
 
 		<PathAlgorithms
 			on:deletePath={() => (path = null)}
 			bind:invalidate={invalidateAlgorithms}
 			dimensions={2}
 			horizontal
-	  		{blownUp}
 			points={points.map((p) => [p.lat, p.lng])}
 		/>
 	</div>
