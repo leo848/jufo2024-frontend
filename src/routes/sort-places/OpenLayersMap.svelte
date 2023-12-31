@@ -10,6 +10,8 @@
 	export let points: NamedPoint[];
 	export let edges: [CoordPoint, CoordPoint][];
 
+	export let rotation: number = 0;
+
 	export let norm: DistanceType = 'euclidean';
 	export let invalidate: <T>(c: (t: T) => void) => (t: T) => void;
 
@@ -54,13 +56,15 @@
 	$: selection === null && selectionPopup && map.closePopup(selectionPopup);
 
 	onMount(() => {
-		map = L.map(wrapperDiv, {
+		const config = {
 			center: center(points),
 			zoom: 13,
 			minZoom: 10,
-			attributionControl: false
+			attributionControl: false,
+			rotate: true,
 			// maxBounds: [[ 50.7, 6.0 ], [ 50.8, 6.1 ]]
-		});
+		}
+		map = L.map(wrapperDiv, config);
 
 		L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
 			attribution:

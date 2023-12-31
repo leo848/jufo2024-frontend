@@ -10,6 +10,7 @@ function wikiCoord(coord: string): number {
 
 const presets: {
 	name: string;
+	rotation ?: number;
 	values: NamedPoint[];
 }[] = [
 	{
@@ -132,6 +133,7 @@ const presets: {
 	},
 	{
 		name: 'New York City',
+		rotation: 60,
 		values: [
 		  { "name": "One World Trade Center", "lat": 40.71274, "lng": -74.01339 },
 		  { "name": "Empire State Building", "lat": 40.74844, "lng": -73.98565 },

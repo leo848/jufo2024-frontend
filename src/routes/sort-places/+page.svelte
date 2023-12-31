@@ -21,6 +21,7 @@
 
 	let edges: [CoordPoint, CoordPoint][] = [];
 	let norm: DistanceType = 'euclidean';
+	let rotation: number = presets[2].rotation ?? 0;
 
 	let path: null | number[][] = null;
 	let invalidateAlgorithms: () => {};
@@ -90,7 +91,7 @@
 	>
 		<Window title="Karte" options row={3}>
 			<div class="h-full m-0">
-				<OpenLayersMap {invalidate} {norm} bind:points {edges} />
+				<OpenLayersMap {invalidate} {norm} bind:points {rotation} {edges} />
 			</div>
 		</Window>
 
