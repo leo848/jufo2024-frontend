@@ -39,6 +39,7 @@
 	let colorsLocked = false;
 	let invalidate: <T>(callback: (t: T) => void) => (t: T) => void;
 	let colorsAnim = true;
+	let edgesAnim = true;
 
 	let selection: {
 		index: number;
@@ -133,7 +134,9 @@
 			colorsLocked = true;
 			if (pc.donePath) {
 				path = pc.donePath.map(Point3.fromArray);
+				edgesAnim = false;
 				edges = pathToEdges(pc.donePath);
+				setTimeout(() => edgesAnim = true);
 				setColorsFromPath(pc.donePath);
 			} else {
 				edges = pc.currentEdges.map(([from, to]) => [
