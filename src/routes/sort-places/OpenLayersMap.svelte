@@ -5,10 +5,12 @@
 	import 'leaflet/dist/images/marker-icon.png';
 	import type { CoordPoint, NamedPoint } from '../../geom/coordPoint';
 	import { scale } from 'svelte/transition';
+	import type { DistanceType } from '../../geom/dist';
 
 	export let points: NamedPoint[];
 	export let edges: [CoordPoint, CoordPoint][];
 
+	export let norm: DistanceType = 'euclidean';
 	export let invalidate: <T>(c: (t: T) => void) => (t: T) => void;
 
 	let wrapperDiv: HTMLDivElement;
@@ -32,7 +34,13 @@
 	let edgeLines: L.Path[] = [];
 	$: {
 		edgeLines.forEach((l) => l.removeFrom(map));
-		edgeLines = edges.map((edge) => new L.Polyline([edge]));
+		if (norm === 'euclidean') {
+			edgeLines = edges.map((edge) => new L.Polyline([edge]));
+		} else {
+			edgeLines = edges.map(
+				([point1, point2]) => new L.Polyline([point1, [point2.lat, point1.lng], point2])
+			);
+		}
 		edgeLines.forEach((l) => l.addTo(map));
 	}
 

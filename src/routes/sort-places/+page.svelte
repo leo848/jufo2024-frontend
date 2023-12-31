@@ -90,7 +90,7 @@
 	>
 		<Window title="Karte" options row={3}>
 			<div class="h-full m-0">
-				<OpenLayersMap {invalidate} bind:points {edges} />
+				<OpenLayersMap {invalidate} {norm} bind:points {edges} />
 			</div>
 		</Window>
 
@@ -103,7 +103,10 @@
 				on:delete={invalidate(() => (points = []))}
 				bind:norm
 				on:asVectors={invalidate(() => {
-	   goto('/sort-vectors?v=' + points.map((p) => [p.lat, p.lng].map(f => f.toFixed(5)).join('i')).join('o'));
+					goto(
+						'/sort-vectors?v=' +
+							points.map((p) => [p.lat, p.lng].map((f) => f.toFixed(5)).join('i')).join('o')
+					);
 				})}
 			/>
 		</Window>
