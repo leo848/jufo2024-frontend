@@ -61,9 +61,9 @@
 			zoom: 13,
 			minZoom: 10,
 			attributionControl: false,
-			rotate: true,
+			rotate: true
 			// maxBounds: [[ 50.7, 6.0 ], [ 50.8, 6.1 ]]
-		}
+		};
 		map = L.map(wrapperDiv, config);
 
 		L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {

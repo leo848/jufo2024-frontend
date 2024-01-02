@@ -10,7 +10,7 @@ function wikiCoord(coord: string): number {
 
 const presets: {
 	name: string;
-	rotation ?: number;
+	rotation?: number;
 	values: NamedPoint[];
 }[] = [
 	{
@@ -135,16 +135,16 @@ const presets: {
 		name: 'New York City',
 		rotation: 60,
 		values: [
-		  { "name": "One World Trade Center", "lat": 40.71274, "lng": -74.01339 },
-		  { "name": "Empire State Building", "lat": 40.74844, "lng": -73.98565 },
-		  { "name": "Chrysler Building", "lat": 40.75174, "lng": -73.97560 },
-		  { "name": "Bank of America Tower", "lat": 40.75856, "lng": -73.98295 },
-		  { "name": "The New York Times Building", "lat": 40.75652, "lng": -73.99035 },
-		  { "name": "One Bryant Park", "lat": 40.75566, "lng": -73.98342 },
-		  { "name": "432 Park Avenue", "lat": 40.76144, "lng": -73.97137 },
-		  { "name": "One57", "lat": 40.76526, "lng": -73.97923 },
-		  { "name": "30 Hudson Yards", "lat": 40.75362, "lng": -74.00164 },
-		  { "name": "MetLife Building", "lat": 40.75462, "lng": -73.97645 }
+			{ name: 'One World Trade Center', lat: 40.71274, lng: -74.01339 },
+			{ name: 'Empire State Building', lat: 40.74844, lng: -73.98565 },
+			{ name: 'Chrysler Building', lat: 40.75174, lng: -73.9756 },
+			{ name: 'Bank of America Tower', lat: 40.75856, lng: -73.98295 },
+			{ name: 'The New York Times Building', lat: 40.75652, lng: -73.99035 },
+			{ name: 'One Bryant Park', lat: 40.75566, lng: -73.98342 },
+			{ name: '432 Park Avenue', lat: 40.76144, lng: -73.97137 },
+			{ name: 'One57', lat: 40.76526, lng: -73.97923 },
+			{ name: '30 Hudson Yards', lat: 40.75362, lng: -74.00164 },
+			{ name: 'MetLife Building', lat: 40.75462, lng: -73.97645 }
 		]
 	}
 ];

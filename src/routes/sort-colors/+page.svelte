@@ -15,9 +15,7 @@
 	import { gradient } from '../../ui/color';
 	import PointChartOptions from './PointChartOptions.svelte';
 	import PathAlgorithms from '../../components/PathAlgorithms.svelte';
-	import ColorAddPopover from './ColorAddPopover.svelte';
 	import ColorDisplay from './ColorDisplay.svelte';
-	import ListStoragePopover from './ListStoragePopover.svelte';
 	import PathProperties from '../../components/PathProperties.svelte';
 	import { goto } from '$app/navigation';
 	import type { DistanceType } from '../../geom/dist';
@@ -136,7 +134,7 @@
 				path = pc.donePath.map(Point3.fromArray);
 				edgesAnim = false;
 				edges = pathToEdges(pc.donePath);
-				setTimeout(() => edgesAnim = true);
+				setTimeout(() => (edgesAnim = true));
 				setColorsFromPath(pc.donePath);
 			} else {
 				edges = pc.currentEdges.map(([from, to]) => [
@@ -304,6 +302,38 @@
 			>
 				<Icon.TrashBinOutline size="xl" />
 			</button>
+			{#if selection.index !== 0}
+				<button
+					class="text-base p-2 bg-white bg-opacity-10 rounded-lg hover:bg-gray-400 transition-all"
+					on:click={invalidate(() => {
+						if (selection && colors.length > selection.index) {
+							[colors[selection.index], colors[selection.index - 1]] = [
+								colors[selection.index - 1],
+								colors[selection.index]
+							];
+							selection = selection;
+						}
+					})}
+				>
+					<Icon.ArrowLeftSolid size="xl" />
+				</button>
+			{/if}
+			{#if selection.index !== colors.length - 1}
+				<button
+					class="text-base p-2 bg-white bg-opacity-10 rounded-lg hover:bg-gray-400 transition-all"
+					on:click={invalidate(() => {
+						if (selection && colors.length > selection.index) {
+							[colors[selection.index], colors[selection.index + 1]] = [
+								colors[selection.index + 1],
+								colors[selection.index]
+							];
+							selection = selection;
+						}
+					})}
+				>
+					<Icon.ArrowRightSolid size="xl" />
+				</button>
+			{/if}
 		</div>
 	</div>
 {/if}
