@@ -26,14 +26,22 @@
 
 	let space: ColorSpace = 'rgb';
 
-	let colors = [
+	/*let colors = [
 		RgbColor.fromNumeric(0xff1e26).color(),
 		RgbColor.fromNumeric(0xfe941e).color(),
 		RgbColor.fromNumeric(0xffff00).color(),
 		RgbColor.fromNumeric(0x06bd00).color(),
 		RgbColor.fromNumeric(0x001a98).color(),
 		RgbColor.fromNumeric(0x760088).color()
-	]; // pride flag
+	];*/ // pride flag
+	let colors = [
+		[.6,.2],
+		[.1,.7],
+		[.9,.4],
+		[.2,.2],
+		[.5,.5],
+		[.8,.7]
+	].map(([r, b]) => new RgbColor(r, 0, b).color()); // langfassung
 	let colorsLocked = false;
 	let invalidate: <T>(callback: (t: T) => void) => (t: T) => void;
 	let colorsAnim = true;
