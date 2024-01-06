@@ -135,6 +135,13 @@
 					method: 'threeOpt',
 					complexity: 'O(n³)',
 					icon: Icon.SwatchbookSolid
+				},
+				{
+					name: 'Simulated Annealing',
+					description: 'Zu Beginn werden Knoten zufällig getauscht, zum Schluss hin nur noch taktisch.',
+					method: null,
+					complexity: null,
+					icon: Icon.ChartSolid,
 				}
 			] as const
 		).map((e, i) => {

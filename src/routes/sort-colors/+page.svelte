@@ -213,7 +213,7 @@
 				}}
 				size="xs"
 			/>
-			w<sub>{selection.index + 1}</sub> =
+			l<sub>{selection.index + 1}</sub> =
 			{colors[selection.index].space(space).point()}
 		</div>
 		{#if selection.index !== 0}
@@ -229,7 +229,7 @@
 					}}
 					size="xs"
 				/>
-				w<sub>{selection.index}</sub>,
+				l<sub>{selection.index}</sub>,
 				<ColorDisplay
 					color={colors[selection.index]}
 					on:click={() => {
@@ -239,7 +239,7 @@
 					}}
 					size="xs"
 				/>
-				w<sub>{selection.index + 1}</sub>) =
+				l<sub>{selection.index + 1}</sub>) =
 				{colors[selection.index - 1]
 					.space(space)
 					.point()
@@ -259,7 +259,7 @@
 					}}
 					size="xs"
 				/>
-				w<sub>{selection.index + 1}</sub>,
+				l<sub>{selection.index + 1}</sub>,
 				<ColorDisplay
 					color={colors[selection.index + 1]}
 					on:click={() => {
@@ -270,7 +270,7 @@
 					}}
 					size="xs"
 				/>
-				w<sub>{selection.index + 2}</sub>) =
+				l<sub>{selection.index + 2}</sub>) =
 				{colors[selection.index]
 					.space(space)
 					.point()
