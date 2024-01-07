@@ -122,6 +122,13 @@
 					icon: Icon.RotateOutline
 				},
 				{
+					name: 'Swap',
+					description:
+						'Swap tauscht zwei Kanten, falls dies die Kantenlänge verringert.',
+					method: 'swap',
+					icon: Icon.ChervonDoubleDownSolid,
+				},
+				{
 					name: '2-opt',
 					description:
 						'Beim 2-opt-Verfahren werden Überkreuzungen zweier Kanten gesucht und durch Tauschen der Knoten behoben.',
@@ -139,10 +146,9 @@
 				{
 					name: 'Simulated Annealing',
 					description: 'Zu Beginn werden Knoten zufällig getauscht, zum Schluss hin nur noch taktisch.',
-					method: null,
-					complexity: null,
+					method: 'simulatedAnnealing',
 					icon: Icon.ChartSolid,
-				}
+				},
 			] as const
 		).map((e, i) => {
 			const payload =
