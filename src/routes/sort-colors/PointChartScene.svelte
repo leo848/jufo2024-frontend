@@ -86,6 +86,10 @@
 		const evtType = 'mouse' + evtTypeSuffix;
 		canvas.addEventListener(evtType, advance);
 	}
+	for (const evtTypeSuffix of ['start', 'end', 'cancel', 'move'] as const) {
+		const evtType = 'touch' + evtTypeSuffix;
+		canvas.addEventListener(evtType, advance);
+	}
 
 	let displayPoints: Tweened<{ point: Point3; color: Color }[]> = tweened(undefined, {
 		duration: 500,
