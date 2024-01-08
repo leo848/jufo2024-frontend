@@ -38,10 +38,10 @@
 	}
 
 	$: chainLengthDisplay = $chainLength.toFixed(
-		Math.max(3 - Math.max(0, Math.log10($chainLength)), 0) - 0.01
+		Math.max(3 - Math.max(0, Math.log10($chainLength)), 0) - 0.001
 	);
 	$: averageDistDisplay = ($chainLength / length).toFixed(
-		Math.max(2 - Math.max(0, Math.log10($chainLength / length)), 0) - 0.01
+		Math.max(3 - Math.max(0, Math.log10($chainLength / length)), 0) - 0.001
 	);
 
 	const _tailwind = [
