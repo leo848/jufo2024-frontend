@@ -82,11 +82,11 @@
 		[5, 0.001, -5]
 	] as const;
 
-	for (const evtTypeSuffix of ['move', 'down', 'up', 'enter', 'leave'] as const) {
+	for (const evtTypeSuffix of ['move', 'down', 'up', 'enter', 'leave']) {
 		const evtType = 'mouse' + evtTypeSuffix;
 		canvas.addEventListener(evtType, advance);
 	}
-	for (const evtTypeSuffix of ['start', 'end', 'cancel', 'move'] as const) {
+	for (const evtTypeSuffix of ['start', 'end', 'cancel', 'move']) {
 		const evtType = 'touch' + evtTypeSuffix;
 		canvas.addEventListener(evtType, advance);
 	}
