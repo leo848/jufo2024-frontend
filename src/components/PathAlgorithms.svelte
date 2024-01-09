@@ -123,10 +123,9 @@
 				},
 				{
 					name: 'Swap',
-					description:
-						'Swap tauscht zwei Kanten, falls dies die Kantenlänge verringert.',
+					description: 'Swap tauscht zwei Kanten, falls dies die Kantenlänge verringert.',
 					method: 'swap',
-					icon: Icon.ChervonDoubleDownSolid,
+					icon: Icon.ChervonDoubleDownSolid
 				},
 				{
 					name: '2-opt',
@@ -145,10 +144,11 @@
 				},
 				{
 					name: 'Simulated Annealing',
-					description: 'Zu Beginn werden Knoten zufällig getauscht, zum Schluss hin nur noch taktisch.',
+					description:
+						'Zu Beginn werden Knoten zufällig getauscht, zum Schluss hin nur noch taktisch.',
 					method: 'simulatedAnnealing',
-					icon: Icon.ChartSolid,
-				},
+					icon: Icon.ChartSolid
+				}
 			] as const
 		).map((e, i) => {
 			const payload =

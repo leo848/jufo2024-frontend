@@ -68,7 +68,7 @@ const action = z.discriminatedUnion('type', [
 			z.object({ type: z.literal('twoOpt') }),
 			z.object({ type: z.literal('threeOpt') }),
 			z.object({ type: z.literal('simulatedAnnealing') }),
-			z.object({ type: z.literal('swap') }),
+			z.object({ type: z.literal('swap') })
 		])
 	})
 ]);

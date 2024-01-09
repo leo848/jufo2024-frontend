@@ -131,6 +131,26 @@ export class Color {
 	}
 }
 
+export class NamedColor extends Color {
+	#name: string;
+
+	constructor(r: number, g: number, b: number, name: string) {
+		super(r, g, b);
+		this.#name = name;
+	}
+
+	static fromColor(color: Color, name: string): NamedColor {
+		let rgb = color.rgb();
+		return new NamedColor(rgb.r, rgb.g, rgb.b, name);
+	}
+
+	async name(list?: ColorNameList): Promise<ColorNameMetadata> {
+		const meta = await super.name(list);
+		meta.name = this.#name;
+		return meta;
+	}
+}
+
 export const rgbComponentSchema = z.enum(['r', 'g', 'b']);
 export type RgbComponent = z.infer<typeof rgbComponentSchema>;
 export const hsvComponentSchema = z.enum(['h', 's', 'v']);

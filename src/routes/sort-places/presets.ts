@@ -149,30 +149,28 @@ const presets: {
 	},
 	{
 		name: 'Sehenswürdigkeiten Marls',
-		values: 
-[
-  { "name": "Skulpturenmuseum Glaskasten", "lat": 51.65618, "lng": 7.09468},
-  { "name": "Zentralbibliothek", "lat": 51.6534120, "lng": 7.0964492 },
-  {  "name": "Katholische Kirche St. Georg", "lat": 51.64744, "lng": 7.08224},
-  { "name": "St. Bartholomäus", "lat": 51.62605, "lng": 7.05185 },
-  { "name": "Chemiepark", "lat": 51.67946, "lng": 7.10056 },
-  { "name": "Heimatmuseum", "lat": 51.6458, "lng": 7.08099 },
-]
-
+		values: [
+			{ name: 'Skulpturenmuseum Glaskasten', lat: 51.65618, lng: 7.09468 },
+			{ name: 'Zentralbibliothek', lat: 51.653412, lng: 7.0964492 },
+			{ name: 'Katholische Kirche St. Georg', lat: 51.64744, lng: 7.08224 },
+			{ name: 'St. Bartholomäus', lat: 51.62605, lng: 7.05185 },
+			{ name: 'Chemiepark', lat: 51.67946, lng: 7.10056 },
+			{ name: 'Heimatmuseum', lat: 51.6458, lng: 7.08099 }
+		]
 	},
 	{
-		"name": 'Kirchen Marls',
+		name: 'Kirchen Marls',
 		values: [
-  {  "name": "Katholische Kirche St. Georg", "lat": 51.64744, "lng": 7.08224},
-  { "name": "St. Bonifatius", "lat": 51.65719, "lng": 7.08752 },
-  { "name": "Dreifaltigkeitskirche", "lat": 51.65517, "lng": 7.08813 },
-  { "name": "St. Michael", "lat": 51.66571, "lng": 7.10233 },
-  { "name": "St. Heinrich", "lat": 51.6533, "lng": 7.1054 },
-  { "name": "Neoapostolische Kirche", "lat": 51.65849, "lng": 7.08029 },
-  { "name": "Freikirche Hüls", "lat": 51.66532, "lng": 7.12322 },
-  { "name": "Herz Jesu", "lat": 51.66349, "lng": 7.13334 },
-  { "name": "Auferstehungskirche", "lat": 51.65312, "lng": 7.11498 },
-  { "name": "Friedenskirche", "lat": 51.66175, "lng": 7.11445 }
+			{ name: 'Katholische Kirche St. Georg', lat: 51.64744, lng: 7.08224 },
+			{ name: 'St. Bonifatius', lat: 51.65719, lng: 7.08752 },
+			{ name: 'Dreifaltigkeitskirche', lat: 51.65517, lng: 7.08813 },
+			{ name: 'St. Michael', lat: 51.66571, lng: 7.10233 },
+			{ name: 'St. Heinrich', lat: 51.6533, lng: 7.1054 },
+			{ name: 'Neoapostolische Kirche', lat: 51.65849, lng: 7.08029 },
+			{ name: 'Freikirche Hüls', lat: 51.66532, lng: 7.12322 },
+			{ name: 'Herz Jesu', lat: 51.66349, lng: 7.13334 },
+			{ name: 'Auferstehungskirche', lat: 51.65312, lng: 7.11498 },
+			{ name: 'Friedenskirche', lat: 51.66175, lng: 7.11445 }
 		]
 	}
 ];
