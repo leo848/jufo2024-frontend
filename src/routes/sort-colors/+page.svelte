@@ -382,7 +382,7 @@
 		class="mt-8 grid grid-cols-12 gap-8 auto-cols-max align-stretch justify-stretch justify-items-stretch"
 	>
 		<div class="flex flex-row col-span-12 xl:col-span-8 justify-between align-center gap-4">
-			<div class="flex flex-row flex-wrap justify-start 2xl:gap-8 gap-2 items-stretch h-16">
+			<div class="flex flex-row flex-wrap justify-start gap-2 items-stretch h-16">
 				{#each colors as color, index (color)}
 					<div animate:flip>
 						<ColorDisplay
