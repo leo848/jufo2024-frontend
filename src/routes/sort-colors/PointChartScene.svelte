@@ -29,12 +29,15 @@
 
 	const { renderer, renderMode, advance } = useThrelte();
 
+	const ballSizeAnim = tweened(ballSize, { duration: 250, easing: cubicOut });
+	$: $ballSizeAnim = ballSize;
+
 	renderMode.set('manual');
 	$: colors,
 		edges,
 		space,
 		projection,
-		ballSize,
+		$ballSizeAnim,
 		selectedIndex,
 		$displayPoints,
 		$displayEdges,
@@ -138,9 +141,6 @@
 	$: {
 		displayEdges.set(edges);
 	}
-
-	const ballSizeAnim = tweened(ballSize, { duration: 250, easing: cubicOut });
-	$: $ballSizeAnim = ballSize;
 
 	let cameraPosition: [number, number, number] = [5, 5, 20];
 	let cameraRefOrth: THREE.OrthographicCamera;
