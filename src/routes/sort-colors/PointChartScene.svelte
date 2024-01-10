@@ -5,7 +5,7 @@
 	import type { ColorSpace } from '../../color/colorSpaces';
 	import { RgbColor } from '../../color/colorSpaces';
 	import type { Color } from '../../color/color';
-	import { cubicOut, quadInOut } from 'svelte/easing';
+	import { cubicOut, quadIn, quadInOut } from 'svelte/easing';
 	import { Point3, axes } from '../../geom/point';
 	import { createEventDispatcher, onMount } from 'svelte';
 	import { type Tweened, tweened } from 'svelte/motion';
@@ -98,7 +98,9 @@
 		duration: 500,
 		easing: quadInOut,
 		interpolate(a: { point: Point3; color: Color }[], b: { point: Point3; color: Color }[]) {
-			if (!colorsAnim || a.length != b.length) return () => b;
+			const noAnim = () => b;
+			if (!colorsAnim) return noAnim;
+			if (a.length != b.length) return noAnim;
 			return (t) => {
 				return a.map((valueA, index) => {
 					const valueB = b[index];
@@ -119,13 +121,46 @@
 	}
 
 	let displayEdges: Tweened<[Point3, Point3, Color | undefined][]> = tweened(undefined, {
-		duration: 500,
+		duration(a: [Point3, Point3, Color | undefined][], b: [Point3, Point3, Color | undefined][]) {
+			if (a == null || b == null) return 0;
+			if (!edgesAnim) return 0;
+			if (b.length == 0) return 2000;
+			if (a.length + 1 === length) return 500;
+			if (a.length !== b.length) return 0;
+			return 500;
+		},
 		easing: quadInOut,
 		interpolate(
 			a: [Point3, Point3, Color | undefined][],
 			b: [Point3, Point3, Color | undefined][]
 		) {
-			if (!edgesAnim || a.length != b.length) return () => b;
+			const noAnim = () => b;
+			if (!edgesAnim) return noAnim;
+			if (b.length == 0) {
+				return (tRaw) => {
+					let t = quadIn(tRaw);
+					return a.map((value) => {
+						return [
+							value[0].add(value[0].delta(new Point3(value[0].x, -0.5, value[0].z)).scale(t)),
+							value[1].add(value[1].delta(new Point3(value[0].x, -0.5, value[0].z)).scale(t)),
+							undefined
+						];
+					});
+				};
+			}
+			if (a.length + 1 === b.length) {
+				return (t) => {
+					const copy = b.slice();
+					const last = copy[copy.length - 1];
+					copy[copy.length - 1] = [
+						last[0],
+						last[0].add(last[0].delta(last[1]).scale(t)),
+						undefined
+					];
+					return copy;
+				};
+			}
+			if (a.length != b.length) return noAnim;
 			return (t) => {
 				return a.map((valueA, index) => {
 					const valueB = b[index];
