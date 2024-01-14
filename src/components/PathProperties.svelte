@@ -56,8 +56,8 @@
 
 <Window title="Eigenschaften" xlCol={horizontal ? 6 : 3}>
 	<div class="text-xl tabular-nums">
-		{#if path !== null}
-			<div class={`grid grid-cols-${horizontal ? 4 : 2} gap-4 m-4`}>
+		<div class={`grid grid-cols-${horizontal ? 4 : 2} gap-4 m-4`}>
+			{#if path !== null}
 				<div
 					class="col-span-2 rounded-2xl bg-gray-700 py-4 text-gray-400 flex-col flex justify-around items-center"
 				>
@@ -76,21 +76,21 @@
 					<div class="text-5xl">{averageDistDisplay}</div>
 					<div>Ø Distanz</div>
 				</div>
-			</div>
-		{:else}
-			<div class="m-10 p-4 bg-gray-700 rounded">
-				{#if blownUp}
-					<div class="text-4xl text-white">Pfad gelöscht</div>
-					<div>
-						Durch eine Änderung der Werte im entsperrten Modus wurde der Pfad gelöscht. Drücke auf <b
-							>Aktuelle Anordnung</b
-						>, um einen Pfad aus der vorliegenden Reihenfolge zu erstellen.
-					</div>
-				{:else}
-					<div class="text-4xl text-white">Kein Pfad</div>
-					<div>Erzeuge einen Pfad mittels der <b>Konstruktion</b>.</div>
-				{/if}
-			</div>
-		{/if}
+			{:else}
+				<div class="col-span-2 m-10 p-4 bg-gray-700 rounded">
+					{#if blownUp}
+						<div class="text-4xl text-white">Pfad gelöscht</div>
+						<div>
+							Durch eine Änderung der Werte im entsperrten Modus wurde der Pfad gelöscht. Drücke auf <b
+								>Aktuelle Anordnung</b
+							>, um einen Pfad aus der vorliegenden Reihenfolge zu erstellen.
+						</div>
+					{:else}
+						<div class="text-4xl text-white">Kein Pfad</div>
+						<div>Erzeuge einen Pfad mittels der <b>Konstruktion</b>.</div>
+					{/if}
+				</div>
+			{/if}
+		</div>
 	</div>
 </Window>

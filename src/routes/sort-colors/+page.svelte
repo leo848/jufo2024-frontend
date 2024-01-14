@@ -71,7 +71,7 @@
 		"98, 79, 76",
 		"97, 75, 82",
 	].map(str => { let ns =str.split(", ").map(Number).map(n=>n/100); return new RgbColor(ns[0],ns[1],ns[2]).color() });*/ // perlen
-	let colors = presets['buntstifte']!.colors;
+	let colors = presets.books.colors;
 	let colorsLocked = false;
 	let invalidate: <T>(callback: (t: T) => void) => (t: T) => void;
 	let colorsAnim = true;
