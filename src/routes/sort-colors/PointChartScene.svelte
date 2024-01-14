@@ -23,7 +23,7 @@
 	export let ballSize: number = 0.5;
 	export let selectedIndex: number | null = null;
 	export let colorsAnim: boolean;
-	export let edgesAnim: boolean;
+	export let edgesAnim: boolean = true;
 
 	export let canvas: HTMLCanvasElement;
 
@@ -124,8 +124,8 @@
 		duration(a: [Point3, Point3, Color | undefined][], b: [Point3, Point3, Color | undefined][]) {
 			if (a == null || b == null) return 0;
 			if (!edgesAnim) return 0;
-			if (b.length == 0) return 2000;
-			if (a.length + 1 === length) return 500;
+			if (b.length == 0) return 1000;
+			if (a.length + 1 === b.length) return 500;
 			if (a.length !== b.length) return 0;
 			return 500;
 		},

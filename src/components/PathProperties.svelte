@@ -57,12 +57,12 @@
 <Window title="Eigenschaften" xlCol={horizontal ? 6 : 3}>
 	<div class="text-xl tabular-nums">
 		<div class={`grid grid-cols-${horizontal ? 4 : 2} gap-4 m-4`}>
-				<div
-					class="col-span-1 rounded-2xl bg-gray-700 py-4 text-gray-400 flex-col flex justify-around items-center"
-				>
-					<div class="text-5xl">{$displayLength.toFixed(0)}</div>
-					<div>Anzahl</div>
-				</div>
+			<div
+				class="col-span-1 rounded-2xl bg-gray-700 py-4 text-gray-400 flex-col flex justify-around items-center"
+			>
+				<div class="text-5xl">{$displayLength.toFixed(0)}</div>
+				<div>Anzahl</div>
+			</div>
 			{#if path !== null}
 				<div
 					class="col-span-1 rounded-2xl bg-gray-700 py-4 text-gray-400 flex-col flex justify-around items-center"
