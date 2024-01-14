@@ -3,6 +3,7 @@
 	import { cubicIn } from 'svelte/easing';
 	import { constrain } from '../utils/math';
 	import Window from './Window.svelte';
+	import EdgeDistances from './EdgeDistances.svelte';
 	import { dist, type DistanceType } from '../geom/dist';
 
 	export let path: number[][] | null = null;
@@ -27,14 +28,20 @@
 		return dist(point1, point2, norm);
 	}
 
+	let distances: number[] = [];
+
 	$: if (path != null) {
 		let lengthAcc = 0;
+		distances = [];
 		for (let i = 0; i < path.length - 1; i++) {
-			lengthAcc += distance(path[i], path[i + 1], norm);
+			const dist = distance(path[i], path[i + 1], norm);
+			lengthAcc += dist;
+			distances.push(dist);
 		}
 		chainLength.set(lengthAcc);
 	} else {
 		chainLength.set(0);
+		distances = [];
 	}
 
 	$: chainLengthDisplay = $chainLength.toFixed(
@@ -75,6 +82,11 @@
 				>
 					<div class="text-8xl">{chainLengthDisplay}</div>
 					<div>Kettenlänge</div>
+				</div>
+				<div
+					class="col-span-2 rounded-2xl bg-gray-700 py-2 text-gray-400 max-h-[100px]"
+				>
+					<EdgeDistances {distances} />
 				</div>
 			{:else}
 				<div class="col-span-2 p-4 bg-gray-700 rounded">

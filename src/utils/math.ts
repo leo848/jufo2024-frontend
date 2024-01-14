@@ -16,3 +16,7 @@ export function factorial(n: number): number {
 	if (n <= 1) return 1;
 	else return n * factorial(n - 1);
 }
+
+export function lerp([start, stop]: [number, number], t: number) {
+	return start + (stop - start) * t;
+}
