@@ -46,8 +46,6 @@
 		distances = [];
 	}
 
-	$: console.log(path);
-
 	$: chainLengthDisplay = $chainLength.toFixed(
 		Math.max(3 - Math.max(0, Math.log10($chainLength)), 0) - 0.001
 	);
