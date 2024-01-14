@@ -42,7 +42,7 @@
 		}
 	)
 
-	let max = spring(distances[0], { damping: 0.5, stiffness: 0.25 });
+	let max = spring(distances[0], { damping: 0.5, stiffness: 0.5 });
 	let min = 0;
 
 	$: $animDistances = distances.map((dist, index) => ({ dist, color: index === selectedIndex || index + 1 === selectedIndex ? "#fff": "#aaa" }));
@@ -60,7 +60,7 @@
 			min = Math.min(dist, min);
 		}
 		if (localMax * 1.9 < $max) {
-			max.set(localMax, { soft: 1 })
+			max.set(localMax)
 		}
 
 		ctx.beginPath();
