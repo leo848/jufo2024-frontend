@@ -5,6 +5,7 @@
 	import {quadInOut} from 'svelte/easing';
 
 	export let distances: number[];
+	export let selectedIndex: number|null = null;
 
 	let wrapperDiv: HTMLDivElement;
 	let canvas: HTMLCanvasElement;
@@ -41,10 +42,10 @@
 		}
 	)
 
-	let max = spring(distances[0], { damping: 0.5, stiffness: 0.1 });
+	let max = spring(distances[0], { damping: 0.5, stiffness: 0.25 });
 	let min = 0;
 
-	$: $animDistances = distances.map(dist => ({ dist, color: "#aaa" }));
+	$: $animDistances = distances.map((dist, index) => ({ dist, color: index === selectedIndex || index + 1 === selectedIndex ? "#fff": "#aaa" }));
 
 	$: if (ctx) {
 		ctx.clearRect(0, 0, width, height);

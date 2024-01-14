@@ -14,6 +14,8 @@
 	export let horizontal: boolean = false;
 	export let blownUp: boolean = false;
 
+	export let selectedIndex: number|null = null;
+
 	let chainLength = tweened(0);
 
 	let displayLength = tweened(length, {
@@ -86,7 +88,7 @@
 				<div
 					class="col-span-2 rounded-2xl bg-gray-700 py-2 text-gray-400 max-h-[100px]"
 				>
-					<EdgeDistances {distances} />
+					<EdgeDistances {distances} {selectedIndex} />
 				</div>
 			{:else}
 				<div class="col-span-2 p-4 bg-gray-700 rounded">

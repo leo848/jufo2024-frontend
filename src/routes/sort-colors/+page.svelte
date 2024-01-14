@@ -450,7 +450,7 @@
 			</div>
 		</Window>
 
-		<PathProperties path={path?.map((point) => point.values())} length={colors.length} {norm} />
+		<PathProperties path={path?.map((point) => point.values())} selectedIndex={selection?.index} length={colors.length} {norm} />
 
 		<PathAlgorithms
 			on:deletePath={() => (path = null)}
