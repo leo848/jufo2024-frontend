@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
 	import {lerp, rangeMap} from '../utils/math';
-	import {tweened, type Tweened} from 'svelte/motion';
+	import {spring, tweened, type Tweened} from 'svelte/motion';
 	import {quadInOut} from 'svelte/easing';
 
 	export let distances: number[];
@@ -20,18 +20,20 @@
 		ctx = context;
 	});
 
-	let animDistances: Tweened<{ dist: number }[]> = tweened(undefined,
+	let animDistances: Tweened<{ dist: number, color: string }[]> = tweened(undefined,
 		{
 			duration: 500,
 			easing: quadInOut,
-			interpolate(a: { dist: number }[], b: { dist: number }[]) {
+			interpolate(a: { dist: number, color: string }[], b: { dist: number, color: string }[]) {
 				if (a.length !== b.length) return () => b;
+				const setB = new Set(b.map(({dist}) => dist))
 				return t => {
 					return a.map((valueA, index) => {
 						const valueB = b[index];
-						if (valueA.dist === valueB.dist) return valueB;
+						if (valueA.dist === valueB.dist || setB.has(valueA.dist)) return valueB;
 						return {
-							dist: lerp([valueA.dist, valueB.dist], t)
+							dist: lerp([valueA.dist, valueB.dist], t),
+							color: valueA.dist < valueB.dist ? "#faa" : "#afa",
 						}
 					});
 				}
@@ -39,10 +41,10 @@
 		}
 	)
 
-	let max = distances[0];
+	let max = spring(distances[0], { damping: 0.5, stiffness: 0.1 });
 	let min = 0;
 
-	$: $animDistances = distances.map(dist => ({ dist }));
+	$: $animDistances = distances.map(dist => ({ dist, color: "#aaa" }));
 
 	$: if (ctx) {
 		ctx.clearRect(0, 0, width, height);
@@ -50,12 +52,14 @@
 		let localMax = distances[0];
 
 		for (const { dist } of $animDistances) {
-			max = Math.max(dist, max);
+			if (dist > $max) {
+				max.set(dist);
+			}
 			localMax = Math.max(dist, localMax);
 			min = Math.min(dist, min);
 		}
-		if (localMax * 1.9 < max) {
-			max = localMax;
+		if (localMax * 1.9 < $max) {
+			max.set(localMax, { soft: 1 })
 		}
 
 		ctx.beginPath();
@@ -63,12 +67,12 @@
 		ctx.rect(0, height / 2 - 2, width, 4);
 		ctx.fill();
 
-		const logScale = Math.floor(Math.log10(max - min) - 0.2);
+		const logScale = Math.floor(Math.log10($max - min) - 0.2);
 		const scale = 10 ** logScale;
 		let gridX = 0;
-		while (gridX < max) {
+		while (gridX < $max) {
 			gridX += scale;
-			const x = rangeMap(gridX, [min, max], [10, width - 10]);
+			const x = rangeMap(gridX, [min, $max], [10, width - 10]);
 			ctx.beginPath();
 			ctx.font = "12px Inter";
 			ctx.fillStyle = "#888"
@@ -77,10 +81,10 @@
 
 		const rectWidth = 4;
 
-		for (const { dist } of $animDistances) {
-			const x = rangeMap(dist, [min, max], [10, width - 10]);
+		for (const { dist, color } of $animDistances) {
+			const x = rangeMap(dist, [min, $max], [10, width - 10]);
 			ctx.beginPath();
-			ctx.fillStyle = "#aaa";
+			ctx.fillStyle = color;
 			ctx.roundRect(x - rectWidth / 2, 12.5, rectWidth, height - 25, 6);
 			ctx.fill();
 		}
