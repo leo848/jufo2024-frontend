@@ -322,7 +322,13 @@
 
 <T.AmbientLight intensity={0.5} />
 
-<T.DirectionalLight intensity={1.0} position={[5, 5, 5]} />
+{#each [0, 5, 10] as x}
+{#each [0, 5, 10] as y}
+{#each [0, 5, 10] as z}
+<T.DirectionalLight intensity={0.2} position={[x, y, z]} />
+{/each}
+{/each}
+{/each}
 
 {#each rotations as rotation, index}
 	{#each axisPositions[index] as position, axisIndex}
