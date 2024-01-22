@@ -1,8 +1,8 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
 	import {lerp, rangeMap} from '../utils/math';
-	import {spring, tweened, type Tweened} from 'svelte/motion';
-	import {quadInOut} from 'svelte/easing';
+	import {tweened, type Tweened} from 'svelte/motion';
+	import {cubicOut, quadInOut} from 'svelte/easing';
 
 	export let distances: number[];
 	export let selectedIndex: number|null = null;
@@ -42,7 +42,7 @@
 		}
 	)
 
-	let max = spring(distances[0], { damping: 0.5, stiffness: 0.5 });
+	let max = tweened(distances[0], { duration: 1000, easing: cubicOut });
 	let min = 0;
 
 	$: $animDistances = distances.map((dist, index) => ({ dist, color: index === selectedIndex || index + 1 === selectedIndex ? "#fff": "#aaa" }));
