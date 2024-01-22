@@ -1,10 +1,11 @@
 <script lang="ts">
 	import { tweened } from 'svelte/motion';
-	import { cubicIn } from 'svelte/easing';
+	import { cubicIn, expoIn, quartIn } from 'svelte/easing';
 	import { constrain } from '../utils/math';
 	import Window from './Window.svelte';
 	import EdgeDistances from './EdgeDistances.svelte';
 	import { dist, type DistanceType } from '../geom/dist';
+	import {scale} from 'svelte/transition';
 
 	export let path: number[][] | null = null;
 	export let length: number = path?.length || 0;
@@ -20,9 +21,9 @@
 
 	let displayLength = tweened(length, {
 		duration(from, to) {
-			return constrain(to - from, 10, 100) * 10;
+			return constrain(Math.abs(to - from), 5, 100) * 20;
 		},
-		easing: cubicIn
+		easing: quartIn,
 	});
 	$: displayLength.set(length);
 
@@ -69,7 +70,9 @@
 			<div
 				class="col-span-1 rounded-2xl bg-gray-700 py-4 text-gray-400 flex-col flex justify-around items-center"
 			>
-				<div class="text-5xl">{$displayLength.toFixed(0)}</div>
+				{#key length}
+					<div class="text-5xl" in:scale>{$displayLength.toFixed(0)}</div>
+				{/key}
 				<div>Anzahl</div>
 			</div>
 			{#if path != null}
