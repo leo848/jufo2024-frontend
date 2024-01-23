@@ -1,4 +1,4 @@
-import {dist, type DistanceType} from "../geom/dist";
+import { dist, type DistanceType } from '../geom/dist';
 
 export function adjacencyMatrix(vectors: number[][], norm: DistanceType = 'euclidean'): number[][] {
 	let matrix = new Array(vectors.length).fill(null);

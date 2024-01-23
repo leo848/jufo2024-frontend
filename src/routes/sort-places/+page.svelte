@@ -5,7 +5,10 @@
 	import PathAlgorithms from '../../components/PathAlgorithms.svelte';
 	import { type CoordPoint, type NamedPoint, coordSimilar } from '../../geom/coordPoint';
 	import { registerCallback, unregisterCallback } from '../../server/websocket';
-	import { serverOutputDistPathCreation, serverOutputDistPathImprovement } from '../../server/types';
+	import {
+		serverOutputDistPathCreation,
+		serverOutputDistPathImprovement
+	} from '../../server/types';
 	import { onDestroy } from 'svelte';
 	import presets from './presets';
 	import Window from '../../components/Window.svelte';

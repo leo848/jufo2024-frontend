@@ -488,6 +488,14 @@ export class OklabColor extends AbstractColor<OklabColor, OklabComponent> {
 	xyzComponents(): ['a', 'l', 'b'] {
 		return ['a', 'l', 'b'];
 	}
+
+	lerp(other: OklabColor, t: number): OklabColor {
+		return new OklabColor(
+			this.l + (other.l - this.l) * t,
+			this.a + (other.a - this.a) * t,
+			this.b + (other.b - this.b) * t
+		);
+	}
 }
 
 export class LinearRgbColor extends AbstractColor<LinearRgbColor, RgbComponent> {

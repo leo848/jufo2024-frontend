@@ -3,7 +3,10 @@
 	import PathAlgorithms from '../../components/PathAlgorithms.svelte';
 	import * as Icon from 'flowbite-svelte-icons';
 	import { registerCallback, unregisterCallback } from '../../server/websocket';
-	import { serverOutputDistPathCreation, serverOutputDistPathImprovement } from '../../server/types';
+	import {
+		serverOutputDistPathCreation,
+		serverOutputDistPathImprovement
+	} from '../../server/types';
 	import { fromUrlString, type NamedVector } from './vector';
 	import { onDestroy } from 'svelte';
 	import { flip } from 'svelte/animate';
@@ -60,7 +63,10 @@
 	let path: number[][] | null = null;
 	let edges: [number, number][] = [];
 
-	$: matrix = adjacencyMatrix($data.map(d => d.inner), norm);
+	$: matrix = adjacencyMatrix(
+		$data.map((d) => d.inner),
+		norm
+	);
 
 	let locked = false;
 	let blownUp = false;
@@ -276,8 +282,8 @@
 			points={points.map((p) => p.inner)}
 		/>
 
-		<Window title="Adjazenzmatrix" options xlCol={12}>
-			<AdjacencyMatrix values={matrix} vertexNames={$data.map(d=>d.name)} />
+		<Window title="Adjazenzmatrix" options xlCol={6}>
+			<AdjacencyMatrix values={matrix} vertexNames={$data.map((d) => d.name)} />
 		</Window>
 	</div>
 </div>
