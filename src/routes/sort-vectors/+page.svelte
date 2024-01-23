@@ -3,7 +3,7 @@
 	import PathAlgorithms from '../../components/PathAlgorithms.svelte';
 	import * as Icon from 'flowbite-svelte-icons';
 	import { registerCallback, unregisterCallback } from '../../server/websocket';
-	import { serverOutputDistPathCreatiserverOutputDistPathImprovementment } from '../../server/types';
+	import { serverOutputDistPathCreation, serverOutputDistPathImprovement } from '../../server/types';
 	import { fromUrlString, type NamedVector } from './vector';
 	import { onDestroy } from 'svelte';
 	import { flip } from 'svelte/animate';

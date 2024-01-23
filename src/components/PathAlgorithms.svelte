@@ -3,8 +3,8 @@
 	import * as Icon from 'flowbite-svelte-icons';
 	import { factorial } from '../utils/math';
 	import { sendWebsocket, registerCallback, unregisterCallback } from '../server/websocket';
-	import { serverOutputDistPathCreatiserverOutputDistPathImprovementment } from '../server/types';
-	import { Card, Spinner, Progressbar, Range } from 'flowbite-svelte';
+	import { serverOutputDistPathCreation, serverOutputDistPathImprovement } from '../server/types';
+	import { Spinner, Progressbar } from 'flowbite-svelte';
 	import { flip } from 'svelte/animate';
 	import { scale } from 'svelte/transition';
 	import { createEventDispatcher, onDestroy } from 'svelte';
@@ -158,7 +158,7 @@
 						type: 'action',
 						latency,
 						action: {
-							type: 'improvePath',
+							type: 'improveDistPath',
 							method: { type: e.method },
 							dimensions,
 							path: points

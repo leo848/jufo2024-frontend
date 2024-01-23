@@ -9,7 +9,7 @@
 	import { onDestroy } from 'svelte';
 	import PointChart from './PointChart.svelte';
 	import { registerCallback, unregisterCallback } from '../../server/websocket';
-	import { serverOutputDistPathCreatiserverOutputDistPathImprovementment } from '../../server/types';
+	import { serverOutputDistPathCreation, serverOutputDistPathImprovement } from '../../server/types';
 	import type { Color } from '../../color/color';
 	import { title } from '../../ui/navbar';
 	import { gradient } from '../../ui/color';

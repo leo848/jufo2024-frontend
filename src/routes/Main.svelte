@@ -37,7 +37,7 @@
 	});
 </script>
 
-<Gallery class="gap-4 grid-cols-1 lg:grid-cols-2 mx-32 mt-4">
+<Gallery class="gap-4 grid-cols-1 lg:grid-cols-2 xl:grid-cols-4 mx-32 mt-4">
 	{#each displayCards as card, i (card.text)}
 		<div transition:scale>
 			<Card

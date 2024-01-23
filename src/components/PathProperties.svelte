@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { tweened } from 'svelte/motion';
-	import { cubicIn, expoIn, quartIn } from 'svelte/easing';
+	import { quartIn } from 'svelte/easing';
 	import { constrain } from '../utils/math';
 	import Window from './Window.svelte';
 	import EdgeDistances from './EdgeDistances.svelte';
