@@ -282,7 +282,7 @@
 			points={points.map((p) => p.inner)}
 		/>
 
-		<Window title="Adjazenzmatrix" options xlCol={6}>
+		<Window title="Adjazenzmatrix" scrollable xlCol={6}>
 			<AdjacencyMatrix values={matrix} vertexNames={$data.map((d) => d.name)} />
 		</Window>
 	</div>

@@ -2,9 +2,14 @@
 	import { Card } from 'flowbite-svelte';
 	import * as Icon from 'flowbite-svelte-icons';
 	import { createEventDispatcher } from 'svelte';
+	import {slide} from 'svelte/transition';
 
 	export let title: string;
 	export let options: boolean = false;
+	export let closable: boolean = true;
+	export let scrollable: boolean = false;
+
+	export let closed = false;
 
 	export let mdCol: number = 6;
 	export let xlCol: number = 6;
@@ -46,18 +51,37 @@
 	}
 </script>
 
+<div class={` col-span-${closed?6:12} md:col-span-${closed?6:mdCol} xl:col-span-${closed?2:xlCol} row-span-${closed?1:row} max-w-none md:m-0` }>
 <Card
-	class={` rounded-xl col-span-12 md:col-span-${mdCol} xl:col-span-${xlCol} row-span-${row} max-w-none md:m-0 md:p-0 overflow-hidden`}
+	class={` rounded-xl max-w-none md:p-0 ${scrollable?'overflow-scroll':'overflow-hidden'} ${closed?'w-auto h-auto':'h-full max-h-[600px]'} transition-all`}
 >
-	<div
-		class="text-2xl dark:text-white bg-gray-700 p-2 pl-4 rounded-t-xl flex flex-row justify-between"
-	>
-		<div>{title}</div>
+<div class={ `gap-4 text-2xl dark:text-white bg-gray-700 p-2 rounded-t-xl flex flex-row ${closed?'':'justify-between'}` }>
+		<div class="flex flex-row gap-4">
+			{#if closable}<button
+					class="bg-gray-600 hover:bg-gray-500 transition-all rounded-xl p-2"
+	 on:click={() => (closed = !closed)}>
+
+	 {#if closed}
+		 <Icon.PlusSolid />
+	 {:else}
+	 <Icon.MinusSolid />
+	 {/if}
+
+
+			</button
+				>{/if}
+			<div>{title}</div>
+		</div>
 		{#if options}
 			<button class="bg-gray-600 rounded-xl p-2" on:click={() => dispatch('optionClick')}
 				><Icon.CogOutline /></button
 			>
 		{/if}
 	</div>
-	<slot />
+	{#if !closed}
+		<div transition:slide={{axis:"y"}} class="h-full">
+			<slot />
+		</div>
+	{/if}
 </Card>
+</div>

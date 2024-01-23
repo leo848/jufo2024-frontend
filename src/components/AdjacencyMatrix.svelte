@@ -30,15 +30,9 @@
 	}
 
 	function distColor(dist: number): Color {
-		let [minColor, maxColor] = [new RgbColor(0, 128, 0), new RgbColor(255, 0, 0)].map(rgb => {
-			return rgb
-			.color()
-			.space('hsl')
-			.with('s', 0.2)
-			.color()
-			.oklab()
-			.with('l', 0.3);
-		})
+		let [minColor, maxColor] = [new RgbColor(0, 128, 0), new RgbColor(255, 0, 0)].map((rgb) => {
+			return rgb.color().space('hsl').with('s', 0.2).color().oklab().with('l', 0.3);
+		});
 
 		let t = rangeMap(dist, [min, max], [0, 1]);
 		let result = minColor.lerp(maxColor, t).color();
