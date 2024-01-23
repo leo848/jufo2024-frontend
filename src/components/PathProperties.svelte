@@ -5,7 +5,7 @@
 	import Window from './Window.svelte';
 	import EdgeDistances from './EdgeDistances.svelte';
 	import { dist, type DistanceType } from '../geom/dist';
-	import {scale} from 'svelte/transition';
+	import { scale } from 'svelte/transition';
 
 	export let path: number[][] | null = null;
 	export let length: number = path?.length || 0;
@@ -15,7 +15,7 @@
 	export let horizontal: boolean = false;
 	export let blownUp: boolean = false;
 
-	export let selectedIndex: number|null = null;
+	export let selectedIndex: number | null = null;
 
 	let chainLength = tweened(0);
 
@@ -23,7 +23,7 @@
 		duration(from, to) {
 			return constrain(Math.abs(to - from), 5, 100) * 20;
 		},
-		easing: quartIn,
+		easing: quartIn
 	});
 	$: displayLength.set(length);
 
@@ -88,9 +88,7 @@
 					<div class="text-8xl">{chainLengthDisplay}</div>
 					<div>Kettenlänge</div>
 				</div>
-				<div
-					class="col-span-2 rounded-2xl bg-gray-700 py-2 text-gray-400 max-h-[100px]"
-				>
+				<div class="col-span-2 rounded-2xl bg-gray-700 py-2 text-gray-400 max-h-[100px]">
 					<EdgeDistances {distances} {selectedIndex} />
 				</div>
 			{:else}

@@ -1,11 +1,11 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
-	import {lerp, rangeMap} from '../utils/math';
-	import {tweened, type Tweened} from 'svelte/motion';
-	import {cubicOut, quadInOut} from 'svelte/easing';
+	import { lerp, rangeMap } from '../utils/math';
+	import { tweened, type Tweened } from 'svelte/motion';
+	import { cubicOut, quadInOut } from 'svelte/easing';
 
 	export let distances: number[];
-	export let selectedIndex: number|null = null;
+	export let selectedIndex: number | null = null;
 
 	let wrapperDiv: HTMLDivElement;
 	let canvas: HTMLCanvasElement;
@@ -21,31 +21,32 @@
 		ctx = context;
 	});
 
-	let animDistances: Tweened<{ dist: number, color: string }[]> = tweened(undefined,
-		{
-			duration: 500,
-			easing: quadInOut,
-			interpolate(a: { dist: number, color: string }[], b: { dist: number, color: string }[]) {
-				if (a.length !== b.length) return () => b;
-				const setB = new Set(b.map(({dist}) => dist))
-				return t => {
-					return a.map((valueA, index) => {
-						const valueB = b[index];
-						if (valueA.dist === valueB.dist || setB.has(valueA.dist)) return valueB;
-						return {
-							dist: lerp([valueA.dist, valueB.dist], t),
-							color: valueA.dist < valueB.dist ? "#faa" : "#afa",
-						}
-					});
-				}
-			},
+	let animDistances: Tweened<{ dist: number; color: string }[]> = tweened(undefined, {
+		duration: 500,
+		easing: quadInOut,
+		interpolate(a: { dist: number; color: string }[], b: { dist: number; color: string }[]) {
+			if (a.length !== b.length) return () => b;
+			const setB = new Set(b.map(({ dist }) => dist));
+			return (t) => {
+				return a.map((valueA, index) => {
+					const valueB = b[index];
+					if (valueA.dist === valueB.dist || setB.has(valueA.dist)) return valueB;
+					return {
+						dist: lerp([valueA.dist, valueB.dist], t),
+						color: valueA.dist < valueB.dist ? '#faa' : '#afa'
+					};
+				});
+			};
 		}
-	)
+	});
 
 	let max = tweened(distances[0], { duration: 1000, easing: cubicOut });
 	let min = 0;
 
-	$: $animDistances = distances.map((dist, index) => ({ dist, color: index === selectedIndex || index + 1 === selectedIndex ? "#fff": "#aaa" }));
+	$: $animDistances = distances.map((dist, index) => ({
+		dist,
+		color: index === selectedIndex || index + 1 === selectedIndex ? '#fff' : '#aaa'
+	}));
 
 	$: if (ctx) {
 		ctx.clearRect(0, 0, width, height);
@@ -60,11 +61,11 @@
 			min = Math.min(dist, min);
 		}
 		if (localMax * 1.9 < $max) {
-			max.set(localMax)
+			max.set(localMax);
 		}
 
 		ctx.beginPath();
-		ctx.fillStyle = "#555";
+		ctx.fillStyle = '#555';
 		ctx.rect(0, height / 2 - 2, width, 4);
 		ctx.fill();
 
@@ -75,8 +76,8 @@
 			gridX += scale;
 			const x = rangeMap(gridX, [min, $max], [10, width - 10]);
 			ctx.beginPath();
-			ctx.font = "12px Inter";
-			ctx.fillStyle = "#888"
+			ctx.font = '12px Inter';
+			ctx.fillStyle = '#888';
 			ctx.fillText(gridX.toFixed(1), x, height / 2 - 10);
 		}
 
