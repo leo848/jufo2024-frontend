@@ -56,9 +56,9 @@
 			<div class="border-gray-500 border">
 				<div class="bg-gray-700 h-full text-center text-xl">{name}</div>
 			</div>
-			{#each sorted as { name, index } (name)}
-				{@const value = vector[index]}
-				{#if value !== 0}
+			{#each sorted as { name, index: index1 } (name)}
+				{@const value = vector[index1]}
+				{#if index != index1}
 					<div
 						class="tabular-nums py-2 px-2 border-gray-500 border-1 border"
 						style={`background-color:${distColor(value).rgb().css()}`}

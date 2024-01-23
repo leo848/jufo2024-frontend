@@ -128,7 +128,12 @@
 	}
 
 	function getName(index: number): string {
-		return length > 26 || index > 25 ? `v<sub>${index + 1}</sub>` : String.fromCharCode(97 + index);
+		let base26 = index.toString(26);
+		let string = "";
+		for (let i = 0; i < base26.length; i++) {
+			string += String.fromCharCode(parseInt(base26.charAt(i), 26) + 97);
+		}
+		return string;
 	}
 
 	function pathToEdges(path: number[][]): [number, number][] {
