@@ -24,56 +24,14 @@
 	import type { DistanceType } from '../../geom/dist';
 	import Window from '../../components/Window.svelte';
 	import Options from '../../components/Options.svelte';
-	import presets from './presets';
+	import presets from '../../color/presets';
+	import LoadColor from './LoadColor.svelte';
 
 	title.set('Farben sortieren');
 
 	let space: ColorSpace = 'rgb';
 
-	/*let colors = [
-		RgbColor.fromNumeric(0xff1e26).color(),
-		RgbColor.fromNumeric(0xfe941e).color(),
-		RgbColor.fromNumeric(0xffff00).color(),
-		RgbColor.fromNumeric(0x06bd00).color(),
-		RgbColor.fromNumeric(0x001a98).color(),
-		RgbColor.fromNumeric(0x760088).color()
-	];*/ // pride flag
-	/*let colors = [
-		[.6,.2],
-		[.1,.7],
-		[.9,.4],
-		[.2,.2],
-		[.5,.5],
-		[.8,.7]
-	].map(([r, b]) => new RgbColor(r, 0, b).color()); // langfassung*/
 	// let colors = new Array(40).fill(null).map(() => new RgbColor(Math.random(), Math.random(), Math.random()).color()); // random
-	/*let colors = [
-		"79, 10, 17",
-		"95, 33, 21",
-		"96, 52, 15",
-		"87, 78, 88",
-		"96, 64, 43",
-		"93, 82, 25",
-		"91, 88, 39",
-		"91, 85, 73",
-		"37, 76, 64",
-		"2, 56, 50",
-		"1, 67, 49",
-		"89, 90, 92",
-		"22, 55, 80",
-		"2, 73, 94",
-		"34, 77, 78",
-		"27, 74, 87",
-		"55, 84, 90",
-		"36, 13, 48",
-		"46, 25, 61",
-		"63, 55, 76",
-		"49, 50, 56",
-		"95, 54, 70",
-		"96, 66, 73",
-		"98, 79, 76",
-		"97, 75, 82",
-	].map(str => { let ns =str.split(", ").map(Number).map(n=>n/100); return new RgbColor(ns[0],ns[1],ns[2]).color() });*/ // perlen
 	let colors: Color[] = presets.books.colors;
 	let colorsLocked = false;
 	let invalidate: <T>(callback: (t: T) => void) => (t: T) => void;
@@ -401,33 +359,34 @@
 				{/each}
 			</div>
 		</div>
-		<Window title="Optionen" xlCol={4}>
-			<Options
-				show={['colorSpace']}
-				on:blowUp={blowUp}
-				bind:invalidate
-				bind:locked={colorsLocked}
-				on:add={invalidate(addColor)}
-				on:delete={invalidate(() => (colors = []))}
-				bind:norm
-				bind:colorSpace={space}
-				on:asVectors={invalidate(() => {
-					goto(
-						'/sort-vectors?v=' +
-							colors
-								.map((c) =>
-									c
-										.space(space)
-										.point()
-										.values()
-										.map((n) => Math.floor(n * 255))
-										.join('i')
-								)
-								.join('o')
-					);
-				})}
-			/>
-		</Window>
+		<Options
+			show={['colorSpace']}
+			on:blowUp={blowUp}
+			bind:invalidate
+			bind:locked={colorsLocked}
+			on:add={invalidate(addColor)}
+			on:delete={invalidate(() => (colors = []))}
+			bind:norm
+			bind:colorSpace={space}
+			on:asVectors={invalidate(() => {
+				goto(
+					'/sort-vectors?v=' +
+						colors
+							.map((c) =>
+								c
+									.space(space)
+									.point()
+									.values()
+									.map((n) => Math.floor(n * 255))
+									.join('i')
+							)
+							.join('o')
+				);
+			})}
+			xlCol={4}
+		>
+			<LoadColor slot="load" bind:colors {invalidate} />
+		</Options>
 		<Window
 			title="3D-Darstellung"
 			options

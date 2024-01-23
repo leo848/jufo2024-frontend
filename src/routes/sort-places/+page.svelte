@@ -98,22 +98,22 @@
 			</div>
 		</Window>
 
-		<Window title="Optionen" xlCol={6}>
-			<Options
-				on:blowUp={blowUp}
-				bind:invalidate
-				bind:locked={pointsLocked}
-				hide={['add']}
-				on:delete={invalidate(() => (points = []))}
-				bind:norm
-				on:asVectors={invalidate(() => {
-					goto(
-						'/sort-vectors?v=' +
-							points.map((p) => [p.lat, p.lng].map((f) => f.toFixed(5)).join('i')).join('o')
-					);
-				})}
-			/>
-		</Window>
+		<Options
+			xlCol={6}
+			on:blowUp={blowUp}
+			bind:invalidate
+			bind:locked={pointsLocked}
+			hide={['add']}
+			on:delete={invalidate(() => (points = []))}
+			bind:norm
+			on:asVectors={invalidate(() => {
+				goto(
+					'/sort-vectors?v=' +
+						points.map((p) => [p.lat, p.lng].map((f) => f.toFixed(5)).join('i')).join('o')
+				);
+			})}
+		/>
+
 		<PathProperties {path} {length} {blownUp} horizontal />
 
 		<PathAlgorithms

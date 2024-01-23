@@ -1,5 +1,5 @@
-import { NamedColor } from '../../color/color';
-import { RgbColor } from '../../color/colorSpaces';
+import { Color, NamedColor } from '../color/color';
+import { RgbColor } from '../color/colorSpaces';
 
 function mapBuntstifte(input: [number, number, number][]): NamedColor[] {
 	return input
@@ -387,8 +387,58 @@ const presets = {
 		).map(([name, r, g, b]) => {
 			return NamedColor.fromColor(new RgbColor(r / 255, g / 255, b / 255).color(), name);
 		})
+	},
+	pride: {
+		name: 'Pride-Flagge',
+		colors: [0xff1e26, 0xfe941e, 0xffff00, 0x06bd00, 0x001a98, 0x760088].map((num) =>
+			RgbColor.fromNumeric(num).color()
+		)
+	},
+	pearls: {
+		name: 'Perlen',
+		colors: [
+			[79, 10, 17],
+			[95, 33, 21],
+			[96, 52, 15],
+			[87, 78, 88],
+			[96, 64, 43],
+			[93, 82, 25],
+			[91, 88, 39],
+			[91, 85, 73],
+			[37, 76, 64],
+			[2, 56, 50],
+			[1, 67, 49],
+			[89, 90, 92],
+			[22, 55, 80],
+			[2, 73, 94],
+			[34, 77, 78],
+			[27, 74, 87],
+			[55, 84, 90],
+			[36, 13, 48],
+			[46, 25, 61],
+			[63, 55, 76],
+			[49, 50, 56],
+			[95, 54, 70],
+			[96, 66, 73],
+			[98, 79, 76],
+			[97, 75, 82]
+		].map((arr) => {
+			let ns = arr.map((n) => n / 100);
+			return new RgbColor(ns[0], ns[1], ns[2]).color();
+		})
+	},
+	langfassung: {
+		name: 'Langfassung',
+		colors: [
+			[0.6, 0.2],
+			[0.1, 0.7],
+			[0.9, 0.4],
+			[0.2, 0.2],
+			[0.5, 0.5],
+			[0.8, 0.7]
+		].map(([r, b]) => new RgbColor(r, 0, b).color())
 	}
-} satisfies Partial<Record<string, { name: string; colors: NamedColor[] }>>;
+} satisfies Partial<Record<string, { name: string; colors: Color[] }>>;
 
 function leftPadZeroes(len: number, num: number): string {
 	let str = '' + num;

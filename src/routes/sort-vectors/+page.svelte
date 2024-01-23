@@ -257,16 +257,15 @@
 				</button>
 			{/if}
 		</div>
-		<Window title="Optionen" xlCol={4}>
-			<Options
-				bind:locked
-				on:blowUp={blowUp}
-				bind:invalidate
-				bind:norm
-				on:add={invalidate(addEmptyVector)}
-				on:delete={invalidate(() => data.set([]))}
-			/>
-		</Window>
+		<Options
+			bind:locked
+			on:blowUp={blowUp}
+			bind:invalidate
+			bind:norm
+			xlCol={4}
+			on:add={invalidate(addEmptyVector)}
+			on:delete={invalidate(() => data.set([]))}
+		/>
 		<Window title="Ansicht des Graphen (FDGD)" options xlCol={5}>
 			<div class="h-full m-0 min-h-[420px]">
 				<ForceDirectedGraph bind:redraw vectors={points} {edges} {norm} />

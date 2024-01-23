@@ -1,5 +1,6 @@
 <script lang="ts">
 	import * as Icon from 'flowbite-svelte-icons';
+	import Window from '../components/Window.svelte';
 	import type { DistanceType } from '../geom/dist';
 	import { createEventDispatcher } from 'svelte';
 	import { tweened } from 'svelte/motion';
@@ -7,6 +8,9 @@
 	import type { ColorSpace } from '../color/colorSpaces';
 	import OptionsButton from './OptionsButton.svelte';
 	import OptionsSelect from './OptionsSelect.svelte';
+
+	type State = 'default' | 'load' | 'store';
+	let state: State = 'default';
 
 	export let norm: DistanceType = 'euclidean';
 	export let colorSpace: ColorSpace = 'rgb';
@@ -25,6 +29,8 @@
 	export let show: Module[] = [];
 	export let hide: Module[] = [];
 
+	export let xlCol: undefined | number;
+
 	let display: Set<Module>;
 	$: {
 		display = new Set(Array.from(defaultShow).concat(show));
@@ -40,6 +46,12 @@
 		asVectors: null;
 		norm: DistanceType;
 	}>();
+
+	let stateNames: Record<State, string> = {
+		default: 'Optionen',
+		load: 'Laden',
+		store: 'Speichern'
+	};
 
 	let lockAnim = tweened(0, { duration: 1500, easing: sineIn });
 	export let locked: boolean;
@@ -66,54 +78,79 @@
 		: '';
 </script>
 
-<div class="m-4 text-white">
-	<div class="flex flex-row gap-4">
-		<OptionsButton
-			show={display.has('add')}
-			on:click={() => dispatch('add')}
-			icon={Icon.PlusSolid}
-			title="Hinzufügen"
-		/>
-		<OptionsButton
-			show={display.has('delete')}
-			on:click={() => dispatch('delete')}
-			icon={Icon.TrashBinSolid}
-			title="Löschen"
-		/>
-		<OptionsButton
-			show={display.has('lock')}
-			on:click={() => (locked = !locked)}
-			title={locked ? 'Entsperren' : 'Sperren'}
-			icon={locked ? Icon.LockSolid : Icon.LockOpenSolid}
-			iconStyle={lockButtonStyle}
-		/>
+<Window title={stateNames[state]} {xlCol} scrollable={state !== 'default'}>
+	<div class="m-4 text-white">
+		{#if state == 'default'}
+			<div class="flex flex-row gap-4">
+				<OptionsButton
+					show={display.has('add')}
+					on:click={() => dispatch('add')}
+					icon={Icon.PlusSolid}
+					title="Hinzufügen"
+				/>
+				<OptionsButton
+					show={display.has('delete')}
+					on:click={() => dispatch('delete')}
+					icon={Icon.TrashBinSolid}
+					title="Löschen"
+				/>
+				<OptionsButton
+					show={display.has('lock')}
+					on:click={() => (locked = !locked)}
+					title={locked ? 'Entsperren' : 'Sperren'}
+					icon={locked ? Icon.LockSolid : Icon.LockOpenSolid}
+					iconStyle={lockButtonStyle}
+				/>
+			</div>
+			<OptionsSelect
+				show={display.has('norm')}
+				icon={Icon.RulerCombinedSolid}
+				title="Metrik"
+				bind:value={norm}
+				options={['manhattan', 'euclidean', 'max']}
+				optionNames={['Manhattan', 'Euklidisch', 'Maximum']}
+				{invalidate}
+			/>
+			<OptionsSelect
+				show={display.has('colorSpace')}
+				icon={Icon.PalleteSolid}
+				title="Farbraum"
+				bind:value={colorSpace}
+				options={['rgb', 'lrgb', 'cmy', 'hsv', 'hsl', 'oklab']}
+				optionNames={['RGB', 'lRGB', 'CMY', 'HSV', 'HSL', 'OKLAB']}
+				{invalidate}
+			/>
+			<div class="flex flex-row gap-4 mt-4">
+				<OptionsButton
+					on:click={() => (state = 'load')}
+					show={display.has('load')}
+					title="Laden"
+					icon={Icon.DownloadSolid}
+				/>
+				<OptionsButton
+					on:click={() => (state = 'store')}
+					show={display.has('store')}
+					title="Speichern"
+					icon={Icon.UploadSolid}
+				/>
+				<OptionsButton
+					show={display.has('asVector')}
+					title="Als Vektoren"
+					icon={Icon.ArrowRightBigOutline}
+					on:click={() => dispatch('asVectors')}
+				/>
+			</div>
+		{:else}
+			{#if state === 'load'}
+				<slot name="load">Nichts zu laden</slot>
+			{/if}
+			<div class="flex flex-row gap-4">
+				<OptionsButton
+					on:click={() => (state = 'default')}
+					icon={Icon.ArrowLeftToBracketOutline}
+					title="Zurück"
+				/>
+			</div>
+		{/if}
 	</div>
-	<OptionsSelect
-		show={display.has('norm')}
-		icon={Icon.RulerCombinedSolid}
-		title="Metrik"
-		bind:value={norm}
-		options={['manhattan', 'euclidean', 'max']}
-		optionNames={['Manhattan', 'Euklidisch', 'Maximum']}
-		{invalidate}
-	/>
-	<OptionsSelect
-		show={display.has('colorSpace')}
-		icon={Icon.PalleteSolid}
-		title="Farbraum"
-		bind:value={colorSpace}
-		options={['rgb', 'lrgb', 'cmy', 'hsv', 'hsl', 'oklab']}
-		optionNames={['RGB', 'lRGB', 'CMY', 'HSV', 'HSL', 'OKLAB']}
-		{invalidate}
-	/>
-	<div class="flex flex-row gap-4 mt-4">
-		<OptionsButton show={display.has('load')} title="Laden" icon={Icon.DownloadSolid} />
-		<OptionsButton show={display.has('store')} title="Speichern" icon={Icon.UploadSolid} />
-		<OptionsButton
-			show={display.has('asVector')}
-			title="Als Vektoren"
-			icon={Icon.ArrowRightBigOutline}
-			on:click={() => dispatch('asVectors')}
-		/>
-	</div>
-</div>
+</Window>

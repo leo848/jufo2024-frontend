@@ -1,6 +1,7 @@
 import { Color } from './color';
 import { RgbColor } from './colorSpaces';
 import { deepMap } from '../utils/deepMap';
+import presets from './presets';
 
 export const colorListCategories = ['default', 'custom'] as const;
 export type ColorListCategory = (typeof colorListCategories)[number];
@@ -9,14 +10,7 @@ export type ColorList = { name: string; description?: string; colors: Color[] };
 export type ColorListStorage = Record<ColorListCategory, Record<string, ColorList>>;
 
 const defaultStorage: ColorListStorage = {
-	default: {
-		pride: {
-			name: 'pride',
-			colors: [0xff1e26, 0xfe941e, 0xffff00, 0x06bd00, 0x001a98, 0x760088].map((num) =>
-				RgbColor.fromNumeric(num).color()
-			)
-		}
-	},
+	default: presets,
 	custom: {}
 };
 
