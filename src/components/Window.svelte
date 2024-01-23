@@ -2,7 +2,7 @@
 	import { Card } from 'flowbite-svelte';
 	import * as Icon from 'flowbite-svelte-icons';
 	import { createEventDispatcher } from 'svelte';
-	import {slide} from 'svelte/transition';
+	import { slide } from 'svelte/transition';
 
 	export let title: string;
 	export let options: boolean = false;
@@ -51,37 +51,44 @@
 	}
 </script>
 
-<div class={` col-span-${closed?6:12} md:col-span-${closed?6:mdCol} xl:col-span-${closed?2:xlCol} row-span-${closed?1:row} max-w-none md:m-0` }>
-<Card
-	class={` rounded-xl max-w-none md:p-0 ${scrollable?'overflow-scroll':'overflow-hidden'} ${closed?'w-auto h-auto':'h-full max-h-[600px]'} transition-all`}
+<div
+	class={` col-span-${closed ? 6 : 12} md:col-span-${closed ? 6 : mdCol} xl:col-span-${
+		closed ? 2 : xlCol
+	} row-span-${closed ? 1 : row} max-w-none md:m-0`}
 >
-<div class={ `gap-4 text-2xl dark:text-white bg-gray-700 p-2 rounded-t-xl flex flex-row ${closed?'':'justify-between'}` }>
-		<div class="flex flex-row gap-4">
-			{#if closable}<button
-					class="bg-gray-600 hover:bg-gray-500 transition-all rounded-xl p-2"
-	 on:click={() => (closed = !closed)}>
-
-	 {#if closed}
-		 <Icon.PlusSolid />
-	 {:else}
-	 <Icon.MinusSolid />
-	 {/if}
-
-
-			</button
-				>{/if}
-			<div>{title}</div>
+	<Card
+		class={` rounded-xl max-w-none md:p-0 ${scrollable ? 'overflow-scroll' : 'overflow-hidden'} ${
+			closed ? 'w-auto h-auto' : 'h-full max-h-[600px]'
+		} transition-all`}
+	>
+		<div
+			class={`gap-4 text-2xl dark:text-white bg-gray-700 p-2 rounded-t-xl flex flex-row ${
+				closed ? '' : 'justify-between'
+			}`}
+		>
+			<div class="flex flex-row gap-4">
+				{#if closable}<button
+						class="bg-gray-600 hover:bg-gray-500 transition-all rounded-xl p-2"
+						on:click={() => (closed = !closed)}
+					>
+						{#if closed}
+							<Icon.PlusSolid />
+						{:else}
+							<Icon.MinusSolid />
+						{/if}
+					</button>{/if}
+				<div>{title}</div>
+			</div>
+			{#if options}
+				<button class="bg-gray-600 rounded-xl p-2" on:click={() => dispatch('optionClick')}
+					><Icon.CogOutline /></button
+				>
+			{/if}
 		</div>
-		{#if options}
-			<button class="bg-gray-600 rounded-xl p-2" on:click={() => dispatch('optionClick')}
-				><Icon.CogOutline /></button
-			>
+		{#if !closed}
+			<div transition:slide={{ axis: 'y' }} class="h-full">
+				<slot />
+			</div>
 		{/if}
-	</div>
-	{#if !closed}
-		<div transition:slide={{axis:"y"}} class="h-full">
-			<slot />
-		</div>
-	{/if}
-</Card>
+	</Card>
 </div>
