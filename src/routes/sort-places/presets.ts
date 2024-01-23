@@ -12,6 +12,7 @@ export type PointList = {
 	name: string;
 	rotation?: number;
 	values: NamedPoint[];
+	desc?:string;
 }
 
 export const presets = { hamburg: {
@@ -173,6 +174,131 @@ marlChurches: {
 		{ name: 'Auferstehungskirche', lat: 51.65312, lng: 7.11498 },
 		{ name: 'Friedenskirche', lat: 51.66175, lng: 7.11445 }
 	]
+},
+citiesRuhrgebiet: {
+	name: 'Städte im Ruhrgebiet',
+	values: [
+{
+"name": "Dortmund",
+"desc": "Dortmund ist eine Großstadt im Ruhrgebiet und zeichnet sich durch ihre industrielle Vergangenheit aus.",
+"lat": 51.51495,
+"lng": 7.46571
+},
+{
+"name": "Essen",
+"desc": "Essen ist eine bedeutende Stadt im Ruhrgebiet und hat sich von einer Industriestadt zu einem kulturellen Zentrum entwickelt.",
+"lat": 51.45657,
+"lng": 7.01228
+},
+{
+"name": "Duisburg",
+"desc": "Duisburg ist eine Hafenstadt im Ruhrgebiet und spielt eine wichtige Rolle im Logistiksektor.",
+"lat": 51.43441,
+"lng": 6.76233
+},
+{
+"name": "Bochum",
+"desc": "Bochum ist eine Stadt mit vielfältiger Kultur und einer lebendigen Musikszene im Ruhrgebiet.",
+"lat": 51.48165,
+"lng": 7.21648
+},
+{
+"name": "Gelsenkirchen",
+"desc": "Gelsenkirchen ist bekannt für den Fußballverein Schalke 04 und hat eine industrielle Vergangenheit.",
+"lat": 51.51774,
+"lng": 7.08571
+},
+{
+"name": "Herne",
+"desc": "Herne ist eine Stadt im Ruhrgebiet mit einer Mischung aus urbanem Leben und grünen Naherholungsgebieten.",
+"lat": 51.53721,
+"lng": 7.22208
+},
+{
+"name": "Bottrop",
+"desc": "Bottrop ist eine Stadt im Ruhrgebiet, die sich durch ihre vielfältige Kulturszene auszeichnet.",
+"lat": 51.52372,
+"lng": 6.92035
+},
+{
+"name": "Hagen",
+"desc": "Hagen ist eine Stadt mit historischer Architektur und einem breiten Angebot an kulturellen Veranstaltungen.",
+"lat": 51.36105,
+"lng": 7.47181
+},
+{
+"name": "Hamn",
+"desc": "Hamm ist eine Stadt im Ruhrgebiet mit einer Mischung aus Tradition und Moderne.",
+"lat": 51.67844,
+"lng": 7.82556
+},
+{
+"name": "Mülheim an der Ruhr",
+"desc": "Mülheim an der Ruhr ist eine Stadt mit grünen Parks und einer lebendigen Kunstszene.",
+"lat": 51.43092,
+"lng": 6.88032
+},
+{
+"name": "Oberhausen",
+"desc": "Oberhausen ist eine Stadt im Ruhrgebiet mit einer Vielzahl von Freizeitmöglichkeiten und kulturellen Einrichtungen.",
+"lat": 51.49698,
+"lng": 6.86377
+},
+{
+"name": "Recklinghausen",
+"desc": "Recklinghausen ist eine Stadt mit historischem Charme und regelmäßigen kulturellen Veranstaltungen.",
+"lat": 51.6146,
+"lng": 7.19745
+},
+{
+"name": "Remscheid",
+"desc": "Remscheid ist eine Stadt im Ruhrgebiet, die durch ihre Lage in den Hügeln geprägt ist.",
+"lat": 51.17812,
+"lng": 7.19627
+},
+{
+"name": "Solingen",
+"desc": "Solingen ist eine Stadt mit einer langen Tradition in der Messerproduktion und verfügt über malerische Altstadtgassen.",
+"lat": 51.17389,
+"lng": 7.08446
+},
+{
+"name": "Witten",
+"desc": "Witten ist eine Stadt im Ruhrgebiet mit einem historischen Stadtkern und zahlreichen Grünflächen.",
+"lat": 51.44218,
+"lng": 7.34073
+},
+{
+"name": "Unna",
+"desc": "Unna ist eine Stadt mit einem charmanten Stadtbild und einer reichen Geschichte.",
+"lat": 51.53409,
+"lng": 7.68453
+},
+{
+"name": "Castrop-Rauxel",
+"desc": "Castrop-Rauxel ist eine Stadt im Ruhrgebiet mit einer Mischung aus Industriekultur und Naturerlebnissen.",
+"lat": 51.55073,
+"lng": 7.30823
+},
+{
+"name": "Dinslaken",
+"desc": "Dinslaken ist eine Stadt mit historischen Gebäuden und einer vielfältigen Naturlandschaft im Ruhrgebiet.",
+"lat": 51.56583,
+"lng": 6.74117
+},
+{
+"name": "Hattingen",
+"desc": "Hattingen ist eine Stadt mit einer gut erhaltenen Altstadt und einem charmanten Flair im Ruhrgebiet.",
+"lat": 51.39666,
+"lng": 7.18494
+},
+{
+"name": "Lünen",
+"desc": "Lünen ist eine Stadt im Ruhrgebiet mit einem historischen Stadtkern und grünen Naherholungsgebieten.",
+"lat": 51.6168,
+"lng": 7.52498
+}
+]
 }
 } satisfies Partial<Record<string, PointList>> ;
 

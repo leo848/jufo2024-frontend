@@ -5,6 +5,7 @@ export type CoordPoint = {
 
 export type NamedPoint = {
 	name: string;
+	desc ?: string;
 } & CoordPoint;
 
 export function coordSimilar(a: CoordPoint, b: CoordPoint): boolean {
