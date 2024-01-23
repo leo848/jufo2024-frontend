@@ -15,16 +15,17 @@
 	import Options from '../../components/Options.svelte';
 	import type { DistanceType } from '../../geom/dist';
 	import { goto } from '$app/navigation';
+	import LoadPlace from './LoadPlace.svelte';
 
 	title.set('Orte sortieren');
 
-	let points: NamedPoint[] = presets[4].values;
+	let points: NamedPoint[] = presets.hamburg.values;
 	let pointsLocked: boolean = false;
 	$: length = points.length;
 
 	let edges: [CoordPoint, CoordPoint][] = [];
 	let norm: DistanceType = 'euclidean';
-	let rotation: number = presets[2].rotation ?? 0;
+	let rotation: number = 0;
 
 	let path: null | number[][] = null;
 	let invalidateAlgorithms: () => {};
@@ -38,6 +39,8 @@
 		edges = [];
 		invalidateAlgorithms();
 	}
+
+	let olmKey = 0;
 
 	function setDataFromPath(path: number[][]) {
 		pointsLocked = true;
@@ -94,7 +97,9 @@
 	>
 		<Window title="Karte" options row={3}>
 			<div class="h-full m-0">
-				<OpenLayersMap {invalidate} {norm} bind:points {rotation} {edges} />
+				{#key olmKey}
+					<OpenLayersMap {invalidate} {norm} bind:points {rotation} {edges} />
+				{/key}
 			</div>
 		</Window>
 
@@ -112,7 +117,9 @@
 						points.map((p) => [p.lat, p.lng].map((f) => f.toFixed(5)).join('i')).join('o')
 				);
 			})}
-		/>
+		>
+			<LoadPlace slot="load" on:load={() => olmKey++} {invalidate} bind:points />
+		</Options>
 
 		<PathProperties {path} {length} {blownUp} horizontal />
 

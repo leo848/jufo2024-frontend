@@ -10,6 +10,7 @@
 	import ColorDisplay from './ColorDisplay.svelte';
 	import { gradient } from '../../ui/color';
 	import OptionsButton from '../../components/OptionsButton.svelte';
+	import {createEventDispatcher} from 'svelte';
 
 	export let colors: Color[];
 	export let invalidate: <T>(callback: (t: T) => void) => (t: T) => void;
@@ -19,8 +20,11 @@
 
 	let selectedColorList: null | ColorList = null;
 
+	const dispatch = createEventDispatcher<{load:null}>();
+
 	function load(colorList: ColorList) {
 		colors = colorList.colors;
+		dispatch("load");
 	}
 
 	function translate(key: string): string {
@@ -44,7 +48,7 @@
 						class="text-xl bg-gray-700 hover:bg-gray-600 transition-all p-2 color-white w-full items-center justify-between flex flex-row"
 						on:click={() => (selectedColorList = colorList)}
 					>
-						<div class="text-white">{colorList.name}</div>
+						<div class="text-white truncate">{colorList.name}</div>
 						<div><Icon.ArrowRightSolid /></div>
 					</button>
 				</div>
@@ -65,7 +69,7 @@
 			{/each}
 		</div>
 		<div class="flex flex-col">
-			<div class="text-2xl">{selectedColorList.colors.length} Farben</div>
+			<div class="text-2xl mb-4">{selectedColorList.colors.length} Farben</div>
 			<div>
 				<OptionsButton
 					icon={Icon.DownloadSolid}
