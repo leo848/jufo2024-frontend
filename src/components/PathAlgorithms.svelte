@@ -103,7 +103,7 @@
 						type: 'action',
 						latency,
 						action: {
-							type: 'createPath',
+							type: 'createDistPath',
 							method: { type: e.method },
 							dimensions,
 							values: points

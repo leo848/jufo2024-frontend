@@ -37,13 +37,11 @@
 	});
 </script>
 
-<Gallery class="gap-4 grid-cols-1 lg:grid-cols-2 xl:grid-cols-4 mx-32 mt-4">
+<Gallery class="gap-4 grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 mx-32 mt-4">
 	{#each displayCards as card, i (card.text)}
 		<div transition:scale>
 			<Card
 				img={card.img}
-				horizontal
-				reverse={i % 2 == i % 4}
 				href={card.href}
 				class="mb-4 h-full w-full transition-all"
 			>
