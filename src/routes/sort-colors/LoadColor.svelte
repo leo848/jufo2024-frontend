@@ -64,12 +64,15 @@
 				<ColorDisplay {color} size="sm" />
 			{/each}
 		</div>
-		<div>
-			<OptionsButton
-				icon={Icon.DownloadSolid}
-				title="Laden"
-				on:click={invalidate(() => selectedColorList && load(selectedColorList))}
-			/>
+		<div class="flex flex-col">
+			<div class="text-2xl">{selectedColorList.colors.length} Farben</div>
+			<div>
+				<OptionsButton
+					icon={Icon.DownloadSolid}
+					title="Laden"
+					on:click={invalidate(() => selectedColorList && load(selectedColorList))}
+				/>
+			</div>
 		</div>
 	{/if}
 </div>

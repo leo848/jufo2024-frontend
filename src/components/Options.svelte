@@ -122,13 +122,13 @@
 			/>
 			<div class="flex flex-row gap-4 mt-4">
 				<OptionsButton
-					on:click={() => (state = 'load')}
+					on:click={invalidate(() => (state = 'load'))}
 					show={display.has('load')}
 					title="Laden"
 					icon={Icon.DownloadSolid}
 				/>
 				<OptionsButton
-					on:click={() => (state = 'store')}
+					on:click={invalidate(() => (state = 'store'))}
 					show={display.has('store')}
 					title="Speichern"
 					icon={Icon.UploadSolid}
