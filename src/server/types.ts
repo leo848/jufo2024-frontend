@@ -40,6 +40,25 @@ export const colorNameApiError = z.discriminatedUnion('type', [
 	})
 ]);
 
+const pathCreateMethod = 
+			z.discriminatedUnion('type', [
+			z.object({ type: z.literal('nearestNeighbor') }),
+			z.object({ type: z.literal('bruteForce') }),
+			z.object({ type: z.literal('greedy') }),
+			z.object({ type: z.literal('christofides') }),
+			z.object({ type: z.literal('random') }),
+			z.object({ type: z.literal('transmute') })
+		]);
+
+		const pathImproveMethod = 
+			z.discriminatedUnion('type', [
+			z.object({ type: z.literal('rotate') }),
+			z.object({ type: z.literal('twoOpt') }),
+			z.object({ type: z.literal('threeOpt') }),
+			z.object({ type: z.literal('simulatedAnnealing') }),
+			z.object({ type: z.literal('swap') })
+		])
+
 const action = z.discriminatedUnion('type', [
 	z.object({
 		type: z.literal('sortNumbers'),
@@ -50,26 +69,23 @@ const action = z.discriminatedUnion('type', [
 		type: z.literal('createDistPath'),
 		dimensions: z.number().positive().int().lt(256),
 		values: z.array(z.array(z.number())),
-		method: z.discriminatedUnion('type', [
-			z.object({ type: z.literal('nearestNeighbor') }),
-			z.object({ type: z.literal('bruteForce') }),
-			z.object({ type: z.literal('greedy') }),
-			z.object({ type: z.literal('christofides') }),
-			z.object({ type: z.literal('random') }),
-			z.object({ type: z.literal('transmute') })
-		])
+		method: pathCreateMethod,
 	}),
 	z.object({
 		type: z.literal('improveDistPath'),
 		dimensions: z.number().positive().int().lt(256),
 		path: z.array(z.array(z.number())),
-		method: z.discriminatedUnion('type', [
-			z.object({ type: z.literal('rotate') }),
-			z.object({ type: z.literal('twoOpt') }),
-			z.object({ type: z.literal('threeOpt') }),
-			z.object({ type: z.literal('simulatedAnnealing') }),
-			z.object({ type: z.literal('swap') })
-		])
+		method: pathImproveMethod,
+	}),
+	z.object({
+		type: z.literal('createPath'),
+		matrix: z.array(z.array(z.number())),
+		method: pathCreateMethod,
+	}),
+	z.object({
+		type: z.literal('improvePath'),
+		path: z.array(z.number().int()),
+		method: pathImproveMethod
 	})
 ]);
 
@@ -128,13 +144,28 @@ export const serverOutputDistPathImprovement = z.object({
 	currentPath: z.array(z.array(z.number())),
 	progress: z.optional(z.number().gte(0).lte(1))
 });
+export const serverOutputPathCreation = z.object({
+	type: z.literal('pathCreation'),
+	donePath: z.optional(z.array(z.number().int())),
+	currentEdges: z.array(z.tuple([z.array(z.number().int()), z.array(z.number().int())])),
+	progress: z.optional(z.number().gte(0).lte(1))
+})
+export const serverOutputPathImprovement = z.object({
+	type: z.literal('pathImprovement'),
+	done: z.boolean(),
+	better: z.boolean(),
+	currentPath: z.array(z.number().int()),
+	progress: z.optional(z.number().gte(0).lte(1))
+});
 export const serverOutput = z.discriminatedUnion('type', [
 	serverOutputError,
 	serverOutputLog,
 	serverOutputSortedNumbers,
-	serverOutputDistPathCreation,
 	serverOutputLatency,
-	serverOutputDistPathImprovement
+	serverOutputDistPathCreation,
+	serverOutputDistPathImprovement,
+	serverOutputPathCreation,
+	serverOutputPathImprovement,
 ]);
 
 export type ServerOutput = z.infer<typeof serverOutput>;
