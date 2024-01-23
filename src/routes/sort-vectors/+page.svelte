@@ -14,7 +14,9 @@
 	import { goto } from '$app/navigation';
 	import Window from '../../components/Window.svelte';
 	import type { DistanceType } from '../../geom/dist';
+	import { adjacencyMatrix } from '../../graph/adjacency';
 	import Options from '../../components/Options.svelte';
+	import AdjacencyMatrix from '../../components/AdjacencyMatrix.svelte';
 
 	title.set('Vektoren sortieren');
 
@@ -58,6 +60,8 @@
 	let path: number[][] | null = null;
 	let edges: [number, number][] = [];
 
+	$: matrix = adjacencyMatrix($data.map(d => d.inner), norm);
+
 	let locked = false;
 	let blownUp = false;
 
@@ -91,33 +95,6 @@
 			return arr;
 		}
 	}
-
-	function randomVectors(dim: number, amount: number): NamedVector[] {
-		let vectors: NamedVector[] = [];
-		while (vectors.length < amount) {
-			let namedVector: NamedVector = { inner: [], name: getName(vectors.length) };
-			vectors.push(namedVector);
-			for (let comp = 0; comp < dim; comp++) {
-				namedVector.inner.push(Math.floor(Math.random() * 10));
-			}
-			for (let i = 0; i < vectors.length - 1; i++) {
-				const vector = vectors[i];
-				let equal = true;
-				for (let comp = 0; comp < dim; comp++) {
-					if (vector.inner[comp] !== vectors[vectors.length - 1].inner[comp]) {
-						equal = false;
-						break;
-					}
-				}
-				if (equal) {
-					vectors.pop();
-					break;
-				}
-			}
-		}
-		return vectors;
-	}
-
 	function emptyVector(dim: number): number[] {
 		let vector = [];
 		for (let i = 0; i < dim; i++) {
@@ -298,6 +275,10 @@
 			dimensions={dim}
 			points={points.map((p) => p.inner)}
 		/>
+
+		<Window title="Adjazenzmatrix" options xlCol={12}>
+			<AdjacencyMatrix values={matrix} vertexNames={$data.map(d=>d.name)} />
+		</Window>
 	</div>
 </div>
 
