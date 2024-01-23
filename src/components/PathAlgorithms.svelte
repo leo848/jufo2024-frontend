@@ -3,7 +3,7 @@
 	import * as Icon from 'flowbite-svelte-icons';
 	import { factorial } from '../utils/math';
 	import { sendWebsocket, registerCallback, unregisterCallback } from '../server/websocket';
-	import { serverOutputPathCreation, serverOutputPathImprovement } from '../server/types';
+	import { serverOutputDistPathCreatiserverOutputDistPathImprovementment } from '../server/types';
 	import { Card, Spinner, Progressbar, Range } from 'flowbite-svelte';
 	import { flip } from 'svelte/animate';
 	import { scale } from 'svelte/transition';
@@ -188,7 +188,7 @@
 	let latencySlider = 1;
 	$: latency = [0, 100, 250, 500, 1000, 2000][latencySlider];
 
-	let callbackId = registerCallback(serverOutputPathCreation, (pc) => {
+	let callbackId = registerCallback(serverOutputDistPathCreation, (pc) => {
 		if (pc.donePath) {
 			progress.ongoing = false;
 			path = pc.donePath;
@@ -200,7 +200,7 @@
 	});
 	onDestroy(() => unregisterCallback(callbackId));
 
-	let callbackId2 = registerCallback(serverOutputPathImprovement, (pi) => {
+	let callbackId2 = registerCallback(serverOutputDistPathImprovement, (pi) => {
 		if (pi.done) {
 			progress.ongoing = false;
 		} else {

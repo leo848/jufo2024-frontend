@@ -47,7 +47,7 @@ const action = z.discriminatedUnion('type', [
 		algorithm: z.enum(['bubble', 'selection', 'insertion', 'quick', 'merge'])
 	}),
 	z.object({
-		type: z.literal('createPath'),
+		type: z.literal('createDistPath'),
 		dimensions: z.number().positive().int().lt(256),
 		values: z.array(z.array(z.number())),
 		method: z.discriminatedUnion('type', [
@@ -60,7 +60,7 @@ const action = z.discriminatedUnion('type', [
 		])
 	}),
 	z.object({
-		type: z.literal('improvePath'),
+		type: z.literal('improveDistPath'),
 		dimensions: z.number().positive().int().lt(256),
 		path: z.array(z.array(z.number())),
 		method: z.discriminatedUnion('type', [
@@ -115,14 +115,14 @@ export const serverOutputSortedNumbers = z.object({
 	numbers: z.array(z.number()),
 	highlight: z.array(z.tuple([z.number(), Highlight]))
 });
-export const serverOutputPathCreation = z.object({
-	type: z.literal('pathCreation'),
+export const serverOutputDistPathCreation = z.object({
+	type: z.literal('distPathCreation'),
 	donePath: z.optional(z.array(z.array(z.number()))),
 	currentEdges: z.array(z.tuple([z.array(z.number()), z.array(z.number())])),
 	progress: z.optional(z.number().gte(0).lte(1))
 });
-export const serverOutputPathImprovement = z.object({
-	type: z.literal('pathImprovement'),
+export const serverOutputDistPathImprovement = z.object({
+	type: z.literal('distPathImprovement'),
 	done: z.boolean(),
 	better: z.boolean(),
 	currentPath: z.array(z.array(z.number())),
@@ -132,9 +132,9 @@ export const serverOutput = z.discriminatedUnion('type', [
 	serverOutputError,
 	serverOutputLog,
 	serverOutputSortedNumbers,
-	serverOutputPathCreation,
+	serverOutputDistPathCreation,
 	serverOutputLatency,
-	serverOutputPathImprovement
+	serverOutputDistPathImprovement
 ]);
 
 export type ServerOutput = z.infer<typeof serverOutput>;

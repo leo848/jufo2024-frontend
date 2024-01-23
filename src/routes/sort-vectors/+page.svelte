@@ -3,7 +3,7 @@
 	import PathAlgorithms from '../../components/PathAlgorithms.svelte';
 	import * as Icon from 'flowbite-svelte-icons';
 	import { registerCallback, unregisterCallback } from '../../server/websocket';
-	import { serverOutputPathCreation, serverOutputPathImprovement } from '../../server/types';
+	import { serverOutputDistPathCreatiserverOutputDistPathImprovementment } from '../../server/types';
 	import { fromUrlString, type NamedVector } from './vector';
 	import { onDestroy } from 'svelte';
 	import { flip } from 'svelte/animate';
@@ -179,7 +179,7 @@
 		);
 	}
 
-	let callbackIdCreation = registerCallback(serverOutputPathCreation, (pc) => {
+	let callbackIdCreation = registerCallback(serverOutputDistPathCreation, (pc) => {
 		path = null;
 		locked = true;
 		if (pc.donePath) {
@@ -192,7 +192,7 @@
 	});
 	onDestroy(() => unregisterCallback(callbackIdCreation));
 
-	let callbackIdImprovement = registerCallback(serverOutputPathImprovement, (pi) => {
+	let callbackIdImprovement = registerCallback(serverOutputDistPathImprovement, (pi) => {
 		locked = true;
 		if (pi.better) {
 			path = pi.currentPath;

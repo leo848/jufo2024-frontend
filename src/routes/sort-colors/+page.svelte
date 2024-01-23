@@ -9,7 +9,7 @@
 	import { onDestroy } from 'svelte';
 	import PointChart from './PointChart.svelte';
 	import { registerCallback, unregisterCallback } from '../../server/websocket';
-	import { serverOutputPathCreation, serverOutputPathImprovement } from '../../server/types';
+	import { serverOutputDistPathCreatiserverOutputDistPathImprovementment } from '../../server/types';
 	import type { Color } from '../../color/color';
 	import { title } from '../../ui/navbar';
 	import { gradient } from '../../ui/color';
@@ -165,7 +165,7 @@
 	}
 
 	{
-		let callbackIdCreation = registerCallback(serverOutputPathCreation, (pc) => {
+		let callbackIdCreation = registerCallback(serverOutputDistPathCreation, (pc) => {
 			path = null;
 			colorsLocked = true;
 			if (pc.donePath) {
@@ -184,7 +184,7 @@
 		});
 		onDestroy(() => unregisterCallback(callbackIdCreation));
 
-		let callbackIdImprovement = registerCallback(serverOutputPathImprovement, (pi) => {
+		let callbackIdImprovement = registerCallback(serverOutputDistPathImprovement, (pi) => {
 			if (pi.better) {
 				edges = pathToEdges(pi.currentPath);
 				path = pi.currentPath.map(Point3.fromArray);

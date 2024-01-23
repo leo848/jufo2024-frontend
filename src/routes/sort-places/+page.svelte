@@ -5,7 +5,7 @@
 	import PathAlgorithms from '../../components/PathAlgorithms.svelte';
 	import { type CoordPoint, type NamedPoint, coordSimilar } from '../../geom/coordPoint';
 	import { registerCallback, unregisterCallback } from '../../server/websocket';
-	import { serverOutputPathCreation, serverOutputPathImprovement } from '../../server/types';
+	import { serverOutputDistPathCreatiserverOutputDistPathImprovementment } from '../../server/types';
 	import { onDestroy } from 'svelte';
 	import presets from './presets';
 	import Window from '../../components/Window.svelte';
@@ -58,7 +58,7 @@
 		return edges;
 	}
 
-	let callbackIdCreation = registerCallback(serverOutputPathCreation, (pc) => {
+	let callbackIdCreation = registerCallback(serverOutputDistPathCreation, (pc) => {
 		path = null;
 		if (pc.donePath) {
 			path = pc.donePath;
@@ -73,7 +73,7 @@
 	});
 	onDestroy(() => unregisterCallback(callbackIdCreation));
 
-	let callbackIdImprovement = registerCallback(serverOutputPathImprovement, (pi) => {
+	let callbackIdImprovement = registerCallback(serverOutputDistPathImprovement, (pi) => {
 		if (pi.better) {
 			path = pi.currentPath;
 		}
