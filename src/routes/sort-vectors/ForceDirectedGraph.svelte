@@ -145,7 +145,6 @@
 		if (callback) clearInterval(callback);
 		width = canvas.width = wrapperDiv.offsetWidth;
 		height = canvas.height = wrapperDiv.offsetHeight;
-		console.log(wrapperDiv.offsetWidth, wrapperDiv.offsetHeight, particles[0].pos);
 		const context = canvas.getContext('2d');
 		if (!context) throw new Error('could not get canvas context');
 		ctx = context;
