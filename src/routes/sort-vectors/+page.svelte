@@ -129,7 +129,7 @@
 
 	function getName(index: number): string {
 		let base26 = index.toString(26);
-		let string = "";
+		let string = '';
 		for (let i = 0; i < base26.length; i++) {
 			string += String.fromCharCode(parseInt(base26.charAt(i), 26) + 97);
 		}

@@ -10,7 +10,7 @@
 	import ColorDisplay from './ColorDisplay.svelte';
 	import { gradient } from '../../ui/color';
 	import OptionsButton from '../../components/OptionsButton.svelte';
-	import {createEventDispatcher} from 'svelte';
+	import { createEventDispatcher } from 'svelte';
 
 	export let colors: Color[];
 	export let invalidate: <T>(callback: (t: T) => void) => (t: T) => void;
@@ -20,11 +20,11 @@
 
 	let selectedColorList: null | ColorList = null;
 
-	const dispatch = createEventDispatcher<{load:null}>();
+	const dispatch = createEventDispatcher<{ load: null }>();
 
 	function load(colorList: ColorList) {
 		colors = colorList.colors;
-		dispatch("load");
+		dispatch('load');
 	}
 
 	function translate(key: string): string {

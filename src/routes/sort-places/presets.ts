@@ -10,6 +10,7 @@ function wikiCoord(coord: string): number {
 
 export type PointList = {
 	name: string;
+	aiGenerated?: boolean;
 	rotation?: number;
 	values: NamedPoint[];
 	desc?:string;
@@ -175,131 +176,337 @@ marlChurches: {
 		{ name: 'Friedenskirche', lat: 51.66175, lng: 7.11445 }
 	]
 },
-citiesRuhrgebiet: {
-	name: 'Städte im Ruhrgebiet',
-	values: [
-{
-"name": "Dortmund",
-"desc": "Dortmund ist eine Großstadt im Ruhrgebiet und zeichnet sich durch ihre industrielle Vergangenheit aus.",
-"lat": 51.51495,
-"lng": 7.46571
-},
-{
-"name": "Essen",
-"desc": "Essen ist eine bedeutende Stadt im Ruhrgebiet und hat sich von einer Industriestadt zu einem kulturellen Zentrum entwickelt.",
-"lat": 51.45657,
-"lng": 7.01228
-},
-{
-"name": "Duisburg",
-"desc": "Duisburg ist eine Hafenstadt im Ruhrgebiet und spielt eine wichtige Rolle im Logistiksektor.",
-"lat": 51.43441,
-"lng": 6.76233
-},
-{
-"name": "Bochum",
-"desc": "Bochum ist eine Stadt mit vielfältiger Kultur und einer lebendigen Musikszene im Ruhrgebiet.",
-"lat": 51.48165,
-"lng": 7.21648
-},
-{
-"name": "Gelsenkirchen",
-"desc": "Gelsenkirchen ist bekannt für den Fußballverein Schalke 04 und hat eine industrielle Vergangenheit.",
-"lat": 51.51774,
-"lng": 7.08571
-},
-{
-"name": "Herne",
-"desc": "Herne ist eine Stadt im Ruhrgebiet mit einer Mischung aus urbanem Leben und grünen Naherholungsgebieten.",
-"lat": 51.53721,
-"lng": 7.22208
-},
-{
-"name": "Bottrop",
-"desc": "Bottrop ist eine Stadt im Ruhrgebiet, die sich durch ihre vielfältige Kulturszene auszeichnet.",
-"lat": 51.52372,
-"lng": 6.92035
-},
-{
-"name": "Hagen",
-"desc": "Hagen ist eine Stadt mit historischer Architektur und einem breiten Angebot an kulturellen Veranstaltungen.",
-"lat": 51.36105,
-"lng": 7.47181
-},
-{
-"name": "Hamn",
-"desc": "Hamm ist eine Stadt im Ruhrgebiet mit einer Mischung aus Tradition und Moderne.",
-"lat": 51.67844,
-"lng": 7.82556
-},
-{
-"name": "Mülheim an der Ruhr",
-"desc": "Mülheim an der Ruhr ist eine Stadt mit grünen Parks und einer lebendigen Kunstszene.",
-"lat": 51.43092,
-"lng": 6.88032
-},
-{
-"name": "Oberhausen",
-"desc": "Oberhausen ist eine Stadt im Ruhrgebiet mit einer Vielzahl von Freizeitmöglichkeiten und kulturellen Einrichtungen.",
-"lat": 51.49698,
-"lng": 6.86377
-},
-{
-"name": "Recklinghausen",
-"desc": "Recklinghausen ist eine Stadt mit historischem Charme und regelmäßigen kulturellen Veranstaltungen.",
-"lat": 51.6146,
-"lng": 7.19745
-},
-{
-"name": "Remscheid",
-"desc": "Remscheid ist eine Stadt im Ruhrgebiet, die durch ihre Lage in den Hügeln geprägt ist.",
-"lat": 51.17812,
-"lng": 7.19627
-},
-{
-"name": "Solingen",
-"desc": "Solingen ist eine Stadt mit einer langen Tradition in der Messerproduktion und verfügt über malerische Altstadtgassen.",
-"lat": 51.17389,
-"lng": 7.08446
-},
-{
-"name": "Witten",
-"desc": "Witten ist eine Stadt im Ruhrgebiet mit einem historischen Stadtkern und zahlreichen Grünflächen.",
-"lat": 51.44218,
-"lng": 7.34073
-},
-{
-"name": "Unna",
-"desc": "Unna ist eine Stadt mit einem charmanten Stadtbild und einer reichen Geschichte.",
-"lat": 51.53409,
-"lng": 7.68453
-},
-{
-"name": "Castrop-Rauxel",
-"desc": "Castrop-Rauxel ist eine Stadt im Ruhrgebiet mit einer Mischung aus Industriekultur und Naturerlebnissen.",
-"lat": 51.55073,
-"lng": 7.30823
-},
-{
-"name": "Dinslaken",
-"desc": "Dinslaken ist eine Stadt mit historischen Gebäuden und einer vielfältigen Naturlandschaft im Ruhrgebiet.",
-"lat": 51.56583,
-"lng": 6.74117
-},
-{
-"name": "Hattingen",
-"desc": "Hattingen ist eine Stadt mit einer gut erhaltenen Altstadt und einem charmanten Flair im Ruhrgebiet.",
-"lat": 51.39666,
-"lng": 7.18494
-},
-{
-"name": "Lünen",
-"desc": "Lünen ist eine Stadt im Ruhrgebiet mit einem historischen Stadtkern und grünen Naherholungsgebieten.",
-"lat": 51.6168,
-"lng": 7.52498
-}
+	citiesRuhrgebiet: {
+		name: 'Städte im Ruhrgebiet',
+		aiGenerated: true,
+		values: [
+			{
+			"name": "Dortmund",
+			"desc": "Dortmund ist eine Großstadt im Ruhrgebiet und zeichnet sich durch ihre industrielle Vergangenheit aus.",
+			"lat": 51.51495,
+			"lng": 7.46571
+			},
+			{
+			"name": "Essen",
+			"desc": "Essen ist eine bedeutende Stadt im Ruhrgebiet und hat sich von einer Industriestadt zu einem kulturellen Zentrum entwickelt.",
+			"lat": 51.45657,
+			"lng": 7.01228
+			},
+			{
+			"name": "Duisburg",
+			"desc": "Duisburg ist eine Hafenstadt im Ruhrgebiet und spielt eine wichtige Rolle im Logistiksektor.",
+			"lat": 51.43441,
+			"lng": 6.76233
+			},
+			{
+			"name": "Bochum",
+			"desc": "Bochum ist eine Stadt mit vielfältiger Kultur und einer lebendigen Musikszene im Ruhrgebiet.",
+			"lat": 51.48165,
+			"lng": 7.21648
+			},
+			{
+			"name": "Gelsenkirchen",
+			"desc": "Gelsenkirchen ist bekannt für den Fußballverein Schalke 04 und hat eine industrielle Vergangenheit.",
+			"lat": 51.51774,
+			"lng": 7.08571
+			},
+			{
+			"name": "Herne",
+			"desc": "Herne ist eine Stadt im Ruhrgebiet mit einer Mischung aus urbanem Leben und grünen Naherholungsgebieten.",
+			"lat": 51.53721,
+			"lng": 7.22208
+			},
+			{
+			"name": "Bottrop",
+			"desc": "Bottrop ist eine Stadt im Ruhrgebiet, die sich durch ihre vielfältige Kulturszene auszeichnet.",
+			"lat": 51.52372,
+			"lng": 6.92035
+			},
+			{
+			"name": "Hagen",
+			"desc": "Hagen ist eine Stadt mit historischer Architektur und einem breiten Angebot an kulturellen Veranstaltungen.",
+			"lat": 51.36105,
+			"lng": 7.47181
+			},
+			{
+			"name": "Hamm",
+			"desc": "Hamm ist eine Stadt im Ruhrgebiet mit einer Mischung aus Tradition und Moderne.",
+			"lat": 51.67844,
+			"lng": 7.82556
+			},
+			{
+			"name": "Mülheim an der Ruhr",
+			"desc": "Mülheim an der Ruhr ist eine Stadt mit grünen Parks und einer lebendigen Kunstszene.",
+			"lat": 51.43092,
+			"lng": 6.88032
+			},
+			{
+			"name": "Oberhausen",
+			"desc": "Oberhausen ist eine Stadt im Ruhrgebiet mit einer Vielzahl von Freizeitmöglichkeiten und kulturellen Einrichtungen.",
+			"lat": 51.49698,
+			"lng": 6.86377
+			},
+			{
+			"name": "Recklinghausen",
+			"desc": "Recklinghausen ist eine Stadt mit historischem Charme und regelmäßigen kulturellen Veranstaltungen.",
+			"lat": 51.6146,
+			"lng": 7.19745
+			},
+			{
+			"name": "Velbert",
+			"desc": "Velbert ist eine Stadt im Ruhrgebiet, die durch ihre Lage in den Hügeln geprägt ist.",
+			"lat": 51.3282,
+			"lng": 7.04613
+			},
+			{
+			"name": "Gladbeck",
+			"desc": "Gladbeck ist eine Stadt mit einer langen Tradition in der Industrie und bietet eine vielfältige Kulturszene.",
+			"lat": 51.57476,
+			"lng": 6.97074
+			},
+			{
+			"name": "Witten",
+			"desc": "Witten ist eine Stadt im Ruhrgebiet mit einem historischen Stadtkern und zahlreichen Grünflächen.",
+			"lat": 51.44218,
+			"lng": 7.34073
+			},
+			{
+			"name": "Unna",
+			"desc": "Unna ist eine Stadt im Ruhrgebiet mit einem charmanten Stadtbild und einer reichen Geschichte.",
+			"lat": 51.53409,
+			"lng": 7.68453
+			},
+			{
+			"name": "Castrop-Rauxel",
+			"desc": "Castrop-Rauxel ist eine Stadt im Ruhrgebiet mit einer Mischung aus Industriekultur und Naturerlebnissen.",
+			"lat": 51.55073,
+			"lng": 7.30823
+			},
+			{
+			"name": "Dinslaken",
+			"desc": "Dinslaken ist eine Stadt mit historischen Gebäuden und einer vielfältigen Naturlandschaft im Ruhrgebiet.",
+			"lat": 51.56583,
+			"lng": 6.74117
+			},
+			{
+			"name": "Hattingen",
+			"desc": "Hattingen ist eine Stadt mit einer gut erhaltenen Altstadt und einem charmanten Flair im Ruhrgebiet.",
+			"lat": 51.39666,
+			"lng": 7.18494
+			},
+			{
+			"name": "Lünen",
+			"desc": "Lünen ist eine Stadt im Ruhrgebiet mit einem historischen Stadtkern und grünen Naherholungsgebieten.",
+			"lat": 51.6168,
+			"lng": 7.52498
+			}
+		]
+	},
+	stuttgart: {
+		name: 'Städte nahe Stuttgart',
+		aiGenerated: true,
+		values: [
+  { "name": "Ludwigsburg", "desc": "Ludwigsburg ist eine Stadt in Baden-Württemberg, bekannt für ihr barockes Residenzschloss und den blühenden Barockgarten.", "lat": 48.89760, "lng": 9.19153 },
+  { "name": "Esslingen am Neckar", "desc": "Esslingen am Neckar ist eine historische Stadt mit gut erhaltenem mittelalterlichem Stadtbild und Fachwerkhäusern.", "lat": 48.74077, "lng": 9.31085 },
+  { "name": "Böblingen", "desc": "Böblingen ist eine Stadt südwestlich von Stuttgart und zeichnet sich durch moderne Architektur und Einkaufsmöglichkeiten aus.", "lat": 48.68536, "lng": 9.01392 },
+  { "name": "Fellbach", "desc": "Fellbach liegt östlich von Stuttgart und ist für seine Weinberge und das Kultur- und Kongresszentrum Schwabenlandhalle bekannt.", "lat": 48.81465, "lng": 9.27679 },
+  { "name": "Waiblingen", "desc": "Waiblingen ist eine Stadt am Rems-Ufer und besticht durch ihre mittelalterliche Altstadt und das Fachwerkensemble.", "lat": 48.83013, "lng": 9.31836 },
+  { "name": "Leonberg", "desc": "Leonberg ist eine Stadt mit historischem Stadtkern und dem bekannten Pomeranzengarten, einem Renaissance-Garten.", "lat": 48.79811, "lng": 9.01860 },
+  { "name": "Sindelfingen", "desc": "Sindelfingen ist eine Stadt südwestlich von Stuttgart und bekannt für ihre Automobilindustrie und das Mercedes-Benz Werk.", "lat": 48.71035, "lng": 9.00304 },
+  { "name": "Kornwestheim", "desc": "Kornwestheim liegt nordwestlich von Stuttgart und ist für sein Schloss und den Stadtpark Kegelenberg bekannt.", "lat": 48.86495, "lng": 9.18316 },
+  { "name": "Gerlingen", "desc": "Gerlingen ist eine Stadt westlich von Stuttgart und bietet eine Mischung aus Moderne und historischem Charme.", "lat": 48.79992, "lng": 9.07306 },
+  { "name": "Vaihingen an der Enz", "desc": "Vaihingen an der Enz ist eine Stadt mit malerischer Altstadt und dem imposanten Enztalviadukt.", "lat": 48.93827, "lng": 8.95207 },
+  { "name": "Ditzingen", "desc": "Ditzingen ist eine Stadt nordwestlich von Stuttgart und bekannt für ihre schöne Landschaft und das Stadtmuseum.", "lat": 48.83671, "lng": 9.06766 },
+  { "name": "Weinstadt", "desc": "Weinstadt liegt östlich von Stuttgart und zeichnet sich durch ihre Weinberge und Fachwerkhäuser aus.", "lat": 48.81436, "lng": 9.38682 },
+  { "name": "Korntal-Münchingen", "desc": "Korntal-Münchingen liegt nordwestlich von Stuttgart und besticht durch die Kombination aus Natur und städtischem Flair.", "lat": 48.83462, "lng": 9.13584 },
+  { "name": "Remseck am Neckar", "desc": "Remseck am Neckar liegt nördlich von Stuttgart und ist für seine Neckarpromenade und das Schloss Ludwigsburg bekannt.", "lat": 48.87618, "lng": 9.25926 },
+  { "name": "Ostfildern", "desc": "Ostfildern liegt östlich von Stuttgart und bietet eine grüne Umgebung sowie das sehenswerte Schloss Nellingen.", "lat": 48.72687, "lng": 9.25605 },
+  { "name": "Leinfelden-Echterdingen", "desc": "Leinfelden-Echterdingen liegt südlich von Stuttgart und ist für seine Messe Stuttgart und das Si-Centrum bekannt.", "lat": 48.69716, "lng": 9.18277 },
+  { "name": "Filderstadt", "desc": "Filderstadt liegt südlich von Stuttgart und zeichnet sich durch eine moderne Infrastruktur und das Schönbuch-Naturparkzentrum aus.", "lat": 48.66625, "lng": 9.22274 },
+  { "name": "Schwieberdingen", "desc": "Schwieberdingen ist eine Gemeinde nordwestlich von Stuttgart und bietet eine Mischung aus Natur und ländlichem Charme.", "lat": 48.86842, "lng": 9.08165 },
+  { "name": "Steinenbronn", "desc": "Steinenbronn liegt südlich von Stuttgart und ist für seinen Erlebnispfad und das Naturschutzgebiet Schönbuch bekannt.", "lat": 48.65166, "lng": 9.11314 },
+  { "name": "Markgröningen", "desc": "Markgröningen ist eine Stadt westlich von Stuttgart und beeindruckt mit ihrer historischen Altstadt und dem Schloss.", "lat": 48.90641, "lng": 9.10694 }
 ]
-}
+	},
+	dresden: {
+		name: 'Städte nahe Dresden',
+		aiGenerated: true,
+		values: 
+			[
+			  { "name": "Meißen", "desc": "Meißen, die Wiege Sachsens, ist berühmt für ihre Porzellanmanufaktur und die majestätische Albrechtsburg.", "lat": 51.16456, "lng": 13.47254 },
+			  { "name": "Radebeul", "desc": "Radebeul, das sächsische Nizza, lockt mit seinen malerischen Weinbergen und dem charmanten Karl-May-Museum.", "lat": 51.10453, "lng": 13.66224 },
+			  { "name": "Coswig", "desc": "Coswig überrascht mit seinem Schloss, umgeben von idyllischen Parkanlagen, und einer reizvollen Altstadt.", "lat": 51.11492, "lng": 13.55342 },
+			  { "name": "Pirna", "desc": "Pirna, das Tor zur Sächsischen Schweiz, beeindruckt mit seiner gut erhaltenen Altstadt und der schönen Elbpromenade.", "lat": 50.96187, "lng": 13.93488 },
+			  { "name": "Riesa", "desc": "Riesa, bekannt für seine Große Porphyrbrücke, bietet auch das charmante Stadttheater und eine lebendige Kulturszene.", "lat": 51.30642, "lng": 13.29334 },
+			  { "name": "Großenhain", "desc": "Großenhain, mit seinem Renaissance-Schloss und dem historischen Marktplatz, ist eine Stadt mit reicher Geschichte und Tradition.", "lat": 51.28456, "lng": 13.55148 },
+			  { "name": "Freital", "desc": "Freital, eingebettet zwischen Hügeln und Wäldern, lockt mit dem Wasserschloss Burgk und dem charmanten Stadtpark.", "lat": 51.00646, "lng": 13.64432 },
+			  { "name": "Dippoldiswalde", "desc": "Dippoldiswalde, umgeben von malerischer Natur, besticht durch sein mittelalterliches Stadtbild und die imposante Stadtkirche.", "lat": 50.97618, "lng": 13.67248 },
+			  { "name": "Heidenau", "desc": "Heidenau, an der Elbe gelegen, bezaubert mit seinem historischen Stadtkern und der Nähe zum Nationalpark Sächsische Schweiz.", "lat": 51.01341, "lng": 13.85292 },
+			  { "name": "Radeberg", "desc": "Radeberg, bekannt für sein Bier und die historische Altstadt, ist ein malerisches Städtchen im Osten Sachsens.", "lat": 51.11466, "lng": 13.91550 },
+			  { "name": "Kamenz", "desc": "Kamenz, die Lessingstadt, bietet nicht nur kulturelle Vielfalt, sondern auch idyllische Plätze und historische Bauten.", "lat": 51.26687, "lng": 14.09380 },
+			  { "name": "Königsbrück", "desc": "Königsbrück, umgeben von Seen und Wäldern, präsentiert sich als charmante Kleinstadt mit historischem Flair.", "lat": 51.27567, "lng": 13.84769 },
+			  { "name": "Weißwasser", "desc": "Weißwasser, in der Lausitz gelegen, besticht durch seine Teichlandschaften und die Tradition der Glaskunst.", "lat": 51.50568, "lng": 14.63763 },
+			  { "name": "Großröhrsdorf", "desc": "Großröhrsdorf, eingebettet in sanfte Hügel, beeindruckt mit seinem Schloss und der historischen Kirche.", "lat": 51.20744, "lng": 13.57810 },
+			  { "name": "Hoyerswerda", "desc": "Hoyerswerda, mit seinem Zoo und dem Schloss, präsentiert sich als modernes Städtchen mit historischem Flair.", "lat": 51.43827, "lng": 14.25161 },
+			  { "name": "Rabenau", "desc": "Rabenau, umgeben von grünen Wäldern, besticht durch sein Schloss und die gemütliche Atmosphäre im historischen Ortskern.", "lat": 50.98941, "lng": 13.53394 },
+			  { "name": "Grossenhain", "desc": "Großenhain, mit seinem Renaissance-Schloss und dem historischen Marktplatz, ist eine Stadt mit reicher Geschichte und Tradition.", "lat": 51.28456, "lng": 13.55148 },
+			  { "name": "Moritzburg", "desc": "Moritzburg, umgeben von einem malerischen Schlosspark, fasziniert mit dem imposanten Barockschloss und seinen vielen Seen.", "lat": 51.13382, "lng": 13.71172 },
+			  { "name": "Klipphausen", "desc": "Klipphausen, inmitten der Elbtalauen, beeindruckt mit seiner alten Mühle und den historischen Fachwerkhäusern.", "lat": 51.06489, "lng": 13.48174 },
+			  { "name": "Pulsnitz", "desc": "Pulsnitz, die Pfefferkuchenstadt, lockt mit süßem Gebäck und einer charmanten Altstadt mit vielen Fachwerkhäusern.", "lat": 51.18247, "lng": 14.00465 }
+			]
+	},
+	wien: {
+		name: 'Städte nahe Wien',
+		aiGenerated: true,
+		values: [
+  {
+    "name": "Klosterneuburg",
+    "desc": "Klosterneuburg, wo Geschichte auf moderne Lebensart trifft. Bekannt für das imposante Stift und malerische Weinberge.",
+    "lat": 48.30578,
+    "lng": 16.32582
+  },
+  {
+    "name": "Schwechat",
+    "desc": "Schwechat, Heimat des Flughafens Wien. Ein Ort, der sich im Puls der Luftfahrt bewegt und dennoch bodenständig bleibt.",
+    "lat": 48.13712,
+    "lng": 16.47078
+  },
+  {
+    "name": "Baden",
+    "desc": "Baden, wo Wellness auf Kultur trifft. Ein charmantes Städtchen mit historischen Bädern und kulturellen Schätzen.",
+    "lat": 48.01036,
+    "lng": 16.23419
+  },
+  {
+    "name": "Wiener Neustadt",
+    "desc": "Wiener Neustadt, die Stadt der Doppeladler. Hier schlägt das Herz der Militärgeschichte und modernen Innovationen.",
+    "lat": 47.81398,
+    "lng": 16.24205
+  },
+  {
+    "name": "Mödling",
+    "desc": "Mödling, wo Natur und Urbanität harmonieren. Historische Gassen, grüne Parks und ein lebendiges Stadtleben.",
+    "lat": 48.10334,
+    "lng": 16.27768
+  },
+  {
+    "name": "Perchtoldsdorf",
+    "desc": "Perchtoldsdorf, der Weinort mit Charme. Genieße die Atmosphäre der Weinberge und das historische Stadtbild.",
+    "lat": 48.11066,
+    "lng": 16.27268
+  },
+  {
+    "name": "Tulln",
+    "desc": "Tulln, die Gartenstadt an der Donau. Bekannt für blühende Gärten, romantische Flussufer und die Gartenbauschule.",
+    "lat": 48.32703,
+    "lng": 16.05957
+  },
+  {
+    "name": "Korneuburg",
+    "desc": "Korneuburg, wo Tradition und Moderne sich begegnen. Erlebe die Geschichte in den Gassen und die Dynamik der Gegenwart.",
+    "lat": 48.33945,
+    "lng": 16.33963
+  },
+  {
+    "name": "Gerasdorf bei Wien",
+    "desc": "Gerasdorf bei Wien, ein Ort zum Wachsen. Moderne Infrastruktur und ländlicher Charme in perfekter Balance.",
+    "lat": 48.30877,
+    "lng": 16.48751
+  },
+  {
+    "name": "Stockerau",
+    "desc": "Stockerau, die Stadt am Kamp. Historischer Stadtkern, lebendige Kultur und eine idyllische Lage am Fluss.",
+    "lat": 48.38379,
+    "lng": 16.21569
+  },
+  {
+    "name": "Purkersdorf",
+    "desc": "Purkersdorf, wo Kunst und Natur verschmelzen. Ein Rückzugsort mit Künstlerflair und malerischer Umgebung.",
+    "lat": 48.21263,
+    "lng": 16.16672
+  },
+  {
+    "name": "Schwadorf",
+    "desc": "Schwadorf, ein Ort der Ruhe im Schatten Wiens. Historische Bauwerke und grüne Oasen abseits des Trubels.",
+    "lat": 48.11037,
+    "lng": 16.42402
+  },
+  {
+    "name": "Leopoldsdorf",
+    "desc": "Leopoldsdorf, wo Landwirtschaft auf Moderne trifft. Grüne Felder und moderne Infrastruktur in harmonischem Einklang.",
+    "lat": 48.15889,
+    "lng": 16.54411
+  },
+  {
+    "name": "Langenzersdorf",
+    "desc": "Langenzersdorf, das Tor zum Weinviertel. Historische Architektur und Weingärten prägen das charmante Stadtbild.",
+    "lat": 48.27311,
+    "lng": 16.38086
+  },
+  {
+    "name": "Gänserndorf",
+    "desc": "Gänserndorf, wo Tradition und Innovation Hand in Hand gehen. Eine Stadt, die die Vergangenheit ehrt und die Zukunft gestaltet.",
+    "lat": 48.33956,
+    "lng": 16.58008
+  },
+  {
+    "name": "Enzersfeld im Weinviertel",
+    "desc": "Enzersfeld im Weinviertel, ein Ort der Stille und Weinreben. Ländliche Idylle und traditionelle Gemütlichkeit.",
+    "lat": 48.39965,
+    "lng": 16.36673
+  },
+  {
+    "name": "Hollabrunn",
+    "desc": "Hollabrunn, das Herz des Weinviertels. Charmante Weingüter, historische Plätze und ein pulsierendes Stadtleben.",
+    "lat": 48.55899,
+    "lng": 16.07177
+  },
+  {
+    "name": "Marchegg",
+    "desc": "Marchegg, die Stadt der Störche. Naturreservate, historische Bauten und eine einzigartige Vogelvielfalt.",
+    "lat": 48.15127,
+    "lng": 16.94816
+  },
+  {
+    "name": "Laa an der Thaya",
+    "desc": "Laa an der Thaya, wo Geschichte auf Thermalquellen trifft. Historische Bauten, entspannende Bäder und eine charmante Atmosphäre.",
+    "lat": 48.71808,
+    "lng": 16.36598
+  },
+  {
+    "name": "Ebreichsdorf",
+    "desc": "Ebreichsdorf, wo Pferde und Kultur zu Hause sind. Reitkultur, historische Architektur und eine lebendige Gemeinschaft.",
+    "lat": 47.95484,
+    "lng": 16.39552
+  },
+  {
+    "name": "Gumpoldskirchen",
+    "desc": "Gumpoldskirchen, das Tor zum Weinbau. Ein charmantes Städtchen mit Weinbergen, traditionellen Heurigen und historischem Flair.",
+    "lat": 48.05758,
+    "lng": 16.28282
+ 
+
+ },
+  {
+    "name": "Bruck an der Leitha",
+    "desc": "Bruck an der Leitha, wo Geschichte am Flussufer lebendig wird. Historische Bauten, idyllische Uferpromenade und lebendige Kultur.",
+    "lat": 48.00157,
+    "lng": 16.77498
+  },
+  {
+    "name": "Zwölfaxing",
+    "desc": "Zwölfaxing, ein Ort der Harmonie im Wiener Umland. Grüne Landschaft, kleine Teiche und entspanntes Landleben.",
+    "lat": 48.09035,
+    "lng": 16.44211
+  },
+  {
+    "name": "Königstetten",
+    "desc": "Königstetten, wo die Donau das Umland prägt. Naturidylle, historisches Ambiente und eine entspannte Atmosphäre.",
+    "lat": 48.32146,
+    "lng": 16.22616
+  }
+]
+	}
 } satisfies Partial<Record<string, PointList>> ;
 
 export default presets;
