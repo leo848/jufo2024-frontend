@@ -119,7 +119,7 @@
 		const center = new Vec2(width / 2, height / 2);
 		for (const particle1 of particles) {
 			// Zentrumskraft
-			particle1.applyForce(center.sub(particle1.pos).setMag(0.005));
+			particle1.applyForce(center.sub(particle1.pos).setMag(0.05));
 			for (const particle2 of particles) {
 				if (particle1.pos.dist(particle2.pos) < 0.001) continue;
 				let delta = particle2.pos.sub(particle1.pos);
@@ -145,12 +145,19 @@
 		if (callback) clearInterval(callback);
 		width = canvas.width = wrapperDiv.offsetWidth;
 		height = canvas.height = wrapperDiv.offsetHeight;
+		console.log(wrapperDiv.offsetWidth, wrapperDiv.offsetHeight, particles[0].pos);
 		const context = canvas.getContext('2d');
 		if (!context) throw new Error('could not get canvas context');
 		ctx = context;
 
-		fullParticleUpdate();
+		fullParticleUpdate(true);
 		callback = setInterval(render, 60);
+
+		wrapperDiv.addEventListener('resize', () => {
+			console.log('smth');
+			mount();
+			fullParticleUpdate(true);
+		});
 	}
 
 	onMount(mount);
