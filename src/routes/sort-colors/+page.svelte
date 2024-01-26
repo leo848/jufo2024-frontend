@@ -26,6 +26,8 @@
 	import Options from '../../components/Options.svelte';
 	import presets from '../../color/presets';
 	import LoadColor from './LoadColor.svelte';
+	import OptionsButton from '../../components/OptionsButton.svelte';
+	import CopyButton from '../../components/CopyButton.svelte';
 
 	title.set('Farben sortieren');
 
@@ -424,5 +426,22 @@
 			bind:invalidate={invalidateAlgorithms}
 			points={colors.map((color) => color.space(space).point().values())}
 		/>
+
+		<Window title="Exportieren" xlCol={2} closed>
+			<div class="m-2">
+				<CopyButton
+					title="RGB-Werte kopieren"
+					text={JSON.stringify(colors.map((c) => c.rgb().values()))}
+				/>
+			</div>
+			{#if space !== 'rgb'}
+				<div class="m-2">
+					<CopyButton
+						title={`${space}-Werte kopieren`}
+						text={JSON.stringify(colors.map((c) => c.space(space).values()))}
+					/>
+				</div>
+			{/if}
+		</Window>
 	</div>
 </div>

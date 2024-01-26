@@ -10,7 +10,7 @@
 
 {#if show}
 	<button
-		class="pr-2 inline-flex gap-2 justify-between items-center justify-items-center bg-gray-700 hover:bg-gray-600 transition-all rounded-xl"
+		class="pr-2 inline-flex gap-2 justify-between items-center justify-items-center bg-gray-700 hover:bg-gray-600 transition-all rounded-xl text-white"
 		on:click
 	>
 		<div class="bg-gray-600 p-2 rounded-xl" style={iconStyle}>
