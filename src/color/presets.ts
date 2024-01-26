@@ -437,6 +437,16 @@ const presets = {
 			[0.5, 0.5],
 			[0.8, 0.7]
 		].map(([r, b]) => new RgbColor(r, 0, b).color())
+	},
+	rgbcube: {
+		name: 'RGB-Würfel',
+		colors: [0, 25, 50, 75, 100]
+			.map((r) =>
+				[0, 25, 50, 75, 100].map((g) =>
+					[0, 25, 50, 75, 100].map((b) => new RgbColor(r / 100, g / 100, b / 100).color())
+				)
+			)
+			.flat(3)
 	}
 } satisfies Partial<Record<string, { name: string; colors: Color[] }>>;
 
