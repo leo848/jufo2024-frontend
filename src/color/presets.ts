@@ -64,6 +64,11 @@ const books =
 		})
 }
 
+const booksDark = {
+		name: 'Bücher dunkler',
+		colors: dedup(books.colors.map(c => c.oklab()).map(oklab => oklab.with("l", rangeMap(oklab.l, [0, 1], [0, 0.775])).color())),
+	}
+
 const presets = {
 	// buntstifteAlt: {
 	// 	name: 'Buntstifte alt',
@@ -396,9 +401,17 @@ const presets = {
 		])
 	},
 	books,
-	booksDark: {
-		name: 'Bücher dunkler',
-		colors: dedup(books.colors.map(c => c.oklab()).map(oklab => oklab.with("l", rangeMap(oklab.l, [0, 1], [0, 0.75])).color())),
+	booksDark,
+	booksDarkByLightness: {
+		name: "Bücher nach Helligkeit",
+		colors: books.colors.toSorted((b, a)=>a.oklab().l - b.oklab().l),
+	},
+	booksDarkByHue: {
+		name: "Bücher nach Farbwert",
+		colors: books.colors.toSorted((a,b)=> {
+			let chromas = [b,a].map(c => c.oklab()).map(({ a, b }) => Math.sqrt(a * a + b * b));
+			return chromas[0] - chromas[1]
+		})
 	},
 	pride: {
 		name: 'Pride-Flagge',
