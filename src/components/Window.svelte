@@ -67,7 +67,7 @@
 			}`}
 		>
 			<div class="flex flex-row gap-4">
-				{#if closable}<button
+				{#if closable}<div><button
 						class="bg-gray-600 hover:bg-gray-500 transition-all rounded-xl p-2"
 						on:click={() => (closed = !closed)}
 					>
@@ -76,13 +76,13 @@
 						{:else}
 							<Icon.MinusSolid />
 						{/if}
-					</button>{/if}
+					</button></div>{/if}
 				<div>{title}</div>
 			</div>
 			{#if options}
-				<button class="bg-gray-600 rounded-xl p-2" on:click={() => dispatch('optionClick')}
+				<div><button class="bg-gray-600 rounded-xl p-2" on:click={() => dispatch('optionClick')}
 					><Icon.CogOutline /></button
-				>
+				></div>
 			{/if}
 		</div>
 		{#if !closed}
