@@ -31,6 +31,13 @@
 			href: '/sort-places',
 			text: 'Orte sortieren',
 			desc: 'Geografische Orte über eine Kartenanwendung sortieren'
+		},
+		{
+			img: '/glen-carrie-words.png',
+			imgSource: 'Glen Carrie',
+			href: '/sort-words',
+			text: 'Wörter sortieren',
+			desc: 'Deutsche Wörter nach ihrer Bedeutung (semantisch) sortieren',
 		}
 	];
 	let displayCards: typeof cards = [];
