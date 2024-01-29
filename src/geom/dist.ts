@@ -41,7 +41,6 @@ export function maxDist(a: number[], b: number[]): number {
 }
 
 export function cosineDist(a: number[], b: number[]): number {
-	console.log(a,b);
 	const dim = Math.min(a.length, b.length);
 	let dot = 0;
 	for (let i = 0; i < dim; i++) {
