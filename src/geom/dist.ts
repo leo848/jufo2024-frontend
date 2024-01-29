@@ -1,5 +1,5 @@
 import { assertNever } from '../server/types';
-import {rangeMap} from '../utils/math';
+import { rangeMap } from '../utils/math';
 
 export type DistanceType = 'euclidean' | 'manhattan' | 'max' | 'cosine';
 

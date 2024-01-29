@@ -1,6 +1,6 @@
 import { Color, NamedColor } from '../color/color';
 import { HsvColor, RgbColor } from '../color/colorSpaces';
-import {rangeMap} from '../utils/math';
+import { rangeMap } from '../utils/math';
 
 function mapBuntstifte(input: [number, number, number][]): NamedColor[] {
 	return input
@@ -24,50 +24,55 @@ function mapBuntstifte(input: [number, number, number][]): NamedColor[] {
 }
 
 function dedup(array: Color[]): Color[] {
-	return array.filter((c, i, a) => i == a.length - 1 || c.rgb().numeric() != a[i+1].rgb().numeric())
+	return array.filter(
+		(c, i, a) => i == a.length - 1 || c.rgb().numeric() != a[i + 1].rgb().numeric()
+	);
 }
 
-const books = 
-{
-		name: 'Mathematikbücher',
-		colors: (
-			[
-				['mit der eins fängt alles an', 242, 240, 238],
-				['mathe macciato', 212, 188, 0],
-				['rechnen und raten', 240, 198, 33],
-				['mathematisches problemlösen und beweisen', 230, 109, 0],
-				['von ziffern zahlen und zeichen', 185, 112, 29],
-				['mathe magie für durchblicker', 217, 73, 51],
-				['nullen machen einsen groß', 191, 44, 38],
-				['damit hatte keiner gerechnet', 190, 34, 39],
-				['eine null im alltag', 211, 57, 37],
-				['zahlen bitte', 203, 83, 113],
-				['rechnen mit dem weltmeister', 72, 4, 54],
-				['mathematische detektivgeschichten', 188, 225, 244],
-				['zahlen spiralen und magische quadrate', 133, 184, 213],
-				['schülerduden mathematik ii', 93, 167, 245],
-				['rechnen ohne taschenrechner', 0, 144, 147],
-				['100 great problems of elementary mathematics', 57, 57, 112],
-				['dtv atlas schulmathematik', 0, 37, 107],
-				['fünf minuten mathematik', 2, 5, 20],
-				['von der pflicht zur kür', 20, 22, 33],
-				['nikola teslas rätseluniversum', 51, 64, 94],
-				['mathematische knobeleien', 1, 60, 24],
-				['fit im kopf', 96, 116, 46],
-				['mathematik durch die hintertür', 164, 184, 58],
-				['1089 oder das wunder der zahlen', 180, 191, 52],
-				['enigma', 231, 175, 114],
-				['mathe in 30 sekunden', 202, 173, 117]
-			] as const
-		).map(([name, r, g, b]) => {
-			return NamedColor.fromColor(new RgbColor(r / 255, g / 255, b / 255).color(), name);
-		})
-}
+const books = {
+	name: 'Mathematikbücher',
+	colors: (
+		[
+			['mit der eins fängt alles an', 242, 240, 238],
+			['mathe macciato', 212, 188, 0],
+			['rechnen und raten', 240, 198, 33],
+			['mathematisches problemlösen und beweisen', 230, 109, 0],
+			['von ziffern zahlen und zeichen', 185, 112, 29],
+			['mathe magie für durchblicker', 217, 73, 51],
+			['nullen machen einsen groß', 191, 44, 38],
+			['damit hatte keiner gerechnet', 190, 34, 39],
+			['eine null im alltag', 211, 57, 37],
+			['zahlen bitte', 203, 83, 113],
+			['rechnen mit dem weltmeister', 72, 4, 54],
+			['mathematische detektivgeschichten', 188, 225, 244],
+			['zahlen spiralen und magische quadrate', 133, 184, 213],
+			['schülerduden mathematik ii', 93, 167, 245],
+			['rechnen ohne taschenrechner', 0, 144, 147],
+			['100 great problems of elementary mathematics', 57, 57, 112],
+			['dtv atlas schulmathematik', 0, 37, 107],
+			['fünf minuten mathematik', 2, 5, 20],
+			['von der pflicht zur kür', 20, 22, 33],
+			['nikola teslas rätseluniversum', 51, 64, 94],
+			['mathematische knobeleien', 1, 60, 24],
+			['fit im kopf', 96, 116, 46],
+			['mathematik durch die hintertür', 164, 184, 58],
+			['1089 oder das wunder der zahlen', 180, 191, 52],
+			['enigma', 231, 175, 114],
+			['mathe in 30 sekunden', 202, 173, 117]
+		] as const
+	).map(([name, r, g, b]) => {
+		return NamedColor.fromColor(new RgbColor(r / 255, g / 255, b / 255).color(), name);
+	})
+};
 
 const booksDark = {
-		name: 'Bücher dunkler',
-		colors: dedup(books.colors.map(c => c.oklab()).map(oklab => oklab.with("l", rangeMap(oklab.l, [0, 1], [0, 0.775])).color())),
-	}
+	name: 'Bücher dunkler',
+	colors: dedup(
+		books.colors
+			.map((c) => c.oklab())
+			.map((oklab) => oklab.with('l', rangeMap(oklab.l, [0, 1], [0, 0.775])).color())
+	)
+};
 
 const presets = {
 	// buntstifteAlt: {
@@ -403,14 +408,14 @@ const presets = {
 	books,
 	booksDark,
 	booksDarkByLightness: {
-		name: "Bücher nach Helligkeit",
-		colors: books.colors.toSorted((b, a)=>a.oklab().l - b.oklab().l),
+		name: 'Bücher nach Helligkeit',
+		colors: books.colors.toSorted((b, a) => a.oklab().l - b.oklab().l)
 	},
 	booksDarkByHue: {
-		name: "Bücher nach Farbwert",
-		colors: books.colors.toSorted((a,b)=> {
-			let chromas = [b,a].map(c => c.oklab()).map(({ a, b }) => Math.sqrt(a * a + b * b));
-			return chromas[0] - chromas[1]
+		name: 'Bücher nach Farbwert',
+		colors: books.colors.toSorted((a, b) => {
+			let chromas = [b, a].map((c) => c.oklab()).map(({ a, b }) => Math.sqrt(a * a + b * b));
+			return chromas[0] - chromas[1];
 		})
 	},
 	pride: {
@@ -482,8 +487,8 @@ const presets = {
 				)
 			)
 			.flat(3)
-			.filter(c => c.oklab().l < 0.5)
-	},
+			.filter((c) => c.oklab().l < 0.5)
+	}
 } satisfies Partial<Record<string, { name: string; colors: Color[] }>>;
 
 function leftPadZeroes(len: number, num: number): string {
