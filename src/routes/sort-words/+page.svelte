@@ -54,6 +54,9 @@ import Window from "../../components/Window.svelte";
 		input = "";
 		words = [...words, ({ inner: word, vec: evt.result.vec }) ];
 	})
+
+	$: matrix = adjacencyMatrix(words.map(w => w.vec), "cosine");
+	$: console.log(matrix);
 </script>
 
 <div class="grid grid-cols-12 gap-8 mt-8 mx-10">
@@ -77,6 +80,6 @@ import Window from "../../components/Window.svelte";
 	</Window>
 
 	<Window xlCol={8} title="Adjazenzmatrix">
-		<AdjacencyMatrix values={adjacencyMatrix(words.map(w => w.vec))} vertexNames={words.map(w => w.inner)} />
+		<AdjacencyMatrix values={matrix} vertexNames={words.map(w => w.inner)} />
 	</Window>
 </div>
