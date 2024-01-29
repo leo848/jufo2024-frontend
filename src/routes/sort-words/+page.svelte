@@ -7,6 +7,7 @@ import Window from "../../components/Window.svelte";
 	import {serverOutputWordToVec} from "../../server/types";
 	import AdjacencyMatrix from "../../components/AdjacencyMatrix.svelte";
 	import {adjacencyMatrix} from "../../graph/adjacency";
+	import {flip} from "svelte/animate";
 
 	title.set("Wörter sortieren");
 
@@ -19,8 +20,8 @@ import Window from "../../components/Window.svelte";
 	let words: Word[] = [];
 	let input: string = "";
 	let inputLoading = false;
-	let inputError: null|string = null;
-	$: input, inputError = null;
+	let inputUnknownWord: null|string = null;
+	$: input, inputUnknownWord = null;
 	let inputElement: HTMLInputElement;
 
 	async function addInput() {
@@ -47,7 +48,7 @@ import Window from "../../components/Window.svelte";
 		const word = evt.word;
 
 		if (evt.result.type === "unknownWord") {
-			inputError = `Unbekanntes Wort: ${word}`;
+			inputUnknownWord = word;
 			return;
 		}
 
@@ -60,8 +61,8 @@ import Window from "../../components/Window.svelte";
 </script>
 
 <div class="grid grid-cols-12 gap-8 mt-8 mx-10">
-	<Window xlCol={4} title="Wörter">
-		<div class="grid m-4 gap-2 overflow-auto">
+	<Window xlCol={4} row={2} title="Wörter" scrollable>
+		<div class="grid m-4 gap-2">
 			<form on:submit|preventDefault={addInput}>
 			<div class="flex flex-row gap-4 mb-4">
 					<input class="bg-gray-600 text-xl p-2 rounded text-white grow" bind:value={input} bind:this={inputElement} />
@@ -69,17 +70,17 @@ import Window from "../../components/Window.svelte";
 							<Icon.PlusSolid />
 					</button>
 			</div>
-			{#if inputError}
-				<div>{inputError}</div>
+			{#if inputUnknownWord}
+				<div>Unbekanntes Wort: <b>{inputUnknownWord}</b></div>
 			{/if}
 				</form>
-			{#each words as word, index}
-				<div class="p-2 rounded text-xl text-white bg-gray-700"><span class="text-gray-400">{index+1}.</span> {word.inner}</div>
+			{#each words as word, index (word.inner)}
+				<div animate:flip class="p-2 rounded text-xl text-white bg-gray-700"><span class="text-gray-400">{index+1}.</span> {word.inner}</div>
 			{/each}
 		</div>
 	</Window>
 
-	<Window xlCol={8} title="Adjazenzmatrix">
-		<AdjacencyMatrix values={matrix} vertexNames={words.map(w => w.inner)} />
+	<Window xlCol={8} title="Adjazenzmatrix" scrollable>
+		<AdjacencyMatrix values={matrix} vertexNames={words.map(w => w.inner)} digits={2} />
 	</Window>
 </div>

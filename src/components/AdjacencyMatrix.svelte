@@ -5,6 +5,7 @@
 
 	export let values: number[][];
 	export let vertexNames: string[];
+	export let digits: number = 1;
 
 	$: sorted = vertexNames
 		.map((value, index) => ({ index, name: value }))
@@ -24,9 +25,10 @@
 		for (const vector of values) {
 			for (const dist of vector) {
 				if (dist > max) max = dist;
-				if (dist < min && dist > 0) min = dist;
+				if (dist < min && dist > 0.0001) min = dist;
 			}
 		}
+		console.log(min);
 	}
 
 	function distColor(dist: number): Color {
@@ -63,7 +65,7 @@
 						class="tabular-nums py-2 px-2 border-gray-500 border-1 border"
 						style={`background-color:${distColor(value).rgb().css()}`}
 					>
-						{value.toFixed(1)}
+						{value.toFixed(digits)}
 					</div>
 				{:else}
 					<div class="py-2 px-2 border-gray-500 border-1 border">–</div>

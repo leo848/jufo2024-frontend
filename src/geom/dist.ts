@@ -50,6 +50,6 @@ export function cosineDist(a: number[], b: number[]): number {
 	let magA = euclideanDist(a, new Array(dim).fill(0));
 	let magB = euclideanDist(b, new Array(dim).fill(0));
 	const trueCosine = dot / (magA * magB);
-	const normal = rangeMap(trueCosine, [1, -1], [0, 1]); // Graph-Kante: kürzer ist ähnlicher
+	const normal = rangeMap(trueCosine, [1, 0], [0, 1]); // Graph-Kante: kürzer ist ähnlicher
 	return normal;
 }
