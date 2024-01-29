@@ -159,8 +159,9 @@ export const serverOutputPathImprovement = z.object({
 });
 export const serverOutputWordToVec = z.object({
 	type: z.literal('wordToVec'),
+	word: z.string(),
 	result: z.discriminatedUnion('type', [
-		z.object({ type: z.literal('ok'), word: z.string(), vec: z.array(z.number()) }),
+		z.object({ type: z.literal('ok'), vec: z.array(z.number()) }),
 		z.object({ type: z.literal('unknownWord') }),
 		z.object({ type: z.literal('unsupported') }),
 	])
