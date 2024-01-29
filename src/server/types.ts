@@ -94,10 +94,12 @@ const serverInputAction = z.object({
 	latency: z.number().optional()
 });
 const serverInputLatency = z.object({ type: z.literal('latency') });
+const serverInputWordToVec = z.object({ type: z.literal('wordToVec'), word: z.string() })
 const serverInput = z.discriminatedUnion('type', [
 	serverInputLog,
 	serverInputAction,
-	serverInputLatency
+	serverInputLatency,
+	serverInputWordToVec,
 ]);
 
 export type ServerInput = z.infer<typeof serverInput>;
@@ -155,6 +157,14 @@ export const serverOutputPathImprovement = z.object({
 	currentPath: z.array(z.number().int()),
 	progress: z.optional(z.number().gte(0).lte(1))
 });
+export const serverOutputWordToVec = z.object({
+	type: z.literal('wordToVec'),
+	result: z.discriminatedUnion('type', [
+		z.object({ type: z.literal('ok'), word: z.string(), vec: z.array(z.number()) }),
+		z.object({ type: z.literal('unknownWord') }),
+		z.object({ type: z.literal('unsupported') }),
+	])
+})
 export const serverOutput = z.discriminatedUnion('type', [
 	serverOutputError,
 	serverOutputLog,
@@ -163,7 +173,8 @@ export const serverOutput = z.discriminatedUnion('type', [
 	serverOutputDistPathCreation,
 	serverOutputDistPathImprovement,
 	serverOutputPathCreation,
-	serverOutputPathImprovement
+	serverOutputPathImprovement,
+	serverOutputWordToVec,
 ]);
 
 export type ServerOutput = z.infer<typeof serverOutput>;
