@@ -123,4 +123,5 @@
 	<!-- <PageTransition refresh={$page.url.pathname}> -->
 	<slot />
 	<!-- </PageTransition> -->
+	<div class="h-64" />
 </div>
