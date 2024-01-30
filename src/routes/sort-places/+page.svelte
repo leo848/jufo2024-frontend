@@ -128,7 +128,7 @@
 			bind:invalidate={invalidateAlgorithms}
 			dimensions={2}
 			horizontal
-			points={points.map((p) => [p.lat, p.lng])}
+			values={points.map((p) => [p.lat, p.lng])}
 		/>
 	</div>
 </div>

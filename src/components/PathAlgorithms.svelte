@@ -3,20 +3,21 @@
 	import * as Icon from 'flowbite-svelte-icons';
 	import { factorial } from '../utils/math';
 	import { sendWebsocket, registerCallback, unregisterCallback } from '../server/websocket';
-	import { serverOutputDistPathCreation, serverOutputDistPathImprovement } from '../server/types';
+	import { serverOutputDistPathCreation, serverOutputDistPathImprovement, serverOutputPathCreation, serverOutputPathImprovement } from '../server/types';
 	import { Spinner, Progressbar } from 'flowbite-svelte';
 	import { flip } from 'svelte/animate';
 	import { scale } from 'svelte/transition';
-	import { createEventDispatcher, onDestroy } from 'svelte';
+	import { onDestroy } from 'svelte';
 	import Window from './Window.svelte';
 
-	export let points: number[][];
+	export let values: number[][];
 	export let dimensions = 3;
+	export let matrix: boolean = false;
 
 	export let horizontal: boolean = false;
 
 	let progress = { ongoing: false, value: 0 as null | number };
-	let path: number[][] | null = null;
+	let path: number[][] | null | number[] = null;
 
 	type ActionKind = 'construction' | 'improvement';
 	type ForAction<T> = Record<ActionKind, T>;
@@ -96,20 +97,38 @@
 				}
 			] as const
 		).map((e, i) => {
-			const payload =
-				e.method &&
-				(() =>
-					({
-						type: 'action',
-						latency,
-						action: {
-							type: 'createDistPath',
-							method: { type: e.method },
-							dimensions,
-							values: points
-						}
-					} as const));
-			const send = payload && (() => sendWebsocket(payload()));
+			let send;
+			if (matrix) {
+				const payload =
+					e.method &&
+					(() =>
+						({
+							type: 'action',
+							latency,
+							action: {
+								type: 'createPath',
+								method: { type: e.method },
+								matrix: values,
+							}
+						} as const));
+				send = payload && (() => sendWebsocket(payload()));
+			} else {
+				const payload =
+					e.method &&
+					(() =>
+						({
+							type: 'action',
+							latency,
+							action: {
+								type: 'createDistPath',
+								method: { type: e.method },
+								dimensions,
+								values,
+							}
+						} as const));
+				send = payload && (() => sendWebsocket(payload()));
+
+			}
 			return Object.assign({}, e, { index: i, send });
 		}),
 		improvement: (
@@ -151,20 +170,39 @@
 				}
 			] as const
 		).map((e, i) => {
-			const payload =
-				e.method &&
-				(() =>
-					({
-						type: 'action',
-						latency,
-						action: {
-							type: 'improveDistPath',
-							method: { type: e.method },
-							dimensions,
-							path: points
-						}
-					} as const));
-			const send = payload && (() => sendWebsocket(payload()));
+			let send;
+			if (matrix) {
+				const payload =
+					e.method &&
+					(() =>
+						({
+							type: 'action',
+							latency,
+							action: {
+								type: 'improvePath',
+								method: { type: e.method },
+								path: path as number[],
+								matrix: values,
+							}
+						} as const));
+				send = payload && (() => sendWebsocket(payload()));
+			} else {
+				const payload =
+					e.method &&
+					(() =>
+						({
+							type: 'action',
+							latency,
+							action: {
+								type: 'improveDistPath',
+								method: { type: e.method },
+								dimensions,
+								path: values
+							}
+						} as const));
+				send = payload && (() => sendWebsocket(payload()));
+
+			}
 			return Object.assign({}, e, { index: i, send });
 		})
 	};
@@ -188,30 +226,54 @@
 	let latencySlider = 1;
 	$: latency = [0, 100, 250, 500, 1000, 2000][latencySlider];
 
-	let callbackId = registerCallback(serverOutputDistPathCreation, (pc) => {
-		if (pc.donePath) {
-			progress.ongoing = false;
-			path = pc.donePath;
-		} else {
-			progress.ongoing = true;
-			progress.value = pc.progress ?? null;
-			path = null;
-		}
-	});
-	onDestroy(() => unregisterCallback(callbackId));
+	if (matrix) {
+		let callbackId = registerCallback(serverOutputPathCreation, (pc) => {
+			if (pc.donePath) {
+				progress.ongoing = false;
+				path = pc.donePath;
+			} else {
+				progress.ongoing = true;
+				progress.value = pc.progress ?? null;
+				path = null;
+			}
+		});
+		onDestroy(() => unregisterCallback(callbackId));
 
-	let callbackId2 = registerCallback(serverOutputDistPathImprovement, (pi) => {
-		if (pi.done) {
-			progress.ongoing = false;
-		} else {
-			progress.ongoing = true;
-			progress.value = pi.progress ?? null;
-		}
-		path = pi.currentPath;
-	});
-	onDestroy(() => unregisterCallback(callbackId2));
+		let callbackId2 = registerCallback(serverOutputPathImprovement, (pi) => {
+			if (pi.done) {
+				progress.ongoing = false;
+			} else {
+				progress.ongoing = true;
+				progress.value = pi.progress ?? null;
+			}
+			path = pi.currentPath;
+		});
+		onDestroy(() => unregisterCallback(callbackId2));
 
-	let dispatch = createEventDispatcher<{ deletePath: null }>();
+	} else {
+		let callbackId = registerCallback(serverOutputDistPathCreation, (pc) => {
+			if (pc.donePath) {
+				progress.ongoing = false;
+				path = pc.donePath;
+			} else {
+				progress.ongoing = true;
+				progress.value = pc.progress ?? null;
+				path = null;
+			}
+		});
+		onDestroy(() => unregisterCallback(callbackId));
+
+		let callbackId2 = registerCallback(serverOutputDistPathImprovement, (pi) => {
+			if (pi.done) {
+				progress.ongoing = false;
+			} else {
+				progress.ongoing = true;
+				progress.value = pi.progress ?? null;
+			}
+			path = pi.currentPath;
+		});
+		onDestroy(() => unregisterCallback(callbackId2));
+	}
 
 	export function invalidate() {
 		path = null;
@@ -258,7 +320,7 @@
 				<div>
 					<div class="rounded-xl mb-4" in:scale={{ delay: 150 }}>{description}</div>
 					{#if expectedTime}
-						{@const time = expectedTime(points.length)}
+						{@const time = expectedTime(values.length)}
 						{#if time === null}
 							<div>Erwartete Zeit: beliebig</div>
 						{:else if time < 1}

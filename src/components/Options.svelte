@@ -81,7 +81,7 @@
 <Window title={stateNames[state]} {xlCol} scrollable={state !== 'default'}>
 	<div class="m-4 text-white">
 		{#if state == 'default'}
-			<div class="flex flex-row gap-4">
+			<div class="flex flex-row flex-wrap gap-4">
 				<OptionsButton
 					show={display.has('add')}
 					on:click={() => dispatch('add')}
@@ -120,7 +120,7 @@
 				optionNames={['RGB', 'lRGB', 'CMY', 'HSV', 'HSL', 'OKLAB']}
 				{invalidate}
 			/>
-			<div class="flex flex-row gap-4 mt-4">
+			<div class="flex flex-row flex-wrap gap-4 mt-4">
 				<OptionsButton
 					on:click={invalidate(() => (state = 'load'))}
 					show={display.has('load')}

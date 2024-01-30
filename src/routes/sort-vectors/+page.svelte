@@ -283,7 +283,7 @@
 			on:deletePath={() => (path = null)}
 			bind:invalidate={invalidateAlgorithms}
 			dimensions={dim}
-			points={points.map((p) => p.inner)}
+			values={points.map((p) => p.inner)}
 		/>
 
 		<Window title="Adjazenzmatrix" scrollable xlCol={6}>

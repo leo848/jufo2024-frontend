@@ -424,7 +424,7 @@
 		<PathAlgorithms
 			on:deletePath={() => (path = null)}
 			bind:invalidate={invalidateAlgorithms}
-			points={colors.map((color) => color.space(space).point().values())}
+			values={colors.map((color) => color.space(space).point().values())}
 		/>
 
 		<Window title="Exportieren" xlCol={2} closed>

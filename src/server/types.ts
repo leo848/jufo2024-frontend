@@ -147,7 +147,7 @@ export const serverOutputDistPathImprovement = z.object({
 export const serverOutputPathCreation = z.object({
 	type: z.literal('pathCreation'),
 	donePath: z.optional(z.array(z.number().int())),
-	currentEdges: z.array(z.tuple([z.array(z.number().int()), z.array(z.number().int())])),
+	currentEdges: z.array(z.tuple([z.number().int(), z.number().int()])),
 	progress: z.optional(z.number().gte(0).lte(1))
 });
 export const serverOutputPathImprovement = z.object({
