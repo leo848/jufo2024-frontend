@@ -3,7 +3,11 @@
 	import { title } from '../../ui/navbar';
 	import * as Icon from 'flowbite-svelte-icons';
 	import { registerCallback, sendWebsocket, unregisterCallback } from '../../server/websocket';
-	import { serverOutputPathCreation, serverOutputPathImprovement, serverOutputWordToVec } from '../../server/types';
+	import {
+		serverOutputPathCreation,
+		serverOutputPathImprovement,
+		serverOutputWordToVec
+	} from '../../server/types';
 	import AdjacencyMatrix from '../../components/AdjacencyMatrix.svelte';
 	import { adjacencyMatrix } from '../../graph/adjacency';
 	import { flip } from 'svelte/animate';
@@ -12,7 +16,7 @@
 	import type { Color } from '../../color/color';
 	import Options from '../../components/Options.svelte';
 	import PathAlgorithms from '../../components/PathAlgorithms.svelte';
-	import {onDestroy} from 'svelte';
+	import { onDestroy } from 'svelte';
 	import PathProperties from '../../components/PathProperties.svelte';
 
 	title.set('Wörter sortieren');
@@ -26,11 +30,11 @@
 
 	let words: Word[] = [];
 	let locked = false;
-	let invalidate: ((c:(arg0:any)=>void)=>(arg0:any)=>void);
+	let invalidate: (c: (arg0: any) => void) => (arg0: any) => void;
 
 	let input: string = '';
 	let inputLoading = false;
-	let inputError: null | { type: "unknown" | "present", word: string } = null;
+	let inputError: null | { type: 'unknown' | 'present'; word: string } = null;
 	let unknownWords = new Set<string>();
 	let knownWords = new Set<string>();
 	$: input, (inputError = null);
@@ -41,7 +45,6 @@
 	async function addInput() {
 		if (input.length === 0 || inputLoading) {
 			if (inputElement === document.activeElement) {
-				
 			} else {
 				inputElement.focus();
 				return;
@@ -51,10 +54,10 @@
 		const word = input.toLowerCase();
 
 		if (unknownWords.has(word)) {
-			setTimeout(() => (inputError = { "type": "unknown", word }));
+			setTimeout(() => (inputError = { type: 'unknown', word }));
 			return;
 		} else if (knownWords.has(word)) {
-			setTimeout(() => (inputError = { "type": "present", word }));
+			setTimeout(() => (inputError = { type: 'present', word }));
 			return;
 		}
 
@@ -86,7 +89,7 @@
 
 	function removeWord(trueIndex: number) {
 		const word = words[trueIndex];
-		(words = words.toSpliced(trueIndex, 1));
+		words = words.toSpliced(trueIndex, 1);
 		for (const word of words) {
 			if (word.index > trueIndex) word.index--;
 		}
@@ -104,15 +107,18 @@
 		if (evt.result.type === 'unknownWord') {
 			input = word;
 			unknownWords.add(word);
-			setTimeout(() => (inputError = { "type": "unknown", word }));
+			setTimeout(() => (inputError = { type: 'unknown', word }));
 			return;
 		}
 
 		knownWords.add(word);
 
-		words = [...words, { inner: word, index: (words[words.length-1]?.index ?? -1) + 1, vec: evt.result.vec }];
+		words = [
+			...words,
+			{ inner: word, index: (words[words.length - 1]?.index ?? -1) + 1, vec: evt.result.vec }
+		];
 	});
-	callbacks[1] = registerCallback(serverOutputPathCreation, pc => {
+	callbacks[1] = registerCallback(serverOutputPathCreation, (pc) => {
 		console.log(pc);
 		if (pc.donePath) {
 			let newWords = [];
@@ -123,7 +129,7 @@
 		}
 		locked = true;
 	});
-	callbacks[2] = registerCallback(serverOutputPathImprovement, pi => {
+	callbacks[2] = registerCallback(serverOutputPathImprovement, (pi) => {
 		console.log(pi);
 		if (pi.done) {
 			let newWords = [];
@@ -134,7 +140,7 @@
 		}
 		locked = true;
 	});
-	onDestroy(() => callbacks.forEach(c => unregisterCallback(c)));
+	onDestroy(() => callbacks.forEach((c) => unregisterCallback(c)));
 </script>
 
 <div class="grid grid-cols-12 gap-8 mt-8 mx-10">
@@ -158,12 +164,13 @@
 				</div>
 				{#if inputError}
 					<div>
-					{#if inputError.type === "unknown"}
-						Unbekanntes Wort:
-					{:else}
-						Bereits eingegeben:
-					{/if}
-					&nbsp;<b>{inputError.word}</b></div>
+						{#if inputError.type === 'unknown'}
+							Unbekanntes Wort:
+						{:else}
+							Bereits eingegeben:
+						{/if}
+						&nbsp;<b>{inputError.word}</b>
+					</div>
 				{/if}
 			</form>
 			{#each words as word, trueIndex (word.inner)}
@@ -183,22 +190,34 @@
 		</div>
 	</Window>
 
-	<Options xlCol={4} bind:locked bind:invalidate hide={["norm"]} on:add={invalidate(addInput)} on:delete={() => words = []} />
+	<Options
+		xlCol={4}
+		bind:locked
+		bind:invalidate
+		hide={['norm']}
+		on:add={invalidate(addInput)}
+		on:delete={() => (words = [])}
+	/>
 
-	<PathAlgorithms dimensions={100} values={adjacencyMatrix(words.map(w => w.vec))} bind:invalidate={invalidateAlgorithms} matrix />
+	<PathAlgorithms
+		dimensions={100}
+		values={adjacencyMatrix(words.map((w) => w.vec))}
+		bind:invalidate={invalidateAlgorithms}
+		matrix
+	/>
 
 	<Window xlCol={8} title="Adjazenzmatrix" scrollable>
 		<AdjacencyMatrix
 			values={adjacencyMatrix(
-	  words.toSorted((w1,w2)=>w1.index-w2.index).map((w) => w.vec),
+				words.toSorted((w1, w2) => w1.index - w2.index).map((w) => w.vec),
 				'cosine'
 			)}
-	  vertexNames={words.toSorted((w1,w2)=>w1.index-w2.index).map((w) => w.inner)}
-	  collapseNames
+			vertexNames={words.toSorted((w1, w2) => w1.index - w2.index).map((w) => w.inner)}
+			collapseNames
 			digits={2}
 			sort={false}
 		/>
 	</Window>
 
-	<PathProperties path={words.map(w => w.vec)} norm="cosine" xlCol={4} />
+	<PathProperties path={words.map((w) => w.vec)} norm="cosine" xlCol={4} />
 </div>

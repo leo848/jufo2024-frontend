@@ -3,7 +3,12 @@
 	import * as Icon from 'flowbite-svelte-icons';
 	import { factorial } from '../utils/math';
 	import { sendWebsocket, registerCallback, unregisterCallback } from '../server/websocket';
-	import { serverOutputDistPathCreation, serverOutputDistPathImprovement, serverOutputPathCreation, serverOutputPathImprovement } from '../server/types';
+	import {
+		serverOutputDistPathCreation,
+		serverOutputDistPathImprovement,
+		serverOutputPathCreation,
+		serverOutputPathImprovement
+	} from '../server/types';
 	import { Spinner, Progressbar } from 'flowbite-svelte';
 	import { flip } from 'svelte/animate';
 	import { scale } from 'svelte/transition';
@@ -108,7 +113,7 @@
 							action: {
 								type: 'createPath',
 								method: { type: e.method },
-								matrix: values,
+								matrix: values
 							}
 						} as const));
 				send = payload && (() => sendWebsocket(payload()));
@@ -123,11 +128,10 @@
 								type: 'createDistPath',
 								method: { type: e.method },
 								dimensions,
-								values,
+								values
 							}
 						} as const));
 				send = payload && (() => sendWebsocket(payload()));
-
 			}
 			return Object.assign({}, e, { index: i, send });
 		}),
@@ -182,7 +186,7 @@
 								type: 'improvePath',
 								method: { type: e.method },
 								path: path as number[],
-								matrix: values,
+								matrix: values
 							}
 						} as const));
 				send = payload && (() => sendWebsocket(payload()));
@@ -201,7 +205,6 @@
 							}
 						} as const));
 				send = payload && (() => sendWebsocket(payload()));
-
 			}
 			return Object.assign({}, e, { index: i, send });
 		})
@@ -249,7 +252,6 @@
 			path = pi.currentPath;
 		});
 		onDestroy(() => unregisterCallback(callbackId2));
-
 	} else {
 		let callbackId = registerCallback(serverOutputDistPathCreation, (pc) => {
 			if (pc.donePath) {
@@ -280,23 +282,19 @@
 		selectedItem = { construction: null, improvement: null };
 	}
 
-	const dispatch = createEventDispatcher<{deletePath:null}>();
+	const dispatch = createEventDispatcher<{ deletePath: null }>();
 
 	function deletePath() {
-	selectedItem = { construction: null, improvement: null };
+		selectedItem = { construction: null, improvement: null };
 		path = null;
-		dispatch("deletePath");
+		dispatch('deletePath');
 	}
 
 	let _tailwind = ['xl:col-span-4', 'xl:col-span-6'];
 </script>
 
 <Window title={name[currentAction]} mdCol={6} xlCol={horizontal ? 6 : 4}>
-	<div
-		class={`grid grid-cols-${
-			horizontal && selectedItem[currentAction] === null ? 2 : 1
-		} m-4`}
-	>
+	<div class={`grid grid-cols-${horizontal && selectedItem[currentAction] === null ? 2 : 1} m-4`}>
 		{#each displayItems[currentAction] as item (item.index)}
 			<button
 				animate:flip={{ duration: 200 }}
@@ -372,9 +370,12 @@
 					{/if}
 				{/if}
 			</div>
-		{:else if currentAction === "improvement"}
+		{:else if currentAction === 'improvement'}
 			<div class="grow h-full" />
-			<button class="text-gray-500 hover:text-gray-200 transition-all underline self-center" on:click={deletePath}>Pfad löschen</button>
+			<button
+				class="text-gray-500 hover:text-gray-200 transition-all underline self-center"
+				on:click={deletePath}>Pfad löschen</button
+			>
 		{/if}
 	</div>
 </Window>

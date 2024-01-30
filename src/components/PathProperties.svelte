@@ -17,7 +17,7 @@
 	export let selectedIndex: number | null = null;
 
 	export let horizontal: boolean = false;
-	export let xlCol: number|null = null;
+	export let xlCol: number | null = null;
 
 	let chainLength = tweened(0);
 

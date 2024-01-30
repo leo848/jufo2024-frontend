@@ -90,7 +90,10 @@
 			{/if}
 		</div>
 		{#if !closed}
-			<div transition:slide={{ axis: 'y' }} class={ `h-full ${scrollable ? 'overflow-scroll' : 'overflow-hidden'} ` }>
+			<div
+				transition:slide={{ axis: 'y' }}
+				class={`h-full ${scrollable ? 'overflow-scroll' : 'overflow-hidden'} `}
+			>
 				<slot />
 			</div>
 		{/if}

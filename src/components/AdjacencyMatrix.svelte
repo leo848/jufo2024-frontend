@@ -1,6 +1,6 @@
 <script lang="ts">
-	import {Tooltip} from 'flowbite-svelte';
-import type { Color } from '../color/color';
+	import { Tooltip } from 'flowbite-svelte';
+	import type { Color } from '../color/color';
 	import { RgbColor } from '../color/colorSpaces';
 	import { rangeMap } from '../utils/math';
 
@@ -64,7 +64,9 @@ import type { Color } from '../color/color';
 		{#each sorted as { name, index }, trueIndex (name)}
 			{@const vector = values[index]}
 			<div class="border-gray-500 border">
-				<div class="bg-gray-700 h-full text-center text-xl">{collapseNames ? trueIndex + 1 : name}</div>
+				<div class="bg-gray-700 h-full text-center text-xl">
+					{collapseNames ? trueIndex + 1 : name}
+				</div>
 				{#if collapseNames}
 					<Tooltip type="light">{name}</Tooltip>
 				{/if}
