@@ -34,7 +34,6 @@ import type { Color } from '../color/color';
 				if (dist < min && dist > 0.0001) min = dist;
 			}
 		}
-		console.log(min);
 	}
 
 	function distColor(dist: number): Color {
