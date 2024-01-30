@@ -25,6 +25,7 @@
 	let input: string = '';
 	let inputLoading = false;
 	let inputUnknownWord: null | string = null;
+	let unknownWords = new Set<string>();
 	$: input, (inputUnknownWord = null);
 	let inputElement: HTMLInputElement;
 
@@ -34,10 +35,15 @@
 			return;
 		}
 
-		inputLoading = true;
-
 		const word = input.toLowerCase();
+
+		if (unknownWords.has(word)) {
+			setTimeout(() => inputUnknownWord = word);
+			return;
+		}
+
 		input = '';
+		inputLoading = true;
 
 		sendWebsocket({
 			type: 'wordToVec',
@@ -71,6 +77,7 @@
 
 		if (evt.result.type === 'unknownWord') {
 			input = word;
+			unknownWords.add(word);
 			setTimeout(() => (inputUnknownWord = word));
 			return;
 		}
@@ -104,10 +111,12 @@
 				{/if}
 			</form>
 			{#each words as word, index (word.inner)}
-				<div>
+				<div animate:flip>
 					<div class="p-2 rounded text-xl text-white bg-gray-700 flex flex-row">
-						<span class="text-gray-400">{index + 1}. </span>
+						<span class="text-gray-400">{index + 1}.&nbsp;</span>
 						{word.inner}
+						<div class="grow" />
+						<button class="text-gray-400 hover:text-white transition-all" on:click={() => words = words.toSpliced(index, 1)}><Icon.TrashBinSolid /></button>
 					</div>
 					<div style={`background: ${gradient(vecToColors(word.vec))}`} class="grow h-5" />
 				</div>
