@@ -7,7 +7,7 @@
 	import { Spinner, Progressbar } from 'flowbite-svelte';
 	import { flip } from 'svelte/animate';
 	import { scale } from 'svelte/transition';
-	import { onDestroy } from 'svelte';
+	import { createEventDispatcher, onDestroy } from 'svelte';
 	import Window from './Window.svelte';
 
 	export let values: number[][];
@@ -280,6 +280,14 @@
 		selectedItem = { construction: null, improvement: null };
 	}
 
+	const dispatch = createEventDispatcher<{deletePath:null}>();
+
+	function deletePath() {
+	selectedItem = { construction: null, improvement: null };
+		path = null;
+		dispatch("deletePath");
+	}
+
 	let _tailwind = ['xl:col-span-4', 'xl:col-span-6'];
 </script>
 
@@ -364,6 +372,9 @@
 					{/if}
 				{/if}
 			</div>
+		{:else if currentAction === "improvement"}
+			<div class="grow h-full" />
+			<button class="text-gray-500 hover:text-gray-200 transition-all underline self-center" on:click={deletePath}>Pfad löschen</button>
 		{/if}
 	</div>
 </Window>

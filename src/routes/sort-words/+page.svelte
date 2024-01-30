@@ -13,6 +13,7 @@
 	import Options from '../../components/Options.svelte';
 	import PathAlgorithms from '../../components/PathAlgorithms.svelte';
 	import {onDestroy} from 'svelte';
+	import PathProperties from '../../components/PathProperties.svelte';
 
 	title.set('Wörter sortieren');
 
@@ -39,8 +40,12 @@
 
 	async function addInput() {
 		if (input.length === 0 || inputLoading) {
-			inputElement.focus();
-			return;
+			if (inputElement === document.activeElement) {
+				
+			} else {
+				inputElement.focus();
+				return;
+			}
 		}
 
 		const word = input.toLowerCase();
@@ -116,6 +121,7 @@
 			}
 			words = newWords;
 		}
+		locked = true;
 	});
 	callbacks[2] = registerCallback(serverOutputPathImprovement, pi => {
 		console.log(pi);
@@ -126,6 +132,7 @@
 			}
 			words = newWords;
 		}
+		locked = true;
 	});
 	onDestroy(() => callbacks.forEach(c => unregisterCallback(c)));
 </script>
@@ -186,10 +193,12 @@
 	  words.toSorted((w1,w2)=>w1.index-w2.index).map((w) => w.vec),
 				'cosine'
 			)}
-			vertexNames={words.map((w) => w.inner)}
+	  vertexNames={words.toSorted((w1,w2)=>w1.index-w2.index).map((w) => w.inner)}
 	  collapseNames
 			digits={2}
 			sort={false}
 		/>
 	</Window>
+
+	<PathProperties path={words.map(w => w.vec)} norm="cosine" xlCol={4} />
 </div>

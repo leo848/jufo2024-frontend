@@ -8,14 +8,16 @@
 	import { scale } from 'svelte/transition';
 
 	export let path: number[][] | null = null;
-	export let length: number = path?.length || 0;
+	$: length = path?.length || 0;
 
 	export let norm: DistanceType = 'euclidean';
 
-	export let horizontal: boolean = false;
 	export let blownUp: boolean = false;
 
 	export let selectedIndex: number | null = null;
+
+	export let horizontal: boolean = false;
+	export let xlCol: number|null = null;
 
 	let chainLength = tweened(0);
 
@@ -64,7 +66,7 @@
 	];
 </script>
 
-<Window title="Eigenschaften" xlCol={horizontal ? 6 : 3}>
+<Window title="Eigenschaften" xlCol={xlCol ?? (horizontal ? 6 : 3)}>
 	<div class="text-xl tabular-nums">
 		<div class={`grid grid-cols-${horizontal ? 4 : 2} gap-4 m-4`}>
 			<div
