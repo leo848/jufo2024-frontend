@@ -134,6 +134,7 @@
 				'cosine'
 			)}
 			vertexNames={words.map((w) => w.inner)}
+	  collapseNames
 			digits={2}
 			sort={false}
 		/>

@@ -57,13 +57,13 @@
 	} row-span-${closed ? 1 : row} max-w-none md:m-0`}
 >
 	<Card
-		class={` rounded-xl max-w-none md:p-0 ${scrollable ? 'overflow-scroll' : 'overflow-hidden'} ${
+		class={` rounded-xl max-w-none md:p-0 ${
 			closed ? 'w-auto h-auto' : 'h-full max-h-[600px]'
 		} transition-all`}
 	>
 		<div
 			class={`gap-4 text-2xl dark:text-white bg-gray-700 p-2 rounded-t-xl flex flex-row ${
-				closed ? '' : 'justify-between'
+				closed ? 'truncate' : 'justify-between'
 			}`}
 		>
 			<div class="flex flex-row gap-4">
@@ -90,7 +90,7 @@
 			{/if}
 		</div>
 		{#if !closed}
-			<div transition:slide={{ axis: 'y' }} class="h-full">
+			<div transition:slide={{ axis: 'y' }} class={ `h-full ${scrollable ? 'overflow-scroll' : 'overflow-hidden'} ` }>
 				<slot />
 			</div>
 		{/if}

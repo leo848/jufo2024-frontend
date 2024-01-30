@@ -1,5 +1,6 @@
 <script lang="ts">
-	import type { Color } from '../color/color';
+	import {Tooltip} from 'flowbite-svelte';
+import type { Color } from '../color/color';
 	import { RgbColor } from '../color/colorSpaces';
 	import { rangeMap } from '../utils/math';
 
@@ -8,6 +9,7 @@
 	export let digits: number = 1;
 
 	export let sort: boolean = true;
+	export let collapseNames: boolean = false;
 
 	$: sorted = sort
 		? vertexNames
@@ -52,15 +54,21 @@
 		style:grid-template-columns={`repeat(${length + 1}, minmax(auto, 1fr))`}
 	>
 		<div class="m-2 text-center" />
-		{#each sorted as { name } (name)}
+		{#each sorted as { name }, index (name)}
 			<div class="border-gray-500 border">
-				<div class="bg-gray-700 text-center text-xl">{name}</div>
+				<div class="bg-gray-700 text-center text-xl">{collapseNames ? index + 1 : name}</div>
+				{#if collapseNames}
+					<Tooltip type="light">{name}</Tooltip>
+				{/if}
 			</div>
 		{/each}
-		{#each sorted as { name, index } (name)}
+		{#each sorted as { name, index }, trueIndex (name)}
 			{@const vector = values[index]}
 			<div class="border-gray-500 border">
-				<div class="bg-gray-700 h-full text-center text-xl">{name}</div>
+				<div class="bg-gray-700 h-full text-center text-xl">{collapseNames ? trueIndex + 1 : name}</div>
+				{#if collapseNames}
+					<Tooltip type="light">{name}</Tooltip>
+				{/if}
 			</div>
 			{#each sorted as { name, index: index1 } (name)}
 				{@const value = vector[index1]}
