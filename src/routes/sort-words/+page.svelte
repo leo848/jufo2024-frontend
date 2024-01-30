@@ -1,27 +1,31 @@
 <script lang="ts">
-	import { Spinner } from 'flowbite-svelte';
 	import Window from '../../components/Window.svelte';
 	import { title } from '../../ui/navbar';
 	import * as Icon from 'flowbite-svelte-icons';
 	import { registerCallback, sendWebsocket } from '../../server/websocket';
-	import { serverOutputWordToVec } from '../../server/types';
+	import { serverOutputDistPathCreation, serverOutputWordToVec } from '../../server/types';
 	import AdjacencyMatrix from '../../components/AdjacencyMatrix.svelte';
 	import { adjacencyMatrix } from '../../graph/adjacency';
 	import { flip } from 'svelte/animate';
 	import { gradient } from '../../ui/color';
-	import { rangeMap } from '../../utils/math';
-	import { HslColor, RgbColor } from '../../color/colorSpaces';
+	import { RgbColor } from '../../color/colorSpaces';
 	import type { Color } from '../../color/color';
+	import Options from '../../components/Options.svelte';
+	import PathAlgorithms from '../../components/PathAlgorithms.svelte';
 
 	title.set('Wörter sortieren');
 
 	type Word = {
 		inner: string;
 		vec: number[];
+		index: number;
 		error?: string;
 	};
 
 	let words: Word[] = [];
+	let locked = false;
+	let invalidate: <I>(c:(arg0:I)=>void)=>(arg0:I)=>void;
+
 	let input: string = '';
 	let inputLoading = false;
 	let inputUnknownWord: null | string = null;
@@ -68,7 +72,15 @@
 			.map((hsl) => hsl.color());
 	}
 
-	registerCallback(serverOutputWordToVec, (evt) => {
+	function removeWord(index: number) {
+		(words = words.toSpliced(index, 1));
+		for (const word of words) {
+			if (word.index > index) word.index--;
+		}
+	}
+
+	const callbacks = new Array(3);
+	callbacks[0] = registerCallback(serverOutputWordToVec, (evt) => {
 		inputLoading = false;
 
 		if (evt.result.type === 'unsupported') return;
@@ -82,15 +94,17 @@
 			return;
 		}
 
-		input = '';
-		words = [...words, { inner: word, vec: evt.result.vec }];
+		words = [...words, { inner: word, index: (words[words.length-1]?.index ?? -1) + 1, vec: evt.result.vec }];
 	});
+	callbacks[1] = registerCallback(serverOutputDistPathCreation, pc => {
+		console.log(pc);
+	})
 </script>
 
 <div class="grid grid-cols-12 gap-8 mt-8 mx-10">
-	<Window xlCol={4} row={2} title="Wörter" scrollable>
+	<Window xlCol={4} row={1} title="Wörter" scrollable>
 		<div class="grid m-4 gap-2">
-			<form on:submit|preventDefault={addInput}>
+			<form on:submit|preventDefault={invalidate(addInput)}>
 				<div class="flex flex-row gap-4 mb-4">
 					<input
 						class="bg-gray-600 text-xl p-2 rounded text-white grow"
@@ -100,7 +114,7 @@
 					/>
 					<button
 						class={`bg-gray-600 hover:bg-gray-500 text-white p-4 rounded-full`}
-						on:click={addInput}
+						on:click={invalidate(addInput)}
 						disabled={inputLoading}
 					>
 						<Icon.PlusSolid />
@@ -110,15 +124,15 @@
 					<div>Unbekanntes Wort: <b>{inputUnknownWord}</b></div>
 				{/if}
 			</form>
-			{#each words as word, index (word.inner)}
+			{#each words as word (word.inner)}
 				<div animate:flip>
 					<div class="p-2 rounded text-xl text-white bg-gray-700 flex flex-row">
-						<span class="text-gray-400">{index + 1}.&nbsp;</span>
+						<span class="text-gray-400">{word.index + 1}.&nbsp;</span>
 						{word.inner}
 						<div class="grow" />
 						<button
 							class="text-gray-400 hover:text-white transition-all"
-							on:click={() => (words = words.toSpliced(index, 1))}><Icon.TrashBinSolid /></button
+							on:click={() => removeWord(word.index)}><Icon.TrashBinSolid /></button
 						>
 					</div>
 					<div style={`background: ${gradient(vecToColors(word.vec))}`} class="grow h-5" />
@@ -126,6 +140,10 @@
 			{/each}
 		</div>
 	</Window>
+
+	<Options xlCol={4} bind:locked bind:invalidate hide={["norm"]} on:add={invalidate(addInput)} on:delete={() => words = []} />
+
+	<PathAlgorithms dimensions={100} points={words.map(w => w.vec)} />
 
 	<Window xlCol={8} title="Adjazenzmatrix" scrollable>
 		<AdjacencyMatrix

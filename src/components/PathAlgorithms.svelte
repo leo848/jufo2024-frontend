@@ -223,7 +223,7 @@
 
 <Window title={name[currentAction]} mdCol={6} xlCol={horizontal ? 6 : 4}>
 	<div
-		class={`text-xl grid grid-cols-${
+		class={`grid grid-cols-${
 			horizontal && selectedItem[currentAction] === null ? 2 : 1
 		} m-4`}
 	>
