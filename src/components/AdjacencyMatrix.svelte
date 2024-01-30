@@ -7,9 +7,13 @@
 	export let vertexNames: string[];
 	export let digits: number = 1;
 
-	$: sorted = vertexNames
-		.map((value, index) => ({ index, name: value }))
-		.toSorted((a, b) => a.name.localeCompare(b.name));
+	export let sort: boolean = true;
+
+	$: sorted = sort
+		? vertexNames
+				.map((value, index) => ({ index, name: value }))
+				.toSorted((a, b) => a.name.localeCompare(b.name))
+		: vertexNames.map((value, index) => ({ index, name: value }));
 
 	$: length = values.length;
 	$: {

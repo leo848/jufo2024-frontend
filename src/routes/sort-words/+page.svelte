@@ -38,7 +38,7 @@
 		const word = input.toLowerCase();
 
 		if (unknownWords.has(word)) {
-			setTimeout(() => inputUnknownWord = word);
+			setTimeout(() => (inputUnknownWord = word));
 			return;
 		}
 
@@ -116,7 +116,10 @@
 						<span class="text-gray-400">{index + 1}.&nbsp;</span>
 						{word.inner}
 						<div class="grow" />
-						<button class="text-gray-400 hover:text-white transition-all" on:click={() => words = words.toSpliced(index, 1)}><Icon.TrashBinSolid /></button>
+						<button
+							class="text-gray-400 hover:text-white transition-all"
+							on:click={() => (words = words.toSpliced(index, 1))}><Icon.TrashBinSolid /></button
+						>
 					</div>
 					<div style={`background: ${gradient(vecToColors(word.vec))}`} class="grow h-5" />
 				</div>
@@ -132,6 +135,7 @@
 			)}
 			vertexNames={words.map((w) => w.inner)}
 			digits={2}
+			sort={false}
 		/>
 	</Window>
 </div>
