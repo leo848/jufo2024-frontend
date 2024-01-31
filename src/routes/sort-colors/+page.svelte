@@ -392,13 +392,10 @@
 		<Window
 			title="3D-Darstellung"
 			options
-			on:optionClick={() => (threeDOptions.showOptions = !threeDOptions.showOptions)}
 			mdCol={12}
 			xlCol={5}
 		>
-			{#if threeDOptions.showOptions}
-				<PointChartOptions bind:options={threeDOptions} bind:projection bind:ballSize />
-			{/if}
+			<PointChartOptions slot="options" bind:options={threeDOptions} bind:projection bind:ballSize />
 			<div class="h-full m-0 min-h-[420px]">
 				<PointChart
 					{colors}
@@ -417,7 +414,6 @@
 		<PathProperties
 			path={path?.map((point) => point.values())}
 			selectedIndex={selection?.index}
-			length={colors.length}
 			{norm}
 		/>
 

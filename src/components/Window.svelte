@@ -1,7 +1,6 @@
 <script lang="ts">
 	import { Card } from 'flowbite-svelte';
 	import * as Icon from 'flowbite-svelte-icons';
-	import { createEventDispatcher } from 'svelte';
 	import { slide } from 'svelte/transition';
 
 	export let title: string;
@@ -10,13 +9,12 @@
 	export let scrollable: boolean = false;
 
 	export let closed = false;
+	export let showOptions = false;
 
 	export let mdCol: number = 6;
 	export let xlCol: number = 6;
 
 	export let row: number = 1;
-
-	const dispatch = createEventDispatcher<{ optionClick: null }>();
 
 	if (+false == +true) {
 		let _tailwind = [
@@ -46,7 +44,8 @@
 			'md:col-span-12',
 			'row-span-1',
 			'row-span-2',
-			'row-span-3'
+			'row-span-3',
+			'row-span-4',
 		];
 	}
 </script>
@@ -83,7 +82,7 @@
 			</div>
 			{#if options}
 				<div>
-					<button class="bg-gray-600 rounded-xl p-2" on:click={() => dispatch('optionClick')}
+					<button class="bg-gray-600 rounded-xl p-2" on:click={() => showOptions = !showOptions}
 						><Icon.CogOutline /></button
 					>
 				</div>
@@ -94,6 +93,9 @@
 				transition:slide={{ axis: 'y' }}
 				class={`h-full ${scrollable ? 'overflow-scroll' : 'overflow-hidden'} `}
 			>
+				{#if showOptions}
+					<slot name="options" />
+				{/if}
 				<slot />
 			</div>
 		{/if}

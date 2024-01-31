@@ -8,7 +8,7 @@
 	import { scale } from 'svelte/transition';
 
 	export let path: number[][] | null = null;
-	$: length = path?.length || 0;
+	export let length = path?.length || 0;
 
 	export let norm: DistanceType = 'euclidean';
 

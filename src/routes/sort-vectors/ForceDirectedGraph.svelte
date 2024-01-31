@@ -8,6 +8,18 @@
 	export let vectors: NamedVector[];
 	export let norm: DistanceType = 'euclidean';
 
+	export let options: {
+		speed ?: number,
+	} = {};
+
+	export const actions = {
+		freeze() {
+			frozen = !frozen;
+		}
+	}
+
+	$: forces = { friction: [0.95, 0.975, 0.985, 0.99, 0.995][5-(options.speed ?? 3)], attraction: [0.001, 0.0001, 0.00003, 0.00001, 0.00001][5-(options.speed ?? 3)], icePoint: [0.5, 0.9, 1, 5, 20][(options.speed ?? 3)-1]  }
+
 	let wrapperDiv: HTMLDivElement;
 	let canvas: HTMLCanvasElement;
 	let ctx: CanvasRenderingContext2D | null = null;
@@ -20,6 +32,7 @@
 
 	let frozen = false;
 	$: width, height, edges, vectors, norm, (frozen = false);
+	$: frozen = true;
 	$: averageTrueDist = calculateAverageTrueDist(vectors, norm);
 
 	function render() {
@@ -35,7 +48,7 @@
 
 		if (!frozen) {
 			for (const particle of particles) {
-				particle.update();
+				particle.update({ friction: forces.friction });
 			}
 		}
 
@@ -57,7 +70,7 @@
 		ctx.textAlign = 'left';
 		ctx.textBaseline = 'hanging';
 		const energy = totalVel + totalAcc * 10;
-		if (energy < 1) frozen = true;
+		if (energy < forces.icePoint) frozen = true;
 
 		if (!frozen) ctx.fillText(energy.toFixed(1), 10, 10);
 	}
@@ -130,7 +143,7 @@
 				const factor = displayDist - trueDisplayDist;
 				const force = particle2.pos.sub(particle1.pos).mul(factor);
 				// Kraft hin zu Distanz wie in realem Graph
-				particle1.applyForce(force.mul(0.00003));
+				particle1.applyForce(force.mul(forces.attraction));
 
 				// Keine Überlappung
 				// if (particle1.pos.dist(particle2.pos) < particle1.radius + particle2.radius) {

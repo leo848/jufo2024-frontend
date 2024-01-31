@@ -40,11 +40,11 @@ export class Particle {
 		return dist(this.vector, other.vector, norm);
 	}
 
-	update() {
+	update({ friction }: { friction?: number }) {
 		this.vel = this.vel.add(this.acc);
 		this.pos = this.pos.add(this.vel);
 
-		this.vel = this.vel.mul(0.985);
+		this.vel = this.vel.mul(friction ?? 0.985);
 		this.acc = Vec2.zero();
 	}
 
