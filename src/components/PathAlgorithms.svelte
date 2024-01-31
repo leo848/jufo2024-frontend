@@ -166,6 +166,13 @@
 					icon: Icon.SwatchbookSolid
 				},
 				{
+					name: 'Inneres Rotieren',
+					description: 'Wie Rotieren, nur auf jeden sequentielle Teilpfad des Pfades angewandt.',
+					method: 'innerRotate',
+					complexity: 'O(n³)',
+					icon: Icon.RotateOutline,
+				},
+				{
 					name: 'Simulated Annealing',
 					description:
 						'Zu Beginn werden Knoten zufällig getauscht, zum Schluss hin nur noch taktisch.',
