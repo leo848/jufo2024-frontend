@@ -187,7 +187,7 @@
 	>
 		<div>
 			{#key selection.index}
-				{#await (colors[selection.index] ?? { name() {} }).name()}
+				{#await (colors[selection.index] ?? { name() {} }).name("german")}
 					<Spinner />
 				{:then meta}
 					{#if meta}
@@ -413,6 +413,7 @@
 
 		<PathProperties
 			path={path?.map((point) => point.values())}
+	  		length={colors.length}
 			selectedIndex={selection?.index}
 			{norm}
 		/>

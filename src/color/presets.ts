@@ -42,7 +42,7 @@ const books = {
 			['nullen machen einsen groß', 191, 44, 38],
 			['damit hatte keiner gerechnet', 190, 34, 39],
 			['eine null im alltag', 211, 57, 37],
-			['zahlen bitte', 203, 83, 113],
+			['Zahlen, bitte!', 203, 83, 113],
 			['rechnen mit dem weltmeister', 72, 4, 54],
 			['mathematische detektivgeschichten', 188, 225, 244],
 			['zahlen spiralen und magische quadrate', 133, 184, 213],
@@ -61,7 +61,8 @@ const books = {
 			['mathe in 30 sekunden', 202, 173, 117]
 		] as const
 	).map(([name, r, g, b]) => {
-		return NamedColor.fromColor(new RgbColor(r / 255, g / 255, b / 255).color(), name);
+		const rgb = new RgbColor(r / 255, g / 255, b / 255);
+		return rgb.color(); //NamedColor.fromColor(rgb.color(), name);
 	})
 };
 
@@ -414,8 +415,9 @@ const presets = {
 	booksDarkByHue: {
 		name: 'Bücher nach Farbwert',
 		colors: books.colors.toSorted((a, b) => {
-			let chromas = [b, a].map((c) => c.oklab()).map(({ a, b }) => Math.sqrt(a * a + b * b));
-			return chromas[0] - chromas[1];
+			let hues = [b, a].map((c) => c.oklab()).map(({ a, b }) => Math.atan2(b, a));
+			// let chromas = [b, a].map((c) => c.space("hsl")).map(({ h }) => h);
+			return hues[0] - hues[1];
 		})
 	},
 	pride: {
