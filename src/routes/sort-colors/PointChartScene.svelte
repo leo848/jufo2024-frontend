@@ -42,6 +42,7 @@
 		$displayPoints,
 		$displayEdges,
 		advance();
+	canvas.addEventListener('resize',advance);
 
 	$: axisTextures = new Array(3).fill(null).map((_, index) => {
 		const spaced = new RgbColor(0, 0, 0).color().space(space);
