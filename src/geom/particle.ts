@@ -1,4 +1,3 @@
-import { type DistanceType, dist } from './dist';
 import { Vec2 } from './vector';
 
 export class Particle {
@@ -6,7 +5,7 @@ export class Particle {
 	vel: Vec2;
 	acc: Vec2;
 
-	vector: number[];
+	vectorIdx: number;
 	name: string;
 
 	radius: number;
@@ -14,18 +13,18 @@ export class Particle {
 	constructor({
 		radius,
 		name,
-		vector,
+		vectorIdx,
 		x,
 		y
 	}: {
 		radius?: number;
 		name: string;
-		vector: number[];
+		vectorIdx: number;
 		x: number;
 		y: number;
 	}) {
 		this.name = name;
-		this.vector = vector;
+		this.vectorIdx = vectorIdx;
 		this.pos = new Vec2(x, y);
 		this.vel = Vec2.zero();
 		this.acc = Vec2.zero();
@@ -34,10 +33,6 @@ export class Particle {
 
 	applyForce(force: Vec2) {
 		this.acc = this.acc.add(force);
-	}
-
-	dist(other: Particle, norm: DistanceType = 'euclidean') {
-		return dist(this.vector, other.vector, norm);
 	}
 
 	update({ friction }: { friction?: number }) {

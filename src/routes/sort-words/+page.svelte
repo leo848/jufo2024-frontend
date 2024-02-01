@@ -18,6 +18,8 @@
 	import PathAlgorithms from '../../components/PathAlgorithms.svelte';
 	import { onDestroy } from 'svelte';
 	import PathProperties from '../../components/PathProperties.svelte';
+	import ForceDirectedGraphOptions from '../../components/ForceDirectedGraphOptions.svelte';
+	import ForceDirectedGraph from '../../components/ForceDirectedGraph.svelte';
 
 	title.set('Wörter sortieren');
 
@@ -41,6 +43,14 @@
 	let inputElement: HTMLInputElement;
 
 	let invalidateAlgorithms: () => void;
+	let redraw: () => void;
+
+	let fdgOptions: {
+		speed: number;
+	};
+	let fdgActions: {
+		freeze(): void;
+	}
 
 	async function addInput() {
 		if (input.length === 0 || inputLoading) {
@@ -220,4 +230,11 @@
 	</Window>
 
 	<PathProperties length={words.length} path={words.map((w) => w.vec)} norm="cosine" xlCol={4} />
+
+	<Window title="Ansicht des Graphen (FDGD)" options xlCol={5}>
+		<ForceDirectedGraphOptions slot="options" bind:options={fdgOptions} actions={fdgActions} />
+		<div class="h-full m-0 min-h-[420px]">
+			<ForceDirectedGraph bind:redraw values={adjacencyMatrix(words.map(w => w.vec))} names={words.map(w => w.inner)} norm="cosine" options={fdgOptions} bind:actions={fdgActions} />
+		</div>
+	</Window>
 </div>

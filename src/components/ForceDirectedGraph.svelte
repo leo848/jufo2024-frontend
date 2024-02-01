@@ -1,12 +1,16 @@
 <script lang="ts">
 	import { onDestroy, onMount } from 'svelte';
 	import { Particle } from '../geom/particle';
-	import { Vec2, type NamedVector } from '../geom/vector';
-	import { dist, type DistanceType } from '../geom/dist';
+	import { Vec2 } from '../geom/vector';
+	import type { DistanceType } from '../geom/dist';
+	import {adjacencyMatrix} from '../graph/adjacency';
 
 	export let edges: [number, number][]; // indices
-	export let vectors: NamedVector[];
+	export let values: number[][];
+	export let names: string[];
 	export let norm: DistanceType = 'euclidean';
+
+	export let matrix: boolean = false;
 
 	export let options: {
 		speed ?: number,
@@ -20,6 +24,8 @@
 
 	$: forces = { friction: [0.95, 0.975, 0.985, 0.99, 0.995][5-(options.speed ?? 3)], attraction: [0.001, 0.0001, 0.00003, 0.00001, 0.00001][5-(options.speed ?? 3)], icePoint: [0.5, 0.9, 1, 5, 20][(options.speed ?? 3)-1]  }
 
+	$: adjMatrix = matrix ? values : adjacencyMatrix(values, norm);
+
 	let wrapperDiv: HTMLDivElement;
 	let canvas: HTMLCanvasElement;
 	let ctx: CanvasRenderingContext2D | null = null;
@@ -31,9 +37,9 @@
 	let averageTrueDist = 1;
 
 	let frozen = false;
-	$: width, height, edges, vectors, norm, (frozen = false);
+	$: width, height, edges, values, norm, (frozen = false);
 	$: frozen = true;
-	$: averageTrueDist = calculateAverageTrueDist(vectors, norm);
+	$: averageTrueDist = calculateAverageTrueDist(adjMatrix);
 
 	function render() {
 		if (ctx == null) return;
@@ -54,7 +60,7 @@
 
 		ctx.strokeStyle = 'white';
 		ctx.lineWidth = 3;
-		for (const [fromIdx, toIdx] of edges) {
+		for (const [fromIdx, toIdx] of edges ?? []) {
 			ctx.moveTo(particles[fromIdx].pos.x, particles[fromIdx].pos.y);
 			ctx.lineTo(particles[toIdx].pos.x, particles[toIdx].pos.y);
 			ctx.stroke();
@@ -75,13 +81,13 @@
 		if (!frozen) ctx.fillText(energy.toFixed(1), 10, 10);
 	}
 
-	$: for (let i = 0; i < vectors.length; i++) {
+	$: for (let i = 0; i < values.length; i++) {
 		if (particles[i]) {
-			if (particles[i].name != vectors[i].name) {
+			if (names[i] != names[i]) {
 				fullParticleUpdate();
 				break;
 			}
-			particles[i].vector = vectors[i].inner;
+			particles[i].vectorIdx = i;
 		} else {
 			fullParticleUpdate();
 			break;
@@ -92,16 +98,16 @@
 		let oldParticles = particles;
 		particles = [];
 		let minDim = Math.min(width, height);
-		for (let i = 0; i < vectors.length; i++) {
-			let { x, y } = oldParticles.find((p) => p.name == vectors[i].name && !force)?.pos ?? {
-				x: (Math.sin((i / vectors.length) * 2 * Math.PI) * minDim) / 3 + width / 2,
-				y: (Math.cos((i / vectors.length) * 2 * Math.PI) * minDim) / 3 + height / 2
+		for (let i = 0; i < values.length; i++) {
+			let { x, y } = oldParticles.find((p) => p.name == names[i] && !force)?.pos ?? {
+				x: (Math.sin((i / values.length) * 2 * Math.PI) * minDim) / 3 + width / 2,
+				y: (Math.cos((i / values.length) * 2 * Math.PI) * minDim) / 3 + height / 2
 			};
 			particles.push(
 				new Particle({
 					radius: 20,
-					name: vectors[i].name,
-					vector: vectors[i].inner,
+					name: names[i],
+					vectorIdx: i,
 					x,
 					y
 				})
@@ -114,14 +120,14 @@
 		fullParticleUpdate(true);
 	}
 
-	function calculateAverageTrueDist(vectors: NamedVector[], norm: DistanceType) {
+	function calculateAverageTrueDist(matrix: number[][]) {
 		let sum = 1;
-		for (const v1 of vectors) {
-			for (const v2 of vectors) {
-				sum += dist(v1.inner, v2.inner, norm);
+		for (const col of matrix) {
+			for (const entry of col) {
+				sum += entry;
 			}
 		}
-		const avg = sum / (vectors.length + 1) / vectors.length;
+		const avg = sum / (values.length + 1) / values.length;
 		return avg;
 	}
 
@@ -137,7 +143,7 @@
 				if (particle1.pos.dist(particle2.pos) < 0.001) continue;
 				let delta = particle2.pos.sub(particle1.pos);
 				let displayDist = delta.mag();
-				let trueDist = particle1.dist(particle2, norm);
+				let trueDist = adjMatrix[particle1.vectorIdx][particle2.vectorIdx];
 				let trueDisplayDist = (trueDist * 100) / averageTrueDist;
 
 				const factor = displayDist - trueDisplayDist;
@@ -176,8 +182,8 @@
 </script>
 
 <div class="w-full h-full" bind:this={wrapperDiv}>
-	<canvas bind:this={canvas} style={vectors.length === 0 ? 'display: none' : ''} />
-	{#if vectors.length === 0}
+	<canvas bind:this={canvas} style={values.length === 0 ? 'display: none' : ''} />
+	{#if values.length === 0}
 		<div class="m-10 p-4 bg-gray-700 rounded">
 			<div class="text-4xl text-white">Keine Vektoren hinzugefügt</div>
 			<div class="text-xl">Füge durch Klicken auf "a" den ersten Vektor hinzu!</div>
