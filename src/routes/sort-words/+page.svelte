@@ -219,5 +219,5 @@
 		/>
 	</Window>
 
-	<PathProperties path={words.map((w) => w.vec)} norm="cosine" xlCol={4} />
+	<PathProperties length={words.length} path={words.map((w) => w.vec)} norm="cosine" xlCol={4} />
 </div>
