@@ -7,20 +7,20 @@
 		serverOutputDistPathCreation,
 		serverOutputDistPathImprovement
 	} from '../../server/types';
-	import { fromUrlString, type NamedVector } from './vector';
+	import { fromUrlString, type NamedVector } from '../../geom/vector';
 	import { onDestroy } from 'svelte';
 	import { flip } from 'svelte/animate';
 	import { page } from '$app/stores';
 	import { writable, type Writable } from 'svelte/store';
 	import PathProperties from '../../components/PathProperties.svelte';
-	import ForceDirectedGraph from './ForceDirectedGraph.svelte';
+	import ForceDirectedGraph from '../../components/ForceDirectedGraph.svelte';
+	import ForceDirectedGraphOptions from '../../components/ForceDirectedGraphOptions.svelte';
 	import { goto } from '$app/navigation';
 	import Window from '../../components/Window.svelte';
 	import type { DistanceType } from '../../geom/dist';
 	import { adjacencyMatrix } from '../../graph/adjacency';
 	import Options from '../../components/Options.svelte';
 	import AdjacencyMatrix from '../../components/AdjacencyMatrix.svelte';
-	import ForceDirectedGraphOptions from './ForceDirectedGraphOptions.svelte';
 
 	title.set('Vektoren sortieren');
 

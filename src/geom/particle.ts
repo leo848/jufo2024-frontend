@@ -1,4 +1,4 @@
-import { euclideanDist, type DistanceType, dist } from '../../geom/dist';
+import { type DistanceType, dist } from './dist';
 import { Vec2 } from './vector';
 
 export class Particle {
@@ -53,15 +53,18 @@ export class Particle {
 		ctx.fillStyle = '#444';
 		ctx.strokeStyle = '#ccc';
 
+		const fontSize = 18;
+		const textWidth = Math.max(fontSize, ctx.measureText(this.name).width + 10);
+
 		ctx.beginPath();
-		ctx.ellipse(this.pos.x, this.pos.y, this.radius, this.radius, 0, 0, Math.PI * 2);
+		ctx.roundRect(this.pos.x, this.pos.y-5, textWidth + 10, fontSize + 10, fontSize);
 		ctx.stroke();
 		ctx.fill();
 
-		ctx.textAlign = 'center';
-		ctx.textBaseline = 'middle';
-		ctx.font = '24px sans-serif';
+		// ctx.textAlign = 'center';
+		// ctx.textBaseline = 'middle';
+		ctx.font = fontSize + 'px sans-serif';
 		ctx.fillStyle = 'white';
-		ctx.fillText(this.name, this.pos.x, this.pos.y + 2);
+		ctx.fillText(this.name, this.pos.x + 10, this.pos.y + 2);
 	}
 }

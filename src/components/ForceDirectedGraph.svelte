@@ -1,8 +1,8 @@
 <script lang="ts">
 	import { onDestroy, onMount } from 'svelte';
-	import { Particle } from './particle';
-	import { Vec2, type NamedVector } from './vector';
-	import { dist, type DistanceType } from '../../geom/dist';
+	import { Particle } from '../geom/particle';
+	import { Vec2, type NamedVector } from '../geom/vector';
+	import { dist, type DistanceType } from '../geom/dist';
 
 	export let edges: [number, number][]; // indices
 	export let vectors: NamedVector[];
