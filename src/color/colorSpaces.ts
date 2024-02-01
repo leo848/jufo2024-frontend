@@ -420,6 +420,10 @@ export class OklabColor extends AbstractColor<OklabColor, OklabComponent> {
 		return new OklabColor(l1, rangeMap(a1, [-0.4, 0.4], [0, 1]), rangeMap(b1, [-0.4, 0.4], [0, 1]));
 	}
 
+	unnormal(): { l: number, a: number, b: number } {
+		return { l: this.l, a: rangeMap(this.a, [0, 1], [-0.4, 0.4]), b: rangeMap(this.b, [0, 1], [-0.4, 0.4]) }
+	}
+
 	color(): Color {
 		const l0 = this.l;
 		const a0 = rangeMap(this.a, [0, 1], [-0.4, 0.4]);

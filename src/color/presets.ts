@@ -33,7 +33,7 @@ const books = {
 	name: 'Mathematikbücher',
 	colors: (
 		[
-			['mit der eins fängt alles an', 242, 240, 238],
+			['mit der eins fängt alles an', 245, 242, 241],
 			['mathe macciato', 212, 188, 0],
 			['rechnen und raten', 240, 198, 33],
 			['mathematisches problemlösen und beweisen', 230, 109, 0],
@@ -50,7 +50,7 @@ const books = {
 			['rechnen ohne taschenrechner', 0, 144, 147],
 			['100 great problems of elementary mathematics', 57, 57, 112],
 			['dtv atlas schulmathematik', 0, 37, 107],
-			['fünf minuten mathematik', 2, 5, 20],
+			['fünf minuten mathematik', 6, 3, 2],
 			['von der pflicht zur kür', 20, 22, 33],
 			['nikola teslas rätseluniversum', 51, 64, 94],
 			['mathematische knobeleien', 1, 60, 24],
@@ -62,7 +62,7 @@ const books = {
 		] as const
 	).map(([name, r, g, b]) => {
 		const rgb = new RgbColor(r / 255, g / 255, b / 255);
-		return rgb.color(); //NamedColor.fromColor(rgb.color(), name);
+		return NamedColor.fromColor(rgb.color(), name);
 	})
 };
 
@@ -415,7 +415,8 @@ const presets = {
 	booksDarkByHue: {
 		name: 'Bücher nach Farbwert',
 		colors: books.colors.toSorted((a, b) => {
-			let hues = [b, a].map((c) => c.oklab()).map(({ a, b }) => Math.atan2(b, a));
+			let hues = [b, a].map((c) => c.oklab().unnormal()).map(({ a, b }) => Math.atan2(b, a));
+			// let hues = [b, a].map((c) => c.space("hsl")).map(({ h }) => h);
 			// let chromas = [b, a].map((c) => c.space("hsl")).map(({ h }) => h);
 			return hues[0] - hues[1];
 		})
