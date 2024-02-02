@@ -143,7 +143,7 @@
 				if (particle1.pos.dist(particle2.pos) < 0.001) continue;
 				let delta = particle2.pos.sub(particle1.pos);
 				let displayDist = delta.mag();
-				let trueDist = adjMatrix[particle1.vectorIdx][particle2.vectorIdx];
+				let trueDist = (adjMatrix[particle1.vectorIdx]??[])[particle2.vectorIdx]??averageTrueDist;
 				let trueDisplayDist = (trueDist * 100) / averageTrueDist;
 
 				const factor = displayDist - trueDisplayDist;
