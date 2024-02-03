@@ -144,7 +144,7 @@
 				let delta = particle2.pos.sub(particle1.pos);
 				let displayDist = delta.mag();
 				let trueDist = (adjMatrix[particle1.vectorIdx]??[])[particle2.vectorIdx]??averageTrueDist;
-				let trueDisplayDist = (trueDist * 100) / averageTrueDist;
+				let trueDisplayDist = (trueDist * 160) / averageTrueDist;
 
 				const factor = displayDist - trueDisplayDist;
 				const force = particle2.pos.sub(particle1.pos).mul(factor);
