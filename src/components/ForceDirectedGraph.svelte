@@ -3,7 +3,7 @@
 	import { Particle } from '../geom/particle';
 	import { Vec2 } from '../geom/vector';
 	import type { DistanceType } from '../geom/dist';
-	import {adjacencyMatrix} from '../graph/adjacency';
+	import { adjacencyMatrix } from '../graph/adjacency';
 
 	export let edges: [number, number][]; // indices
 	export let values: number[][];
@@ -13,16 +13,20 @@
 	export let matrix: boolean = false;
 
 	export let options: {
-		speed ?: number,
+		speed?: number;
 	} = {};
 
 	export const actions = {
 		freeze() {
 			frozen = !frozen;
 		}
-	}
+	};
 
-	$: forces = { friction: [0.95, 0.975, 0.985, 0.99, 0.995][5-(options.speed ?? 3)], attraction: [0.001, 0.0001, 0.00003, 0.00001, 0.00001][5-(options.speed ?? 3)], icePoint: [0.5, 0.9, 1, 5, 20][(options.speed ?? 3)-1]  }
+	$: forces = {
+		friction: [0.95, 0.975, 0.985, 0.99, 0.995][5 - (options.speed ?? 3)],
+		attraction: [0.001, 0.0001, 0.00003, 0.00001, 0.00001][5 - (options.speed ?? 3)],
+		icePoint: [0.5, 0.9, 1, 5, 20][(options.speed ?? 3) - 1]
+	};
 
 	$: adjMatrix = matrix ? values : adjacencyMatrix(values, norm);
 
@@ -143,7 +147,8 @@
 				if (particle1.pos.dist(particle2.pos) < 0.001) continue;
 				let delta = particle2.pos.sub(particle1.pos);
 				let displayDist = delta.mag();
-				let trueDist = (adjMatrix[particle1.vectorIdx]??[])[particle2.vectorIdx]??averageTrueDist;
+				let trueDist =
+					(adjMatrix[particle1.vectorIdx] ?? [])[particle2.vectorIdx] ?? averageTrueDist;
 				let trueDisplayDist = (trueDist * 160) / averageTrueDist;
 
 				const factor = displayDist - trueDisplayDist;

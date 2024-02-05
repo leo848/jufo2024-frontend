@@ -50,7 +50,7 @@
 	};
 	let fdgActions: {
 		freeze(): void;
-	}
+	};
 
 	async function addInput() {
 		if (input.length === 0 || inputLoading) {
@@ -234,7 +234,14 @@
 	<Window title="Ansicht des Graphen (FDGD)" options xlCol={5}>
 		<ForceDirectedGraphOptions slot="options" bind:options={fdgOptions} actions={fdgActions} />
 		<div class="h-full m-0 min-h-[420px]">
-			<ForceDirectedGraph bind:redraw values={adjacencyMatrix(words.map(w => w.vec))} names={words.map(w => w.inner)} norm="cosine" options={fdgOptions} bind:actions={fdgActions} />
+			<ForceDirectedGraph
+				bind:redraw
+				values={adjacencyMatrix(words.map((w) => w.vec))}
+				names={words.map((w) => w.inner)}
+				norm="cosine"
+				options={fdgOptions}
+				bind:actions={fdgActions}
+			/>
 		</div>
 	</Window>
 </div>

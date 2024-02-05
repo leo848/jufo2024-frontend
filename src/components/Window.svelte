@@ -45,7 +45,7 @@
 			'row-span-1',
 			'row-span-2',
 			'row-span-3',
-			'row-span-4',
+			'row-span-4'
 		];
 	}
 </script>
@@ -82,7 +82,7 @@
 			</div>
 			{#if options}
 				<div>
-					<button class="bg-gray-600 rounded-xl p-2" on:click={() => showOptions = !showOptions}
+					<button class="bg-gray-600 rounded-xl p-2" on:click={() => (showOptions = !showOptions)}
 						><Icon.CogOutline /></button
 					>
 				</div>

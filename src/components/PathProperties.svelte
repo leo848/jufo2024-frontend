@@ -82,7 +82,7 @@
 					class="col-span-1 rounded-2xl bg-gray-700 py-4 text-gray-400 flex-col flex justify-around items-center"
 				>
 					<div class="text-5xl">
-						{#if averageDistDisplay == "NaN" || averageDistDisplay == "Infinity"}
+						{#if averageDistDisplay == 'NaN' || averageDistDisplay == 'Infinity'}
 							<span class="text-gray-500">–</span>
 						{:else}
 							{averageDistDisplay}

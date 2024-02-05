@@ -52,7 +52,7 @@ export class Particle {
 		const textWidth = Math.max(fontSize, ctx.measureText(this.name).width + 10);
 
 		ctx.beginPath();
-		ctx.roundRect(this.pos.x, this.pos.y-5, textWidth + 10, fontSize + 10, fontSize);
+		ctx.roundRect(this.pos.x, this.pos.y - 5, textWidth + 10, fontSize + 10, fontSize);
 		ctx.stroke();
 		ctx.fill();
 
