@@ -177,6 +177,24 @@ export const presets = {
 			{ name: 'Friedenskirche', lat: 51.66175, lng: 7.11445 }
 		]
 	},
+	duisburgChurches: {
+		name: 'Kirchen Duisburgs',
+		values: [
+			{ name: 'Salvatorkirche',  lat: 51.43586, lng: 6.76115 },
+			{ name: 'Liebfrauenkirche', lat: 51.43441, lng: 6.76952},
+			{ name: 'St. Ludger',  lat: 51.4303, lng: 6.7826 },
+			{ name: 'St. Anna', lat: 51.43226, lng: 6.79825  },
+			{ name: 'Kirche Jesu Christi der Heiligen der Letzten Tage', lat: 51.43291, lng: 6.72462},
+			{ name: 'St. Johannes', lat: 51.45286, lng: 6.70989},
+			{ name: 'Evangelisch-Freikirchliche Gemeinde', lat:51.44898,lng:6.70889},
+			{ name: 'Sankt Peter in den Haesen', lat: 51.45656, lng: 6.69147},
+			{ name: 'Nederlandse Kerk an de Ruhr', lat:51.454,lng:6.73027 },
+			{ name: 'Sankt Maximilian', lat:51.45372,lng:6.73418 },
+			{ name: 'Christengemeinde Duisburg', lat:51.45372,lng:6.73418 },
+			{ name: 'St. Joseph-Kirche', lat:51.45372,lng:6.73418 },
+			{ name: 'Neuapostolische Kirche', lat:51.42279,lng:6.76477 },
+		]
+	},
 	citiesRuhrgebiet: {
 		name: 'Städte im Ruhrgebiet',
 		aiGenerated: true,
