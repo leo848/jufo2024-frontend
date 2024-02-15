@@ -9,16 +9,20 @@
 	export let norm: DistanceType = 'euclidean';
 
 	export let options: {
-		speed ?: number,
+		speed?: number;
 	} = {};
 
 	export const actions = {
 		freeze() {
 			frozen = !frozen;
 		}
-	}
+	};
 
-	$: forces = { friction: [0.95, 0.975, 0.985, 0.99, 0.995][5-(options.speed ?? 3)], attraction: [0.001, 0.0001, 0.00003, 0.00001, 0.00001][5-(options.speed ?? 3)], icePoint: [0.5, 0.9, 1, 5, 20][(options.speed ?? 3)-1]  }
+	$: forces = {
+		friction: [0.95, 0.975, 0.985, 0.99, 0.995][5 - (options.speed ?? 3)],
+		attraction: [0.001, 0.0001, 0.00003, 0.00001, 0.00001][5 - (options.speed ?? 3)],
+		icePoint: [0.5, 0.9, 1, 5, 20][(options.speed ?? 3) - 1]
+	};
 
 	let wrapperDiv: HTMLDivElement;
 	let canvas: HTMLCanvasElement;

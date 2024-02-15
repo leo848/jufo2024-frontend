@@ -187,7 +187,7 @@
 	>
 		<div>
 			{#key selection.index}
-				{#await (colors[selection.index] ?? { name() {} }).name("german")}
+				{#await (colors[selection.index] ?? { name() {} }).name('german')}
 					<Spinner />
 				{:then meta}
 					{#if meta}
@@ -389,13 +389,13 @@
 		>
 			<LoadColor slot="load" bind:colors {invalidate} />
 		</Options>
-		<Window
-			title="3D-Darstellung"
-			options
-			mdCol={12}
-			xlCol={5}
-		>
-			<PointChartOptions slot="options" bind:options={threeDOptions} bind:projection bind:ballSize />
+		<Window title="3D-Darstellung" options mdCol={12} xlCol={5}>
+			<PointChartOptions
+				slot="options"
+				bind:options={threeDOptions}
+				bind:projection
+				bind:ballSize
+			/>
 			<div class="h-full m-0 min-h-[420px]">
 				<PointChart
 					{colors}
@@ -413,7 +413,7 @@
 
 		<PathProperties
 			path={path?.map((point) => point.values())}
-	  		length={colors.length}
+			length={colors.length}
 			selectedIndex={selection?.index}
 			{norm}
 		/>

@@ -278,7 +278,14 @@
 		<Window title="Ansicht des Graphen (FDGD)" options xlCol={5}>
 			<ForceDirectedGraphOptions slot="options" bind:options={fdgOptions} actions={fdgActions} />
 			<div class="h-full m-0 min-h-[420px]">
-				<ForceDirectedGraph bind:redraw vectors={points} {edges} {norm} options={fdgOptions} bind:actions={fdgActions} />
+				<ForceDirectedGraph
+					bind:redraw
+					vectors={points}
+					{edges}
+					{norm}
+					options={fdgOptions}
+					bind:actions={fdgActions}
+				/>
 			</div>
 		</Window>
 

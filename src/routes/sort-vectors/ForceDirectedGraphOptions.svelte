@@ -7,10 +7,10 @@
 	} = { speedChange: 0 };
 
 	export let options: {
-	speed: number
+		speed: number;
 	} = { speed: 3 };
 	export let actions: {
-		freeze: () => void,
+		freeze: () => void;
 	};
 </script>
 
@@ -32,8 +32,7 @@
 						<span
 							class="row-[1/2] col-[1/2] tabular-nums"
 							in:fly={{ y: -100 * inner.speedChange, duration: 200 }}
-							out:fly={{ y: 100 * inner.speedChange, duration: 200 }}
-							>{options.speed}</span
+							out:fly={{ y: 100 * inner.speedChange, duration: 200 }}>{options.speed}</span
 						>
 					{/key}
 				</div>
@@ -53,12 +52,7 @@
 				<Icon.PlusSolid />
 			</button>
 		</div>
-			<button
-				class={`bg-gray-700 rounded-xl p-3`}
-				on:click={actions.freeze}
-			>
-				Einfrieren
-			</button>
+		<button class={`bg-gray-700 rounded-xl p-3`} on:click={actions.freeze}> Einfrieren </button>
 	</div>
 </div>
 

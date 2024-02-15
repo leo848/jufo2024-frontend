@@ -180,19 +180,151 @@ export const presets = {
 	duisburgChurches: {
 		name: 'Kirchen Duisburgs',
 		values: [
-			{ name: 'Salvatorkirche',  lat: 51.43586, lng: 6.76115 },
-			{ name: 'Liebfrauenkirche', lat: 51.43441, lng: 6.76952},
-			{ name: 'St. Ludger',  lat: 51.4303, lng: 6.7826 },
-			{ name: 'St. Anna', lat: 51.43226, lng: 6.79825  },
-			{ name: 'Kirche Jesu Christi der Heiligen der Letzten Tage', lat: 51.43291, lng: 6.72462},
-			{ name: 'St. Johannes', lat: 51.45286, lng: 6.70989},
-			{ name: 'Evangelisch-Freikirchliche Gemeinde', lat:51.44898,lng:6.70889},
-			{ name: 'Sankt Peter in den Haesen', lat: 51.45656, lng: 6.69147},
-			{ name: 'Nederlandse Kerk an de Ruhr', lat:51.454,lng:6.73027 },
-			{ name: 'Sankt Maximilian', lat:51.45372,lng:6.73418 },
-			{ name: 'Christengemeinde Duisburg', lat:51.45372,lng:6.73418 },
-			{ name: 'St. Joseph-Kirche', lat:51.45372,lng:6.73418 },
-			{ name: 'Neuapostolische Kirche', lat:51.42279,lng:6.76477 },
+			{ name: 'Salvatorkirche', lat: 51.43586, lng: 6.76115 },
+			{ name: 'Liebfrauenkirche', lat: 51.43441, lng: 6.76952 },
+			{ name: 'St. Ludger', lat: 51.4303, lng: 6.7826 },
+			{ name: 'St. Anna', lat: 51.43226, lng: 6.79825 },
+			{ name: 'Kirche Jesu Christi der Heiligen der Letzten Tage', lat: 51.43291, lng: 6.72462 },
+			{ name: 'St. Johannes', lat: 51.45286, lng: 6.70989 },
+			{ name: 'Evangelisch-Freikirchliche Gemeinde', lat: 51.44898, lng: 6.70889 },
+			{ name: 'Sankt Peter in den Haesen', lat: 51.45656, lng: 6.69147 },
+			{ name: 'Nederlandse Kerk an de Ruhr', lat: 51.454, lng: 6.73027 },
+			{ name: 'Sankt Maximilian', lat: 51.45372, lng: 6.73418 },
+			{ name: 'Christengemeinde Duisburg', lat: 51.45372, lng: 6.73418 },
+			{ name: 'St. Joseph-Kirche', lat: 51.45372, lng: 6.73418 },
+			{ name: 'Neuapostolische Kirche', lat: 51.42279, lng: 6.76477 }
+		]
+	},
+	duisburgGeneral: {
+		name: 'Sehenswürdigkeiten Duisburgs',
+		aiGenerated: true,
+		values: [
+			{
+				name: 'Duisburg',
+				desc: 'Eine ehemalige Industriestadt am Rhein mit vielfältiger Geschichte.',
+				lat: 51.43463,
+				lng: 6.76101
+			},
+			{
+				name: 'Innenhafen Duisburg',
+				desc: 'Ein malerischer Hafenbereich, der sich zu einem lebendigen Kultur- und Freizeitviertel entwickelt hat.',
+				lat: 51.43682,
+				lng: 6.76088
+			},
+			{
+				name: 'Landschaftspark Duisburg-Nord',
+				desc: 'Ein beeindruckendes Industriedenkmal, das zu einem einzigartigen Park umgestaltet wurde.',
+				lat: 51.48248,
+				lng: 6.77352
+			},
+			{
+				name: 'MSV-Arena',
+				desc: 'Das Heimatstadion des Fußballvereins MSV Duisburg.',
+				lat: 51.42838,
+				lng: 6.75394
+			},
+			{
+				name: 'Duisburger Zoo',
+				desc: 'Ein beliebtes Ausflugsziel mit einer vielfältigen Tierwelt.',
+				lat: 51.45597,
+				lng: 6.76032
+			},
+			{
+				name: 'Salvator-Kirche',
+				desc: 'Eine beeindruckende Kirche mit einer reichen Geschichte.',
+				lat: 51.43815,
+				lng: 6.77007
+			},
+			{
+				name: 'Schauinsland-Reisen-Arena',
+				desc: 'Ein Sportstadion, das für Fußballspiele und andere Veranstaltungen genutzt wird.',
+				lat: 51.42946,
+				lng: 6.76584
+			},
+			{
+				name: 'Museum Küppersmühle',
+				desc: 'Ein renommiertes Museum für moderne Kunst in einem historischen Gebäude.',
+				lat: 51.43529,
+				lng: 6.76405
+			},
+			{
+				name: 'Duisburger Rathaus',
+				desc: 'Ein imposantes Gebäude im Herzen der Stadt, das die Verwaltung beherbergt.',
+				lat: 51.43336,
+				lng: 6.76237
+			},
+			{
+				name: 'Sechs-Seen-Platte',
+				desc: 'Ein Naherholungsgebiet mit vielen Seen und grünen Flächen.',
+				lat: 51.42182,
+				lng: 6.73158
+			},
+			{
+				name: 'Königstraße Duisburg',
+				desc: 'Eine lebendige Einkaufsstraße mit vielen Geschäften und Cafés.',
+				lat: 51.43238,
+				lng: 6.77449
+			},
+			{
+				name: 'Mercatorhalle Duisburg',
+				desc: 'Ein Veranstaltungsort für Konzerte, Theateraufführungen und andere kulturelle Veranstaltungen.',
+				lat: 51.43238,
+				lng: 6.76218
+			},
+			{
+				name: 'Botanischer Garten Duisburg',
+				desc: 'Ein grünes Paradies mit einer Vielzahl von Pflanzenarten.',
+				lat: 51.42968,
+				lng: 6.74615
+			},
+			{
+				name: 'Stadtbibliothek Duisburg',
+				desc: 'Ein Ort des Wissens und der Bildung inmitten der Stadt.',
+				lat: 51.43265,
+				lng: 6.76385
+			},
+			{
+				name: 'Stadttheater Duisburg',
+				desc: 'Eine renommierte Bühne für Theateraufführungen und Opern.',
+				lat: 51.43211,
+				lng: 6.76947
+			},
+			{
+				name: 'Innenstadt Duisburg',
+				desc: 'Das pulsierende Zentrum der Stadt mit zahlreichen Geschäften, Restaurants und Bars.',
+				lat: 51.43252,
+				lng: 6.77311
+			},
+			{
+				name: 'Rheinpark Duisburg',
+				desc: 'Ein herrlicher Park entlang des Rheinufers, ideal zum Spazierengehen und Entspannen.',
+				lat: 51.45768,
+				lng: 6.76321
+			},
+			{
+				name: 'Haus der Jugend Duisburg',
+				desc: 'Ein Ort für Jugendliche mit vielfältigen Angeboten und Aktivitäten.',
+				lat: 51.43405,
+				lng: 6.75698
+			},
+			{
+				name: 'Lehmbruck-Museum Duisburg',
+				desc: 'Ein bedeutendes Museum für moderne und zeitgenössische Skulptur.',
+				lat: 51.43516,
+				lng: 6.76801
+			},
+			{
+				name: 'Duisburger Philharmoniker',
+				desc: 'Ein renommiertes Orchester, das regelmäßig Konzerte in der Stadt gibt.',
+				lat: 51.43477,
+				lng: 6.77345
+			},
+			{
+				name: 'Sportpark Duisburg',
+				desc: 'Ein großes Sportzentrum mit verschiedenen Sportanlagen und Aktivitäten.',
+				lat: 51.42219,
+				lng: 6.75002
+			}
 		]
 	},
 	citiesRuhrgebiet: {
