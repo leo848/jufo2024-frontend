@@ -40,6 +40,7 @@
 	let colorsLocked = false;
 	let invalidate: <T>(callback: (t: T) => void) => (t: T) => void;
 	let colorsAnim = true;
+	let edgesAnim = true;
 
 	let selection: {
 		index: number;
@@ -419,6 +420,7 @@
 					{colors}
 					{colorsAnim}
 					{edges}
+					{edgesAnim}
 					{ballSize}
 					{projection}
 					{space}
