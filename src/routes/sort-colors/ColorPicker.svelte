@@ -11,7 +11,10 @@
 		CmyColor,
 		type ColorSpace,
 
-		XyzColor
+		XyzColor,
+
+		CielabColor
+
 
 	} from '../../color/colorSpaces';
 	import { type ColorNameList, getColorNameListInfo } from '../../color/colorName';
@@ -46,7 +49,8 @@
 		hsl: { h: 'Farbton (Hue)', s: 'Sättigung', l: 'Helligkeit (Lightness)' },
 		oklab: { l: 'Helligkeit (Lightness)', a: 'Farbwert A', b: 'Farbwert B' },
 		xyz: { x: 'X', y: 'Y', z: 'Z' },
-	} as const;
+		cielab: { l: 'Helligkeit (Lightness)', a: 'Farbwert A', b: 'Farbwert B' },
+	} as const satisfies Record<ColorSpace, {}>;
 
 	$: proxies = {
 		rgb: modalColor.proxy(RgbColor),
@@ -56,7 +60,8 @@
 		lrgb: modalColor.proxy(LinearRgbColor),
 		cmy: modalColor.proxy(CmyColor),
 		xyz: modalColor.proxy(XyzColor),
-	} as const;
+		cielab: modalColor.proxy(CielabColor),
+	} as const satisfies Record<ColorSpace, {}>;
 
 	$: colorMetadata = modalColor.name(colorNameList);
 
@@ -441,6 +446,44 @@
 								space="xyz"
 								compX="x"
 								compY="y"
+								color={modalColor}
+							/>
+						</div>
+					</div>
+				</div>
+			</TabItem>
+			<TabItem open={space == 'cielab'} class="w-full" on:click={() => (space = 'cielab')}>
+				<div class="text-xl" slot="title">CIELAB</div>
+				<div class="flex flex-row justify-between gap-8 h-full">
+					<div class="stretch w-full">
+						{#each proxies.cielab.components() as comp (comp)}
+							<div class="h-10 mt-4 flex flex-row gap-4">
+								<GradientRange
+									bind:value={proxies.cielab[comp]}
+									space="cielab"
+									{comp}
+									color={modalColor}
+								/>
+								{#key proxies.cielab[comp]}
+									<NumericMappedInput
+										on:set={(n) => (proxies.cielab[comp] = n.detail)}
+										bind:value={proxies.cielab[comp]}
+										mapDisplay={(n) => Math.round(n * 100)}
+										mapValue={(n) => n / 100}
+									/>
+								{/key}
+							</div>
+							<div>{compNames.cielab[comp]} = {Math.round(proxies.cielab[comp] * 100)}%</div>
+						{/each}
+					</div>
+					<div>
+						<div class="h-64 w-64">
+							<GradientDiagram
+								bind:valueX={proxies.cielab.a}
+								bind:valueY={proxies.cielab.b}
+								space="cielab"
+								compX="a"
+								compY="b"
 								color={modalColor}
 							/>
 						</div>

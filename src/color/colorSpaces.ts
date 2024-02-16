@@ -19,8 +19,10 @@ export abstract class AbstractColor<
 > {
 	abstract color(): Color;
 	point(): Point3 {
-		const values = this.values();
-		return new Point3(values[0], values[1], values[2]);
+		const xyzComponents = this.xyzComponents();
+		if (xyzComponents.some(c => c == null)) return new Point3(this.values()[0], this.values()[1], this.values()[2]);
+		const [x,y,z] = xyzComponents.map(key => this.get(key!));
+		return new Point3(x, y, z);
 	}
 	abstract components(): Component[];
 	xyzComponents(): [Component | null, Component | null, Component | null] {
@@ -566,6 +568,94 @@ export class XyzColor extends AbstractColor<XyzColor, XyzComponent> {
 	}
 }
 
+export class CielabColor extends AbstractColor<CielabColor, LabComponent> {
+	l: number;
+	a: number;
+	b: number;
+
+	static κ = 24389/27;
+	static ϵ = 216/24389;
+	static d65 = [0.9504, 1, 1.0888];
+
+	constructor(l: number, a: number, b: number) {
+		super();
+		this.l = l;
+		this.a = a;
+		this.b = b;
+	}
+
+	static fromRgb(r: number, g: number, b: number): CielabColor {
+		const { κ, ϵ, d65: [Xr, Yr, Zr] } = CielabColor;
+		const xyz = XyzColor.fromRgb(r, g, b);
+		const [xr, yr, zr] = [xyz.x / Xr, xyz.y / Yr, xyz.z / Zr];
+		const [fx, fy, fz] = [
+			xr > ϵ ? Math.cbrt(xr) : (κ * xr + 16) / 116,
+			yr > ϵ ? Math.cbrt(yr) : (κ * yr + 16) / 116,
+			zr > ϵ ? Math.cbrt(zr) : (κ * zr + 16) / 116,
+		];
+		const [l, valueA, valueB] = [
+			116 * fy - 16,
+			500 * (fx - fy),
+			200 * (fy - fz),
+		]
+		const [normalL, normalA, normalB] = [
+			rangeMap(l, [0, 120], [0, 1]),
+			rangeMap(valueA, [-100, 100], [0, 1]),
+			rangeMap(valueB, [-100, 100], [0, 1]),
+		];
+		return new CielabColor(normalL, normalA, normalB);
+	}
+
+	color(): Color {
+		const { l: normalL, a: normalA, b: normalB } = this;
+		const [l, a, b] = [
+			rangeMap(normalL, [0, 1], [0, 120]),
+			rangeMap(normalA, [0, 1], [-100, 100]),
+			rangeMap(normalB, [0, 1], [-100, 100]),
+		];
+		const { κ, ϵ, d65: [Xr, Yr, Zr] } = CielabColor;
+		const fy = (l + 16) / 116;
+		const fz = fy - b / 200;
+		const fx = a / 500 + fy;
+		const [xr, yr, zr] = [
+			Math.pow(fx, 3) > ϵ ? Math.pow(fx, 3) : (116 * fx - 16) / κ,
+			l > κ * ϵ ? Math.pow((l + 16) / 116, 3) : l / κ,
+			Math.pow(fz, 3) > ϵ ? Math.pow(fz, 3) : (116 * fx - 16) / κ,
+		]
+		const [x, y, z] = [ xr * Xr, yr * Yr, zr * Zr ];
+		return new XyzColor(x, y, z).color();
+	}
+
+	clone(): CielabColor {
+		return new CielabColor(this.l, this.a, this.b);
+	}
+
+	with(key: 'l' | 'a' | 'b', value: number): CielabColor {
+		let c = this.clone();
+		c[key] = value;
+		return c;
+	}
+
+	get(key: 'l' | 'a' | 'b'): number {
+		return this[key];
+	}
+
+	xyzComponents(): ['a', 'l', 'b'] {
+		return ['a', 'l', 'b'];
+	}
+
+	components(): ('b' | 'l' | 'a')[] {
+		return ['l','a','b'];
+	}
+
+	neededGradientPoints(_key: 'b' | 'l' | 'a'): number {
+		return 20;
+	}
+	gradientTexture(key: 'b' | 'l' | 'a'): HTMLCanvasElement {
+		return linearGradient(new CielabColor(0.5, 0.0, 0.0), key);
+	}
+}
+
 export class LinearRgbColor extends AbstractColor<LinearRgbColor, RgbComponent> {
 	r: number;
 	g: number;
@@ -664,7 +754,7 @@ export class CmyColor extends AbstractColor<CmyColor, CmyComponent> {
 	}
 }
 
-export const colorSpaces = ['rgb', 'hsv', 'hsl', 'oklab', 'lrgb', 'cmy', 'xyz'] as const;
+export const colorSpaces = ['rgb', 'hsv', 'hsl', 'oklab', 'lrgb', 'cmy', 'xyz', 'cielab'] as const;
 
 export type ColorSpace = (typeof colorSpaces)[number];
 
@@ -676,4 +766,5 @@ export const colorSpaceClasses = {
 	lrgb: LinearRgbColor,
 	cmy: CmyColor,
 	xyz: XyzColor,
-} as const;
+	cielab: CielabColor,
+}  as const satisfies Record<ColorSpace, {}>;

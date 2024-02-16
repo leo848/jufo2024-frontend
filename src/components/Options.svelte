@@ -116,8 +116,8 @@
 				icon={Icon.PalleteSolid}
 				title="Farbraum"
 				bind:value={colorSpace}
-				options={['rgb', 'lrgb', 'cmy', 'hsv', 'hsl', 'oklab', 'xyz']}
-				optionNames={['RGB', 'lRGB', 'CMY', 'HSV', 'HSL', 'OKLAB', 'XYZ']}
+				options={['rgb', 'lrgb', 'cmy', 'hsv', 'hsl', 'oklab', 'xyz', 'cielab' ]}
+				optionNames={['RGB', 'lRGB', 'CMY', 'HSV', 'HSL', 'OKLAB', 'XYZ', 'CIELAB' ]}
 				{invalidate}
 			/>
 			<div class="flex flex-row flex-wrap gap-4 mt-4">
