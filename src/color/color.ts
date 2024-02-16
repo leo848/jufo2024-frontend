@@ -161,6 +161,11 @@ export const oklabComponentSchema = z.enum(['l', 'a', 'b']);
 export type LabComponent = z.infer<typeof oklabComponentSchema>;
 export const cmyComponentSchema = z.enum(['c', 'm', 'y']);
 export type CmyComponent = z.infer<typeof cmyComponentSchema>;
-export const xyzComponentSchema = z.enum(['x','y','z']);
+export const xyzComponentSchema = z.enum(['x', 'y', 'z']);
 export type XyzComponent = z.infer<typeof xyzComponentSchema>;
-export type ColorComponent = RgbComponent | HsvComponent | LabComponent | CmyComponent | XyzComponent;
+export type ColorComponent =
+	| RgbComponent
+	| HsvComponent
+	| LabComponent
+	| CmyComponent
+	| XyzComponent;

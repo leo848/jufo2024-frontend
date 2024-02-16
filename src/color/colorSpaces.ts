@@ -20,8 +20,9 @@ export abstract class AbstractColor<
 	abstract color(): Color;
 	point(): Point3 {
 		const xyzComponents = this.xyzComponents();
-		if (xyzComponents.some(c => c == null)) return new Point3(this.values()[0], this.values()[1], this.values()[2]);
-		const [x,y,z] = xyzComponents.map(key => this.get(key!));
+		if (xyzComponents.some((c) => c == null))
+			return new Point3(this.values()[0], this.values()[1], this.values()[2]);
+		const [x, y, z] = xyzComponents.map((key) => this.get(key!));
 		return new Point3(x, y, z);
 	}
 	abstract components(): Component[];
@@ -542,7 +543,7 @@ export class XyzColor extends AbstractColor<XyzColor, XyzComponent> {
 	}
 
 	components(): ('x' | 'y' | 'z')[] {
-		return [ 'x','y','z'];
+		return ['x', 'y', 'z'];
 	}
 
 	get(key: 'x' | 'y' | 'z'): number {
@@ -573,8 +574,8 @@ export class CielabColor extends AbstractColor<CielabColor, LabComponent> {
 	a: number;
 	b: number;
 
-	static κ = 24389/27;
-	static ϵ = 216/24389;
+	static κ = 24389 / 27;
+	static ϵ = 216 / 24389;
 	static d65 = [0.9504, 1, 1.0888];
 
 	constructor(l: number, a: number, b: number) {
@@ -585,23 +586,23 @@ export class CielabColor extends AbstractColor<CielabColor, LabComponent> {
 	}
 
 	static fromRgb(r: number, g: number, b: number): CielabColor {
-		const { κ, ϵ, d65: [Xr, Yr, Zr] } = CielabColor;
+		const {
+			κ,
+			ϵ,
+			d65: [Xr, Yr, Zr]
+		} = CielabColor;
 		const xyz = XyzColor.fromRgb(r, g, b);
 		const [xr, yr, zr] = [xyz.x / Xr, xyz.y / Yr, xyz.z / Zr];
 		const [fx, fy, fz] = [
 			xr > ϵ ? Math.cbrt(xr) : (κ * xr + 16) / 116,
 			yr > ϵ ? Math.cbrt(yr) : (κ * yr + 16) / 116,
-			zr > ϵ ? Math.cbrt(zr) : (κ * zr + 16) / 116,
+			zr > ϵ ? Math.cbrt(zr) : (κ * zr + 16) / 116
 		];
-		const [l, valueA, valueB] = [
-			116 * fy - 16,
-			500 * (fx - fy),
-			200 * (fy - fz),
-		]
+		const [l, valueA, valueB] = [116 * fy - 16, 500 * (fx - fy), 200 * (fy - fz)];
 		const [normalL, normalA, normalB] = [
 			rangeMap(l, [0, 120], [0, 1]),
 			rangeMap(valueA, [-100, 100], [0, 1]),
-			rangeMap(valueB, [-100, 100], [0, 1]),
+			rangeMap(valueB, [-100, 100], [0, 1])
 		];
 		return new CielabColor(normalL, normalA, normalB);
 	}
@@ -611,18 +612,22 @@ export class CielabColor extends AbstractColor<CielabColor, LabComponent> {
 		const [l, a, b] = [
 			rangeMap(normalL, [0, 1], [0, 120]),
 			rangeMap(normalA, [0, 1], [-100, 100]),
-			rangeMap(normalB, [0, 1], [-100, 100]),
+			rangeMap(normalB, [0, 1], [-100, 100])
 		];
-		const { κ, ϵ, d65: [Xr, Yr, Zr] } = CielabColor;
+		const {
+			κ,
+			ϵ,
+			d65: [Xr, Yr, Zr]
+		} = CielabColor;
 		const fy = (l + 16) / 116;
 		const fz = fy - b / 200;
 		const fx = a / 500 + fy;
 		const [xr, yr, zr] = [
 			Math.pow(fx, 3) > ϵ ? Math.pow(fx, 3) : (116 * fx - 16) / κ,
 			l > κ * ϵ ? Math.pow((l + 16) / 116, 3) : l / κ,
-			Math.pow(fz, 3) > ϵ ? Math.pow(fz, 3) : (116 * fx - 16) / κ,
-		]
-		const [x, y, z] = [ xr * Xr, yr * Yr, zr * Zr ];
+			Math.pow(fz, 3) > ϵ ? Math.pow(fz, 3) : (116 * fx - 16) / κ
+		];
+		const [x, y, z] = [xr * Xr, yr * Yr, zr * Zr];
 		return new XyzColor(x, y, z).color();
 	}
 
@@ -645,7 +650,7 @@ export class CielabColor extends AbstractColor<CielabColor, LabComponent> {
 	}
 
 	components(): ('b' | 'l' | 'a')[] {
-		return ['l','a','b'];
+		return ['l', 'a', 'b'];
 	}
 
 	neededGradientPoints(_key: 'b' | 'l' | 'a'): number {
@@ -766,5 +771,5 @@ export const colorSpaceClasses = {
 	lrgb: LinearRgbColor,
 	cmy: CmyColor,
 	xyz: XyzColor,
-	cielab: CielabColor,
-}  as const satisfies Record<ColorSpace, {}>;
+	cielab: CielabColor
+} as const satisfies Record<ColorSpace, {}>;

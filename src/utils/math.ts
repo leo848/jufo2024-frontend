@@ -22,11 +22,9 @@ export function lerp([start, stop]: [number, number], t: number) {
 }
 
 export function matrixVectorMultiplication(matrix: number[][], vector: number[]): number[] {
-    if (matrix[0].length !== vector.length) {
-        throw new Error("Matrix columns must match the vector length for multiplication.");
-    }
+	if (matrix[0].length !== vector.length) {
+		throw new Error('Matrix columns must match the vector length for multiplication.');
+	}
 
-    return matrix.map(row =>
-        row.reduce((acc, value, index) => acc + value * vector[index], 0)
-    );
+	return matrix.map((row) => row.reduce((acc, value, index) => acc + value * vector[index], 0));
 }

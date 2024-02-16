@@ -10,12 +10,8 @@
 		LinearRgbColor,
 		CmyColor,
 		type ColorSpace,
-
 		XyzColor,
-
 		CielabColor
-
-
 	} from '../../color/colorSpaces';
 	import { type ColorNameList, getColorNameListInfo } from '../../color/colorName';
 	import GradientRange from './GradientRange.svelte';
@@ -49,7 +45,7 @@
 		hsl: { h: 'Farbton (Hue)', s: 'Sättigung', l: 'Helligkeit (Lightness)' },
 		oklab: { l: 'Helligkeit (Lightness)', a: 'Farbwert A', b: 'Farbwert B' },
 		xyz: { x: 'X', y: 'Y', z: 'Z' },
-		cielab: { l: 'Helligkeit (Lightness)', a: 'Farbwert A', b: 'Farbwert B' },
+		cielab: { l: 'Helligkeit (Lightness)', a: 'Farbwert A', b: 'Farbwert B' }
 	} as const satisfies Record<ColorSpace, {}>;
 
 	$: proxies = {
@@ -60,7 +56,7 @@
 		lrgb: modalColor.proxy(LinearRgbColor),
 		cmy: modalColor.proxy(CmyColor),
 		xyz: modalColor.proxy(XyzColor),
-		cielab: modalColor.proxy(CielabColor),
+		cielab: modalColor.proxy(CielabColor)
 	} as const satisfies Record<ColorSpace, {}>;
 
 	$: colorMetadata = modalColor.name(colorNameList);
