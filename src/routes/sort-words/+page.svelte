@@ -11,13 +11,16 @@
 	import AdjacencyMatrix from '../../components/AdjacencyMatrix.svelte';
 	import { adjacencyMatrix } from '../../graph/adjacency';
 	import { flip } from 'svelte/animate';
+	import { goto } from '$app/navigation';
+	import { page } from '$app/stores';
 	import { gradient } from '../../ui/color';
 	import { RgbColor } from '../../color/colorSpaces';
 	import type { Color } from '../../color/color';
 	import Options from '../../components/Options.svelte';
 	import PathAlgorithms from '../../components/PathAlgorithms.svelte';
-	import { onDestroy } from 'svelte';
+	import { onDestroy, onMount } from 'svelte';
 	import PathProperties from '../../components/PathProperties.svelte';
+	import { fromUrlString, toUrlString } from './url';
 
 	title.set('Wörter sortieren');
 
@@ -41,6 +44,30 @@
 	let inputElement: HTMLInputElement;
 
 	let invalidateAlgorithms: () => void;
+
+	let queryString = $page.url.searchParams.get('v');
+	onMount(() => {
+		if (queryString == null) return;
+		let newData = fromUrlString(queryString);
+		if (newData == null || newData.every(w => w.length === 0)) return;
+		newData.forEach((string, idx) => {
+			setTimeout(() => {
+				sendWebsocket({
+					type: 'wordToVec',
+					word: string
+				});
+			}, idx * 10 + 100);
+		})
+	});
+
+	$: {
+		$page.url.searchParams.set('v', toUrlString(words.map(w => w.inner)));
+		goto(`?${$page.url.searchParams.toString()}`, {
+			keepFocus: true,
+			replaceState: true,
+			noScroll: true
+		});
+	}
 
 	async function addInput() {
 		if (input.length === 0 || inputLoading) {
