@@ -438,9 +438,9 @@
 							<GradientDiagram
 								bind:valueX={proxies.xyz.x}
 								bind:valueY={proxies.xyz.y}
-								space="oklab"
-								compX="a"
-								compY="b"
+								space="xyz"
+								compX="x"
+								compY="y"
 								color={modalColor}
 							/>
 						</div>
