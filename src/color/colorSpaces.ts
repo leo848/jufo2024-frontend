@@ -509,9 +509,9 @@ export class XyzColor extends AbstractColor<XyzColor, XyzComponent> {
 
 	constructor(x: number, y: number, z: number) {
 		super();
-		this.x = constrain(x);
-		this.y = constrain(y);
-		this.z = constrain(z);
+		this.x = x;
+		this.y = y;
+		this.z = z;
 	}
 
 	static fromRgb(gammaR: number, gammaG: number, gammaB: number): XyzColor {

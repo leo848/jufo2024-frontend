@@ -22,6 +22,7 @@
 	import ColorNameListPopover from './ColorNameListPopover.svelte';
 	import { ExclamationCircleOutline } from 'flowbite-svelte-icons';
 	import WarningGamutPopover from './WarningGamutPopover.svelte';
+	import { rangeMap } from '../../utils/math';
 
 	export let value: Color;
 	// export const open = () => (modal = true);
@@ -192,8 +193,9 @@
 									<NumericMappedInput
 										on:set={(n) => (proxies.rgb[comp] = n.detail)}
 										bind:value={proxies.rgb[comp]}
-										mapDisplay={(n) => Math.round(n * 100)}
-										mapValue={(n) => n / 100}
+										mapDisplay={(n) => Math.round(n * 255)}
+										mapValue={(n) => n / 255}
+										max={255}
 									/>
 								{/key}
 							</div>
@@ -238,6 +240,7 @@
 										bind:value={proxies.lrgb[comp]}
 										mapDisplay={(n) => Math.round(n * 100)}
 										mapValue={(n) => n / 100}
+										percentage
 									/>
 								{/key}
 							</div>
@@ -276,6 +279,7 @@
 										bind:value={proxies.cmy[comp]}
 										mapDisplay={(n) => Math.round(n * 100)}
 										mapValue={(n) => n / 100}
+										percentage
 									/>
 								{/key}
 							</div>
@@ -312,8 +316,11 @@
 									<NumericMappedInput
 										on:set={(n) => (proxies.hsv[comp] = n.detail)}
 										bind:value={proxies.hsv[comp]}
-										mapDisplay={(n) => Math.round(n * 100)}
-										mapValue={(n) => n / 100}
+										mapDisplay={(n) => Math.round(n * (comp === 'h' ? 360 : 100))}
+										mapValue={(n) => n / (comp === 'h' ? 360 : 100)}
+										max={comp === 'h' ? 360 : 100}
+										percentage={comp !== 'h'}
+										degrees={comp === 'h'}
 									/>
 								{/key}
 							</div>
@@ -350,8 +357,11 @@
 									<NumericMappedInput
 										on:set={(n) => (proxies.hsl[comp] = n.detail)}
 										bind:value={proxies.hsl[comp]}
-										mapDisplay={(n) => Math.round(n * 100)}
-										mapValue={(n) => n / 100}
+										mapDisplay={(n) => Math.round(n * (comp === 'h' ? 360 : 100))}
+										mapValue={(n) => n / (comp === 'h' ? 360 : 100)}
+										max={comp === 'h' ? 360 : 100}
+										percentage={comp !== 'h'}
+										degrees={comp === 'h'}
 									/>
 								{/key}
 							</div>
@@ -390,6 +400,7 @@
 										bind:value={proxies.oklab[comp]}
 										mapDisplay={(n) => Math.round(n * 100)}
 										mapValue={(n) => n / 100}
+										percentage
 									/>
 								{/key}
 							</div>
@@ -428,6 +439,7 @@
 										bind:value={proxies.xyz[comp]}
 										mapDisplay={(n) => Math.round(n * 100)}
 										mapValue={(n) => n / 100}
+										percentage
 									/>
 								{/key}
 							</div>
@@ -464,8 +476,14 @@
 									<NumericMappedInput
 										on:set={(n) => (proxies.cielab[comp] = n.detail)}
 										bind:value={proxies.cielab[comp]}
-										mapDisplay={(n) => Math.round(n * 100)}
-										mapValue={(n) => n / 100}
+										mapDisplay={(n) =>
+											Math.round(
+												rangeMap(n, [0, 1], [comp === 'l' ? 0 : -100, comp === 'l' ? 120 : 100])
+											)}
+										min={comp === 'l' ? 0 : -100}
+										max={comp === 'l' ? 120 : 100}
+										mapValue={(n) =>
+											rangeMap(n, [comp === 'l' ? 0 : -100, comp === 'l' ? 120 : 100], [0, 1])}
 									/>
 								{/key}
 							</div>
