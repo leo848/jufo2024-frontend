@@ -9,7 +9,10 @@
 		RgbColor,
 		LinearRgbColor,
 		CmyColor,
-		type ColorSpace
+		type ColorSpace,
+
+		XyzColor
+
 	} from '../../color/colorSpaces';
 	import { type ColorNameList, getColorNameListInfo } from '../../color/colorName';
 	import GradientRange from './GradientRange.svelte';
@@ -41,7 +44,8 @@
 		cmy: { c: 'Cyan', m: 'Magenta', y: 'Gelb (Yellow)' },
 		hsv: { h: 'Farbton (Hue)', s: 'Sättigung', v: 'Farbwert' },
 		hsl: { h: 'Farbton (Hue)', s: 'Sättigung', l: 'Helligkeit (Lightness)' },
-		oklab: { l: 'Helligkeit (Lightness)', a: 'Farbwert A', b: 'Farbwert B' }
+		oklab: { l: 'Helligkeit (Lightness)', a: 'Farbwert A', b: 'Farbwert B' },
+		xyz: { x: 'X', y: 'Y', z: 'Z' },
 	} as const;
 
 	$: proxies = {
@@ -50,7 +54,8 @@
 		hsl: modalColor.proxy(HslColor),
 		oklab: modalColor.proxy(OklabColor),
 		lrgb: modalColor.proxy(LinearRgbColor),
-		cmy: modalColor.proxy(CmyColor)
+		cmy: modalColor.proxy(CmyColor),
+		xyz: modalColor.proxy(XyzColor),
 	} as const;
 
 	$: colorMetadata = modalColor.name(colorNameList);
@@ -395,6 +400,44 @@
 							<GradientDiagram
 								bind:valueX={proxies.oklab.a}
 								bind:valueY={proxies.oklab.b}
+								space="oklab"
+								compX="a"
+								compY="b"
+								color={modalColor}
+							/>
+						</div>
+					</div>
+				</div>
+			</TabItem>
+			<TabItem open={space == 'xyz'} class="w-full" on:click={() => (space = 'xyz')}>
+				<div class="text-xl" slot="title">XYZ</div>
+				<div class="flex flex-row justify-between gap-8 h-full">
+					<div class="stretch w-full">
+						{#each proxies.xyz.components() as comp (comp)}
+							<div class="h-10 mt-4 flex flex-row gap-4">
+								<GradientRange
+									bind:value={proxies.xyz[comp]}
+									space="xyz"
+									{comp}
+									color={modalColor}
+								/>
+								{#key proxies.xyz[comp]}
+									<NumericMappedInput
+										on:set={(n) => (proxies.xyz[comp] = n.detail)}
+										bind:value={proxies.xyz[comp]}
+										mapDisplay={(n) => Math.round(n * 100)}
+										mapValue={(n) => n / 100}
+									/>
+								{/key}
+							</div>
+							<div>{compNames.xyz[comp]} = {Math.round(proxies.xyz[comp] * 100)}%</div>
+						{/each}
+					</div>
+					<div>
+						<div class="h-64 w-64">
+							<GradientDiagram
+								bind:valueX={proxies.xyz.x}
+								bind:valueY={proxies.xyz.y}
 								space="oklab"
 								compX="a"
 								compY="b"

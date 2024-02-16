@@ -1,12 +1,13 @@
-import { constrain, rangeMap } from '../utils/math';
+import { constrain, matrixVectorMultiplication, rangeMap } from '../utils/math';
 import {
 	Color,
 	type ColorComponent,
 	type CmyComponent,
 	type HsvComponent,
-	type OklabComponent,
+	type LabComponent,
 	type RgbComponent,
-	type HslComponent
+	type HslComponent,
+	type XyzComponent
 } from './color';
 import { linearGradient } from './gradient';
 import { toGamma, toLinear } from './linearity';
@@ -390,7 +391,7 @@ export class HslColor extends AbstractColor<HslColor, HslComponent> {
 	}
 }
 
-export class OklabColor extends AbstractColor<OklabColor, OklabComponent> {
+export class OklabColor extends AbstractColor<OklabColor, LabComponent> {
 	l: number;
 	a: number;
 	b: number;
@@ -463,7 +464,7 @@ export class OklabColor extends AbstractColor<OklabColor, OklabComponent> {
 		return `oklab(${l}% <span style="${aStyle}">${a}</span> <span style="${bStyle}">${b}</span>)`;
 	}
 
-	with(comp: OklabComponent, value: number): OklabColor {
+	with(comp: LabComponent, value: number): OklabColor {
 		const color = this.clone();
 		color[comp] = value;
 		return color;
@@ -495,6 +496,73 @@ export class OklabColor extends AbstractColor<OklabColor, OklabComponent> {
 			this.a + (other.a - this.a) * t,
 			this.b + (other.b - this.b) * t
 		);
+	}
+}
+
+export class XyzColor extends AbstractColor<XyzColor, XyzComponent> {
+	x: number;
+	y: number;
+	z: number;
+
+	constructor(x: number, y: number, z: number) {
+		super();
+		this.x = constrain(x);
+		this.y = constrain(y);
+		this.z = constrain(z);
+	}
+
+	static fromRgb(gammaR: number, gammaG: number, gammaB: number): XyzColor {
+		const { r, g, b } = LinearRgbColor.fromRgb(gammaR, gammaG, gammaB);
+
+		const matrix = [
+			[0.4124564, 0.3575761, 0.1804375],
+			[0.2126729, 0.7151522, 0.072175],
+			[0.0193339, 0.119192, 0.9503041]
+		];
+
+		const [x, y, z] = matrixVectorMultiplication(matrix, [r, g, b]);
+
+		return new XyzColor(x, y, z);
+	}
+
+	color(): Color {
+		const { x, y, z } = this;
+
+		const invMatrix = [
+			[3.2404542, -1.5371385, -0.4985314],
+			[-0.969266, 1.8760108, 0.041556],
+			[0.0556434, -0.2040259, 1.0572252]
+		];
+
+		const [r, g, b] = matrixVectorMultiplication(invMatrix, [x, y, z]);
+
+		return new LinearRgbColor(r, g, b).color();
+	}
+
+	components(): ('x' | 'y' | 'z')[] {
+		return [ 'x','y','z'];
+	}
+
+	get(key: 'x' | 'y' | 'z'): number {
+		return this[key];
+	}
+
+	with(key: 'x' | 'y' | 'z', value: number): XyzColor {
+		const c = this.clone();
+		c[key] = value;
+		return c;
+	}
+
+	clone(): XyzColor {
+		return new XyzColor(this.x, this.y, this.z);
+	}
+
+	neededGradientPoints(_key: 'y' | 'x' | 'z'): number {
+		return 20;
+	}
+
+	gradientTexture(key: 'y' | 'x' | 'z'): HTMLCanvasElement {
+		return linearGradient(new XyzColor(0.5, 0.5, 0.5), key);
 	}
 }
 
@@ -596,7 +664,7 @@ export class CmyColor extends AbstractColor<CmyColor, CmyComponent> {
 	}
 }
 
-export const colorSpaces = ['rgb', 'hsv', 'hsl', 'oklab', 'lrgb', 'cmy'] as const;
+export const colorSpaces = ['rgb', 'hsv', 'hsl', 'oklab', 'lrgb', 'cmy', 'xyz'] as const;
 
 export type ColorSpace = (typeof colorSpaces)[number];
 
@@ -606,5 +674,6 @@ export const colorSpaceClasses = {
 	hsl: HslColor,
 	oklab: OklabColor,
 	lrgb: LinearRgbColor,
-	cmy: CmyColor
+	cmy: CmyColor,
+	xyz: XyzColor,
 } as const;
