@@ -30,7 +30,7 @@
 	export let defaultSpace: ColorSpace = 'rgb';
 	let space: ColorSpace = defaultSpace;
 
-	export let defaultColorNameList: ColorNameList = 'default';
+	export let defaultColorNameList: ColorNameList = 'german';
 	let colorNameList = defaultColorNameList;
 
 	export let valid: (color: Color) => boolean = () => true;

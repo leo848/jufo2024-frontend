@@ -63,7 +63,7 @@ const books = {
 	).map(([name, r, g, b]) => {
 		const rgb = new RgbColor(r / 255, g / 255, b / 255);
 		return NamedColor.fromColor(rgb.color(), name);
-	})
+	}).toSorted(() => Math.random() - 0.5)
 };
 
 const booksDark = {
@@ -337,14 +337,17 @@ const presets = {
 				['115 Polish Purple', 194, 76, 158],
 				['420 Red', 204, 14, 12],
 				['110 White', 242, 242, 242],
-				['320 Pink', 255, 94, 180],
+				// ['320 Pink', 255, 94, 180],
 				['160 Pearl-Orange', 255, 154, 145],
 				['235 Polish lilac', 224, 173, 222],
 				['400 Taupe', 184, 174, 171]
 			] satisfies [string, number, number, number][]
 		).map(([name, r, g, b]) =>
 			NamedColor.fromColor(new RgbColor(r / 255, g / 255, b / 255).color(), name)
-		)
+		).toSorted((c1, c2) => {
+			let [h1, h2] = [c1, c2].map(c => c.hsv().h);
+			return h1 - h2;
+		})
 	}
 } satisfies Partial<Record<string, { name: string; colors: Color[] }>>;
 

@@ -50,7 +50,6 @@
 		</button>
 	</div>
 	<input
-		in:scale
 		class="w-14 px-2 text-xl text-white bg-gray-700 border-none rounded-r-md overflow-hidden text-center border-l-4 border-gray-500"
 		{max}
 		{min}

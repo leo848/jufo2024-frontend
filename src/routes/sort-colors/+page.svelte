@@ -26,15 +26,13 @@
 	import Options from '../../components/Options.svelte';
 	import presets from '../../color/presets';
 	import LoadColor from './LoadColor.svelte';
-	import OptionsButton from '../../components/OptionsButton.svelte';
 	import CopyButton from '../../components/CopyButton.svelte';
 
-	title.set('Farben sortieren');
+	title.set("Farben sortieren");
 
 	let space: ColorSpace = 'rgb';
 
-	// let colors = new Array(40).fill(null).map(() => new RgbColor(Math.random(), Math.random(), Math.random()).color()); // random
-	let colors: Color[] = presets.books.colors;
+	let colors: Color[] = presets.nailpolish.colors;
 	let colorsLocked = false;
 	let invalidate: <T>(callback: (t: T) => void) => (t: T) => void;
 	let colorsAnim = true;
