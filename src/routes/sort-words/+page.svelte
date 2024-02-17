@@ -11,15 +11,18 @@
 	import AdjacencyMatrix from '../../components/AdjacencyMatrix.svelte';
 	import { adjacencyMatrix } from '../../graph/adjacency';
 	import { flip } from 'svelte/animate';
+	import { goto } from '$app/navigation';
+	import { page } from '$app/stores';
 	import { gradient } from '../../ui/color';
 	import { RgbColor } from '../../color/colorSpaces';
 	import type { Color } from '../../color/color';
 	import Options from '../../components/Options.svelte';
 	import PathAlgorithms from '../../components/PathAlgorithms.svelte';
-	import { onDestroy } from 'svelte';
+	import { onDestroy, onMount } from 'svelte';
 	import PathProperties from '../../components/PathProperties.svelte';
 	import ForceDirectedGraphOptions from '../../components/ForceDirectedGraphOptions.svelte';
 	import ForceDirectedGraph from '../../components/ForceDirectedGraph.svelte';
+	import { fromUrlString, toUrlString } from './url';
 
 	title.set('Wörter sortieren');
 
@@ -36,7 +39,7 @@
 
 	let input: string = '';
 	let inputLoading = false;
-	let inputError: null | { type: 'unknown' | 'present'; word: string } = null;
+	let inputError: null | { type: 'unknown' | 'present' | 'unsupported'; word: string } = null;
 	let unknownWords = new Set<string>();
 	let knownWords = new Set<string>();
 	$: input, (inputError = null);
@@ -51,6 +54,30 @@
 	let fdgActions: {
 		freeze(): void;
 	};
+
+	let queryString = $page.url.searchParams.get('v');
+	onMount(() => {
+		if (queryString == null) return;
+		let newData = fromUrlString(queryString);
+		if (newData == null || newData.every(w => w.length === 0)) return;
+		newData.forEach((string, idx) => {
+			setTimeout(() => {
+				sendWebsocket({
+					type: 'wordToVec',
+					word: string
+				});
+			}, idx * 10 + 100);
+		})
+	});
+
+	$: {
+		$page.url.searchParams.set('v', toUrlString(words.map(w => w.inner)));
+		goto(`?${$page.url.searchParams.toString()}`, {
+			keepFocus: true,
+			replaceState: true,
+			noScroll: true
+		});
+	}
 
 	async function addInput() {
 		if (input.length === 0 || inputLoading) {
@@ -110,9 +137,12 @@
 	callbacks[0] = registerCallback(serverOutputWordToVec, (evt) => {
 		inputLoading = false;
 
-		if (evt.result.type === 'unsupported') return;
-
 		const word = evt.word;
+
+		if (evt.result.type === 'unsupported') {
+			inputError = { type : "unsupported", word }
+			return;
+		}
 
 		if (evt.result.type === 'unknownWord') {
 			input = word;
@@ -163,6 +193,7 @@
 						placeholder="Gib ein deutsches Wort ein..."
 						bind:value={input}
 						bind:this={inputElement}
+						disabled={inputError && inputError.type === "unsupported"}
 					/>
 					<button
 						class={`bg-gray-600 hover:bg-gray-500 text-white p-4 rounded-full`}
@@ -173,14 +204,20 @@
 					</button>
 				</div>
 				{#if inputError}
-					<div>
-						{#if inputError.type === 'unknown'}
-							Unbekanntes Wort:
-						{:else}
-							Bereits eingegeben:
-						{/if}
-						&nbsp;<b>{inputError.word}</b>
-					</div>
+					{#if inputError.type === 'unsupported'}
+						<div>Worteinbettung von Server nicht unterstützt<br>
+							<a href="/" class="text-white underline text-xl">Zurück zur Startseite</a>
+						</div>
+					{:else}
+						<div>
+							{#if inputError.type === 'unknown'}
+								Unbekanntes Wort:
+							{:else if inputError.type === 'present'}
+								Bereits eingegeben:
+							{/if}
+							&nbsp;<b>{inputError.word}</b>
+						</div>
+					{/if}
 				{/if}
 			</form>
 			{#each words as word, trueIndex (word.inner)}
@@ -230,7 +267,6 @@
 	</Window>
 
 	<PathProperties length={words.length} path={words.map((w) => w.vec)} norm="cosine" xlCol={4} />
-
 	<Window title="Ansicht des Graphen (FDGD)" options xlCol={5}>
 		<ForceDirectedGraphOptions slot="options" bind:options={fdgOptions} actions={fdgActions} />
 		<div class="h-full m-0 min-h-[420px]">

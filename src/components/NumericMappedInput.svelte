@@ -11,6 +11,9 @@
 	export let min = 0;
 	export let step = 1;
 
+	export let percentage = false;
+	export let degrees = false;
+
 	// $: displayValue = mapDisplay(value);
 	let displayValue: number = mapDisplay(value);
 
@@ -58,9 +61,16 @@
 		bind:value={displayValue}
 		on:change={setValue}
 	/>
-	<div class="pl-2 text-2xl text-center justify-center flex flex-col text-gray-200">
-		<div>%</div>
-	</div>
+	{#if percentage}
+		<div class="w-8 pl-2 text-2xl text-center justify-center flex flex-col text-gray-200">
+			<div>%</div>
+		</div>
+	{/if}
+	{#if degrees}
+		<div class="w-8 pl-2 text-2xl text-center justify-center flex flex-col text-gray-200">
+			<div>°</div>
+		</div>
+	{/if}
 </div>
 
 <style>

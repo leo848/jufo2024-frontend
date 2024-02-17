@@ -9,7 +9,9 @@
 		RgbColor,
 		LinearRgbColor,
 		CmyColor,
-		type ColorSpace
+		type ColorSpace,
+		XyzColor,
+		CielabColor
 	} from '../../color/colorSpaces';
 	import { type ColorNameList, getColorNameListInfo } from '../../color/colorName';
 	import GradientRange from './GradientRange.svelte';
@@ -20,6 +22,7 @@
 	import ColorNameListPopover from './ColorNameListPopover.svelte';
 	import { ExclamationCircleOutline } from 'flowbite-svelte-icons';
 	import WarningGamutPopover from './WarningGamutPopover.svelte';
+	import { rangeMap } from '../../utils/math';
 
 	export let value: Color;
 	// export const open = () => (modal = true);
@@ -41,8 +44,10 @@
 		cmy: { c: 'Cyan', m: 'Magenta', y: 'Gelb (Yellow)' },
 		hsv: { h: 'Farbton (Hue)', s: 'Sättigung', v: 'Farbwert' },
 		hsl: { h: 'Farbton (Hue)', s: 'Sättigung', l: 'Helligkeit (Lightness)' },
-		oklab: { l: 'Helligkeit (Lightness)', a: 'Farbwert A', b: 'Farbwert B' }
-	} as const;
+		oklab: { l: 'Helligkeit (Lightness)', a: 'Farbwert A', b: 'Farbwert B' },
+		xyz: { x: 'X', y: 'Y', z: 'Z' },
+		cielab: { l: 'Helligkeit (Lightness)', a: 'Farbwert A', b: 'Farbwert B' }
+	} as const satisfies Record<ColorSpace, {}>;
 
 	$: proxies = {
 		rgb: modalColor.proxy(RgbColor),
@@ -50,8 +55,10 @@
 		hsl: modalColor.proxy(HslColor),
 		oklab: modalColor.proxy(OklabColor),
 		lrgb: modalColor.proxy(LinearRgbColor),
-		cmy: modalColor.proxy(CmyColor)
-	} as const;
+		cmy: modalColor.proxy(CmyColor),
+		xyz: modalColor.proxy(XyzColor),
+		cielab: modalColor.proxy(CielabColor)
+	} as const satisfies Record<ColorSpace, {}>;
 
 	$: colorMetadata = modalColor.name(colorNameList);
 
@@ -186,8 +193,9 @@
 									<NumericMappedInput
 										on:set={(n) => (proxies.rgb[comp] = n.detail)}
 										bind:value={proxies.rgb[comp]}
-										mapDisplay={(n) => Math.round(n * 100)}
-										mapValue={(n) => n / 100}
+										mapDisplay={(n) => Math.round(n * 255)}
+										mapValue={(n) => n / 255}
+										max={255}
 									/>
 								{/key}
 							</div>
@@ -232,6 +240,7 @@
 										bind:value={proxies.lrgb[comp]}
 										mapDisplay={(n) => Math.round(n * 100)}
 										mapValue={(n) => n / 100}
+										percentage
 									/>
 								{/key}
 							</div>
@@ -270,6 +279,7 @@
 										bind:value={proxies.cmy[comp]}
 										mapDisplay={(n) => Math.round(n * 100)}
 										mapValue={(n) => n / 100}
+										percentage
 									/>
 								{/key}
 							</div>
@@ -306,8 +316,11 @@
 									<NumericMappedInput
 										on:set={(n) => (proxies.hsv[comp] = n.detail)}
 										bind:value={proxies.hsv[comp]}
-										mapDisplay={(n) => Math.round(n * 100)}
-										mapValue={(n) => n / 100}
+										mapDisplay={(n) => Math.round(n * (comp === 'h' ? 360 : 100))}
+										mapValue={(n) => n / (comp === 'h' ? 360 : 100)}
+										max={comp === 'h' ? 360 : 100}
+										percentage={comp !== 'h'}
+										degrees={comp === 'h'}
 									/>
 								{/key}
 							</div>
@@ -344,8 +357,11 @@
 									<NumericMappedInput
 										on:set={(n) => (proxies.hsl[comp] = n.detail)}
 										bind:value={proxies.hsl[comp]}
-										mapDisplay={(n) => Math.round(n * 100)}
-										mapValue={(n) => n / 100}
+										mapDisplay={(n) => Math.round(n * (comp === 'h' ? 360 : 100))}
+										mapValue={(n) => n / (comp === 'h' ? 360 : 100)}
+										max={comp === 'h' ? 360 : 100}
+										percentage={comp !== 'h'}
+										degrees={comp === 'h'}
 									/>
 								{/key}
 							</div>
@@ -384,6 +400,7 @@
 										bind:value={proxies.oklab[comp]}
 										mapDisplay={(n) => Math.round(n * 100)}
 										mapValue={(n) => n / 100}
+										percentage
 									/>
 								{/key}
 							</div>
@@ -396,6 +413,89 @@
 								bind:valueX={proxies.oklab.a}
 								bind:valueY={proxies.oklab.b}
 								space="oklab"
+								compX="a"
+								compY="b"
+								color={modalColor}
+							/>
+						</div>
+					</div>
+				</div>
+			</TabItem>
+			<TabItem open={space == 'xyz'} class="w-full" on:click={() => (space = 'xyz')}>
+				<div class="text-xl" slot="title">XYZ</div>
+				<div class="flex flex-row justify-between gap-8 h-full">
+					<div class="stretch w-full">
+						{#each proxies.xyz.components() as comp (comp)}
+							<div class="h-10 mt-4 flex flex-row gap-4">
+								<GradientRange
+									bind:value={proxies.xyz[comp]}
+									space="xyz"
+									{comp}
+									color={modalColor}
+								/>
+								{#key proxies.xyz[comp]}
+									<NumericMappedInput
+										on:set={(n) => (proxies.xyz[comp] = n.detail)}
+										bind:value={proxies.xyz[comp]}
+										mapDisplay={(n) => Math.round(n * 100)}
+										mapValue={(n) => n / 100}
+										percentage
+									/>
+								{/key}
+							</div>
+							<div>{compNames.xyz[comp]} = {Math.round(proxies.xyz[comp] * 100)}%</div>
+						{/each}
+					</div>
+					<div>
+						<div class="h-64 w-64">
+							<GradientDiagram
+								bind:valueX={proxies.xyz.x}
+								bind:valueY={proxies.xyz.y}
+								space="xyz"
+								compX="x"
+								compY="y"
+								color={modalColor}
+							/>
+						</div>
+					</div>
+				</div>
+			</TabItem>
+			<TabItem open={space == 'cielab'} class="w-full" on:click={() => (space = 'cielab')}>
+				<div class="text-xl" slot="title">CIELAB</div>
+				<div class="flex flex-row justify-between gap-8 h-full">
+					<div class="stretch w-full">
+						{#each proxies.cielab.components() as comp (comp)}
+							<div class="h-10 mt-4 flex flex-row gap-4">
+								<GradientRange
+									bind:value={proxies.cielab[comp]}
+									space="cielab"
+									{comp}
+									color={modalColor}
+								/>
+								{#key proxies.cielab[comp]}
+									<NumericMappedInput
+										on:set={(n) => (proxies.cielab[comp] = n.detail)}
+										bind:value={proxies.cielab[comp]}
+										mapDisplay={(n) =>
+											Math.round(
+												rangeMap(n, [0, 1], [comp === 'l' ? 0 : -100, comp === 'l' ? 120 : 100])
+											)}
+										min={comp === 'l' ? 0 : -100}
+										max={comp === 'l' ? 120 : 100}
+										mapValue={(n) =>
+											rangeMap(n, [comp === 'l' ? 0 : -100, comp === 'l' ? 120 : 100], [0, 1])}
+									/>
+								{/key}
+							</div>
+							<div>{compNames.cielab[comp]} = {Math.round(proxies.cielab[comp] * 100)}%</div>
+						{/each}
+					</div>
+					<div>
+						<div class="h-64 w-64">
+							<GradientDiagram
+								bind:valueX={proxies.cielab.a}
+								bind:valueY={proxies.cielab.b}
+								space="cielab"
 								compX="a"
 								compY="b"
 								color={modalColor}

@@ -21,12 +21,14 @@
 	import ColorDisplay from './ColorDisplay.svelte';
 	import PathProperties from '../../components/PathProperties.svelte';
 	import { goto } from '$app/navigation';
+	import { page } from '$app/stores';
 	import type { DistanceType } from '../../geom/dist';
 	import Window from '../../components/Window.svelte';
 	import Options from '../../components/Options.svelte';
 	import presets from '../../color/presets';
 	import LoadColor from './LoadColor.svelte';
 	import CopyButton from '../../components/CopyButton.svelte';
+	import { fromUrlString, toUrlString } from './url';
 
 	title.set("Farben sortieren");
 
@@ -85,6 +87,23 @@
 			position: { x: -1000, y: -1000 },
 			colorPickerOpen: true
 		};
+	}
+
+	(() => {
+		let queryString = $page.url.searchParams.get('v');
+		if (queryString == null) return;
+		let newData = fromUrlString(queryString);
+		if (newData == null) return;
+		colors = newData;
+	})();
+
+	$: {
+		$page.url.searchParams.set('v', toUrlString(colors));
+		goto(`?${$page.url.searchParams.toString()}`, {
+			keepFocus: true,
+			replaceState: true,
+			noScroll: true
+		});
 	}
 
 	let ballSize = 0.4;
@@ -399,6 +418,7 @@
 					{colors}
 					{colorsAnim}
 					{edges}
+					{edgesAnim}
 					{ballSize}
 					{projection}
 					{space}
