@@ -63,6 +63,7 @@
 		}
 		return edges;
 	}
+	$: if (path === null) edges = [];
 
 	let callbackIdCreation = registerCallback(serverOutputDistPathCreation, (pc) => {
 		path = null;
@@ -98,7 +99,7 @@
 		<Window title="Karte" options row={3}>
 			<div class="h-full m-0">
 				{#key olmKey}
-					<OpenLayersMap {invalidate} {norm} bind:points {rotation} {edges} />
+					<OpenLayersMap {invalidate} {norm} bind:points {edges} />
 				{/key}
 			</div>
 		</Window>

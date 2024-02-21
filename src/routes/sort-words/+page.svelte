@@ -36,6 +36,7 @@
 	let words: Word[] = [];
 	let locked = false;
 	let invalidate: (c: (arg0: any) => void) => (arg0: any) => void;
+	let edges: [number,number][]; // indices;
 
 	let input: string = '';
 	let inputLoading = false;
@@ -161,16 +162,30 @@
 	callbacks[1] = registerCallback(serverOutputPathCreation, (pc) => {
 		console.log(pc);
 		if (pc.donePath) {
-			let newWords = [];
-			for (const index of pc.donePath) {
+			let newWords: Word[] = [];
+			let newEdges: [number, number][] = [];
+			pc.donePath.forEach((index, pathIndex, arr) => {
+				if (index < arr.length - 1) {
+					newEdges.push([index, arr[pathIndex + 1]])
+				}
 				newWords.push(words[index]);
-			}
+			});
 			words = newWords;
+			edges = newEdges;
 		}
 		locked = true;
 	});
 	callbacks[2] = registerCallback(serverOutputPathImprovement, (pi) => {
 		console.log(pi);
+		if (pi.better) {
+			const newEdges: [number,number][] = [];
+			pi.currentPath.forEach((index, pathIndex, arr) => {
+				if (index < arr.length - 1) {
+					edges.push([index, arr[pathIndex + 1]])
+				}
+			});
+			edges = newEdges;
+		}
 		if (pi.done) {
 			let newWords = [];
 			for (const index of pi.currentPath) {
@@ -251,6 +266,7 @@
 		dimensions={100}
 		values={adjacencyMatrix(words.map((w) => w.vec))}
 		bind:invalidate={invalidateAlgorithms}
+		on:deletePath={() => edges = []}
 		matrix
 	/>
 
@@ -275,6 +291,7 @@
 				bind:redraw
 				values={adjacencyMatrix(words.map((w) => w.vec))}
 				names={words.map((w) => w.inner)}
+				{edges}
 				norm="cosine"
 				options={fdgOptions}
 				bind:actions={fdgActions}
