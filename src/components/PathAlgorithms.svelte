@@ -346,7 +346,7 @@
 						<div>Komplexität: <b>{complexity}</b></div>
 					{/if}
 					<div class="mt-2">
-						Latenz:
+						Minimallatenz:
 						{#if latency == 0}
 							<b>keine</b>
 						{:else if latency < 1000}
