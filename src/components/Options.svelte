@@ -23,7 +23,6 @@
 		'lock',
 		'norm',
 		'load',
-		'store',
 		'asVector'
 	] as Module[]);
 	export let show: Module[] = [];
