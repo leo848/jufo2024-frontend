@@ -151,7 +151,7 @@ export const presets = {
 			{ name: 'MetLife Building', lat: 40.75462, lng: -73.97645 }
 		]
 	},
-	marlSights: {
+	/* marlSights: {
 		name: 'Sehenswürdigkeiten Marls',
 		values: [
 			{ name: 'Skulpturenmuseum Glaskasten', lat: 51.65618, lng: 7.09468 },
@@ -176,6 +176,140 @@ export const presets = {
 			{ name: 'Auferstehungskirche', lat: 51.65312, lng: 7.11498 },
 			{ name: 'Friedenskirche', lat: 51.66175, lng: 7.11445 }
 		]
+	}, */
+   	chicago: {
+		name: 'Sehenswürdigkeiten Chicagos',
+		values: 
+
+[
+    {
+        "name": "Millennium Park",
+        "desc": "Millennium Park ist ein weitläufiger Stadtpark in der Innenstadt von Chicago. Es beherbergt die berühmte Cloud Gate-Skulptur, die oft als 'The Bean' bezeichnet wird.",
+        "lat": 41.88232,
+        "lng": -87.62317
+    },
+    {
+        "name": "Art Institute of Chicago",
+        "desc": "Das Art Institute of Chicago ist eines der ältesten und größten Kunstmuseen der USA. Es beherbergt eine umfangreiche Sammlung von Kunstwerken aus verschiedenen Epochen.",
+        "lat": 41.87955,
+        "lng": -87.62371
+    },
+    {
+        "name": "Willis Tower",
+        "desc": "Der Willis Tower, ehemals Sears Tower, ist ein ikonischer Wolkenkratzer in Chicago. Es bietet eine atemberaubende Aussicht von der Aussichtsplattform Skydeck auf der 103. Etage.",
+        "lat": 41.87885,
+        "lng": -87.63622
+    },
+    {
+        "name": "Navy Pier",
+        "desc": "Navy Pier ist eine Landmarke am Ufer des Lake Michigan in Chicago. Es bietet Unterhaltungsmöglichkeiten, Restaurants, Geschäfte und eine atemberaubende Aussicht auf den See.",
+        "lat": 41.89169,
+        "lng": -87.60761
+    },
+    {
+        "name": "The Magnificent Mile",
+        "desc": "The Magnificent Mile ist eine prestigeträchtige Einkaufsstraße in Chicago. Sie erstreckt sich über mehrere Blocks und beherbergt Luxusgeschäfte, Restaurants und Unterhaltungsmöglichkeiten.",
+        "lat": 41.89787,
+        "lng": -87.62445
+    },
+    {
+        "name": "Grant Park",
+        "desc": "Grant Park ist ein großer Stadtpark in Chicago, der für seine Grünflächen und seine Nähe zu kulturellen Attraktionen bekannt ist. Zu den Highlights gehören der Buckingham Fountain und das Millennium Park.",
+        "lat": 41.87226,
+        "lng": -87.61883
+    },
+    {
+        "name": "Shedd Aquarium",
+        "desc": "Das Shedd Aquarium ist ein beliebtes öffentliches Aquarium in Chicago. Es beherbergt Tausende von Meereslebewesen und bietet interaktive Ausstellungen für Besucher jeden Alters.",
+        "lat": 41.86759,
+        "lng": -87.61472
+    },
+    {
+        "name": "Field Museum of Natural History",
+        "desc": "Das Field Museum of Natural History ist ein renommiertes Naturkundemuseum in Chicago. Es beherbergt eine beeindruckende Sammlung von prähistorischen Artefakten, Dinosaurierskeletten und mehr.",
+        "lat": 41.86626,
+        "lng": -87.61677
+    },
+    {
+        "name": "Adler Planetarium",
+        "desc": "Das Adler Planetarium ist ein führendes Wissenschaftsmuseum in Chicago, das sich der Astronomie und Weltraumforschung widmet. Es bietet interaktive Ausstellungen und beeindruckende Planetariumsshows.",
+        "lat": 41.86628,
+        "lng": -87.60608
+    },
+    {
+        "name": "Chicago Riverwalk",
+        "desc": "Die Chicago Riverwalk ist ein beliebtes öffentliches Ufergebiet entlang des Chicago River. Es bietet Spaziergänge, Restaurants, Bootstouren und einen herrlichen Blick auf die umliegende Skyline.",
+        "lat": 41.88864,
+        "lng": -87.62526
+    },
+    {
+        "name": "Lincoln Park Zoo",
+        "desc": "Der Lincoln Park Zoo ist ein kostenloser Zoo in Chicago. Er beherbergt eine Vielzahl von Tieren aus verschiedenen Teilen der Welt und bietet Bildungsmöglichkeiten für Besucher jeden Alters.",
+        "lat": 41.92099,
+        "lng": -87.63371
+    },
+    {
+        "name": "Museum of Science and Industry",
+        "desc": "Das Museum of Science and Industry ist eines der größten Wissenschaftsmuseen der Welt. Es bietet interaktive Ausstellungen und Exponate zu verschiedenen wissenschaftlichen Themen.",
+        "lat": 41.79138,
+        "lng": -87.58078
+    },
+    {
+        "name": "Wrigley Field",
+        "desc": "Wrigley Field ist ein historischer Baseballpark in Chicago und die Heimat der Chicago Cubs. Es ist bekannt für seine ikonische Architektur und die lebhafte Atmosphäre während der Spiele.",
+        "lat": 41.94844,
+        "lng": -87.65533
+    },
+    {
+        "name": "Chicago Cultural Center",
+        "desc": "Das Chicago Cultural Center ist ein historisches Gebäude in Chicago, das als Kulturzentrum dient. Es beherbergt Kunstgalerien, Konzertsäle und öffentliche Veranstaltungen.",
+        "lat": 41.88307,
+        "lng": -87.62490
+    },
+    {
+        "name": "Maggie Daley Park",
+        "desc": "Der Maggie Daley Park ist ein öffentlicher Park in der Innenstadt von Chicago. Er bietet Spielplätze, Gärten, Freiflächen und eine einzigartige Landschaftsarchitektur für Besucher jeden Alters.",
+        "lat": 41.88209,
+        "lng": -87.61874
+    },
+    {
+        "name": "Chicago Botanic Garden",
+        "desc": "Der Chicago Botanic Garden ist ein ausgedehnter botanischer Garten in Chicago. Er beherbergt eine Vielzahl von Pflanzenarten aus der ganzen Welt und bietet landschaftlich reizvolle Gärten und Wege.",
+        "lat": 41.82994,
+        "lng": -87.62755
+    },
+    {
+        "name": "Glessner House Museum",
+        "desc": "Das Glessner House Museum ist ein historisches Anwesen in Chicago, das für seine prächtige Architektur und seine Einblicke in das Leben im späten 19. Jahrhundert bekannt ist.",
+        "lat": 41.85785,
+        "lng": -87.62168
+    },
+    {
+        "name": "Chicago History Museum",
+        "desc": "Das Chicago History Museum ist ein Museum, das die Geschichte und Kultur von Chicago dokumentiert. Es bietet Ausstellungen, Programme und Sammlungen, die die reiche Geschichte der Stadt illustrieren.",
+        "lat": 41.91172,
+        "lng": -87.63170
+    },
+    {
+        "name": "360 Chicago",
+        "desc": "360 Chicago ist eine Aussichtsplattform in Chicago, die sich im John Hancock Center befindet. Sie bietet einen atemberaubenden 360-Grad-Blick auf die Skyline und den Lake Michigan.",
+        "lat": 41.89860,
+        "lng": -87.62370
+    },
+    {
+        "name": "Chicago Theatre",
+        "desc": "Das Chicago Theatre ist ein historisches Theater in der Innenstadt von Chicago. Es ist bekannt für sein prächtiges Design und seine erstklassigen Live-Auftritte und Veranstaltungen.",
+        "lat": 41.88568,
+        "lng": -87.62766
+    },
+    {
+        "name": "Chicago Cultural Mile",
+        "desc": "Die Chicago Cultural Mile ist eine kulturelle Route in Chicago, die wichtige kulturelle Institutionen und Sehenswürdigkeiten miteinander verbindet. Sie erstreckt sich entlang des Michigan Avenue vom Grant Park bis zum Museum Campus.",
+        "lat": 41.87245,
+        "lng": -87.62442
+    }
+]
+
 	},
 	duisburgChurches: {
 		name: 'Kirchen Duisburgs',
