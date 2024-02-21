@@ -1,8 +1,8 @@
-const sep = "_"
+const sep = '_';
 
 export function fromUrlString(s: string): string[] | null {
 	let result = s.split(sep);
-	if (result.some(v => v == null)) return null;
+	if (result.some((v) => v == null)) return null;
 	else return result;
 }
 

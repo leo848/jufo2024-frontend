@@ -30,7 +30,7 @@
 	import CopyButton from '../../components/CopyButton.svelte';
 	import { fromUrlString, toUrlString } from './url';
 
-	title.set("Farben sortieren");
+	title.set('Farben sortieren');
 
 	let space: ColorSpace = 'rgb';
 

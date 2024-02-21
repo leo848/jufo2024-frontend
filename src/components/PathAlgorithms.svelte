@@ -85,8 +85,8 @@
 					method: 'greedy',
 					complexity: 'O(n²)',
 					icon: Icon.DollarOutline
-				},
-				{
+				}
+				/*{
 					name: 'Christofides',
 					description:
 						'Der Christofides-Algorithmus baut zuerst den kürzesten Baum auf, der alle Knoten beinhaltet, und erstellt daraus mittels eines Eulerwegs einen Hamilton-Pfad.',
@@ -99,7 +99,7 @@
 					description: 'Finde die optimale Lösung mittels des externen Tools Concorde',
 					method: null,
 					icon: Icon.WandMagicSparklesOutline
-				}
+}*/
 			] as const
 		).map((e, i) => {
 			let send;

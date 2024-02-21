@@ -8,7 +8,7 @@
 	export let edges: [number, number][]; // indices
 	export let values: number[][];
 	export let names: string[];
-	export let norm: DistanceType = "euclidean";
+	export let norm: DistanceType = 'euclidean';
 
 	export let matrix: boolean = false;
 

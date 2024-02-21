@@ -59,7 +59,7 @@
 	onMount(() => {
 		if (queryString == null) return;
 		let newData = fromUrlString(queryString);
-		if (newData == null || newData.every(w => w.length === 0)) return;
+		if (newData == null || newData.every((w) => w.length === 0)) return;
 		newData.forEach((string, idx) => {
 			setTimeout(() => {
 				sendWebsocket({
@@ -67,11 +67,11 @@
 					word: string
 				});
 			}, idx * 10 + 100);
-		})
+		});
 	});
 
 	$: {
-		$page.url.searchParams.set('v', toUrlString(words.map(w => w.inner)));
+		$page.url.searchParams.set('v', toUrlString(words.map((w) => w.inner)));
 		goto(`?${$page.url.searchParams.toString()}`, {
 			keepFocus: true,
 			replaceState: true,
@@ -140,7 +140,7 @@
 		const word = evt.word;
 
 		if (evt.result.type === 'unsupported') {
-			inputError = { type : "unsupported", word }
+			inputError = { type: 'unsupported', word };
 			return;
 		}
 
@@ -193,7 +193,7 @@
 						placeholder="Gib ein deutsches Wort ein..."
 						bind:value={input}
 						bind:this={inputElement}
-						disabled={inputError && inputError.type === "unsupported"}
+						disabled={inputError && inputError.type === 'unsupported'}
 					/>
 					<button
 						class={`bg-gray-600 hover:bg-gray-500 text-white p-4 rounded-full`}
@@ -205,7 +205,8 @@
 				</div>
 				{#if inputError}
 					{#if inputError.type === 'unsupported'}
-						<div>Worteinbettung von Server nicht unterstützt<br>
+						<div>
+							Worteinbettung von Server nicht unterstützt<br />
 							<a href="/" class="text-white underline text-xl">Zurück zur Startseite</a>
 						</div>
 					{:else}

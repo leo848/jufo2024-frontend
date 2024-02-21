@@ -10,8 +10,6 @@
 	export let points: NamedPoint[];
 	export let edges: [CoordPoint, CoordPoint][];
 
-	export let rotation: number = 0;
-
 	export let norm: DistanceType = 'euclidean';
 	export let invalidate: <T>(c: (t: T) => void) => (t: T) => void;
 
