@@ -6,6 +6,7 @@
 	import {
 		serverOutputPathCreation,
 		serverOutputPathImprovement,
+		serverOutputRandomWord,
 		serverOutputWordToVec
 	} from '../../server/types';
 	import AdjacencyMatrix from '../../components/AdjacencyMatrix.svelte';
@@ -81,12 +82,18 @@
 	}
 
 	async function addInput() {
-		if (input.length === 0 || inputLoading) {
+		if (inputLoading) return;
+		if (input.length === 0 || !input) {
 			if (inputElement === document.activeElement) {
+				sendWebsocket({
+					type: 'wordToVec',
+					word: null,
+				});
+				inputLoading = true;
 			} else {
 				inputElement.focus();
-				return;
 			}
+			return;
 		}
 
 		const word = input.toLowerCase();
@@ -134,7 +141,7 @@
 		knownWords.delete(word.inner);
 	}
 
-	const callbacks = new Array(3);
+	const callbacks = new Array(4);
 	callbacks[0] = registerCallback(serverOutputWordToVec, (evt) => {
 		inputLoading = false;
 
@@ -159,7 +166,11 @@
 			{ inner: word, index: (words[words.length - 1]?.index ?? -1) + 1, vec: evt.result.vec }
 		];
 	});
-	callbacks[1] = registerCallback(serverOutputPathCreation, (pc) => {
+	callbacks[1] = registerCallback(serverOutputRandomWord, (rw) => {
+		if (input.length === 0) input = rw.word;
+		inputLoading = false;
+	})
+	callbacks[2] = registerCallback(serverOutputPathCreation, (pc) => {
 		console.log(pc);
 		if (pc.donePath) {
 			let newWords: Word[] = [];
@@ -175,7 +186,7 @@
 		}
 		locked = true;
 	});
-	callbacks[2] = registerCallback(serverOutputPathImprovement, (pi) => {
+	callbacks[3] = registerCallback(serverOutputPathImprovement, (pi) => {
 		console.log(pi);
 		if (pi.better) {
 			const newEdges: [number, number][] = [];

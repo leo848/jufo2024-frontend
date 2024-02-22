@@ -95,7 +95,7 @@ const serverInputAction = z.object({
 	latency: z.number().optional()
 });
 const serverInputLatency = z.object({ type: z.literal('latency') });
-const serverInputWordToVec = z.object({ type: z.literal('wordToVec'), word: z.string() });
+const serverInputWordToVec = z.object({ type: z.literal('wordToVec'), word: z.nullable(z.string()) });
 const serverInput = z.discriminatedUnion('type', [
 	serverInputLog,
 	serverInputAction,
@@ -167,6 +167,10 @@ export const serverOutputWordToVec = z.object({
 		z.object({ type: z.literal('unsupported') })
 	])
 });
+export const serverOutputRandomWord = z.object({
+	type: z.literal('randomWord'),
+	word: z.string(),
+})
 export const serverOutput = z.discriminatedUnion('type', [
 	serverOutputError,
 	serverOutputLog,
@@ -176,7 +180,8 @@ export const serverOutput = z.discriminatedUnion('type', [
 	serverOutputDistPathImprovement,
 	serverOutputPathCreation,
 	serverOutputPathImprovement,
-	serverOutputWordToVec
+	serverOutputWordToVec,
+	serverOutputRandomWord,
 ]);
 
 export type ServerOutput = z.infer<typeof serverOutput>;
