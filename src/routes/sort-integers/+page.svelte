@@ -228,8 +228,8 @@
 		</Gallery>
 	{:else if currentStep === 2}
 		<Gallery class="md:grid-cols-2 gap-4 mt-4">
-			{#each algorithms as { key, name, desc, img }, index}
-				<Card horizontal reverse={(((index + 1) / 2) | 0) % 2 === 1} {img}>
+			{#each algorithms as { key, name, desc }}
+				<Card >
 					<h2 class="text-2xl font-bold dark:text-white">{name}</h2>
 					<div>{desc}</div>
 					<Button
