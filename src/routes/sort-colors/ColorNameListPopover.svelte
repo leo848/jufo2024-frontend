@@ -21,8 +21,8 @@
 	{triggeredBy}
 	placement="bottom"
 	trigger="click"
-	defaultClass="bg-transparent dark:bg-black dark:backdrop-blur dark:bg-clip-padding dark:backdrop-filter dark:backdrop-blur-xl dark:bg-opacity-10 dark:border dark:border-gray-800"
-	class="text-sm p-0 m-0 h-96 overflow-scroll"
+	defaultClass="bg-transparent dark:bg-black dark:backdrop-blur dark:bg-clip-padding dark:backdrop-filter dark:backdrop-blur-xl dark:bg-opacity-10 dark:border dark:border-gray-800 overflow-scroll"
+	class="text-sm p-0 m-0 overflow-scroll"
 >
 	<Window title="Namensliste auswählen">
 		<div class="m-4">
@@ -67,8 +67,8 @@
 					</div>
 				</div>
 			</div>
-			<div class="grid grid-cols-3 gap-2">
-				{#each availableColorNameLists as colorNameList}
+			<div class="grid grid-cols-3 gap-2 h-96 overflow-scroll">
+				{#each availableColorNameLists.toSorted((a,b)=>a.localeCompare(b)) as colorNameList}
 					<button
 						class={` bg-gray-${
 							colorNameList == value ? 600 : 700

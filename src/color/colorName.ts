@@ -47,7 +47,7 @@ export const availableColorNameLists = [
 	'xkcd'
 ] as const;
 
-const colorNameListSchema = z.enum(availableColorNameLists);
+const colorNameListSchema = z.string();
 
 export const colorNameListNames: Record<ColorNameList, string> = {
 	basic: 'Einfach',
