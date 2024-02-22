@@ -7,22 +7,22 @@
 			img: '/vackground-pattern.png',
 			imgSource: 'vackground.com',
 			href: '/sort-integers',
-			text: 'Liste ganzer Zahlen sortieren',
-			desc: 'Eine beliebige Anzahl ganzer Zahlen nach ihrem Wert sortieren'
+			text: 'Liste natürlicher Zahlen sortieren',
+			desc: 'Eine Liste natürlicher Zahlen bis 999 mittels verschiedener linearithmischer oder quadratischer Algorithmen sortieren und die Sortierung visualisieren'
 		},
 		{
 			img: '/robert-katzki-colors.png',
 			imgSource: 'Robert Katzki',
 			href: '/sort-colors',
 			text: 'Farben sortieren',
-			desc: 'Farben in beliebigem Farbraum eingeben und nach einzelnen Komponenten oder mit eigener TSP-Metrik optimal oder heuristisch sortieren'
+			desc: 'Farben in beliebigem Farbraum eingeben und als mehrdimensionale Objekte nach zahlreichen Konstruktions- und Verbesserungsalgorithmen sortieren'
 		},
 		{
 			img: '/shubbam-dhage-vector.png',
 			imgSource: 'Shubbam Dhage',
 			href: '/sort-vectors',
 			text: 'Vektoren sortieren',
-			desc: 'n-dimensionale Vektoren sortieren'
+			desc: 'n-dimensionale Vektoren gemäß all ihren Komponenten und einer durch eine p-Norm induzierte Metrik sortieren'
 		},
 		{
 			img: '/joel-de-vriend-metro.png',
@@ -36,7 +36,7 @@
 			imgSource: 'Glen Carrie',
 			href: '/sort-words',
 			text: 'Wörter sortieren',
-			desc: 'Deutsche Wörter nach ihrer Bedeutung (semantisch) sortieren'
+			desc: 'Deutsche Wörter nach ihrer Bedeutung (semantisch) als Einbettung in einen hochdimensionalen Vektorraum sortieren'
 		}
 	];
 	let displayCards: typeof cards = [];
