@@ -17,14 +17,7 @@
 
 	type Module = 'add' | 'delete' | 'lock' | 'norm' | 'colorSpace' | 'load' | 'store' | 'asVector';
 
-	const defaultShow = new Set([
-		'add',
-		'delete',
-		'lock',
-		'norm',
-		'load',
-		'asVector'
-	] as Module[]);
+	const defaultShow = new Set(['add', 'delete', 'lock', 'norm', 'load', 'asVector'] as Module[]);
 	export let show: Module[] = [];
 	export let hide: Module[] = [];
 

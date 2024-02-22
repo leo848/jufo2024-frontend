@@ -36,7 +36,7 @@
 	let words: Word[] = [];
 	let locked = false;
 	let invalidate: (c: (arg0: any) => void) => (arg0: any) => void;
-	let edges: [number,number][]; // indices;
+	let edges: [number, number][]; // indices;
 
 	let input: string = '';
 	let inputLoading = false;
@@ -166,7 +166,7 @@
 			let newEdges: [number, number][] = [];
 			pc.donePath.forEach((index, pathIndex, arr) => {
 				if (index < arr.length - 1) {
-					newEdges.push([index, arr[pathIndex + 1]])
+					newEdges.push([index, arr[pathIndex + 1]]);
 				}
 				newWords.push(words[index]);
 			});
@@ -178,10 +178,10 @@
 	callbacks[2] = registerCallback(serverOutputPathImprovement, (pi) => {
 		console.log(pi);
 		if (pi.better) {
-			const newEdges: [number,number][] = [];
+			const newEdges: [number, number][] = [];
 			pi.currentPath.forEach((index, pathIndex, arr) => {
 				if (index < arr.length - 1) {
-					edges.push([index, arr[pathIndex + 1]])
+					edges.push([index, arr[pathIndex + 1]]);
 				}
 			});
 			edges = newEdges;
@@ -266,7 +266,7 @@
 		dimensions={100}
 		values={adjacencyMatrix(words.map((w) => w.vec))}
 		bind:invalidate={invalidateAlgorithms}
-		on:deletePath={() => edges = []}
+		on:deletePath={() => (edges = [])}
 		matrix
 	/>
 
