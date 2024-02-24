@@ -289,7 +289,7 @@ export class HslColor extends AbstractColor<HslColor, HslComponent> {
 		if (h > 1) h -= 1;
 		if (h < 0) h += 1;
 		const l = (max + min) / 2;
-		const s = max < 0.001 ? 0 : delta / (1 - abs(2 * l - 1));
+		const s = max < 0.001 ? 0 : delta / Math.max(0.0001, 1 - abs(2 * l - 1));
 		return new HslColor(h, s, l);
 	}
 
