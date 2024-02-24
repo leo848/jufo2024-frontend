@@ -1,5 +1,4 @@
 <script lang="ts">
-	import Container from '../../components/Container.svelte';
 	import BarChart from './BarChart.svelte';
 	import { registerCallback, sendWebsocket, unregisterCallback } from '../../server/websocket';
 	import {
@@ -10,16 +9,7 @@
 	} from '../../server/types';
 
 	import {
-		Card,
-		StepIndicator,
-		Gallery,
-		Input,
-		Label,
-		Button,
-		Toast,
 		GradientButton,
-		Tabs,
-		TabItem
 	} from 'flowbite-svelte';
 
 	import { onDestroy } from 'svelte';
@@ -41,11 +31,6 @@
 
 	let latencySlider = 1;
 	$: latency = [0, 100, 250, 500, 1000, 2000][latencySlider];
-
-	let currentStep = 1;
-	let steps = ['Zahlen eingeben', 'Algorithmus auswählen', 'Sortieren'].map(
-		(s, i) => `${i + 1}. ${s}`
-	);
 
 	const algorithms = [
 		{
@@ -69,13 +54,13 @@
 		{
 			key: 'quick',
 			name: 'Quick Sort',
-			desc: 'Die Liste wird in zwei Teillisten partitioniert, und der Algorithmus auf diesen Teillisten wiederholt.',
+			desc: 'Die Liste wird in zwei Teillisten nach Vergleich zu einem Pivotelement partitioniert, und der Algorithmus auf diesen Teillisten wiederholt.',
 			img: undefined
 		},
 		{
 			key: 'merge',
 			name: 'Merge Sort',
-			desc: 'Zwei Teillisten werden mittels Merge Sort sortiert und dann zusammengefügt.',
+			desc: 'Zwei Teillisten werden mittels Merge Sort sortiert und dann in linearer Zeit zusammengefügt.',
 			img: undefined
 		}
 	] as const;
