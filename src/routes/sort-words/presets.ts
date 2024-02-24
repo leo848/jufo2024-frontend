@@ -104,6 +104,31 @@ export const presets = {
 			{ str: 'Latein', desc: 'Latein thematisiert das lateinische Vokabular und die Grammatik.' }
 		]
 	},
+	colorsAndBirds: {
+		name: 'Farben + Vögel',
+		values: [
+			{ str: 'rot' },
+			{ str: 'schwalbe' },
+			{ str: 'lila' },
+			{ str: 'amsel' },
+			{ str: 'spatz' },
+			{ str: 'schwarz' },
+			{ str: 'rotkehlchen' },
+			{ str: 'orange' },
+			{ str: 'braun' },
+			{ str: 'weiß' },
+			{ str: 'kolibri' },
+			{ str: 'meise' },
+			{ str: 'rosa' },
+			{ str: 'sperling' },
+			{ str: 'möve' },
+			{ str: 'buchfink' },
+			{ str: 'violett' },
+			{ str: 'kranich' },
+			{ str: 'gelb' },
+			{ str: 'grün' },
+		]
+	},
 	europe: {
 		name: 'EU-Mitgliedsstaaten',
 		aiGenerated: true,
@@ -513,5 +538,5 @@ export const presets = {
 				desc: 'Eine Zahl, die, wenn sie mit sich selbst multipliziert wird, ein bestimmtes Ergebnis ergibt.'
 			}
 		].sort((a, b) => a.str.localeCompare(b.str))
-	}
+	},
 } satisfies Partial<Record<string, WordList>>;
