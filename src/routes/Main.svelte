@@ -49,7 +49,10 @@
 </script>
 
 <Gallery class="gap-4 grid-cols-1 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 mx-32 mt-4">
-	{#each displayCards as card, i (card.text)}
+	{#each cards as { img, text }}
+		<img src={img} alt={text} class="hidden"/>
+	{/each}
+	{#each displayCards as card (card.text)}
 		<div transition:scale>
 			<button
 				on:click={() => (location.href = card.href)}
