@@ -48,6 +48,7 @@
 	};
 
 	let lockAnim = tweened(0, { duration: 1500, easing: sineIn });
+	let lockIcon: HTMLElement;
 	export let locked: boolean;
 
 	export function invalidate<I>(
@@ -57,6 +58,7 @@
 		return (i) => {
 			if (locked) {
 				lockAnim.update((l) => l + 1, { duration: 0 }).then(() => lockAnim.set(0, { delay: 250 }));
+				lockIcon.scrollIntoView({ behavior: "smooth" });
 				if (invalid) invalid(i);
 			} else {
 				dispatch('blowUp');
@@ -89,6 +91,7 @@
 					title="Löschen"
 				/>
 				<OptionsButton
+					bind:elt={lockIcon}
 					show={display.has('lock')}
 					on:click={() => (locked = !locked)}
 					title={locked ? 'Entsperren' : 'Sperren'}

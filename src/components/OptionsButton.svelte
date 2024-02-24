@@ -6,12 +6,15 @@
 	export let title: string;
 
 	export let iconStyle: string = '';
+
+	export let elt: HTMLElement = null;
 </script>
 
 {#if show}
 	<button
 		class="pr-2 inline-flex gap-2 justify-between items-center justify-items-center bg-gray-700 hover:bg-gray-600 transition-all rounded-xl text-white"
 		on:click
+		bind:this={elt}
 	>
 		<div class="bg-gray-600 p-2 rounded-xl" style={iconStyle}>
 			<svelte:component this={icon} size="md" />

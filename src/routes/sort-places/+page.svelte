@@ -125,7 +125,7 @@
 		<PathProperties {path} {length} {blownUp} horizontal />
 
 		<PathAlgorithms
-			on:deletePath={() => (path = null)}
+			on:deletePath={invalidate(() => (path = null))}
 			bind:invalidate={invalidateAlgorithms}
 			dimensions={2}
 			horizontal

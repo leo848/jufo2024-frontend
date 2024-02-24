@@ -292,8 +292,6 @@
 	const dispatch = createEventDispatcher<{ deletePath: null }>();
 
 	function deletePath() {
-		selectedItem = { construction: null, improvement: null };
-		path = null;
 		dispatch('deletePath');
 	}
 
