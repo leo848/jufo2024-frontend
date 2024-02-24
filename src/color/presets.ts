@@ -1,6 +1,5 @@
 import { Color, NamedColor } from '../color/color';
-import { HsvColor, RgbColor } from '../color/colorSpaces';
-import { rangeMap } from '../utils/math';
+import { RgbColor } from '../color/colorSpaces';
 
 function mapBuntstifte(input: [number, number, number][]): NamedColor[] {
 	return input
@@ -21,12 +20,6 @@ function mapBuntstifte(input: [number, number, number][]): NamedColor[] {
 		})
 		.filter(({ index }) => index % 2 == 0)
 		.map(({ color, index }) => NamedColor.fromColor(color, leftPadZeroes(3, index + 1)));
-}
-
-function dedup(array: Color[]): Color[] {
-	return array.filter(
-		(c, i, a) => i == a.length - 1 || c.rgb().numeric() != a[i + 1].rgb().numeric()
-	);
 }
 
 const books = {
@@ -67,16 +60,6 @@ const books = {
 		})
 		.toSorted(() => Math.random() - 0.5)
 };
-
-const booksDark = {
-	name: 'Bücher dunkler',
-	colors: dedup(
-		books.colors
-			.map((c) => c.oklab())
-			.map((oklab) => oklab.with('l', rangeMap(oklab.l, [0, 1], [0, 0.775])).color())
-	)
-};
-
 const presets = {
 	buntstifte: {
 		name: 'Buntstifte',
@@ -244,20 +227,6 @@ const presets = {
 		])
 	},
 	books,
-	booksDark,
-	booksDarkByLightness: {
-		name: 'Bücher nach Helligkeit',
-		colors: books.colors.toSorted((b, a) => a.oklab().l - b.oklab().l)
-	},
-	booksDarkByHue: {
-		name: 'Bücher nach Farbwert',
-		colors: books.colors.toSorted((a, b) => {
-			let hues = [b, a].map((c) => c.oklab().unnormal()).map(({ a, b }) => Math.atan2(b, a));
-			// let hues = [b, a].map((c) => c.space("hsl")).map(({ h }) => h);
-			// let chromas = [b, a].map((c) => c.space("hsl")).map(({ h }) => h);
-			return hues[0] - hues[1];
-		})
-	},
 	pride: {
 		name: 'Pride-Flagge',
 		colors: [0xff1e26, 0xfe941e, 0xffff00, 0x06bd00, 0x001a98, 0x760088].map((num) =>
