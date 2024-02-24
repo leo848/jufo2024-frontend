@@ -17,6 +17,7 @@
 	import { scale, slide } from 'svelte/transition';
 	import Window from '../../components/Window.svelte';
 	import Options from '../../components/Options.svelte';
+	import {goto} from '$app/navigation';
 
 	title.set('Zahlen sortieren');
 
@@ -222,6 +223,7 @@
 	<Options
 		on:add={() => numberInput.focus()}
 		on:delete={() => (numbers = [])}
+		on:asVectors={() => goto("/sort-vectors?v=" + numbers.join("o"))}
 		hide={['norm', 'lock', 'load']}
 		xlCol={5}
 		locked={false}
