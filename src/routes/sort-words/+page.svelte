@@ -87,7 +87,7 @@
 			if (inputElement === document.activeElement) {
 				sendWebsocket({
 					type: 'wordToVec',
-					word: null,
+					word: null
 				});
 				inputLoading = true;
 			} else {
@@ -169,7 +169,7 @@
 	callbacks[1] = registerCallback(serverOutputRandomWord, (rw) => {
 		if (input.length === 0) input = rw.word;
 		inputLoading = false;
-	})
+	});
 	callbacks[2] = registerCallback(serverOutputPathCreation, (pc) => {
 		console.log(pc);
 		if (pc.donePath) {

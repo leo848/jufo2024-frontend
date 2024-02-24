@@ -26,7 +26,9 @@
 	import { flip } from 'svelte/animate';
 	import * as Icon from 'flowbite-svelte-icons';
 	import { title } from '../../ui/navbar';
-	import { scale } from 'svelte/transition';
+	import { scale, slide } from 'svelte/transition';
+	import Window from '../../components/Window.svelte';
+	import Options from '../../components/Options.svelte';
 
 	title.set('Zahlen sortieren');
 
@@ -35,10 +37,10 @@
 		return _id++;
 	}
 
-	let numbers: { value: number; id: number; highlight?: Highlight }[] =
-		[]; /* [1, 2, 3, 4, 5, 6, 7, 8].map(
-		(value) => ({ value, id: genId(), highlight: false })
-	); */
+	let numbers: { value: number; id: number; highlight?: Highlight }[] = [];
+
+	let latencySlider = 1;
+	$: latency = [0, 100, 250, 500, 1000, 2000][latencySlider];
 
 	let currentStep = 1;
 	let steps = ['Zahlen eingeben', 'Algorithmus auswählen', 'Sortieren'].map(
@@ -93,28 +95,39 @@
 		}
 		do {
 			let rand = (Math.random() + numbers.length / 2) % 1;
-			let idx = Math.floor(rand * funnyNumbers.length);
-			funnyNumber = funnyNumbers[idx];
+			if (numbers.length > 20) {
+				funnyNumber = Math.floor(rand * 1000);
+			} else {
+				let idx = Math.floor(rand * funnyNumbers.length);
+				funnyNumber = funnyNumbers[idx];
+			}
 		} while (numbers.some((v) => v.value === funnyNumber));
 	}
 
 	let value: null | string = null;
-	let error = false;
+	let error: 'range' | 'duplicate' | null = null;
+	let flexWrap = true;
 
+	let numberInput: HTMLInputElement;
 	function addNumber() {
 		let num = !value ? funnyNumber : Number(value);
 		value = null;
-		if (num > 999 || num < 0 || isNaN(num)) {
-			error = true;
+		error = null;
+		if (num > 9999 || num < -9999 || isNaN(num)) {
+			error = 'range';
+			return;
+		} else if (numbers.find((obj) => obj.value == num) !== undefined) {
+			error = 'duplicate';
 			return;
 		}
 		numbers = [{ value: num, id: genId() }, ...numbers];
+		numberInput.focus();
 	}
 
 	function serverSend(numbers: number[]) {
 		sendWebsocket({
 			type: 'action',
-			latency: 500,
+			latency,
 			action: {
 				type: 'sortNumbers',
 				algorithm: selectedAlgorithm,
@@ -171,120 +184,124 @@
 	onDestroy(() => unregisterCallback(callbackId));
 </script>
 
-<Container>
-	<StepIndicator class="mt-4 mb-8" {currentStep} {steps} glow />
-
-	{#if currentStep == 1}
-		<Gallery class="gap-4 md:grid-cols-4 grid-cols-2 mx-4 my-4">
-			<Card size="lg" class="col-span-1">
-				<Button
-					class="mt-2 text-md"
-					color="red"
-					on:click={() => (numbers = [])}
-					disabled={numbers.length == 0}
+<div class="mx-10 mt-4 grid grid-cols-12 gap-4">
+	<Window title="Zahlen" xlCol={7}>
+		{#if error}
+			<div
+				class="mx-0 bg-gray-500 p-2 text-white flex flex-row justify-between"
+				transition:slide={{ axis: 'y' }}
+			>
+				{#if error == 'range'}
+					<div>Gib bitte eine Zahl zwischen -9999 und 9999 ein.</div>
+				{:else if error == 'duplicate'}
+					<div>Bereits eingegeben.</div>
+				{/if}
+				<button
+					class="text-gray-400 hover:text-white transition-all"
+					on:click={() => (error = null)}><Icon.CloseCircleSolid /></button
 				>
-					<Icon.TrashBinSolid class="mr-2" />
-					Löschen</Button
+			</div>
+		{/if}
+		<div class={`ml-2 flex flex-row overflow-scroll my-2 ${flexWrap ? 'flex-wrap' : ''}`}>
+			{#if redoable}
+				<button class="p-6 my-2 mx-2 bg-gray-700 rounded-xl">
+					<form on:submit|preventDefault={addNumber}>
+						<input
+							bind:value
+							bind:this={numberInput}
+							placeholder={String(funnyNumber)}
+							class="w-20 px-0 mb-2 text-3xl font-light mx-auto tracking-tight dark:text-white bg-gray-700 focus:outline-0"
+						/>
+					</form>
+				</button>
+			{/if}
+			{#each numbers as number, index (number.value)}
+				<div
+					animate:flip={{ duration: 200, delay: (redoable ? 1 : 0) * index * 50 }}
+					transition:scale
 				>
-				<Button
-					class="mt-2 text-md"
-					color="green"
-					on:click={() => currentStep++}
-					disabled={numbers.length < 5}
-				>
-					<Icon.PlaySolid class="mr-2" />
-					Fortfahren</Button
-				>
-			</Card>
-			<Card size="lg" class="col-span-2">
-				<Toast class="mx-0" bind:open={error}>Gib bitte eine Zahl zwischen 0 und 999 ein.</Toast>
-				<Gallery class="gap-6 grid-cols-2">
-					<div>
-						<Label for="num-input">Zahl eingeben</Label>
-						<Input id="num-input" class="text-3xl" bind:value placeholder={funnyNumber} />
-					</div>
-					<Button class="mt-2 text-xl" on:click={addNumber}>
-						<Icon.PlusSolid class="mr-2" />
-						Hinzufügen
-					</Button>
-				</Gallery>
-			</Card>
-			{#each numbers as number, index (number.id)}
-				<div animate:flip={{ duration: 200, delay: index * 50 }} transition:scale>
-					<Card
+					<button
+						disabled={!redoable}
 						on:click={() => {
 							numbers.splice(index, 1);
 							numbers = numbers;
 						}}
+						class={colorClass(number.highlight) + ' p-6 m-2 bg-gray-700 rounded-xl'}
 					>
-						<h5
-							class="px-0 mb-2 text-8xl font-light mx-auto tracking-tight text-gray-900 dark:text-white"
-						>
+						<h5 class="px-0 mb-2 text-3xl font-light mx-auto tracking-tight dark:text-white">
 							{number.value}
 						</h5>
-					</Card>
+					</button>
 				</div>
 			{/each}
-		</Gallery>
-	{:else if currentStep === 2}
-		<Gallery class="md:grid-cols-2 gap-4 mt-4">
+		</div>
+	</Window>
+	<Options
+		on:add={() => numberInput.focus()}
+		on:delete={() => (numbers = [])}
+		hide={['norm', 'lock', 'load']}
+		xlCol={5}
+		locked={false}
+	/>
+	<Window title="Balkendiagramm" row={2}>
+		<div>
+			<BarChart content={numbers} />
+		</div>
+	</Window>
+	<Window title="Algorithmen" row={1}>
+		<div class="flex flex-row overflow-scroll gap-4 m-4">
 			{#each algorithms as { key, name, desc }}
-				<Card >
+				<button
+					class={` p-2 bg-gray-${
+						selectedAlgorithm === key ? 600 : 700
+					} flex flex-col justify-between rounded-xl transition-all min-w-64`}
+					disabled={!redoable}
+					on:click={() => (selectedAlgorithm = key)}
+				>
 					<h2 class="text-2xl font-bold dark:text-white">{name}</h2>
 					<div>{desc}</div>
-					<Button
-						color="alternative"
-						class="w-fit mt-4 transition"
-						on:click={() => {
-							selectedAlgorithm = key;
-							currentStep++;
-						}}
-						>Auswählen <Icon.ArrowRightSolid class="ml-4" />
-					</Button>
-				</Card>
+				</button>
 			{/each}
-		</Gallery>
-	{:else if currentStep === 3}
-		<GradientButton
-			class="mt-2 mb-4 mx-4 text-xl"
-			disabled={!redoable}
-			on:click={() => serverSend(numbers.map((e) => e.value))}
-			color="teal"
-		>
-			<Icon.ArrowSortLettersOutline class="mr-2" size="xl" />
-			Sortieren
-			<Icon.CloudArrowUpOutline class="ml-2" />
-		</GradientButton>
-		<GradientButton class="mt-2 text-xl" on:click={shuffleNumbers} color="cyan">
-			<Icon.ShuffleSolid class="mr-2" size="xl" />
-			Mischen</GradientButton
-		>
-		<Tabs
-			style="full"
-			defaultClass="flex rounded-lg divide-x divide-gray-200 shadow dark:divide-gray-700"
-		>
-			<TabItem open class="w-full">
-				<div class="text-xl" slot="title">Karten</div>
-				<Gallery class="gap-4 md:grid-cols-4 grid-cols-2 m-4">
-					{#each numbers as { value, highlight } (value)}
-						<div animate:flip={{ duration: 200 }}>
-							<Card class={colorClass(highlight)}>
-								<h5
-									class="px-0 mb-2 text-6xl font-light mx-auto tracking-tight text-gray-900 dark:text-white"
-								>
-									{value}
-								</h5>
-							</Card>
-						</div>
-					{/each}
-				</Gallery>
-			</TabItem>
-			<TabItem class="w-full">
-				<div class="text-xl" slot="title">Balkendiagramm</div>
-				<div>
-					<BarChart content={numbers} />
-				</div>
-			</TabItem>
-		</Tabs>
-	{/if}
-</Container>
+		</div>
+	</Window>
+	<Window title="Aktionen">
+		<div class="h-full m-4 grow">
+			<GradientButton
+				class="mt-2 mb-4 mx-4 text-xl"
+				disabled={!redoable}
+				on:click={() => serverSend(numbers.map((e) => e.value))}
+				color="teal"
+			>
+				<Icon.ArrowSortLettersOutline class="mr-2" size="xl" />
+				Sortieren
+				<Icon.CloudArrowUpOutline class="ml-2" />
+			</GradientButton>
+			<GradientButton
+				class="mt-2 text-xl"
+				disabled={!redoable}
+				on:click={shuffleNumbers}
+				color="cyan"
+			>
+				<Icon.ShuffleSolid class="mr-2" size="xl" />
+				Mischen</GradientButton
+			>
+			<div class="mt-2">
+				Minimallatenz:
+				{#if latency == 0}
+					<b>keine</b>
+				{:else if latency < 1000}
+					<b>{latency}</b>ms
+				{:else}
+					<b>{(latency / 1000).toFixed(0)}</b>s
+				{/if}
+			</div>
+			<input
+				type="range"
+				bind:value={latencySlider}
+				min={0}
+				max={5}
+				class="w-full bg-transparent text-white grayscale"
+			/>
+		</div>
+	</Window>
+</div>

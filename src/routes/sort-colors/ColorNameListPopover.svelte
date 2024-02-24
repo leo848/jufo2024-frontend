@@ -68,7 +68,7 @@
 				</div>
 			</div>
 			<div class="grid grid-cols-3 gap-2 h-96 overflow-scroll">
-				{#each availableColorNameLists.toSorted((a,b)=>a.localeCompare(b)) as colorNameList}
+				{#each availableColorNameLists.toSorted((a, b) => a.localeCompare(b)) as colorNameList}
 					<button
 						class={` bg-gray-${
 							colorNameList == value ? 600 : 700
