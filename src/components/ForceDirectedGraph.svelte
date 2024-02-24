@@ -65,6 +65,7 @@
 		ctx.strokeStyle = 'white';
 		ctx.lineWidth = 3;
 		for (const [fromIdx, toIdx] of edges ?? []) {
+			if (!particles[toIdx] || !particles[fromIdx]) continue;
 			ctx.moveTo(particles[fromIdx].pos.x, particles[fromIdx].pos.y);
 			ctx.lineTo(particles[toIdx].pos.x, particles[toIdx].pos.y);
 			ctx.stroke();
