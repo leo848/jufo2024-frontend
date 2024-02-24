@@ -25,6 +25,7 @@
 	import ForceDirectedGraph from '../../components/ForceDirectedGraph.svelte';
 	import { fromUrlString, toUrlString } from './url';
 	import LoadWords from './LoadWords.svelte';
+	import {presets} from './presets';
 
 	title.set('Wörter sortieren');
 
@@ -276,6 +277,7 @@
 		bind:locked
 		bind:invalidate
 		hide={['norm']}
+		loadAmount={Object.keys(presets).length}
 		on:add={invalidate(addInput)}
 		on:delete={() => (words = [])}
 	>

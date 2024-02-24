@@ -25,7 +25,6 @@
 
 	let edges: [CoordPoint, CoordPoint][] = [];
 	let norm: DistanceType = 'euclidean';
-	let rotation: number = 0;
 
 	let path: null | number[][] = null;
 	let invalidateAlgorithms: () => {};
@@ -112,6 +111,7 @@
 			hide={['add']}
 			on:delete={invalidate(() => (points = []))}
 			bind:norm
+			loadAmount={Object.keys(presets).length}
 			on:asVectors={invalidate(() => {
 				goto(
 					'/sort-vectors?v=' +

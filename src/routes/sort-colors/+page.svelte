@@ -387,6 +387,7 @@
 			on:delete={invalidate(() => (colors = []))}
 			bind:norm
 			bind:colorSpace={space}
+			loadAmount={Object.keys(presets).length}
 			on:asVectors={invalidate(() => {
 				goto(
 					'/sort-vectors?v=' +

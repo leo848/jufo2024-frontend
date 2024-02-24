@@ -21,6 +21,8 @@
 	export let show: Module[] = [];
 	export let hide: Module[] = [];
 
+	export let loadAmount: number = 0;
+
 	export let xlCol: undefined | number;
 
 	let display: Set<Module>;
@@ -116,7 +118,7 @@
 				<OptionsButton
 					on:click={invalidate(() => (state = 'load'))}
 					show={display.has('load')}
-					title="Laden"
+					title={ `Laden${loadAmount ? " (" + loadAmount + ")" : ""}`  }
 					icon={Icon.DownloadSolid}
 				/>
 				<OptionsButton
