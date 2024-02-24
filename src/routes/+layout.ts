@@ -4,5 +4,7 @@ import { dev } from '$app/environment';
 
 export const ssr = false;
 
-inject({ mode: dev ? 'development' : 'production' });
-injectSpeedInsights();
+if (!dev) {
+	inject({ mode: 'production' });
+	injectSpeedInsights();
+}
