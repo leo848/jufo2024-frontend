@@ -293,7 +293,7 @@
 		<PathProperties {path} {length} {norm} {blownUp} />
 
 		<PathAlgorithms
-			on:deletePath={() => (path = null, edges = [])}
+			on:deletePath={() => ((path = null), (edges = []))}
 			bind:invalidate={invalidateAlgorithms}
 			dimensions={dim}
 			values={points.map((p) => p.inner)}

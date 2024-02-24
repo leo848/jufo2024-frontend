@@ -8,9 +8,7 @@
 		assertNever
 	} from '../../server/types';
 
-	import {
-		GradientButton,
-	} from 'flowbite-svelte';
+	import { GradientButton } from 'flowbite-svelte';
 
 	import { onDestroy } from 'svelte';
 	import { flip } from 'svelte/animate';

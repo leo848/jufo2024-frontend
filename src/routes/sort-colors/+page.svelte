@@ -437,7 +437,7 @@
 		/>
 
 		<PathAlgorithms
-			on:deletePath={invalidate(() => (path = null, edges = []))}
+			on:deletePath={invalidate(() => ((path = null), (edges = [])))}
 			bind:invalidate={invalidateAlgorithms}
 			values={colors.map((color) => color.space(space).point().values())}
 		/>

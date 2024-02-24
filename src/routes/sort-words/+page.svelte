@@ -24,11 +24,13 @@
 	import ForceDirectedGraphOptions from '../../components/ForceDirectedGraphOptions.svelte';
 	import ForceDirectedGraph from '../../components/ForceDirectedGraph.svelte';
 	import { fromUrlString, toUrlString } from './url';
+	import LoadWords from './LoadWords.svelte';
 
 	title.set('Wörter sortieren');
 
 	type Word = {
 		inner: string;
+		desc?: string;
 		vec: number[];
 		index: number;
 		error?: string;
@@ -163,7 +165,12 @@
 
 		words = [
 			...words,
-			{ inner: word, index: (words[words.length - 1]?.index ?? -1) + 1, vec: evt.result.vec }
+			{
+				inner: word,
+				index: (words[words.length - 1]?.index ?? -1) + 1,
+				vec: evt.result.vec,
+				desc: evt.desc ?? undefined
+			}
 		];
 	});
 	callbacks[1] = registerCallback(serverOutputRandomWord, (rw) => {
@@ -249,7 +256,7 @@
 			</form>
 			{#each words as word, trueIndex (word.inner)}
 				<div animate:flip>
-					<div class="p-2 rounded text-xl text-white bg-gray-700 flex flex-row">
+					<div class="p-2 rounded text-xl text-white bg-gray-700 flex flex-row" title={word.desc}>
 						<span class="text-gray-400">{word.index + 1}.&nbsp;</span>
 						{word.inner}
 						<div class="grow" />
@@ -271,13 +278,30 @@
 		hide={['norm']}
 		on:add={invalidate(addInput)}
 		on:delete={() => (words = [])}
-	/>
+	>
+		<LoadWords
+			slot="load"
+			bind:invalidate
+			on:load={(e) => {
+				words = [];
+				e.detail.values.forEach((word, index) => {
+					setTimeout(() => {
+						sendWebsocket({
+							type: 'wordToVec',
+							word: word.str.toLowerCase(),
+							desc: word.desc
+						});
+					}, index * 10 + 100);
+				});
+			}}
+		/>
+	</Options>
 
 	<PathAlgorithms
 		dimensions={100}
 		values={adjacencyMatrix(words.map((w) => w.vec))}
 		bind:invalidate={invalidateAlgorithms}
-		on:deletePath={() => (edges = [])}
+		on:deletePath={invalidate(() => (edges = []))}
 		matrix
 	/>
 

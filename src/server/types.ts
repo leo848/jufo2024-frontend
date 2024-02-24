@@ -97,6 +97,7 @@ const serverInputAction = z.object({
 const serverInputLatency = z.object({ type: z.literal('latency') });
 const serverInputWordToVec = z.object({
 	type: z.literal('wordToVec'),
+	desc: z.optional(z.string()),
 	word: z.nullable(z.string())
 });
 const serverInput = z.discriminatedUnion('type', [
@@ -164,6 +165,7 @@ export const serverOutputPathImprovement = z.object({
 export const serverOutputWordToVec = z.object({
 	type: z.literal('wordToVec'),
 	word: z.string(),
+	desc: z.nullable(z.string()),
 	result: z.discriminatedUnion('type', [
 		z.object({ type: z.literal('ok'), vec: z.array(z.number()) }),
 		z.object({ type: z.literal('unknownWord') }),
