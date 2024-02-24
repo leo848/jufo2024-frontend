@@ -121,14 +121,11 @@
 	}
 
 	function shuffleNumbers() {
-		for (let i = 0; i < numbers.length; i++) {
-			for (let j = i + 1; j < numbers.length; j++) {
-				if (Math.random() > 0.5) {
-					let temp = numbers[i];
-					numbers[i] = numbers[j];
-					numbers[j] = temp;
-				}
-			}
+		let currentIndex = numbers.length;
+		while (currentIndex > 0) { 
+			let randomIndex = Math.floor(Math.random() * currentIndex);
+			currentIndex -= 1;
+			[numbers[currentIndex], numbers[randomIndex]] = [numbers[randomIndex], numbers[currentIndex]]
 		}
 	}
 
@@ -201,7 +198,7 @@
 			{/if}
 			{#each numbers as number, index (number.value)}
 				<div
-					animate:flip={{ duration: 200, delay: (redoable ? 1 : 0) * index * 50 }}
+					animate:flip={{ duration: Math.min(latency, 200), delay: (redoable ? 1 : 0) * index * 10 }}
 					transition:scale
 				>
 					<button
@@ -223,7 +220,7 @@
 	<Options
 		on:add={() => numberInput.focus()}
 		on:delete={() => (numbers = [])}
-		on:asVectors={() => goto("/sort-vectors?v=" + numbers.join("o"))}
+		on:asVectors={() => goto('/sort-vectors?v=' + numbers.map(n => n.value).join('o'))}
 		hide={['norm', 'lock', 'load']}
 		xlCol={5}
 		locked={false}

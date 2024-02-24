@@ -25,7 +25,7 @@
 	import ForceDirectedGraph from '../../components/ForceDirectedGraph.svelte';
 	import { fromUrlString, toUrlString } from './url';
 	import LoadWords from './LoadWords.svelte';
-	import {presets} from './presets';
+	import { presets } from './presets';
 
 	title.set('Wörter sortieren');
 

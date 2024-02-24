@@ -118,7 +118,7 @@
 				<OptionsButton
 					on:click={invalidate(() => (state = 'load'))}
 					show={display.has('load')}
-					title={ `Laden${loadAmount ? " (" + loadAmount + ")" : ""}`  }
+					title={`Laden${loadAmount ? ' (' + loadAmount + ')' : ''}`}
 					icon={Icon.DownloadSolid}
 				/>
 				<OptionsButton
