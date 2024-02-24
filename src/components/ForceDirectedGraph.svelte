@@ -87,7 +87,7 @@
 
 	$: for (let i = 0; i < values.length; i++) {
 		if (particles[i]) {
-			if (names[i] != names[i]) {
+			if (particles[i].name != names[i]) {
 				fullParticleUpdate();
 				break;
 			}
