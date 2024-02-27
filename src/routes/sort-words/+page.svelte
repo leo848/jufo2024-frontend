@@ -41,6 +41,7 @@
 	let locked = false;
 	let invalidate: (c: (arg0: any) => void) => (arg0: any) => void;
 	let edges: [number, number][]; // indices;
+	$: words, (edges = []);
 
 	let input: string = '';
 	let inputLoading = false;
@@ -192,7 +193,7 @@
 				newWords.push(words[index]);
 			});
 			words = newWords;
-			edges = newEdges;
+			setTimeout(() => (edges = new Array(words.length - 1).fill(null).map((_, i) => [i, i + 1])));
 		}
 		locked = true;
 	});
@@ -205,7 +206,7 @@
 					edges.push([index, arr[pathIndex + 1]]);
 				}
 			});
-			edges = newEdges;
+			setTimeout(() => (edges = newEdges));
 		}
 		if (pi.done) {
 			let newWords = [];
@@ -213,6 +214,7 @@
 				newWords.push(words[index]);
 			}
 			words = newWords;
+			setTimeout(() => (edges = new Array(words.length - 1).fill(null).map((_, i) => [i, i + 1])));
 		}
 		locked = true;
 	});
@@ -278,7 +280,7 @@
 		xlCol={4}
 		bind:locked
 		bind:invalidate
-		hide={['norm']}
+		hide={['asVector', 'norm']}
 		loadAmount={Object.keys(presets).length}
 		on:add={invalidate(() => addInput({ sendRandom: true }))}
 		on:delete={() => (words = [])}
@@ -288,6 +290,7 @@
 			bind:invalidate
 			on:load={(e) => {
 				words = [];
+				edges = [];
 				e.detail.values.forEach((word, index) => {
 					setTimeout(() => {
 						sendWebsocket({

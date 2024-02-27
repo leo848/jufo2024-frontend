@@ -5,7 +5,7 @@
 	import type { DistanceType } from '../geom/dist';
 	import { adjacencyMatrix } from '../graph/adjacency';
 
-	export let edges: [number, number][]; // indices
+	export let edges: [number, number][] = []; // indices
 	export let values: number[][];
 	export let names: string[];
 	export let norm: DistanceType = 'euclidean';

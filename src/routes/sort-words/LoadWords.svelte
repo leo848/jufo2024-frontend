@@ -31,22 +31,23 @@
 		</div>
 		{#each Object.keys(wordsLists) as name}
 			{@const list = wordsLists[name]}
-			<div class="col-span-3 rounded overflow-hidden">
+			<div class="col-span-6 2xl:col-span-3 rounded overflow-hidden">
 				<button
 					class="text-xl bg-gray-700 hover:bg-gray-600 transition-all p-2 color-white w-full items-center justify-between flex flex-row"
 					on:click={() => (selectedWordList = list)}
 				>
-					<div class="text-white truncate">{list.name}</div>
+					<div class="text-white truncate">({list.values.length}) {list.name}</div>
 					<div><Icon.ArrowRightSolid /></div>
 				</button>
 			</div>
 		{/each}
-		<!-- {/each} -->
 	{:else}
 		<div class="text-3xl col-span-6 text-white align-center">{selectedWordList.name}</div>
-		<div class="max-h-64 col-span-4 overflow-y-scroll flex gap-2 text-sm flex-wrap grow">
+		<div class="max-h-64 col-span-4 overflow-y-scroll flex gap-2 text-sm flex-wrap">
 			{#each selectedWordList.values as point}
-				<div class="rounded-full bg-gray-600 p-1" title={point.desc}>{point.str}</div>
+				<div>
+					<div class="rounded-full bg-gray-600 p-1" title={point.desc}>{point.str}</div>
+				</div>
 			{/each}
 		</div>
 		<div class="col-span-2">
