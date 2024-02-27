@@ -84,18 +84,20 @@
 		});
 	}
 
-	async function addInput() {
+	async function addInput({ sendRandom }: { sendRandom?: boolean } = {}) {
 		if (inputLoading) return;
-		if (input.length === 0 || !input) {
-			if (inputElement === document.activeElement) {
+		if (!input || input.length === 0) {
+			if (inputElement === document.activeElement || sendRandom) {
+if (sendRandom !== false) {
+
 				sendWebsocket({
 					type: 'wordToVec',
 					word: null
 				});
+}
 				inputLoading = true;
-			} else {
-				inputElement.focus();
 			}
+			inputElement.focus();
 			return;
 		}
 
@@ -177,6 +179,7 @@
 	callbacks[1] = registerCallback(serverOutputRandomWord, (rw) => {
 		if (input.length === 0) input = rw.word;
 		inputLoading = false;
+		inputElement.select();
 	});
 	callbacks[2] = registerCallback(serverOutputPathCreation, (pc) => {
 		console.log(pc);
@@ -231,7 +234,7 @@
 					/>
 					<button
 						class={`bg-gray-600 hover:bg-gray-500 text-white p-4 rounded-full`}
-						on:click={invalidate(addInput)}
+						on:click={invalidate(() => addInput())}
 						disabled={inputLoading}
 					>
 						<Icon.PlusSolid />
@@ -278,7 +281,7 @@
 		bind:invalidate
 		hide={['norm']}
 		loadAmount={Object.keys(presets).length}
-		on:add={invalidate(addInput)}
+		on:add={invalidate(()=>addInput({ sendRandom: true }))}
 		on:delete={() => (words = [])}
 	>
 		<LoadWords

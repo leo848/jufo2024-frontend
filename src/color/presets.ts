@@ -1,6 +1,18 @@
 import { Color, NamedColor } from '../color/color';
 import { RgbColor } from '../color/colorSpaces';
 
+function chunks<T>(array: T[], n: number): T[][] {
+	const chunks: T[][] = [];
+	for (let i = 0; i < array.length; i += n) {
+		chunks.push(array.slice(i, i + n));
+	}
+	return chunks;
+}
+
+function transpose<T>(mat: T[][]): T[][] {
+	return mat[0].map((col, i) => mat.map(row => row[i]));
+}
+
 function mapBuntstifte(input: [number, number, number][]): NamedColor[] {
 	return input
 		.map(([r, g, b], index) => ({ r, g, b, index }))
@@ -235,11 +247,11 @@ const presets = {
 	},
 	pearls: {
 		name: 'Perlen',
-		colors: [
+		colors: transpose(chunks([
 			[79, 10, 17],
 			[95, 33, 21],
 			[96, 52, 15],
-			[87, 78, 88],
+			[100, 50, 20],
 			[96, 64, 43],
 			[93, 82, 25],
 			[91, 88, 39],
@@ -251,7 +263,6 @@ const presets = {
 			[22, 55, 80],
 			[2, 73, 94],
 			[34, 77, 78],
-			[27, 74, 87],
 			[55, 84, 90],
 			[36, 13, 48],
 			[46, 25, 61],
@@ -264,7 +275,8 @@ const presets = {
 		].map((arr) => {
 			let ns = arr.map((n) => n / 100);
 			return new RgbColor(ns[0], ns[1], ns[2]).color();
-		})
+		}), 4)).flat()
+
 	},
 	langfassung: {
 		name: 'Langfassung',
