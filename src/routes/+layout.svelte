@@ -227,6 +227,7 @@
 	.rotating-bg {
 		background-repeat: repeat-x;
 		animation: rotate-bg 100s linear infinite;
+		border-top: 0.25rem solid rgba(255, 255, 255, 50%);
 	}
 
 	@keyframes rotate-bg {
