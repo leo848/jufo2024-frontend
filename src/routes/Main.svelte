@@ -7,8 +7,8 @@
 			img: '/vackground-pattern.png',
 			imgSource: 'vackground.com',
 			href: '/sort-integers',
-			text: 'Liste natürlicher Zahlen sortieren',
-			desc: 'Eine Liste natürlicher Zahlen bis 999 mittels verschiedener linearithmischer oder quadratischer Algorithmen sortieren und die Sortierung visualisieren'
+			text: 'Liste ganzer Zahlen sortieren',
+			desc: 'Eine Liste ganzer Zahlen zwischen -9999 und 9999 mittels verschiedener linearithmischer oder quadratischer Algorithmen sortieren und die Sortierung visualisieren'
 		},
 		{
 			img: '/robert-katzki-colors.png',
