@@ -28,7 +28,7 @@
 
 	let numbers: { value: number; id: number; highlight?: Highlight }[] = [];
 
-	let latencySlider = 1;
+	let latencySlider = 3;
 	$: latency = [0, 100, 250, 500, 1000, 2000][latencySlider];
 
 	const algorithms = [
