@@ -88,13 +88,12 @@
 		if (inputLoading) return;
 		if (!input || input.length === 0) {
 			if (inputElement === document.activeElement || sendRandom) {
-if (sendRandom !== false) {
-
-				sendWebsocket({
-					type: 'wordToVec',
-					word: null
-				});
-}
+				if (sendRandom !== false) {
+					sendWebsocket({
+						type: 'wordToVec',
+						word: null
+					});
+				}
 				inputLoading = true;
 			}
 			inputElement.focus();
@@ -281,7 +280,7 @@ if (sendRandom !== false) {
 		bind:invalidate
 		hide={['norm']}
 		loadAmount={Object.keys(presets).length}
-		on:add={invalidate(()=>addInput({ sendRandom: true }))}
+		on:add={invalidate(() => addInput({ sendRandom: true }))}
 		on:delete={() => (words = [])}
 	>
 		<LoadWords

@@ -58,7 +58,7 @@
 		return (i) => {
 			if (locked) {
 				lockAnim.update((l) => l + 1, { duration: 0 }).then(() => lockAnim.set(0, { delay: 250 }));
-				lockIcon.scrollIntoView({ behavior: "smooth" });
+				lockIcon.scrollIntoView({ behavior: 'smooth' });
 				if (invalid) invalid(i);
 			} else {
 				dispatch('blowUp');

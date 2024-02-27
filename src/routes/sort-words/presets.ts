@@ -126,7 +126,7 @@ export const presets = {
 			{ str: 'violett' },
 			{ str: 'kranich' },
 			{ str: 'gelb' },
-			{ str: 'grün' },
+			{ str: 'grün' }
 		]
 	},
 	europe: {
@@ -538,5 +538,5 @@ export const presets = {
 				desc: 'Eine Zahl, die, wenn sie mit sich selbst multipliziert wird, ein bestimmtes Ergebnis ergibt.'
 			}
 		].sort((a, b) => a.str.localeCompare(b.str))
-	},
+	}
 } satisfies Partial<Record<string, WordList>>;

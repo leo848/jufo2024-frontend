@@ -10,7 +10,7 @@ function chunks<T>(array: T[], n: number): T[][] {
 }
 
 function transpose<T>(mat: T[][]): T[][] {
-	return mat[0].map((col, i) => mat.map(row => row[i]));
+	return mat[0].map((col, i) => mat.map((row) => row[i]));
 }
 
 function mapBuntstifte(input: [number, number, number][]): NamedColor[] {
@@ -247,36 +247,40 @@ const presets = {
 	},
 	pearls: {
 		name: 'Perlen',
-		colors: transpose(chunks([
-			[79, 10, 17],
-			[95, 33, 21],
-			[96, 52, 15],
-			[100, 50, 20],
-			[96, 64, 43],
-			[93, 82, 25],
-			[91, 88, 39],
-			[91, 85, 73],
-			[37, 76, 64],
-			[2, 56, 50],
-			[1, 67, 49],
-			[89, 90, 92],
-			[22, 55, 80],
-			[2, 73, 94],
-			[34, 77, 78],
-			[55, 84, 90],
-			[36, 13, 48],
-			[46, 25, 61],
-			[63, 55, 76],
-			[49, 50, 56],
-			[95, 54, 70],
-			[96, 66, 73],
-			[98, 79, 76],
-			[97, 75, 82]
-		].map((arr) => {
-			let ns = arr.map((n) => n / 100);
-			return new RgbColor(ns[0], ns[1], ns[2]).color();
-		}), 4)).flat()
-
+		colors: transpose(
+			chunks(
+				[
+					[79, 10, 17],
+					[95, 33, 21],
+					[96, 52, 15],
+					[100, 50, 20],
+					[96, 64, 43],
+					[93, 82, 25],
+					[91, 88, 39],
+					[91, 85, 73],
+					[37, 76, 64],
+					[2, 56, 50],
+					[1, 67, 49],
+					[89, 90, 92],
+					[22, 55, 80],
+					[2, 73, 94],
+					[34, 77, 78],
+					[55, 84, 90],
+					[36, 13, 48],
+					[46, 25, 61],
+					[63, 55, 76],
+					[49, 50, 56],
+					[95, 54, 70],
+					[96, 66, 73],
+					[98, 79, 76],
+					[97, 75, 82]
+				].map((arr) => {
+					let ns = arr.map((n) => n / 100);
+					return new RgbColor(ns[0], ns[1], ns[2]).color();
+				}),
+				4
+			)
+		).flat()
 	},
 	langfassung: {
 		name: 'Langfassung',

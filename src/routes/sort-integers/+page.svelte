@@ -17,7 +17,7 @@
 	import { scale, slide } from 'svelte/transition';
 	import Window from '../../components/Window.svelte';
 	import Options from '../../components/Options.svelte';
-	import {goto} from '$app/navigation';
+	import { goto } from '$app/navigation';
 
 	title.set('Zahlen sortieren');
 
@@ -122,10 +122,10 @@
 
 	function shuffleNumbers() {
 		let currentIndex = numbers.length;
-		while (currentIndex > 0) { 
+		while (currentIndex > 0) {
 			let randomIndex = Math.floor(Math.random() * currentIndex);
 			currentIndex -= 1;
-			[numbers[currentIndex], numbers[randomIndex]] = [numbers[randomIndex], numbers[currentIndex]]
+			[numbers[currentIndex], numbers[randomIndex]] = [numbers[randomIndex], numbers[currentIndex]];
 		}
 	}
 
@@ -198,7 +198,10 @@
 			{/if}
 			{#each numbers as number, index (number.value)}
 				<div
-					animate:flip={{ duration: Math.min(latency, 200), delay: (redoable ? 1 : 0) * index * 10 }}
+					animate:flip={{
+						duration: Math.min(latency, 200),
+						delay: (redoable ? 1 : 0) * index * 10
+					}}
 					transition:scale
 				>
 					<button
@@ -220,7 +223,7 @@
 	<Options
 		on:add={() => numberInput.focus()}
 		on:delete={() => (numbers = [])}
-		on:asVectors={() => goto('/sort-vectors?v=' + numbers.map(n => n.value).join('o'))}
+		on:asVectors={() => goto('/sort-vectors?v=' + numbers.map((n) => n.value).join('o'))}
 		hide={['norm', 'lock', 'load']}
 		xlCol={5}
 		locked={false}

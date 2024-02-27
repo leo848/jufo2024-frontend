@@ -19,8 +19,6 @@
 	export let horizontal: boolean = false;
 	export let xlCol: number | null = null;
 
-	let chainLength = tweened(0);
-
 	let displayLength = tweened(length, {
 		duration(from, to) {
 			return constrain(Math.abs(to - from), 5, 100) * 20;
@@ -35,19 +33,24 @@
 
 	let distances: number[] = [];
 
-	$: if (path != null) {
+	function setDistChain() {
+		if (path === null) {
+			chainLength.set(0);
+			distances = [];
+			return;
+		}
 		let lengthAcc = 0;
 		distances = [];
 		for (let i = 0; i < path.length - 1; i++) {
 			const dist = distance(path[i], path[i + 1], norm);
 			lengthAcc += dist;
-			distances.push(dist);
+			distances = [...distances, dist];
 		}
 		chainLength.set(lengthAcc);
-	} else {
-		chainLength.set(0);
-		distances = [];
 	}
+
+	let chainLength = tweened(0);
+	$: path, setDistChain();
 
 	$: chainLengthDisplay = $chainLength.toFixed(
 		Math.max(3 - Math.max(0, Math.log10($chainLength)), 0) - 0.001
