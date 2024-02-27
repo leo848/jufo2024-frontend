@@ -12,6 +12,8 @@
 	import { flip } from 'svelte/animate';
 
 	import './fonts.css';
+	import { gradient } from '../ui/color';
+	import { OklabColor } from '../color/colorSpaces';
 
 	let errors: { error: DisplayError; showDetails: boolean }[] = [];
 	let ignore = new Set();
@@ -25,6 +27,13 @@
 
 	function keySep(strings: string[]): string {
 		return strings.join('|SEP|␞');
+	}
+
+	function addIgnore(title: string, origin: string) {
+		console.log(ignore);
+		const key = keySep([title, origin]);
+		ignore.add(key);
+		errors = errors.filter((e) => keySep([e.error.title, e.error.origin]) != key);
 	}
 
 	const pages = [
@@ -45,11 +54,20 @@
 		{ url: '/Abbildungen.pdf', title: 'Abbildungen' }
 	];
 
-	function addIgnore(title: string, origin: string) {
-		console.log(ignore);
-		const key = keySep([title, origin]);
-		ignore.add(key);
-		errors = errors.filter((e) => keySep([e.error.title, e.error.origin]) != key);
+	let footerGradient: string;
+	{
+		const amount = 100;
+		let range = new Array(amount)
+			.fill(0)
+			.map((_v, i) => i / (amount - 1))
+			.map((v) => v * Math.PI * 2)
+			.map((h, i) => {
+				const l = 0.3;
+				const c = 0.05;
+				const [a, b] = [c * Math.sin(h), c * Math.cos(h)];
+				return OklabColor.fromUnnormalOklab(l, a, b).color();
+			});
+		footerGradient = gradient(range);
 	}
 </script>
 
@@ -142,29 +160,34 @@
 	<slot />
 	<!-- </PageTransition> -->
 	<div class="h-64" />
-	<div class="min-h-40 bg-gray-800 text-gray-300 p-10 grid grid-cols-6 gap-12">
+	<div
+		class="min-h-40 bg-gray-800 text-gray-300 p-10 grid grid-cols-6 gap-12 rotating-bg"
+		style={`background:${footerGradient}`}
+	>
 		<!-- footer -->
-		<div class="col-span-2">
+		<div class="xl:col-span-2 col-span-3">
 			<div class="text-6xl">sorting the colors</div>
 			<div class="text-2xl">
 				Dimensionsbezogene <b>Generalisierung</b><br />vergleichsbasierter <b>Sortierung</b>
 			</div>
 		</div>
-		<div class="col-span-2">
-			<img
-				class="bg-white-transparent p-2 rounded-md mb-4"
-				src="1920px-Jugend_forscht.svg"
-				alt="Jugend forscht logo"
-			/>
+		<div class="xl:col-span-2 col-span-3">
+			<a href="https://jugend-forscht.de" target="_blank">
+				<img
+					class="bg-white-transparent p-2 rounded-md mb-4"
+					src="1920px-Jugend_forscht.svg"
+					alt="Jugend forscht logo"
+				/>
+			</a>
 			<div class="">Ein <b>jugend forscht</b>-Projekt von Leo Blume</div>
-			<div class="text-gray-500">
+			<div class="opacity-50">
 				Copyright &copy; 2023, 2024 Leo Blume. Der Quelltext des Projekts (Frontend und Backend)
 				steht unter der GNU GPL v3-Lizenz und ist damit freie Software; er kann unter den
 				Bedingungen dieser Lizenz geteilt und/oder modifiziert werden.
 			</div>
 		</div>
 
-		<div class="col-span-1">
+		<div class="col-span-2 xl:col-span-1">
 			<div class="text-gray-200 text-2xl">Unterseiten</div>
 			<div class="flex flex-col text-gray-400">
 				{#each pages as page}
@@ -176,14 +199,14 @@
 				{/each}
 			</div>
 		</div>
-		<div class="col-span-1">
+		<div class="col-span-2 xl:col-span-1">
 			<div class="text-gray-200 text-2xl">Weitere Links</div>
 			<div class="flex flex-col text-gray-400">
 				{#each links as link}
 					<a
 						href={link.url}
 						target="_blank"
-						class="underline underline-offset-2 hover:underline-offset-4 transition-all hover:text-gray-200"
+						class="underline underline-offset-2 hover:underline-offset-4 transition-all hover:text-gray-200 active:text-gray-200"
 						>{link.title}</a
 					>
 				{/each}
@@ -195,5 +218,23 @@
 <style>
 	.bg-white-transparent {
 		background-color: rgba(255, 255, 255, 10%);
+		transition: all 0.1s;
+	}
+	.bg-white-transparent:hover {
+		background-color: rgba(255, 255, 255, 50%);
+	}
+
+	.rotating-bg {
+		background-repeat: repeat-x;
+		animation: rotate-bg 100s linear infinite;
+	}
+
+	@keyframes rotate-bg {
+		from {
+			background-position-x: 0vw;
+		}
+		to {
+			background-position-x: 100vw;
+		}
 	}
 </style>

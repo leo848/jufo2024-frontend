@@ -424,6 +424,10 @@ export class OklabColor extends AbstractColor<OklabColor, LabComponent> {
 		return new OklabColor(l1, rangeMap(a1, [-0.4, 0.4], [0, 1]), rangeMap(b1, [-0.4, 0.4], [0, 1]));
 	}
 
+	static fromUnnormalOklab(l: number, a: number, b: number): OklabColor {
+		return new OklabColor(l, rangeMap(a, [-0.4, 0.4], [0, 1]), rangeMap(b, [-0.4, 0.4], [0, 1]));
+	}
+
 	unnormal(): { l: number; a: number; b: number } {
 		return {
 			l: this.l,
