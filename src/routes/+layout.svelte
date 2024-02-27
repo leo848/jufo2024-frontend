@@ -28,6 +28,7 @@
 	}
 
 	const pages = [
+		{ url: '/', title: 'Startseite' },
 		{ url: '/sort-colors', title: 'Farben sortieren' },
 		{ url: '/sort-integers', title: 'Zahlen sortieren' },
 		{ url: '/sort-words', title: 'Wörter sortieren' },
@@ -39,7 +40,9 @@
 		{ url: 'https://youtu.be/MUNU9x1WDwU', title: 'Video (Vollversion 8min)' },
 		{ url: 'https://vimeo.com/916472978', title: 'Video (gekürzt 3min)' },
 		{ url: 'https://github.com/leo848/jufo2024-backend', title: 'Quelltext Backend' },
-		{ url: 'https://github.com/leo848/jufo2024-frontend', title: 'Quelltext Frontend' }
+		{ url: 'https://github.com/leo848/jufo2024-frontend', title: 'Quelltext Frontend' },
+		{ url: '/Karten.pdf', title: 'Farbkarten (ausdruckbar)' },
+		{ url: '/Abbildungen.pdf', title: 'Abbildungen' }
 	];
 
 	function addIgnore(title: string, origin: string) {
@@ -142,17 +145,22 @@
 	<div class="min-h-40 bg-gray-800 text-gray-300 p-10 grid grid-cols-6 gap-12">
 		<!-- footer -->
 		<div class="col-span-2">
-			<div class="text-2xl">sorting the colors</div>
-			<div class="text-xl">
+			<div class="text-6xl">sorting the colors</div>
+			<div class="text-2xl">
 				Dimensionsbezogene <b>Generalisierung</b><br />vergleichsbasierter <b>Sortierung</b>
 			</div>
 		</div>
 		<div class="col-span-2">
+			<img
+				class="bg-white-transparent p-2 rounded-md mb-4"
+				src="1920px-Jugend_forscht.svg"
+				alt="Jugend forscht logo"
+			/>
 			<div class="">Ein <b>jugend forscht</b>-Projekt von Leo Blume</div>
 			<div class="text-gray-500">
-				Copyright &copy; 2023, 2024 Leo Blume. Das Projekt (Frontend und Backend) steht unter der
-				GNU GPL v3-Lizenz und ist damit freie Software; es kann unter den Bedingungen dieser Lizenz
-				geteilt und/oder modifiziert werden.
+				Copyright &copy; 2023, 2024 Leo Blume. Der Quelltext des Projekts (Frontend und Backend)
+				steht unter der GNU GPL v3-Lizenz und ist damit freie Software; er kann unter den
+				Bedingungen dieser Lizenz geteilt und/oder modifiziert werden.
 			</div>
 		</div>
 
@@ -174,6 +182,7 @@
 				{#each links as link}
 					<a
 						href={link.url}
+						target="_blank"
 						class="underline underline-offset-2 hover:underline-offset-4 transition-all hover:text-gray-200"
 						>{link.title}</a
 					>
@@ -182,3 +191,9 @@
 		</div>
 	</div>
 </div>
+
+<style>
+	.bg-white-transparent {
+		background-color: rgba(255, 255, 255, 10%);
+	}
+</style>
