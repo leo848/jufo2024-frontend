@@ -14,6 +14,7 @@
 	import './fonts.css';
 	import { gradient } from '../ui/color';
 	import { OklabColor } from '../color/colorSpaces';
+	import { PerceptualGradient } from '../color/gradient';
 
 	let errors: { error: DisplayError; showDetails: boolean }[] = [];
 	let ignore = new Set();
@@ -61,7 +62,7 @@
 			.fill(0)
 			.map((_v, i) => i / (amount - 1))
 			.map((v) => v * Math.PI * 2)
-			.map((h, i) => {
+			.map((h) => {
 				const l = 0.3;
 				const c = 0.05;
 				const [a, b] = [c * Math.sin(h), c * Math.cos(h)];

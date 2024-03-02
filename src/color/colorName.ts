@@ -161,14 +161,14 @@ export async function getColorName(
 		handleColorNameApiError({ type: 'noResponse' });
 		// return Promise.reject();
 		const dummy = {
-			name: "Kein Internet",
+			name: 'Kein Internet',
 			rgb: {
 				r: color.r,
 				g: color.g,
-				b: color.b,
+				b: color.b
 			},
 			distance: 0.0,
-			color: color.color(),
+			color: color.color()
 		} satisfies ColorNameMetadata;
 		return dummy;
 	}

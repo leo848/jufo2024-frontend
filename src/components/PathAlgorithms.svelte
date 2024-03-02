@@ -332,16 +332,16 @@
 				<div>
 					<div class="rounded-xl mb-4" in:scale={{ delay: 150 }}>{description}</div>
 					{#key latency}
-					{#if expectedTime}
-						{@const time = expectedTime(values.length)}
-						{#if time === null}
-							<div>Erwartete Zeit: beliebig</div>
-						{:else if time < 1}
-							<div>Erwartete Zeit: <b>&lt;1</b> Sekunde</div>
-						{:else}
-							<div>Erwartete Zeit: <b>{time}</b> Sekunden</div>
+						{#if expectedTime}
+							{@const time = expectedTime(values.length)}
+							{#if time === null}
+								<div>Erwartete Zeit: beliebig</div>
+							{:else if time < 1}
+								<div>Erwartete Zeit: <b>&lt;1</b> Sekunde</div>
+							{:else}
+								<div>Erwartete Zeit: <b>{time}</b> Sekunden</div>
+							{/if}
 						{/if}
-					{/if}
 					{/key}
 					{#if complexity}
 						<div>Komplexität: <b>{complexity}</b></div>

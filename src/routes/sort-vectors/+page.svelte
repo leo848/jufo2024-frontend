@@ -272,7 +272,7 @@
 			bind:invalidate
 			bind:norm
 			xlCol={4}
-	  		hide={["asVector", "load"]}
+			hide={['asVector', 'load']}
 			on:add={invalidate(addEmptyVector)}
 			on:delete={invalidate(() => data.set([]))}
 		/>

@@ -3,6 +3,8 @@
 	import type { Color } from '../color/color';
 	import { RgbColor } from '../color/colorSpaces';
 	import { rangeMap } from '../utils/math';
+	import { PerceptualGradient } from '../color/gradient';
+	import { quartInOut } from 'svelte/easing';
 
 	export let values: number[][];
 	export let vertexNames: string[];
@@ -36,14 +38,32 @@
 		}
 	}
 
-	function distColor(dist: number): Color {
-		let [minColor, maxColor] = [new RgbColor(0, 255, 0), new RgbColor(255, 0, 0)].map((rgb) => {
+	function distColor(dist: number): Color | null {
+		/*let [minColor, maxColor] = [new RgbColor(0, 255, 0), new RgbColor(255, 0, 0)].map((rgb) => {
 			return rgb.color().space('hsl').with('s', 0.2).color().oklab().with('l', 0.3);
-		});
+		});*/
+		function unease(t: number): number {
+			// Inverse cbrt ease.
+			return Math.sqrt(t);
+		}
 
-		let t = rangeMap(dist, [min, max], [0, 1]);
-		let result = minColor.lerp(maxColor, t).color();
-		return result;
+		function symmetrify(unease: (t: number) => number): (t: number) => number {
+			return (t: number) => {
+				if (t < 0.5) {
+					return unease(t) / (2 * unease(0.5));
+				} else {
+					return -(unease(1 - t) / (2 * unease(0.5))) + 1;
+				}
+			};
+		}
+
+		let t = symmetrify(unease)(rangeMap(dist, [min, max], [0, 1]));
+		let sample = PerceptualGradient.Icefire.sample(t);
+		if (!sample) return null;
+		let sampleDarker = sample.with('l', Math.min(sample.l, 0.3));
+		let sampleHsl = sampleDarker.color().space('hsl');
+		let color = sampleDarker.color().space('hsl').with('s', Math.min(sampleHsl.s, 0.4)).color();
+		return color;
 	}
 </script>
 
@@ -76,7 +96,9 @@
 				{#if index != index1}
 					<div
 						class="tabular-nums py-2 px-2 border-gray-500 border-1 border"
-						style={`background-color:${distColor(value).rgb().css()}`}
+						style={`background-color:${(distColor(value) ?? new RgbColor(0.2, 0.2, 0.2).color())
+							.rgb()
+							.css()}`}
 					>
 						{value.toFixed(digits)}
 					</div>

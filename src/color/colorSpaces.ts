@@ -9,7 +9,7 @@ import {
 	type HslComponent,
 	type XyzComponent
 } from './color';
-import { linearGradient } from './gradient';
+import { linearGradient } from './canvas';
 import { toGamma, toLinear } from './linearity';
 import { Point3 } from '../geom/point';
 
