@@ -159,7 +159,18 @@ export async function getColorName(
 		json = await response.json();
 	} catch (e) {
 		handleColorNameApiError({ type: 'noResponse' });
-		return Promise.reject();
+		// return Promise.reject();
+		const dummy = {
+			name: "Kein Internet",
+			rgb: {
+				r: color.r,
+				g: color.g,
+				b: color.b,
+			},
+			distance: 0.0,
+			color: color.color(),
+		} satisfies ColorNameMetadata;
+		return dummy;
 	}
 	const parse = colorNameApiResponse.safeParse(json);
 	if (!parse.success) {

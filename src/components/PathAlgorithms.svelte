@@ -57,7 +57,7 @@
 						'Die Punkte werden zufällig nacheinander ausgewählt und so zu einem Pfad zusammengefügt.',
 					method: 'random',
 					complexity: 'O(n)',
-					expectedTime: () => null,
+					expectedTime: () => 0,
 					icon: Icon.ShuffleOutline
 				},
 				{
@@ -66,7 +66,7 @@
 						'Alle möglichen Permutationen der Punkte werden ausprobiert und die minimale wird gewählt.',
 					method: 'bruteForce',
 					complexity: 'O(n!)',
-					expectedTime: (n: number) => factorial(n) / 360,
+					expectedTime: (n: number) => Math.max((latency / 1000) * n, factorial(n) / 100000),
 					icon: Icon.HourglassOutline
 				},
 				{
@@ -74,8 +74,8 @@
 					description:
 						'Die Methode des nächsten Nachbarn beginnt mit dem Anfangspunkt und wählt stets den nächsten Punkt, der noch nicht besucht wurde, und baut so den Pfad auf.',
 					method: 'nearestNeighbor',
-					complexity: 'O(n³)',
-					expectedTime: (n: number) => Math.min(n / 2, 5),
+					complexity: 'O(n²)',
+					expectedTime: (n: number) => (latency / 1000) * n,
 					icon: Icon.PhoneOutline
 				},
 				{
@@ -84,6 +84,7 @@
 						'Der Greedy-Algorithmus wählt stets die kürzeste Kante aus, bei deren Auswahl kein Zyklus entsteht.',
 					method: 'greedy',
 					complexity: 'O(n²)',
+					expectedTime: (n: number) => (latency / 1000) * n,
 					icon: Icon.DollarOutline
 				}
 				/*{
@@ -330,6 +331,7 @@
 			<div class="flex flex-col justify-between grow">
 				<div>
 					<div class="rounded-xl mb-4" in:scale={{ delay: 150 }}>{description}</div>
+					{#key latency}
 					{#if expectedTime}
 						{@const time = expectedTime(values.length)}
 						{#if time === null}
@@ -340,6 +342,7 @@
 							<div>Erwartete Zeit: <b>{time}</b> Sekunden</div>
 						{/if}
 					{/if}
+					{/key}
 					{#if complexity}
 						<div>Komplexität: <b>{complexity}</b></div>
 					{/if}
