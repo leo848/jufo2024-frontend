@@ -34,7 +34,7 @@
 	let distances: number[] = [];
 
 	function setDistChain() {
-		if (path === null) {
+		if (path == null) {
 			chainLength.set(0);
 			distances = [];
 			return;
