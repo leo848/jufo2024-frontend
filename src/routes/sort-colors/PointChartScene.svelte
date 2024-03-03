@@ -94,6 +94,7 @@
 		const evtType = 'touch' + evtTypeSuffix;
 		canvas.addEventListener(evtType, advance);
 	}
+	canvas.addEventListener('wheel', advance);
 
 	let displayPoints: Tweened<{ point: Point3; color: Color }[]> = tweened(undefined, {
 		duration: 500,
