@@ -1,6 +1,6 @@
 @font-face {
 	font-family: 'Inter';
-	src: url('fonts/Inter.ttf') format('truetype'),
+	src: url('/fonts/Inter.ttf') format('truetype'),
 		url('https://sorting-the-colors.vercel.app/fonts/Inter.ttf') format('truetype');
 }
 @font-face {

@@ -14,7 +14,6 @@
 	import './fonts.css';
 	import { gradient } from '../ui/color';
 	import { OklabColor } from '../color/colorSpaces';
-	import { PerceptualGradient } from '../color/gradient';
 
 	let errors: { error: DisplayError; showDetails: boolean }[] = [];
 	let ignore = new Set();
@@ -47,7 +46,7 @@
 	];
 	const links = [
 		{ url: '/Langfassung.pdf', title: 'Langfassung' },
-		{ url: 'https://youtu.be/MUNU9x1WDwU', title: 'Video (Vollversion 8min)' },
+		{ url: '/video/8m', title: 'Video (Vollversion 8min)', target: '_self' },
 		{ url: 'https://vimeo.com/916472978', title: 'Video (gekürzt 3min)' },
 		{ url: 'https://github.com/leo848/jufo2024-backend', title: 'Quelltext Backend' },
 		{ url: 'https://github.com/leo848/jufo2024-frontend', title: 'Quelltext Frontend' },
@@ -176,7 +175,7 @@
 			<a href="https://jugend-forscht.de" target="_blank">
 				<img
 					class="bg-white-transparent p-2 rounded-md mb-4"
-					src="1920px-Jugend_forscht.svg"
+					src="/1920px-Jugend_forscht.svg"
 					alt="Jugend forscht logo"
 				/>
 			</a>
@@ -206,7 +205,7 @@
 				{#each links as link}
 					<a
 						href={link.url}
-						target="_blank"
+						target={link.target ?? "_blank"}
 						class="underline underline-offset-2 hover:underline-offset-4 transition-all hover:text-gray-200 active:text-gray-200"
 						>{link.title}</a
 					>
