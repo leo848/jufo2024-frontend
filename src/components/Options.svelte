@@ -1,7 +1,7 @@
 <script lang="ts">
 	import * as Icon from 'flowbite-svelte-icons';
 	import Window from '../components/Window.svelte';
-	import type { DistanceType } from '../geom/dist';
+	import type { TrueDistanceType } from '../geom/dist';
 	import { createEventDispatcher } from 'svelte';
 	import { tweened } from 'svelte/motion';
 	import { sineIn } from 'svelte/easing';
@@ -12,12 +12,29 @@
 	type State = 'default' | 'load' | 'store';
 	let state: State = 'default';
 
-	export let norm: DistanceType = 'euclidean';
+	export let metric: TrueDistanceType;
 	export let colorSpace: ColorSpace = 'rgb';
 
-	type Module = 'add' | 'delete' | 'lock' | 'norm' | 'colorSpace' | 'load' | 'store' | 'asVector';
+	type Module =
+		| 'add'
+		| 'delete'
+		| 'lock'
+		| 'norm'
+		| 'modifiedNorm'
+		| 'colorSpace'
+		| 'load'
+		| 'store'
+		| 'asVector';
 
-	const defaultShow = new Set(['add', 'delete', 'lock', 'norm', 'load', 'asVector'] as Module[]);
+	const defaultShow = new Set([
+		'add',
+		'delete',
+		'lock',
+		'norm',
+		'modifiedNorm',
+		'load',
+		'asVector'
+	] as Module[]);
 	export let show: Module[] = [];
 	export let hide: Module[] = [];
 
@@ -38,7 +55,7 @@
 		delete: null;
 		blowUp: null;
 		asVectors: null;
-		norm: DistanceType;
+		norm: TrueDistanceType;
 	}>();
 
 	let stateNames: Record<State, string> = {
@@ -103,9 +120,18 @@
 				show={display.has('norm')}
 				icon={Icon.RulerCombinedSolid}
 				title="Metrik"
-				bind:value={norm}
+				bind:value={metric.norm}
 				options={['manhattan', 'euclidean', 'max']}
 				optionNames={['Manhattan', 'Euklidisch', 'Maximum']}
+				{invalidate}
+			/>
+			<OptionsSelect
+				show={display.has('modifiedNorm')}
+				icon={Icon.RulerCombinedSolid}
+				title="Umkehren"
+				bind:value={metric.invert}
+				options={[false, true]}
+				optionNames={['Nein', 'Ja']}
 				{invalidate}
 			/>
 			<OptionsSelect

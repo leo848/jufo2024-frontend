@@ -225,6 +225,7 @@
 		on:delete={() => (numbers = [])}
 		on:asVectors={() => goto('/sort-vectors?v=' + numbers.map((n) => n.value).join('o'))}
 		hide={['norm', 'lock', 'load']}
+		metric={{ norm: 'manhattan', invert: false }}
 		xlCol={5}
 		locked={false}
 	/>

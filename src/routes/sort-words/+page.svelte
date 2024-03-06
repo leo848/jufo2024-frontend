@@ -10,7 +10,7 @@
 		serverOutputWordToVec
 	} from '../../server/types';
 	import AdjacencyMatrix from '../../components/AdjacencyMatrix.svelte';
-	import { adjacencyMatrix } from '../../graph/adjacency';
+	import { adjacencyMatrix, positiveAdjacencyMatrix } from '../../graph/adjacency';
 	import { flip } from 'svelte/animate';
 	import { goto } from '$app/navigation';
 	import { page } from '$app/stores';
@@ -26,6 +26,7 @@
 	import { fromUrlString, toUrlString } from './url';
 	import LoadWords from './LoadWords.svelte';
 	import { presets } from './presets';
+	import type { TrueDistanceType } from '../../geom/dist';
 
 	title.set('Wörter sortieren');
 
@@ -39,6 +40,7 @@
 
 	let words: Word[] = [];
 	let locked = false;
+	let metric: TrueDistanceType = { norm: 'cosine', invert: false };
 	let invalidate: (c: (arg0: any) => void) => (arg0: any) => void;
 	let edges: [number, number][]; // indices;
 	$: words, (edges = []);
@@ -281,6 +283,7 @@
 		bind:locked
 		bind:invalidate
 		hide={['asVector', 'norm']}
+		bind:metric
 		loadAmount={Object.keys(presets).length}
 		on:add={invalidate(() => addInput({ sendRandom: true }))}
 		on:delete={() => (words = [])}
@@ -306,7 +309,10 @@
 
 	<PathAlgorithms
 		dimensions={100}
-		values={adjacencyMatrix(words.map((w) => w.vec))}
+		values={adjacencyMatrix(
+			words.map((w) => w.vec),
+			metric
+		)}
 		bind:invalidate={invalidateAlgorithms}
 		on:deletePath={invalidate(() => (edges = []))}
 		matrix
@@ -314,9 +320,9 @@
 
 	<Window xlCol={8} title="Adjazenzmatrix" scrollable>
 		<AdjacencyMatrix
-			values={adjacencyMatrix(
+			values={positiveAdjacencyMatrix(
 				words.toSorted((w1, w2) => w1.index - w2.index).map((w) => w.vec),
-				'cosine'
+				metric
 			)}
 			vertexNames={words.toSorted((w1, w2) => w1.index - w2.index).map((w) => w.inner)}
 			collapseNames
@@ -325,16 +331,19 @@
 		/>
 	</Window>
 
-	<PathProperties length={words.length} path={words.map((w) => w.vec)} norm="cosine" xlCol={4} />
+	<PathProperties length={words.length} path={words.map((w) => w.vec)} {metric} xlCol={4} />
 	<Window title="Ansicht des Graphen (FDGD)" options xlCol={5}>
 		<ForceDirectedGraphOptions slot="options" bind:options={fdgOptions} actions={fdgActions} />
 		<div class="h-full m-0 min-h-[420px]">
 			<ForceDirectedGraph
 				bind:redraw
-				values={adjacencyMatrix(words.map((w) => w.vec))}
+				values={positiveAdjacencyMatrix(
+					words.map((w) => w.vec),
+					{ norm: 'cosine', invert: false }
+				)}
 				names={words.map((w) => w.inner)}
 				{edges}
-				norm="cosine"
+				{metric}
 				options={fdgOptions}
 				bind:actions={fdgActions}
 			/>

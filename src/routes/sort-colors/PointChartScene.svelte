@@ -9,14 +9,14 @@
 	import { Point3, axes } from '../../geom/point';
 	import { createEventDispatcher, onMount } from 'svelte';
 	import { type Tweened, tweened } from 'svelte/motion';
-	import type { DistanceType } from '../../geom/dist';
+	import type { TrueDistanceType } from '../../geom/dist';
 
 	extend({
 		OrbitControls
 	});
 
 	export let projection: 'orthographic' | 'perspective' = 'orthographic';
-	export let norm: DistanceType = 'euclidean';
+	export let metric: TrueDistanceType;
 	export let space: ColorSpace;
 	export let colors: Color[];
 	export let edges: [Point3, Point3, Color | undefined][];
@@ -288,7 +288,7 @@
 
 {#each $displayEdges as [pointA, pointB] ([pointA, pointB])}
 	{@const [displayA, displayB] = [pointA.scale(10), pointB.scale(10)]}
-	{#if norm === 'euclidean'}
+	{#if metric.norm === 'euclidean'}
 		{@const deltaVector = displayA.delta(displayB)}
 		{@const distance = deltaVector.mag()}
 		{@const position = displayA.add(deltaVector.scale(0.5)).values()}
@@ -311,7 +311,7 @@
 				})
 				.values()}
 			{@const rotation = rotations[index]}
-			{@const maxFactor = norm === 'max' ? (index !== maxIndex ? 0.4 : 1) : 1}
+			{@const maxFactor = metric.norm === 'max' ? (index !== maxIndex ? 0.4 : 1) : 1}
 			<T.Mesh {position} rotation={[rotation[0], rotation[1], rotation[2]]}>
 				<T.CylinderGeometry
 					args={[0.09 * maxFactor, 0.075 * maxFactor, displayA[axis] - displayB[axis], 10]}

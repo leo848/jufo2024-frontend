@@ -1,16 +1,33 @@
-import { assertNever } from '../server/types';
+import { z } from 'zod';
 import { rangeMap } from '../utils/math';
 
-export type DistanceType = 'euclidean' | 'manhattan' | 'max' | 'cosine';
+export const Norm = z.enum(['euclidean', 'manhattan', 'max', 'cosine']);
+export type Norm = z.infer<typeof Norm>;
+export const DistanceType = z.object({
+	norm: Norm,
+	invert: z.boolean()
+});
+export type TrueDistanceType = z.infer<typeof DistanceType>;
+export type DistanceType = TrueDistanceType | Norm;
+
+export function distanceTypeToObject(dist: DistanceType): z.infer<typeof DistanceType> {
+	if (typeof dist === 'string') dist = { norm: dist, invert: false };
+	return dist;
+}
 
 export function dist(a: number[], b: number[], dist: DistanceType): number {
-	if (dist == 'euclidean') return euclideanDist(a, b);
-	else if (dist == 'manhattan') return manhattanDist(a, b);
-	else if (dist == 'max') return maxDist(a, b);
-	else if (dist == 'cosine') return cosineDist(a, b);
+	dist = distanceTypeToObject(dist);
+	const norm = dist.norm;
+	let normed: number;
+	if (norm == 'euclidean') normed = euclideanDist(a, b);
+	else if (norm == 'manhattan') normed = manhattanDist(a, b);
+	else if (norm == 'max') normed = maxDist(a, b);
+	else if (norm == 'cosine') normed = cosineDist(a, b);
 	else {
-		assertNever(dist);
+		assertNever(norm);
 	}
+	if (dist.invert) normed *= -1;
+	return normed;
 }
 
 export function euclideanDist(a: number[], b: number[]): number {
@@ -51,4 +68,8 @@ export function cosineDist(a: number[], b: number[]): number {
 	const trueCosine = dot / (magA * magB);
 	const normal = rangeMap(trueCosine, [1, 0], [0, 1]); // Graph-Kante: kürzer ist ähnlicher
 	return normal;
+}
+
+function assertNever(ignored: never): never {
+	throw new Error('If this function gets called, type safety has been compromised.', ignored);
 }

@@ -2,13 +2,13 @@
 	import { onDestroy, onMount } from 'svelte';
 	import { Particle } from '../geom/particle';
 	import { Vec2 } from '../geom/vector';
-	import type { DistanceType } from '../geom/dist';
-	import { adjacencyMatrix } from '../graph/adjacency';
+	import type { TrueDistanceType } from '../geom/dist';
+	import { positiveAdjacencyMatrix } from '../graph/adjacency';
 
 	export let edges: [number, number][] = []; // indices
 	export let values: number[][];
 	export let names: string[];
-	export let norm: DistanceType = 'euclidean';
+	export let metric: TrueDistanceType = { norm: 'euclidean', invert: false };
 
 	export let matrix: boolean = false;
 
@@ -28,7 +28,14 @@
 		icePoint: [0.5, 0.9, 1, 5, 20][(options.speed ?? 3) - 1]
 	};
 
-	$: adjMatrix = matrix ? values : adjacencyMatrix(values, norm);
+	let adjMatrix: number[][];
+	$: {
+		if (matrix) {
+			adjMatrix = values;
+		} else {
+			adjMatrix = positiveAdjacencyMatrix(values, metric);
+		}
+	}
 
 	let wrapperDiv: HTMLDivElement;
 	let canvas: HTMLCanvasElement;
@@ -41,7 +48,7 @@
 	let averageTrueDist = 1;
 
 	let frozen = false;
-	$: width, height, edges, values, norm, (frozen = false);
+	$: width, height, edges, values, metric, (frozen = false);
 	$: frozen = true;
 	$: averageTrueDist = calculateAverageTrueDist(adjMatrix);
 

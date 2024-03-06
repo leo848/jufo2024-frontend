@@ -205,7 +205,7 @@
 				{#each links as link}
 					<a
 						href={link.url}
-						target={link.target ?? "_blank"}
+						target={link.target ?? '_blank'}
 						class="underline underline-offset-2 hover:underline-offset-4 transition-all hover:text-gray-200 active:text-gray-200"
 						>{link.title}</a
 					>

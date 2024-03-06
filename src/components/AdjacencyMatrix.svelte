@@ -4,7 +4,6 @@
 	import { RgbColor } from '../color/colorSpaces';
 	import { rangeMap } from '../utils/math';
 	import { PerceptualGradient } from '../color/gradient';
-	import { quartInOut } from 'svelte/easing';
 
 	export let values: number[][];
 	export let vertexNames: string[];

@@ -14,10 +14,12 @@
 	import { scale } from 'svelte/transition';
 	import { createEventDispatcher, onDestroy } from 'svelte';
 	import Window from './Window.svelte';
+	import { DistanceType, distanceTypeToObject } from '../geom/dist';
 
 	export let values: number[][];
 	export let dimensions = 3;
 	export let matrix: boolean = false;
+	export let metric: DistanceType = 'euclidean';
 
 	export let horizontal: boolean = false;
 
@@ -128,6 +130,7 @@
 							action: {
 								type: 'createDistPath',
 								method: { type: e.method },
+								metric: distanceTypeToObject(metric),
 								dimensions,
 								values
 							}
@@ -208,6 +211,7 @@
 							action: {
 								type: 'improveDistPath',
 								method: { type: e.method },
+								metric: distanceTypeToObject(metric),
 								dimensions,
 								path: values
 							}

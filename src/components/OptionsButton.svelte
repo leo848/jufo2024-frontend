@@ -7,7 +7,7 @@
 
 	export let iconStyle: string = '';
 
-	export let elt: HTMLElement = null;
+	export let elt: HTMLElement | null = null;
 </script>
 
 {#if show}

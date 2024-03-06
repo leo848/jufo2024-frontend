@@ -4,13 +4,13 @@
 	import { constrain } from '../utils/math';
 	import Window from './Window.svelte';
 	import EdgeDistances from './EdgeDistances.svelte';
-	import { dist, type DistanceType } from '../geom/dist';
+	import { dist, type TrueDistanceType } from '../geom/dist';
 	import { scale } from 'svelte/transition';
 
 	export let path: number[][] | null = null;
 	export let length = path?.length || 0;
 
-	export let norm: DistanceType = 'euclidean';
+	export let metric: TrueDistanceType;
 
 	export let blownUp: boolean = false;
 
@@ -27,10 +27,6 @@
 	});
 	$: displayLength.set(length);
 
-	function distance(point1: number[], point2: number[], norm: DistanceType) {
-		return dist(point1, point2, norm);
-	}
-
 	let distances: number[] = [];
 
 	function setDistChain() {
@@ -42,9 +38,9 @@
 		let lengthAcc = 0;
 		distances = [];
 		for (let i = 0; i < path.length - 1; i++) {
-			const dist = distance(path[i], path[i + 1], norm);
-			lengthAcc += dist;
-			distances = [...distances, dist];
+			const distance = dist(path[i], path[i + 1], metric);
+			lengthAcc += distance;
+			distances = [...distances, distance];
 		}
 		chainLength.set(lengthAcc);
 	}

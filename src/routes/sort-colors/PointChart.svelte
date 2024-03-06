@@ -4,7 +4,7 @@
 	import type { Color } from '../../color/color';
 	import type { Point3 } from '../../geom/point';
 	import PointChartScene from './PointChartScene.svelte';
-	import type { DistanceType } from '../../geom/dist';
+	import type { TrueDistanceType } from '../../geom/dist';
 
 	export let space: ColorSpace;
 	export let colors: Color[];
@@ -12,7 +12,7 @@
 	export let edges: [Point3, Point3, Color | undefined][];
 	export let edgesAnim: boolean = true;
 	export let projection: 'orthographic' | 'perspective' = 'orthographic';
-	export let norm: DistanceType;
+	export let metric: TrueDistanceType;
 	export let ballSize: number = 0.5;
 	export let selectedIndex: number | null = null;
 	/*background={new THREE.Color(0x0c0c0c)}
@@ -53,7 +53,7 @@
 				{colors}
 				{edges}
 				{projection}
-				{norm}
+				{metric}
 				{canvas}
 				{ballSize}
 				{selectedIndex}

@@ -1,4 +1,5 @@
 import { z } from 'zod';
+import { DistanceType } from '../geom/dist';
 
 export const serverError = z.discriminatedUnion('type', [
 	z.object({
@@ -68,12 +69,14 @@ const action = z.discriminatedUnion('type', [
 		type: z.literal('createDistPath'),
 		dimensions: z.number().positive().int().lt(256),
 		values: z.array(z.array(z.number())),
+		metric: DistanceType,
 		method: pathCreateMethod
 	}),
 	z.object({
 		type: z.literal('improveDistPath'),
 		dimensions: z.number().positive().int().lt(256),
 		path: z.array(z.array(z.number())),
+		metric: DistanceType,
 		method: pathImproveMethod
 	}),
 	z.object({

@@ -22,7 +22,7 @@
 	import PathProperties from '../../components/PathProperties.svelte';
 	import { goto } from '$app/navigation';
 	import { page } from '$app/stores';
-	import type { DistanceType } from '../../geom/dist';
+	import type { TrueDistanceType } from '../../geom/dist';
 	import Window from '../../components/Window.svelte';
 	import Options from '../../components/Options.svelte';
 	import presets from '../../color/presets';
@@ -64,7 +64,7 @@
 	}
 
 	let path: Point3[] | null = null;
-	let norm: DistanceType = 'euclidean';
+	let metric: TrueDistanceType = { norm: 'euclidean', invert: false };
 
 	let edges: [Point3, Point3, Color | undefined][] = [];
 
@@ -253,7 +253,7 @@
 				{colors[selection.index - 1]
 					.space(space)
 					.point()
-					.distanceTo(colors[selection.index].space(space).point(), norm)
+					.distanceTo(colors[selection.index].space(space).point(), metric)
 					.toFixed(2)}
 			</div>
 		{/if}
@@ -284,7 +284,7 @@
 				{colors[selection.index]
 					.space(space)
 					.point()
-					.distanceTo(colors[selection.index + 1].space(space).point(), norm)
+					.distanceTo(colors[selection.index + 1].space(space).point(), metric)
 					.toFixed(2)}
 			</div>
 		{/if}
@@ -385,7 +385,7 @@
 			bind:locked={colorsLocked}
 			on:add={invalidate(addColor)}
 			on:delete={invalidate(() => (colors = []))}
-			bind:norm
+			bind:metric
 			bind:colorSpace={space}
 			loadAmount={Object.keys(presets).length}
 			on:asVectors={invalidate(() => {
@@ -423,7 +423,7 @@
 					{ballSize}
 					{projection}
 					{space}
-					{norm}
+					{metric}
 					on:pick={(evt) => (selection = evt.detail)}
 					selectedIndex={selection?.index}
 				/>
@@ -434,12 +434,13 @@
 			path={path?.map((point) => point.values())}
 			length={colors.length}
 			selectedIndex={selection?.index}
-			{norm}
+			{metric}
 		/>
 
 		<PathAlgorithms
 			on:deletePath={invalidate(() => ((path = null), (edges = [])))}
 			bind:invalidate={invalidateAlgorithms}
+			{metric}
 			values={colors.map((color) => color.space(space).point().values())}
 		/>
 

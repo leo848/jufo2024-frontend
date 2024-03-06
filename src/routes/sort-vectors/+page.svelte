@@ -17,8 +17,8 @@
 	import ForceDirectedGraphOptions from '../../components/ForceDirectedGraphOptions.svelte';
 	import { goto } from '$app/navigation';
 	import Window from '../../components/Window.svelte';
-	import type { DistanceType } from '../../geom/dist';
-	import { adjacencyMatrix } from '../../graph/adjacency';
+	import type { TrueDistanceType } from '../../geom/dist';
+	import { adjacencyMatrix, positiveAdjacencyMatrix } from '../../graph/adjacency';
 	import Options from '../../components/Options.svelte';
 	import AdjacencyMatrix from '../../components/AdjacencyMatrix.svelte';
 
@@ -64,15 +64,15 @@
 	let path: number[][] | null = null;
 	let edges: [number, number][] = [];
 
-	$: matrix = adjacencyMatrix(
+	$: matrix = positiveAdjacencyMatrix(
 		$data.map((d) => d.inner),
-		norm
+		metric
 	);
 
 	let locked = false;
 	let blownUp = false;
 
-	let norm: DistanceType = 'euclidean';
+	let metric: TrueDistanceType & {} = { norm: 'euclidean', invert: false };
 
 	let scrollElement: HTMLElement;
 	$: duplicates = $data.some((v1, i1) =>
@@ -270,7 +270,7 @@
 			bind:locked
 			on:blowUp={blowUp}
 			bind:invalidate
-			bind:norm
+			bind:metric
 			xlCol={4}
 			hide={['asVector', 'load']}
 			on:add={invalidate(addEmptyVector)}
@@ -284,19 +284,20 @@
 					values={points.map((p) => p.inner)}
 					names={points.map((p) => p.name)}
 					{edges}
-					{norm}
+					{metric}
 					options={fdgOptions}
 					bind:actions={fdgActions}
 				/>
 			</div>
 		</Window>
 
-		<PathProperties {path} {length} {norm} {blownUp} />
+		<PathProperties {path} {length} {metric} {blownUp} />
 
 		<PathAlgorithms
 			on:deletePath={invalidate(() => ((path = null), (edges = [])))}
 			bind:invalidate={invalidateAlgorithms}
 			dimensions={dim}
+			{metric}
 			values={points.map((p) => p.inner)}
 		/>
 

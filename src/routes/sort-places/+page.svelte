@@ -13,7 +13,7 @@
 	import presets from './presets';
 	import Window from '../../components/Window.svelte';
 	import Options from '../../components/Options.svelte';
-	import type { DistanceType } from '../../geom/dist';
+	import type { TrueDistanceType } from '../../geom/dist';
 	import { goto } from '$app/navigation';
 	import LoadPlace from './LoadPlace.svelte';
 
@@ -24,7 +24,7 @@
 	$: length = points.length;
 
 	let edges: [CoordPoint, CoordPoint][] = [];
-	let norm: DistanceType = 'euclidean';
+	let metric: TrueDistanceType = { norm: 'euclidean', invert: false };
 
 	let path: null | number[][] = null;
 	let invalidateAlgorithms: () => {};
@@ -98,7 +98,7 @@
 		<Window title="Karte" options row={3}>
 			<div class="h-full m-0">
 				{#key olmKey}
-					<OpenLayersMap {invalidate} {norm} bind:points {edges} />
+					<OpenLayersMap {invalidate} norm={metric} bind:points {edges} />
 				{/key}
 			</div>
 		</Window>
@@ -110,7 +110,7 @@
 			bind:locked={pointsLocked}
 			hide={['add']}
 			on:delete={invalidate(() => (points = []))}
-			bind:norm
+			bind:metric
 			loadAmount={Object.keys(presets).length}
 			on:asVectors={invalidate(() => {
 				goto(
@@ -122,13 +122,14 @@
 			<LoadPlace slot="load" on:load={() => olmKey++} {invalidate} bind:points />
 		</Options>
 
-		<PathProperties {path} {length} {blownUp} horizontal />
+		<PathProperties {path} {length} {blownUp} {metric} horizontal />
 
 		<PathAlgorithms
 			on:deletePath={invalidate(() => (path = null))}
 			bind:invalidate={invalidateAlgorithms}
 			dimensions={2}
 			horizontal
+			{metric}
 			values={points.map((p) => [p.lat, p.lng])}
 		/>
 	</div>
