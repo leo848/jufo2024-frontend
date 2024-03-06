@@ -24,6 +24,7 @@
 	] as const;
 
 	let setting = 'offline';
+	let neverOnline: boolean = true;
 	const tweenOptions = { duration: 1000, easing: quartInOut };
 	let upload = tweened(0, tweenOptions);
 	let download = tweened(0, tweenOptions);
@@ -62,6 +63,7 @@
 			} else {
 				assertNever(ss);
 			}
+			if (setting == 'online') neverOnline = false;
 		});
 	});
 </script>
@@ -103,6 +105,16 @@
 					<p class="mb-3">Verbindung wird hergestellt...</p>
 				{:else if setting === 'online'}
 					<p class="mb-3">Verbindung hergestellt</p>
+				{/if}
+				{#if neverOnline}
+					<hr />
+					<p class="mb-3 mt-3 max-w-40">
+						Zum Ausführen von Sortierungen muss das Serverprogramm heruntergeladen und ausgeführt
+						werden. Dazu kann der Quelltext über GitHub heruntergeladen werden: <a
+							class="underline text-white underline-offset-2 hover:underline-offset-4 transition-all"
+							href="https://github.com/leo848/jufo2024-backend">leo848/jufo2024-backend – GitHub</a
+						>
+					</p>
 				{/if}
 				{#each extractors as { key, title, icon }}
 					{#if $connectionData[key]}
