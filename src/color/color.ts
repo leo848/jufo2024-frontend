@@ -113,6 +113,14 @@ export class Color {
 		return this;
 	}
 
+	css() {
+		return this.rgb().css();
+	}
+
+	readable() {
+		return this.oklab().l > 0.7 ? new Color(0, 0, 0) : new Color(1, 1, 1);
+	}
+
 	async name(nameList?: ColorNameList): Promise<ColorNameMetadata> {
 		const list = nameList || 'default';
 		const cacheItem = this.#cached.colorNameMetadata[list];

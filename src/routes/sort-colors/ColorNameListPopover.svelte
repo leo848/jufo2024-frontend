@@ -9,6 +9,8 @@
 	import type { Color } from '../../color/color';
 	import { scale } from 'svelte/transition';
 	import Window from '../../components/Window.svelte';
+	import * as Icon from 'flowbite-svelte-icons';
+	import colorLists from './colorLists.json';
 
 	export let triggeredBy: string;
 	export let value: ColorNameList;
@@ -24,7 +26,7 @@
 	defaultClass="bg-transparent dark:bg-black dark:backdrop-blur dark:bg-clip-padding dark:backdrop-filter dark:backdrop-blur-xl dark:bg-opacity-10 dark:border dark:border-gray-800 overflow-scroll"
 	class="text-sm p-0 m-0 overflow-scroll"
 >
-	<Window title="Namensliste auswählen">
+	<Window closable={false} title="Namensliste auswählen">
 		<div class="m-4">
 			<div class="flex-row gap-4 flex text-gray-300 bg-white bg-opacity-10 p-2 rounded mb-4">
 				<div class="flex flex-col break-all">
@@ -37,6 +39,11 @@
 								<div class="leading-7">{word}</div>
 							{/each}
 						{/await}
+					</div>
+					<div>
+						{#if Object.keys(colorLists).includes(value)}
+							Enumerierbar
+						{/if}
 					</div>
 				</div>
 				<div class="grow">
@@ -80,8 +87,13 @@
 						<div class="flex flex-row justify-between align-stretch h-full">
 							<div class="flex flex-col items-start justify-start">
 								<div class="font-bold">
-									{#each colorNameListNames[colorNameList].split(' ') as word}
-										<div class="text-left">{word}</div>
+									{#each colorNameListNames[colorNameList].split(' ') as word, index}
+										<div class="text-left flex-row flex">
+											{#if Object.keys(colorLists).includes(colorNameList) && index === 0}
+												<Icon.SearchSolid class="opacity-50 mr-1" />
+											{/if}
+											{word}
+										</div>
 									{/each}
 								</div>
 								<div class="md:w-32 text-start">

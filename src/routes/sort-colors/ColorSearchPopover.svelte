@@ -38,8 +38,9 @@
 		matches = colors
 			.map((item) => {
 				const lowername = item.name.toLowerCase();
-				if (lowername.startsWith(lowerSearch)) return { item, prio: 1 };
-				else if (lowername.includes(lowerSearch)) return { item, prio: 2 };
+				if (lowername === lowerSearch) return { item, prio: 1 };
+				if (lowername.startsWith(lowerSearch)) return { item, prio: 2 };
+				else if (lowername.includes(lowerSearch)) return { item, prio: 3 };
 				else return { item, prio: -1 };
 			})
 			.filter(({ prio }) => prio !== -1)
@@ -65,11 +66,13 @@
 			>
 				<input
 					bind:this={inputElement}
-					class="col-span-12 text-xl md-4 bg-gray-700 p-2"
+					class="col-span-12 text-xl md-4 bg-gray-700 p-2 rounded"
 					bind:value={search}
 				/>
 				<div class="col-span-12">
-					{#if search?.length}Suche nach <i>{search}</i> • {/if}<b>{matches.length}</b> Treffer gefunden
+					{#if search?.length}Suche nach <i>{search}</i> • {/if}
+					<b>{matches.length}</b>
+					{#if search?.length}Treffer gefunden{:else}Farben{/if}
 				</div>
 				{#each matches as match}
 					{@const color = RgbColor.fromNumeric(parseInt(match.hex.slice(1), 16)).color()}
@@ -91,7 +94,8 @@
 							<div>
 								<button
 									class="text-xl p-2 mt-2 rounded"
-									style:background-color={value.rgb().css()}
+									style:background-color={value.css()}
+									style:color={value.readable().css()}
 									on:click={() => (search = '')}>Löschen</button
 								>
 							</div>

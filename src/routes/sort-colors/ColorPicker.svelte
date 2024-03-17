@@ -24,6 +24,7 @@
 	import WarningGamutPopover from './WarningGamutPopover.svelte';
 	import { rangeMap } from '../../utils/math';
 	import * as Icon from 'flowbite-svelte-icons';
+	import colorLists from './colorLists.json';
 
 	import ColorSearchPopover from './ColorSearchPopover.svelte';
 
@@ -134,10 +135,10 @@
 				<div class="flex justify-start">
 					<button
 						class="text-3xl 2xl:text-4xl text-white flex-row flex align-center"
-						disabled={colorNameList !== 'german'}
+						disabled={!Object.keys(colorLists).includes(colorNameList)}
 						id="color-picker-title-germanclick"
 					>
-						{#if colorNameList === 'german'}
+						{#if Object.keys(colorLists).includes(colorNameList)}
 							<Icon.SearchSolid size="xl" class="opacity-50 mr-2" />
 						{/if}
 						{#await colorMetadata then meta}
