@@ -127,11 +127,13 @@
 				{/if}
 			</div>
 			<div class="flex flex-col grow justify-between">
-				<ColorSearchPopover
-					{colorNameList}
-					triggeredBy="#color-picker-title-germanclick"
-					bind:value={modalColor}
-				/>
+				{#key colorNameList}
+					<ColorSearchPopover
+						{colorNameList}
+						triggeredBy="#color-picker-title-germanclick"
+						bind:value={modalColor}
+					/>
+				{/key}
 				<div class="flex justify-start">
 					<button
 						class="text-3xl 2xl:text-4xl text-white flex-row flex align-center"

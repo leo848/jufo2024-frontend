@@ -7,6 +7,7 @@
 	import colorLists from './colorLists.json';
 	import { RgbColor } from '../../color/colorSpaces';
 	import type { ColorNameList } from '../../color/colorName';
+	import { scale } from 'svelte/transition';
 
 	export let triggeredBy: string;
 	export let value: Color;
@@ -37,44 +38,47 @@
 				else return { item, prio: -1 };
 			})
 			.filter(({ prio }) => prio !== -1)
-			.toSorted((a, b) => sortOptionIndex === 0 ? (a.prio - b.prio) : 0)
+			.toSorted((a, b) => (sortOptionIndex === 0 ? a.prio - b.prio : 0))
 			.map(({ item }) => item);
 	}
 
-	const sortOptions: { name: string, method: (color: Color, item: ColorItem) => number | string }[] = [
+	const sortOptions: {
+		name: string;
+		method: (color: Color, item: ColorItem) => number | string;
+	}[] = [
 		{
 			name: 'Relevanz',
-			method: _ => 0,
+			method: (_) => 0
 		},
 		{
 			name: 'Alphabetisch',
-			method: (_, item) => item.name,
+			method: (_, item) => item.name
 		},
 		{
 			name: 'Buntwert',
-			method: color => color.hsv().h,
+			method: (color) => color.hsv().h
 		},
 		{
 			name: 'Helligkeit',
-			method: color => color.oklab().l,
+			method: (color) => color.oklab().l
 		},
 		{
 			name: 'Sättigung',
-			method: color => color.hsv().s,
+			method: (color) => color.hsv().s
 		},
 		{
 			name: 'Rot',
-			method: color => color.rgb().r,
+			method: (color) => color.rgb().r
 		},
 		{
 			name: 'Grün',
-			method: color => color.rgb().g,
+			method: (color) => color.rgb().g
 		},
 		{
 			name: 'Blau',
-			method: color => color.rgb().g,
+			method: (color) => color.rgb().g
 		}
-	]
+	];
 	let sortOptionIndex = 0;
 	let sortInvert = false;
 
@@ -83,21 +87,28 @@
 		let key = colorNameList as keyof typeof colorLists;
 		colors = colorLists[key];
 		colors = colors.toSorted((a, b) => {
-			let [keyA, keyB] = ([a, b]).map(item => {
-				const color = RgbColor.fromNumeric(parseInt(item.hex.startsWith("#") ? item.hex.slice(1) : item.hex, 16)).color();
+			let [keyA, keyB] = [a, b].map((item) => {
+				const color = RgbColor.fromNumeric(
+					parseInt(item.hex.startsWith('#') ? item.hex.slice(1) : item.hex, 16)
+				).color();
 				return sortOptions[sortOptionIndex].method(color, item);
 			});
-			if (typeof keyA === "number") {
+			if (typeof keyA === 'number') {
 				return (keyA - (keyB as number)) * (sortInvert ? -1 : 1);
 			} else {
 				if (!sortInvert) return keyA.localeCompare(keyB as string);
 				else return (keyB as string).localeCompare(keyA);
 			}
-		})
+		});
 	} else {
 		console.error('Wrong key: ' + colorNameList + ' for thing ', colorLists);
 	}
 
+	$: randomColorName = 'Farbname';
+	$: {
+		let randomIndex = new Date().getTime() % colors.length;
+		randomColorName = colors[randomIndex].name;
+	}
 
 	let inputElement: HTMLInputElement | null = null;
 	$: inputElement?.select();
@@ -118,6 +129,7 @@
 				<input
 					bind:this={inputElement}
 					class="col-span-12 text-xl md-4 bg-gray-700 p-2 rounded"
+					placeholder={randomColorName}
 					bind:value={search}
 				/>
 				<div class="col-span-12">
@@ -125,37 +137,42 @@
 					<b>{matches.length}</b>
 					{#if search?.length}Treffer gefunden{:else}Farben{/if}
 				</div>
-				<div class="col-span-12">
-					<div class="flex flex-row">
-						Sortieren:&emsp;
-						{#each sortOptions as option, index}
-							<button class="mr-1" on:click|preventDefault={() => sortOptionIndex = index}>
-								{#if sortOptionIndex === index}
-									<b>{option.name}</b>
-								{:else}
-									{option.name}
-								{/if}
-							</button>
-						{/each}
+				{#if matches.length > 1}
+					<div class="col-span-12" transition:scale>
+						<div class="flex flex-row">
+							Sortieren:&emsp;
+							{#each sortOptions as option, index}
+								<button class="mr-1" on:click|preventDefault={() => (sortOptionIndex = index)}>
+									{#if sortOptionIndex === index}
+										<b>{option.name}</b>
+									{:else}
+										{option.name}
+									{/if}
+								</button>
+							{/each}
+						</div>
+						<div class="flex flex-row">
+							Reihenfolge:&emsp;
+							{#each ['Aufsteigend', 'Absteigend'] as option, index}
+								<button class="mr-1" on:click|preventDefault={() => (sortInvert = !!index)}>
+									{#if sortInvert === !!index}
+										<b>{option}</b>
+									{:else}
+										{option}
+									{/if}
+								</button>
+							{/each}
+						</div>
 					</div>
-					<div class="flex flex-row">
-						Reihenfolge:&emsp;
-						{#each ["Aufsteigend", "Absteigend"] as option, index}
-							<button class="mr-1" on:click|preventDefault={() => sortInvert = !!index}>
-								{#if sortInvert === !!index}
-									<b>{option}</b>
-								{:else}
-									{option}
-								{/if}
-							</button>
-						{/each}
-					</div>
-				</div>
-				{#each matches as match}
-					{@const color = RgbColor.fromNumeric(parseInt(match.hex.startsWith("#") ? match.hex.slice(1) : match.hex, 16)).color()}
+				{/if}
+				{#each matches as match, matchIndex}
+					{@const color = RgbColor.fromNumeric(
+						parseInt(match.hex.startsWith('#') ? match.hex.slice(1) : match.hex, 16)
+					).color()}
 					{@const bright = color.space('oklab').l}
 					<div class="col-span-12 md:col-span-4">
 						<button
+							transition:scale
 							class="bg-gray-700 rounded p-2 text-md w-full"
 							style:background-color={color.css()}
 							style:color={bright > 0.7 ? 'black' : 'white'}
