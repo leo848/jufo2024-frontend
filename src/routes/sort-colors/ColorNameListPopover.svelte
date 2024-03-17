@@ -82,7 +82,7 @@
 						} hover:bg-gray-600 transition-all bg-gray-${
 							colorNameList == value ? 600 : 700
 						} p-2 rounded text-${colorNameList == value ? 'white' : 'gray-200'}`}
-						on:click={() => (value = colorNameList)}
+						on:click|preventDefault={() => (value = colorNameList)}
 					>
 						<div class="flex flex-row justify-between align-stretch h-full">
 							<div class="flex flex-col items-start justify-start">
