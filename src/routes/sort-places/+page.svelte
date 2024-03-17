@@ -98,7 +98,7 @@
 		<Window title="Karte" options row={3}>
 			<div class="h-full m-0">
 				{#key olmKey}
-					<OpenLayersMap {invalidate} metric={metric} bind:points {edges} />
+					<OpenLayersMap {invalidate} {metric} bind:points {edges} />
 				{/key}
 			</div>
 		</Window>

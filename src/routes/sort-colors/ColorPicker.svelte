@@ -23,6 +23,9 @@
 	import { ExclamationCircleOutline } from 'flowbite-svelte-icons';
 	import WarningGamutPopover from './WarningGamutPopover.svelte';
 	import { rangeMap } from '../../utils/math';
+	import * as Icon from 'flowbite-svelte-icons';
+
+	import ColorSearchPopover from './ColorSearchPopover.svelte';
 
 	export let value: Color;
 	// export const open = () => (modal = true);
@@ -123,13 +126,27 @@
 				{/if}
 			</div>
 			<div class="flex flex-col grow justify-between">
+				<ColorSearchPopover
+					{colorNameList}
+					triggeredBy="#color-picker-title-germanclick"
+					bind:value={modalColor}
+				/>
 				<div class="flex justify-start">
+					<button
+						class="text-3xl 2xl:text-4xl text-white flex-row flex align-center"
+						disabled={colorNameList !== 'german'}
+						id="color-picker-title-germanclick"
+					>
+						{#if colorNameList === 'german'}
+							<Icon.SearchSolid size="xl" class="opacity-50 mr-2" />
+						{/if}
+						{#await colorMetadata then meta}
+							{meta.name}
+						{/await}
+					</button>
 					{#await colorMetadata}
 						<Spinner />
 					{:then meta}
-						<div class="text-3xl 2xl:text-4xl text-white">
-							{meta.name}
-						</div>
 						<button
 							id="color-picker-title-thing"
 							class="border border-2 border-gray-700 hover:border-gray-500 transition-all rounded-xl text-white px-2 ml-4 mr-n2 text-base self-end opacity-50 flex flex-row items-center"

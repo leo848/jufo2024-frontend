@@ -2,16 +2,13 @@ import type { NamedPoint } from '../../geom/coordPoint';
 
 function wikiCoord(coord: string): number {
 	let deg, min, sec;
-	if (coord.endsWith("″")) {
+	if (coord.endsWith('″')) {
 		[deg, min, sec] = coord
 			.split(' ')
 			.map((s) => s.substring(0, s.length - 1))
 			.map(Number);
 	} else {
-		[deg, min, sec] = coord
-			.split("/")
-			.slice(0, 3)
-			.map(Number);
+		[deg, min, sec] = coord.split('/').slice(0, 3).map(Number);
 	}
 	return deg + min / 60 + sec / 3600;
 }
@@ -137,57 +134,307 @@ export const presets = {
 	düsseldorf: {
 		name: 'Stadtteile Düsseldorfs',
 		values: [
-			{ lat: wikiCoord("51/13/44/N"), lng: wikiCoord("6/46/25/E"), desc: "4352 Einwohner", name: "Altstadt" },
-			{ lat: wikiCoord("51/19/47.885/N"), lng: wikiCoord("6/46/48.392/E"), desc: "6035 Einwohner", name: "Angermund" },
-			{ lat: wikiCoord("51/09/41/N"), lng: wikiCoord("6/52/26/E"), desc: "15905 Einwohner", name: "Benrath" },
-			{ lat: wikiCoord("51/12/29/N"), lng: wikiCoord("6/46/36/E"), desc: "7500 Einwohner", name: "Bilk" },
-			{ lat: wikiCoord("51/13/22.361/N"), lng: wikiCoord("6/46/15.794/E"), desc: "2317 Einwohner", name: "Carlstadt" },
-			{ lat: wikiCoord("51/14/38.494/N"), lng: wikiCoord("6/47/32.579/E"), desc: "2317 Einwohner", name: "Derendorf" },
-			{ lat: wikiCoord("51/14/12/N"), lng: wikiCoord("6/48/34/E"), desc: "7500 Einwohner", name: "Düsseltal" },
-			{ lat: wikiCoord("51/12/02/N"), lng: wikiCoord("6/50/20/E"), desc: "10000 Einwohner", name: "Eller" },
-			{ lat: wikiCoord("51/11/16/N"), lng: wikiCoord("6/46/20/E"), desc: "10000 Einwohner", name: "Flehe" },
-			{ lat: wikiCoord("51/13/42/N"), lng: wikiCoord("6/48/53/E"), desc: "10000 Einwohner", name: "Flingern Nord" },
-			{ lat: wikiCoord("51/13/15/N"), lng: wikiCoord("6/48/32/E"), desc: "10000 Einwohner", name: "Flingern Süd" },
-			{ lat: wikiCoord("51/12/44/N"), lng: wikiCoord("6/46/50/E"), desc: "17864 Einwohner", name: "Friedrichstadt" },
-			{ lat: wikiCoord("51/08/47/N"), lng: wikiCoord("6/53/40/E"), desc: "21000 Einwohner", name: "Garath" },
-			{ lat: wikiCoord("51/14/22/N"), lng: wikiCoord("6/51/58/E"), desc: "574000 Einwohner", name: "Gerresheim" },
-			{ lat: wikiCoord("51/14/36.074/N"), lng: wikiCoord("6/46/20.586/E"), desc: "10248 Einwohner", name: "Golzheim" },
-			{ lat: wikiCoord("51/14/27/N"), lng: wikiCoord("6/49/29/E"), desc: "7500 Einwohner", name: "Grafenberg" },
-			{ lat: wikiCoord("51/13/9/N"), lng: wikiCoord("6/45/28/E"), desc: "139 Einwohner", name: "Hafen" },
-			{ lat: wikiCoord("51/12/18/N"), lng: wikiCoord("6/44/40/E"), desc: "3679 Einwohner", name: "Hamm" },
-			{ lat: wikiCoord("51/10/45/N"), lng: wikiCoord("6/52/25/E"), desc: "17538 Einwohner", name: "Hassels" },
-			{ lat: wikiCoord("51/13/42.197/N"), lng: wikiCoord("6/42/57.269/E"), desc: "9445 Einwohner", name: "Heerdt" },
-			{ lat: wikiCoord("51/7/56/N"), lng: wikiCoord("6/54/23/E"), desc: "6462 Einwohner", name: "Hellerhof" },
-			{ lat: wikiCoord("51/10/22/N"), lng: wikiCoord("6/48/35/E"), desc: "1302 Einwohner", name: "Himmelgeist" },
-			{ lat: wikiCoord("51/10/18.516/N"), lng: wikiCoord("6/49/53.789/E"), desc: "12000 Einwohner", name: "Holthausen" },
-			{ lat: wikiCoord("51/15/24/N"), lng: wikiCoord("6/54/38/E"), desc: "3559 Einwohner", name: "Hubbelrath" },
-			{ lat: wikiCoord("51/9/54/N"), lng: wikiCoord("6/48/54/E"), desc: "1717 Einwohner", name: "Itter" },
-			{ lat: wikiCoord("51/18/0/N"), lng: wikiCoord("6/44/21/E"), desc: "7712 Einwohner", name: "Kaiserswerth" },
-			{ lat: wikiCoord("51/18/23/N"), lng: wikiCoord("6/45/45/E"), desc: "1890 Einwohner", name: "Kalkum" },
-			{ lat: wikiCoord("51/16/04/N"), lng: wikiCoord("6/52/21/E"), desc: "7712 Einwohner", name: "Knittkuhl" },
-			{ lat: wikiCoord("51/14/47/N"), lng: wikiCoord("6/43/40/E"), desc: "7382 Einwohner", name: "Lörick" },
-			{ lat: wikiCoord("51/16//N"), lng: wikiCoord("6/47//E"), desc: "5773 Einwohner", name: "Lichtenbroich" },
-			{ lat: wikiCoord("51/12/33/N"), lng: wikiCoord("6/49/39/E"), desc: "9660 Einwohner", name: "Lierenfeld" },
-			{ lat: wikiCoord("51/16/50.941/N"), lng: wikiCoord("6/44/12.044/E"), desc: "4009 Einwohner", name: "Lohausen" },
-			{ lat: wikiCoord("51/15/25.877/N"), lng: wikiCoord("6/51/50.897/E"), desc: "6910 Einwohner", name: "Ludenberg" },
-			{ lat: wikiCoord("51/15/18.529/N"), lng: wikiCoord("6/48/28.508/E"), desc: "13820 Einwohner", name: "Mörsenbroich" },
-			{ lat: wikiCoord("51/14/24.374/N"), lng: wikiCoord("6/44/59.939/E"), desc: "5590 Einwohner", name: "Niederkassel" },
-			{ lat: wikiCoord("51/12/57.96/N"), lng: wikiCoord("6/48/13.07/E"), desc: "27570 Einwohner", name: "Oberbilk" },
-			{ lat: wikiCoord("51/13/48.968/N"), lng: wikiCoord("6/45/17.860/E"), desc: "16800 Einwohner", name: "Oberkassel" },
-			{ lat: wikiCoord("51/14/16.926/N"), lng: wikiCoord("6/47/12.649/E"), desc: "27345 Einwohner", name: "Pempelfort" },
-			{ lat: wikiCoord("51/15/58/N"), lng: wikiCoord("6/48/51/E"), desc: "18557 Einwohner", name: "Rath" },
-			{ lat: wikiCoord("51/10/35.368/N"), lng: wikiCoord("6/51/57.074/E"), desc: "10485 Einwohner", name: "Reisholz" },
-			{ lat: wikiCoord("51/13/27.973/N"), lng: wikiCoord("6/47/13.114/E"), desc: "7500 Einwohner", name: "Stadtmitte" },
-			{ lat: wikiCoord("51/15/35.741/N"), lng: wikiCoord("6/45/12.298/E"), desc: "4894 Einwohner", name: "Stockum" },
-			{ lat: wikiCoord("51/12/22/N"), lng: wikiCoord("6/54/00/E"), desc: "7500 Einwohner", name: "Unterbach" },
-			{ lat: wikiCoord("51/12/29/N"), lng: wikiCoord("6/46/36/E"), desc: "7500 Einwohner", name: "Unterbilk" },
-			{ lat: wikiCoord("51/16/24.654/N"), lng: wikiCoord("6/47/26.092/E"), desc: "20798 Einwohner", name: "Unterrath" },
-			{ lat: wikiCoord("51/8/44.527/N"), lng: wikiCoord("6/52/1.4016/E"), desc: "10485 Einwohner", name: "Urdenbach" },
-			{ lat: wikiCoord("51/12/39.492/N"), lng: wikiCoord("6/51/35.755/E"), desc: "9851 Einwohner", name: "Vennhausen" },
-			{ lat: wikiCoord("51/11/17.786/N"), lng: wikiCoord("6/45/49.687/E"), desc: "2173 Einwohner", name: "Volmerswerth" },
-			{ lat: wikiCoord("51/10/53.965/N"), lng: wikiCoord("6/48/59.098/E"), desc: "26788 Einwohner", name: "Wersten" },
-			{ lat: wikiCoord("51/19/7/N"), lng: wikiCoord("6/44/36/E"), desc: "7465 Einwohner", name: "Wittlaer" },
-		],
+			{
+				lat: wikiCoord('51/13/44/N'),
+				lng: wikiCoord('6/46/25/E'),
+				desc: '4352 Einwohner',
+				name: 'Altstadt'
+			},
+			{
+				lat: wikiCoord('51/19/47.885/N'),
+				lng: wikiCoord('6/46/48.392/E'),
+				desc: '6035 Einwohner',
+				name: 'Angermund'
+			},
+			{
+				lat: wikiCoord('51/09/41/N'),
+				lng: wikiCoord('6/52/26/E'),
+				desc: '15905 Einwohner',
+				name: 'Benrath'
+			},
+			{
+				lat: wikiCoord('51/12/29/N'),
+				lng: wikiCoord('6/46/36/E'),
+				desc: '7500 Einwohner',
+				name: 'Bilk'
+			},
+			{
+				lat: wikiCoord('51/13/22.361/N'),
+				lng: wikiCoord('6/46/15.794/E'),
+				desc: '2317 Einwohner',
+				name: 'Carlstadt'
+			},
+			{
+				lat: wikiCoord('51/14/38.494/N'),
+				lng: wikiCoord('6/47/32.579/E'),
+				desc: '2317 Einwohner',
+				name: 'Derendorf'
+			},
+			{
+				lat: wikiCoord('51/14/12/N'),
+				lng: wikiCoord('6/48/34/E'),
+				desc: '7500 Einwohner',
+				name: 'Düsseltal'
+			},
+			{
+				lat: wikiCoord('51/12/02/N'),
+				lng: wikiCoord('6/50/20/E'),
+				desc: '10000 Einwohner',
+				name: 'Eller'
+			},
+			{
+				lat: wikiCoord('51/11/16/N'),
+				lng: wikiCoord('6/46/20/E'),
+				desc: '10000 Einwohner',
+				name: 'Flehe'
+			},
+			{
+				lat: wikiCoord('51/13/42/N'),
+				lng: wikiCoord('6/48/53/E'),
+				desc: '10000 Einwohner',
+				name: 'Flingern Nord'
+			},
+			{
+				lat: wikiCoord('51/13/15/N'),
+				lng: wikiCoord('6/48/32/E'),
+				desc: '10000 Einwohner',
+				name: 'Flingern Süd'
+			},
+			{
+				lat: wikiCoord('51/12/44/N'),
+				lng: wikiCoord('6/46/50/E'),
+				desc: '17864 Einwohner',
+				name: 'Friedrichstadt'
+			},
+			{
+				lat: wikiCoord('51/08/47/N'),
+				lng: wikiCoord('6/53/40/E'),
+				desc: '21000 Einwohner',
+				name: 'Garath'
+			},
+			{
+				lat: wikiCoord('51/14/22/N'),
+				lng: wikiCoord('6/51/58/E'),
+				desc: '574000 Einwohner',
+				name: 'Gerresheim'
+			},
+			{
+				lat: wikiCoord('51/14/36.074/N'),
+				lng: wikiCoord('6/46/20.586/E'),
+				desc: '10248 Einwohner',
+				name: 'Golzheim'
+			},
+			{
+				lat: wikiCoord('51/14/27/N'),
+				lng: wikiCoord('6/49/29/E'),
+				desc: '7500 Einwohner',
+				name: 'Grafenberg'
+			},
+			{
+				lat: wikiCoord('51/13/9/N'),
+				lng: wikiCoord('6/45/28/E'),
+				desc: '139 Einwohner',
+				name: 'Hafen'
+			},
+			{
+				lat: wikiCoord('51/12/18/N'),
+				lng: wikiCoord('6/44/40/E'),
+				desc: '3679 Einwohner',
+				name: 'Hamm'
+			},
+			{
+				lat: wikiCoord('51/10/45/N'),
+				lng: wikiCoord('6/52/25/E'),
+				desc: '17538 Einwohner',
+				name: 'Hassels'
+			},
+			{
+				lat: wikiCoord('51/13/42.197/N'),
+				lng: wikiCoord('6/42/57.269/E'),
+				desc: '9445 Einwohner',
+				name: 'Heerdt'
+			},
+			{
+				lat: wikiCoord('51/7/56/N'),
+				lng: wikiCoord('6/54/23/E'),
+				desc: '6462 Einwohner',
+				name: 'Hellerhof'
+			},
+			{
+				lat: wikiCoord('51/10/22/N'),
+				lng: wikiCoord('6/48/35/E'),
+				desc: '1302 Einwohner',
+				name: 'Himmelgeist'
+			},
+			{
+				lat: wikiCoord('51/10/18.516/N'),
+				lng: wikiCoord('6/49/53.789/E'),
+				desc: '12000 Einwohner',
+				name: 'Holthausen'
+			},
+			{
+				lat: wikiCoord('51/15/24/N'),
+				lng: wikiCoord('6/54/38/E'),
+				desc: '3559 Einwohner',
+				name: 'Hubbelrath'
+			},
+			{
+				lat: wikiCoord('51/9/54/N'),
+				lng: wikiCoord('6/48/54/E'),
+				desc: '1717 Einwohner',
+				name: 'Itter'
+			},
+			{
+				lat: wikiCoord('51/18/0/N'),
+				lng: wikiCoord('6/44/21/E'),
+				desc: '7712 Einwohner',
+				name: 'Kaiserswerth'
+			},
+			{
+				lat: wikiCoord('51/18/23/N'),
+				lng: wikiCoord('6/45/45/E'),
+				desc: '1890 Einwohner',
+				name: 'Kalkum'
+			},
+			{
+				lat: wikiCoord('51/16/04/N'),
+				lng: wikiCoord('6/52/21/E'),
+				desc: '7712 Einwohner',
+				name: 'Knittkuhl'
+			},
+			{
+				lat: wikiCoord('51/14/47/N'),
+				lng: wikiCoord('6/43/40/E'),
+				desc: '7382 Einwohner',
+				name: 'Lörick'
+			},
+			{
+				lat: wikiCoord('51/16//N'),
+				lng: wikiCoord('6/47//E'),
+				desc: '5773 Einwohner',
+				name: 'Lichtenbroich'
+			},
+			{
+				lat: wikiCoord('51/12/33/N'),
+				lng: wikiCoord('6/49/39/E'),
+				desc: '9660 Einwohner',
+				name: 'Lierenfeld'
+			},
+			{
+				lat: wikiCoord('51/16/50.941/N'),
+				lng: wikiCoord('6/44/12.044/E'),
+				desc: '4009 Einwohner',
+				name: 'Lohausen'
+			},
+			{
+				lat: wikiCoord('51/15/25.877/N'),
+				lng: wikiCoord('6/51/50.897/E'),
+				desc: '6910 Einwohner',
+				name: 'Ludenberg'
+			},
+			{
+				lat: wikiCoord('51/15/18.529/N'),
+				lng: wikiCoord('6/48/28.508/E'),
+				desc: '13820 Einwohner',
+				name: 'Mörsenbroich'
+			},
+			{
+				lat: wikiCoord('51/14/24.374/N'),
+				lng: wikiCoord('6/44/59.939/E'),
+				desc: '5590 Einwohner',
+				name: 'Niederkassel'
+			},
+			{
+				lat: wikiCoord('51/12/57.96/N'),
+				lng: wikiCoord('6/48/13.07/E'),
+				desc: '27570 Einwohner',
+				name: 'Oberbilk'
+			},
+			{
+				lat: wikiCoord('51/13/48.968/N'),
+				lng: wikiCoord('6/45/17.860/E'),
+				desc: '16800 Einwohner',
+				name: 'Oberkassel'
+			},
+			{
+				lat: wikiCoord('51/14/16.926/N'),
+				lng: wikiCoord('6/47/12.649/E'),
+				desc: '27345 Einwohner',
+				name: 'Pempelfort'
+			},
+			{
+				lat: wikiCoord('51/15/58/N'),
+				lng: wikiCoord('6/48/51/E'),
+				desc: '18557 Einwohner',
+				name: 'Rath'
+			},
+			{
+				lat: wikiCoord('51/10/35.368/N'),
+				lng: wikiCoord('6/51/57.074/E'),
+				desc: '10485 Einwohner',
+				name: 'Reisholz'
+			},
+			{
+				lat: wikiCoord('51/13/27.973/N'),
+				lng: wikiCoord('6/47/13.114/E'),
+				desc: '7500 Einwohner',
+				name: 'Stadtmitte'
+			},
+			{
+				lat: wikiCoord('51/15/35.741/N'),
+				lng: wikiCoord('6/45/12.298/E'),
+				desc: '4894 Einwohner',
+				name: 'Stockum'
+			},
+			{
+				lat: wikiCoord('51/12/22/N'),
+				lng: wikiCoord('6/54/00/E'),
+				desc: '7500 Einwohner',
+				name: 'Unterbach'
+			},
+			{
+				lat: wikiCoord('51/12/29/N'),
+				lng: wikiCoord('6/46/36/E'),
+				desc: '7500 Einwohner',
+				name: 'Unterbilk'
+			},
+			{
+				lat: wikiCoord('51/16/24.654/N'),
+				lng: wikiCoord('6/47/26.092/E'),
+				desc: '20798 Einwohner',
+				name: 'Unterrath'
+			},
+			{
+				lat: wikiCoord('51/8/44.527/N'),
+				lng: wikiCoord('6/52/1.4016/E'),
+				desc: '10485 Einwohner',
+				name: 'Urdenbach'
+			},
+			{
+				lat: wikiCoord('51/12/39.492/N'),
+				lng: wikiCoord('6/51/35.755/E'),
+				desc: '9851 Einwohner',
+				name: 'Vennhausen'
+			},
+			{
+				lat: wikiCoord('51/11/17.786/N'),
+				lng: wikiCoord('6/45/49.687/E'),
+				desc: '2173 Einwohner',
+				name: 'Volmerswerth'
+			},
+			{
+				lat: wikiCoord('51/10/53.965/N'),
+				lng: wikiCoord('6/48/59.098/E'),
+				desc: '26788 Einwohner',
+				name: 'Wersten'
+			},
+			{
+				lat: wikiCoord('51/19/7/N'),
+				lng: wikiCoord('6/44/36/E'),
+				desc: '7465 Einwohner',
+				name: 'Wittlaer'
+			}
+		]
 	},
 	aachen1: {
 		name: 'Aachen simpel',
@@ -198,88 +445,87 @@ export const presets = {
 		]
 	},
 	nrw: {
-		name: "Städte in NRW",
+		name: 'Städte in NRW',
 		values: [
-		  {
-			"name": "Köln",
-			"desc": "Die bevölkerungsreichste Stadt in Nordrhein-Westfalen und die viertgrößte Stadt Deutschlands.",
-			"lat": 50.9375,
-			"lng": 6.9603
-		  },
-		  {
-			"name": "Düsseldorf",
-			"desc": "Die Landeshauptstadt Nordrhein-Westfalens und ein bedeutendes Wirtschafts- und Kulturzentrum.",
-			"lat": 51.2277,
-			"lng": 6.7735
-		  },
-		  {
-			"name": "Dortmund",
-			"desc": "Eine Stadt mit einer starken Industriegeschichte und einer der wichtigsten Wirtschaftsstandorte im Ruhrgebiet.",
-			"lat": 51.5136,
-			"lng": 7.4653
-		  },
-		  {
-			"name": "Essen",
-			"desc": "Früher ein Zentrum der Montanindustrie, heute ein wichtiger Standort für Dienstleistungen und Handel.",
-			"lat": 51.4556,
-			"lng": 7.0116
-		  },
-		  {
-			"name": "Duisburg",
-			"desc": "Eine Hafenstadt und ein wichtiger Logistikstandort am Rhein und an der Ruhr.",
-			"lat": 51.4344,
-			"lng": 6.7623
-		  },
-		  {
-			"name": "Bochum",
-			"desc": "Bekannt für seine Bergbauvergangenheit und heute für seine Kultur- und Bildungseinrichtungen.",
-			"lat": 51.4812,
-			"lng": 7.2194
-		  },
-		  {
-			"name": "Wuppertal",
-			"desc": "Berühmt für seine Schwebebahn und als Geburtsort des Chemieunternehmens Bayer AG.",
-			"lat": 51.2647,
-			"lng": 7.1784
-		  },
-		  {
-			"name": "Bielefeld",
-			"desc": "Eine Stadt mit einer vielfältigen Wirtschaftsstruktur und einer lebendigen Kulturszene.",
-			"lat": 52.0302,
-			"lng": 8.5325
-		  },
-		  {
-			"name": "Bonn",
-			"desc": "Frühere Hauptstadt der Bundesrepublik Deutschland und Sitz zahlreicher internationaler Organisationen.",
-			"lat": 50.7374,
-			"lng": 7.0982
-		  },
-		  {
-			"name": "Münster",
-			"desc": "Eine Stadt mit einer reichen Geschichte, bekannt für ihre Fahrradfreundlichkeit und ihre Universität.",
-			"lat": 51.9607,
-			"lng": 7.6261
-		  },
-		  {
-			"name": "Mönchengladbach",
-			"desc": "Eine Stadt mit einer starken Industriekultur und einem vielfältigen Freizeitangebot.",
-			"lat": 51.1805,
-			"lng": 6.4426
-		  },
-		  {
-			"name": "Gelsenkirchen",
-			"desc": "Früher ein bedeutendes Zentrum des Steinkohlenbergbaus, heute bekannt für den Fußballverein FC Schalke 04.",
-			"lat": 51.5177,
-			"lng": 7.0857
-		  },
-		  {
-			"name": "Aachen",
-			"desc": "Eine historische Stadt, die für ihre Universität und ihre kulturellen Sehenswürdigkeiten bekannt ist.",
-			"lat": 50.7753,
-			"lng": 6.0839
-		  }
+			{
+				name: 'Köln',
+				desc: 'Die bevölkerungsreichste Stadt in Nordrhein-Westfalen und die viertgrößte Stadt Deutschlands.',
+				lat: 50.9375,
+				lng: 6.9603
+			},
+			{
+				name: 'Düsseldorf',
+				desc: 'Die Landeshauptstadt Nordrhein-Westfalens und ein bedeutendes Wirtschafts- und Kulturzentrum.',
+				lat: 51.2277,
+				lng: 6.7735
+			},
+			{
+				name: 'Dortmund',
+				desc: 'Eine Stadt mit einer starken Industriegeschichte und einer der wichtigsten Wirtschaftsstandorte im Ruhrgebiet.',
+				lat: 51.5136,
+				lng: 7.4653
+			},
+			{
+				name: 'Essen',
+				desc: 'Früher ein Zentrum der Montanindustrie, heute ein wichtiger Standort für Dienstleistungen und Handel.',
+				lat: 51.4556,
+				lng: 7.0116
+			},
+			{
+				name: 'Duisburg',
+				desc: 'Eine Hafenstadt und ein wichtiger Logistikstandort am Rhein und an der Ruhr.',
+				lat: 51.4344,
+				lng: 6.7623
+			},
+			{
+				name: 'Bochum',
+				desc: 'Bekannt für seine Bergbauvergangenheit und heute für seine Kultur- und Bildungseinrichtungen.',
+				lat: 51.4812,
+				lng: 7.2194
+			},
+			{
+				name: 'Wuppertal',
+				desc: 'Berühmt für seine Schwebebahn und als Geburtsort des Chemieunternehmens Bayer AG.',
+				lat: 51.2647,
+				lng: 7.1784
+			},
+			{
+				name: 'Bielefeld',
+				desc: 'Eine Stadt mit einer vielfältigen Wirtschaftsstruktur und einer lebendigen Kulturszene.',
+				lat: 52.0302,
+				lng: 8.5325
+			},
+			{
+				name: 'Bonn',
+				desc: 'Frühere Hauptstadt der Bundesrepublik Deutschland und Sitz zahlreicher internationaler Organisationen.',
+				lat: 50.7374,
+				lng: 7.0982
+			},
+			{
+				name: 'Münster',
+				desc: 'Eine Stadt mit einer reichen Geschichte, bekannt für ihre Fahrradfreundlichkeit und ihre Universität.',
+				lat: 51.9607,
+				lng: 7.6261
+			},
+			{
+				name: 'Mönchengladbach',
+				desc: 'Eine Stadt mit einer starken Industriekultur und einem vielfältigen Freizeitangebot.',
+				lat: 51.1805,
+				lng: 6.4426
+			},
+			{
+				name: 'Gelsenkirchen',
+				desc: 'Früher ein bedeutendes Zentrum des Steinkohlenbergbaus, heute bekannt für den Fußballverein FC Schalke 04.',
+				lat: 51.5177,
+				lng: 7.0857
+			},
+			{
+				name: 'Aachen',
+				desc: 'Eine historische Stadt, die für ihre Universität und ihre kulturellen Sehenswürdigkeiten bekannt ist.',
+				lat: 50.7753,
+				lng: 6.0839
+			}
 		]
-
 	},
 	nyc: {
 		name: 'New York City',
