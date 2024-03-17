@@ -61,7 +61,7 @@
 >
 	<Window title="Farbsuche" closable={false}>
 		<div class="m-4">
-			<div
+			<form
 				class="grid grid-cols-12 gap-4 text-gray-300 p-2 rounded mb-4 max-h-[300px] min-w-[400px] overflow-scroll"
 			>
 				<input
@@ -102,7 +102,7 @@
 						</div>
 					</div>
 				{/each}
-			</div>
+			</form>
 		</div>
 	</Window>
 </Popover>
