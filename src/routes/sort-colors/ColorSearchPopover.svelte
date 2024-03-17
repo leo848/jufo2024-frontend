@@ -7,7 +7,6 @@
 	import colorLists from './colorLists.json';
 	import { RgbColor } from '../../color/colorSpaces';
 	import type { ColorNameList } from '../../color/colorName';
-	import {flip} from 'svelte/animate';
 
 	export let triggeredBy: string;
 	export let value: Color;
@@ -32,16 +31,21 @@
 			.map((item) => {
 				const lowername = item.name.toLowerCase();
 				if (lowername === lowerSearch) return { item, prio: 1 };
-				if (lowername.startsWith(lowerSearch)) return { item, prio: 2 };
-				else if (lowername.includes(lowerSearch)) return { item, prio: 3 };
+				else if (lowername.startsWith(lowerSearch)) return { item, prio: 2 };
+				else if (lowername.endsWith(lowerSearch)) return { item, prio: 3 };
+				else if (lowername.includes(lowerSearch)) return { item, prio: 4 };
 				else return { item, prio: -1 };
 			})
 			.filter(({ prio }) => prio !== -1)
-			.toSorted((a, b) => a.prio - b.prio)
+			.toSorted((a, b) => sortOptionIndex === 0 ? (a.prio - b.prio) : 0)
 			.map(({ item }) => item);
 	}
 
 	const sortOptions: { name: string, method: (color: Color, item: ColorItem) => number | string }[] = [
+		{
+			name: 'Relevanz',
+			method: _ => 0,
+		},
 		{
 			name: 'Alphabetisch',
 			method: (_, item) => item.name,
@@ -78,7 +82,7 @@
 	$: if (Object.keys(colorLists).includes(colorNameList)) {
 		let key = colorNameList as keyof typeof colorLists;
 		colors = colorLists[key];
-		colors.sort((a, b) => {
+		colors = colors.toSorted((a, b) => {
 			let [keyA, keyB] = ([a, b]).map(item => {
 				const color = RgbColor.fromNumeric(parseInt(item.hex.startsWith("#") ? item.hex.slice(1) : item.hex, 16)).color();
 				return sortOptions[sortOptionIndex].method(color, item);
