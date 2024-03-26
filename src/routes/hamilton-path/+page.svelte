@@ -10,10 +10,10 @@
 
 	let matrixValues: number[][] = [
 		[0, 20, 4, 3, 10],
-		[20, 0, 8, 9, 1],
-		[4, 8, 0, 2, 1],
+		[20, 0, 8, 9, 4],
+		[4, 8, 0, 2, 5],
 		[3, 9, 2, 0, 11],
-		[10, 1, 1, 11, 0]
+		[10, 4, 5, 11, 0]
 	];
 
 	let vertexNames = ['a', 'b', 'c', 'd', 'e'];
@@ -32,9 +32,10 @@
 	$: {
 		min = null;
 		max = null;
-		for (const row of matrixValues) {
-			for (const entry of row) {
-				if (entry === 0) continue;
+		for (const index1 in matrixValues) {
+			for (const index2 in matrixValues[index1]) {
+				const entry = matrixValues[index1][index2];
+				if (index1 === index2) continue;
 				if (min === null || entry < min) {
 					min = entry;
 				}
@@ -49,15 +50,63 @@
 		.fill(0)
 		.map((_, index) => distColor(index, [0, 80]) ?? new RgbColor(0.2, 0.2, 0.2).color());
 
-	const scaleStopAmount = 10;
+	$: scaleStopAmount = (max ?? 0) >= 1000 ? 5 : 10;
 	let scaleStops: number[] = [];
-	$: if (max !== null && min !== null) {
+	$: if (max !== null && min !== null && max > min) {
 		scaleStops = [];
 		const step = (max - min) / scaleStopAmount;
 		for (let counter = min; counter <= max + step / 2; counter += step) {
 			scaleStops = [...scaleStops, counter];
 		}
 	}
+
+	function forEachMatrix(f: (arg: number) => number) {
+		let [bmin, bmax] = [min ?? 0, max ?? 1];
+		matrixValues = matrixValues.map((row) =>
+			row.map((x) => (bmax - bmin < 0.1 ? f(x) : Math.round(f(x) * 10000) / 10000))
+		);
+	}
+
+	const actions = [
+		{
+			name: 'Umkehren',
+			execute() {
+				let bmax = max ?? 1;
+				forEachMatrix((x) => bmax - x);
+			}
+		},
+		{
+			name: 'Normalisieren',
+			execute() {
+				let [bmin, bmax] = [min ?? 0, max ?? 1];
+				forEachMatrix((x) => (x - bmin) / (bmax - bmin));
+			}
+		},
+		{
+			name: '* 10',
+			execute() {
+				forEachMatrix((x) => x * 10);
+			}
+		},
+		{
+			name: '/ 10',
+			execute() {
+				forEachMatrix((x) => x / 10);
+			}
+		},
+		{
+			name: 'Quadrieren',
+			execute() {
+				forEachMatrix((x) => x ** 2);
+			}
+		},
+		{
+			name: 'Quadratwurzel',
+			execute() {
+				forEachMatrix(Math.sqrt);
+			}
+		}
+	];
 </script>
 
 <div class="mt-4 pb-10 mx-10">
@@ -74,7 +123,17 @@
 					style:background={gradient(gradientStops, { smooth: true })}
 				>
 					{#each scaleStops as stop}
-						<div>{stop.toFixed(0)}</div>
+						<div>{stop.toFixed((max ?? 0) > 5 ? 0 : 1)}</div>
+					{/each}
+				</div>
+			</Window>
+			<Window title="Werkzeuge" xlCol={12} mdCol={12}>
+				<div class="flex flex-row gap-4 m-4">
+					{#each actions as action}
+						<button
+							class="p-2 bg-gray-700 hover:bg-gray-600 transition-all rounded text-xl"
+							on:click={action.execute}>{action.name}</button
+						>
 					{/each}
 				</div>
 			</Window>
