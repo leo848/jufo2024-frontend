@@ -157,7 +157,9 @@
 		{/each}
 	</div>
 	<!-- <PageTransition refresh={$page.url.pathname}> -->
-	<slot />
+	<div class="min-h-[60vh]">
+		<slot />
+	</div>
 	<!-- </PageTransition> -->
 	<div class="h-64" />
 	<div
