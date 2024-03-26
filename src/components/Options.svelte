@@ -24,7 +24,8 @@
 		| 'colorSpace'
 		| 'load'
 		| 'store'
-		| 'asVector';
+		| 'asVector'
+		| 'asGraph';
 
 	const defaultShow = new Set([
 		'add',
@@ -55,6 +56,7 @@
 		delete: null;
 		blowUp: null;
 		asVectors: null;
+		asGraph: null;
 		norm: TrueDistanceType;
 	}>();
 
@@ -161,6 +163,12 @@
 					title="Als Vektoren"
 					icon={Icon.ArrowRightBigOutline}
 					on:click={() => dispatch('asVectors')}
+				/>
+				<OptionsButton
+					show={display.has('asGraph')}
+					title="Als Graph"
+					icon={Icon.ArrowRightBigOutline}
+					on:click={() => dispatch('asGraph')}
 				/>
 			</div>
 		{:else}

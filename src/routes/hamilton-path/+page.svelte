@@ -1,5 +1,5 @@
 <script lang="ts">
-	import {goto} from '$app/navigation';
+	import { goto } from '$app/navigation';
 	import { page } from '$app/stores';
 	import { RgbColor } from '../../color/colorSpaces';
 	import { distColor } from '../../color/gradient';
@@ -20,7 +20,6 @@
 	];
 
 	let vertexNames = ['a', 'b', 'c', 'd', 'e'];
-
 
 	let symmetric = true;
 	$: if (symmetric) {
@@ -115,16 +114,14 @@
 	let redraw: () => void;
 	(() => {
 		function fromUrlString(s: string): number[][] | null {
-			return s
-				.split('o')
-				.map((vString) => vString.split('i').map(Number));
+			return s.split('o').map((vString) => vString.split('i').map(Number));
 		}
 		let queryString = $page.url.searchParams.get('v');
 		if (queryString == null) return;
 		let newData = fromUrlString(queryString);
 		if (newData == null) return;
 		matrixValues = newData;
-		vertexNames = new Array(matrixValues.length).fill(0).map((_,i) => String.fromCharCode(96 + i));
+		vertexNames = new Array(matrixValues.length).fill(0).map((_, i) => String.fromCharCode(96 + i));
 		requestAnimationFrame(() => redraw());
 	})();
 	$: {
@@ -135,9 +132,6 @@
 			noScroll: true
 		});
 	}
-
-
-
 </script>
 
 <div class="mt-4 pb-10 mx-10">
@@ -145,7 +139,7 @@
 		class="grid grid-cols-12 gap-8 auto-cols-max align-stretch justify-stretch justify-items-stretch"
 	>
 		<div class="col-span-12 xl:col-span-6 grid grid-cols-1 gap-8">
-			<Window title="Adjazenzmatrix" xlCol={12} mdCol={12}>
+			<Window title="Adjazenzmatrix (bearbeitbar)" xlCol={12} mdCol={12}>
 				<AdjacencyMatrix bind:values={matrixValues} {symmetric} {vertexNames} editable />
 			</Window>
 			<Window title="Skala" xlCol={12} mdCol={12}>

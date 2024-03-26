@@ -273,6 +273,8 @@
 			bind:metric
 			xlCol={4}
 			hide={['asVector', 'load']}
+			show={['asGraph']}
+			on:asGraph={() => goto('/hamilton-path?v=' + matrix.map((row) => row.join('i')).join('o'))}
 			on:add={invalidate(addEmptyVector)}
 			on:delete={invalidate(() => data.set([]))}
 		/>
