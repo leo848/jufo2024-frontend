@@ -100,8 +100,6 @@
 				else return (keyB as string).localeCompare(keyA);
 			}
 		});
-	} else {
-		console.error('Wrong key: ' + colorNameList + ' for thing ', colorLists);
 	}
 
 	$: randomColorName = 'Farbname';

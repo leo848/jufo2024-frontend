@@ -43,6 +43,7 @@ export const colorNameApiError = z.discriminatedUnion('type', [
 
 const pathCreateMethod = z.discriminatedUnion('type', [
 	z.object({ type: z.literal('nearestNeighbor') }),
+	z.object({ type: z.literal('optimalNearestNeighbor') }),
 	z.object({ type: z.literal('bruteForce') }),
 	z.object({ type: z.literal('greedy') }),
 	z.object({ type: z.literal('christofides') }),

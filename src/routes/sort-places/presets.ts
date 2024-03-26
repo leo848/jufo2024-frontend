@@ -436,6 +436,28 @@ export const presets = {
 			}
 		]
 	},
+	länder: {
+		name: "Landeshauptstädte Deutschlands",
+		aiGenerated: true,
+		values: [
+			{ "name": "Stuttgart", "desc": "Landeshauptstadt von Baden-Württemberg", "lat": 48.77583, "lng": 9.18293 },
+			{ "name": "München", "desc": "Landeshauptstadt von Bayern", "lat": 48.13743, "lng": 11.57549 },
+			{ "name": "Berlin", "desc": "Landeshauptstadt von Berlin", "lat": 52.51607, "lng": 13.37699 },
+			{ "name": "Potsdam", "desc": "Landeshauptstadt von Brandenburg", "lat": 52.39886, "lng": 13.06566 },
+			{ "name": "Bremen", "desc": "Landeshauptstadt von Bremen", "lat": 53.0793, "lng": 8.8017 },
+			{ "name": "Hamburg", "desc": "Landeshauptstadt von Hamburg", "lat": 53.55108, "lng": 9.99368 },
+			{ "name": "Wiesbaden", "desc": "Landeshauptstadt von Hessen", "lat": 50.08258, "lng": 8.24932 },
+			{ "name": "Schwerin", "desc": "Landeshauptstadt von Mecklenburg-Vorpommern", "lat": 53.63374, "lng": 11.4068 },
+			{ "name": "Hannover", "desc": "Landeshauptstadt von Niedersachsen", "lat": 52.37589, "lng": 9.73201 },
+			{ "name": "Düsseldorf", "desc": "Landeshauptstadt von Nordrhein-Westfalen", "lat": 51.22774, "lng": 6.77346 },
+			{ "name": "Mainz", "desc": "Landeshauptstadt von Rheinland-Pfalz", "lat": 49.99286, "lng": 8.24725 },
+			{ "name": "Saarbrücken", "desc": "Landeshauptstadt von Saarland", "lat": 49.2354, "lng": 6.98199 },
+			{ "name": "Dresden", "desc": "Landeshauptstadt von Sachsen", "lat": 51.05089, "lng": 13.73832 },
+			{ "name": "Magdeburg", "desc": "Landeshauptstadt von Sachsen-Anhalt", "lat": 52.12053, "lng": 11.62762 },
+			{ "name": "Kiel", "desc": "Landeshauptstadt von Schleswig-Holstein", "lat": 54.32329, "lng": 10.13489 },
+			{ "name": "Erfurt", "desc": "Landeshauptstadt von Thüringen", "lat": 50.9787, "lng": 11.03283 }
+		]
+	},
 	aachen1: {
 		name: 'Aachen simpel',
 		// prettier-ignore

@@ -57,7 +57,7 @@
 		const config = {
 			center: center(points),
 			zoom: 13,
-			minZoom: 8,
+			minZoom: 5,
 			attributionControl: false,
 			rotate: true
 			// maxBounds: [[ 50.7, 6.0 ], [ 50.8, 6.1 ]]

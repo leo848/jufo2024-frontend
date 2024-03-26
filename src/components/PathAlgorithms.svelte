@@ -81,6 +81,14 @@
 					icon: Icon.PhoneOutline
 				},
 				{
+					name: 'Optimal Nearest Neighbor',
+					description:
+						'Führt NN für alle Startpunkte aus.',
+					method: 'optimalNearestNeighbor',
+					complexity: 'O(n³)',
+					icon: Icon.PhoneOutline
+				},
+				{
 					name: 'Greedy',
 					description:
 						'Der Greedy-Algorithmus wählt stets die kürzeste Kante aus, bei deren Auswahl kein Zyklus entsteht.',
