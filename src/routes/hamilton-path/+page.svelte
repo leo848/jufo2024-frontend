@@ -2,6 +2,7 @@
 	import { RgbColor } from '../../color/colorSpaces';
 	import { distColor } from '../../color/gradient';
 	import AdjacencyMatrix from '../../components/AdjacencyMatrix.svelte';
+	import ForceDirectedGraph from '../../components/ForceDirectedGraph.svelte';
 	import Window from '../../components/Window.svelte';
 	import { gradient } from '../../ui/color';
 	import { title } from '../../ui/navbar';
@@ -135,6 +136,11 @@
 							on:click={action.execute}>{action.name}</button
 						>
 					{/each}
+				</div>
+			</Window>
+			<Window title="Kräftebasierter Graph" xlCol={12} mdCol={12}>
+				<div class="h-[420px] w-full">
+					<ForceDirectedGraph values={matrixValues} matrix names={vertexNames} />
 				</div>
 			</Window>
 		</div>
