@@ -74,15 +74,23 @@
 		{
 			name: 'Umkehren',
 			execute() {
+				// bmax => block max;
 				let bmax = max ?? 1;
 				forEachMatrix((x) => bmax - x);
 			}
 		},
 		{
-			name: 'Normalisieren',
+			name: 'min = 0',
 			execute() {
-				let [bmin, bmax] = [min ?? 0, max ?? 1];
-				forEachMatrix((x) => (x - bmin) / (bmax - bmin));
+				let bmin = min ?? 0;
+				forEachMatrix(x => x - bmin);
+			}
+		},
+		{
+			name: '/ max',
+			execute() {
+				let bmax = max ?? 1;
+				forEachMatrix((x) => x / bmax);
 			}
 		},
 		{
@@ -95,6 +103,12 @@
 			name: '/ 10',
 			execute() {
 				forEachMatrix((x) => x / 10);
+			}
+		},
+		{
+			name: '+1',
+			execute() {
+				forEachMatrix(x => x + 1);
 			}
 		},
 		{
@@ -121,7 +135,7 @@
 		let newData = fromUrlString(queryString);
 		if (newData == null) return;
 		matrixValues = newData;
-		vertexNames = new Array(matrixValues.length).fill(0).map((_, i) => String.fromCharCode(96 + i));
+		vertexNames = new Array(matrixValues.length).fill(0).map((_, i) => String.fromCharCode(97 + i));
 		requestAnimationFrame(() => redraw());
 	})();
 	$: {
