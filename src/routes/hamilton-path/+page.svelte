@@ -1,4 +1,6 @@
 <script lang="ts">
+	import {goto} from '$app/navigation';
+	import { page } from '$app/stores';
 	import { RgbColor } from '../../color/colorSpaces';
 	import { distColor } from '../../color/gradient';
 	import AdjacencyMatrix from '../../components/AdjacencyMatrix.svelte';
@@ -18,6 +20,7 @@
 	];
 
 	let vertexNames = ['a', 'b', 'c', 'd', 'e'];
+
 
 	let symmetric = true;
 	$: if (symmetric) {
@@ -108,6 +111,33 @@
 			}
 		}
 	];
+
+	let redraw: () => void;
+	(() => {
+		function fromUrlString(s: string): number[][] | null {
+			return s
+				.split('o')
+				.map((vString) => vString.split('i').map(Number));
+		}
+		let queryString = $page.url.searchParams.get('v');
+		if (queryString == null) return;
+		let newData = fromUrlString(queryString);
+		if (newData == null) return;
+		matrixValues = newData;
+		vertexNames = new Array(matrixValues.length).fill(0).map((_,i) => String.fromCharCode(96 + i));
+		requestAnimationFrame(() => redraw());
+	})();
+	$: {
+		$page.url.searchParams.set('v', matrixValues.map((row) => row.join('i')).join('o'));
+		goto(`?${$page.url.searchParams.toString()}`, {
+			keepFocus: true,
+			replaceState: true,
+			noScroll: true
+		});
+	}
+
+
+
 </script>
 
 <div class="mt-4 pb-10 mx-10">
