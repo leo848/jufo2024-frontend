@@ -82,8 +82,7 @@
 				},
 				{
 					name: 'Optimal Nearest Neighbor',
-					description:
-						'Führt NN für alle Startpunkte aus.',
+					description: 'Führt NN für alle Startpunkte aus.',
 					method: 'optimalNearestNeighbor',
 					complexity: 'O(n³)',
 					icon: Icon.PhoneOutline

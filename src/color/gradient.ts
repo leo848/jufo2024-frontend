@@ -304,3 +304,34 @@ export class PerceptualGradient {
 		return string;
 	}
 }
+export function distColor(dist: number, [min, max]: [number, number]): Color | null {
+	/*let [minColor, maxColor] = [new RgbColor(0, 255, 0), new RgbColor(255, 0, 0)].map((rgb) => {
+		return rgb.color().space('hsl').with('s', 0.2).color().oklab().with('l', 0.3);
+	});*/
+	function unease(t: number): number {
+		// Inverse cbrt ease.
+		return Math.sqrt(t);
+	}
+
+	function symmetrify(unease: (t: number) => number): (t: number) => number {
+		return (t: number) => {
+			if (t < 0.5) {
+				return unease(t) / (2 * unease(0.5));
+			} else {
+				return -(unease(1 - t) / (2 * unease(0.5))) + 1;
+			}
+		};
+	}
+
+	let t = symmetrify(unease)(rangeMap(dist, [min, max], [0, 0.8]));
+	let sample = PerceptualGradient.Icefire.sample(t);
+	if (!sample) return null;
+	return readableIcefire(sample.color());
+}
+
+export function readableIcefire(sample: Color) {
+	let sampleDarker = sample.oklab().with('l', rangeMap(sample.oklab().l, [0, 1], [0.3, 0.6]));
+	let sampleHsl = sampleDarker.color().space('hsl');
+	let color = sampleHsl.with('s', Math.min(sampleHsl.s, 0.4));
+	return color.color();
+}

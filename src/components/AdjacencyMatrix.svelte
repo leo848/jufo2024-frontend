@@ -3,7 +3,7 @@
 	import type { Color } from '../color/color';
 	import { RgbColor } from '../color/colorSpaces';
 	import { rangeMap } from '../utils/math';
-	import { PerceptualGradient } from '../color/gradient';
+	import { PerceptualGradient, distColor } from '../color/gradient';
 
 	export let values: number[][];
 	export let vertexNames: string[];
@@ -11,6 +11,9 @@
 
 	export let sort: boolean = true;
 	export let collapseNames: boolean = false;
+
+	export let editable: boolean = false;
+	export let symmetric: boolean = true;
 
 	$: sorted = sort
 		? vertexNames
@@ -36,39 +39,11 @@
 			}
 		}
 	}
-
-	function distColor(dist: number): Color | null {
-		/*let [minColor, maxColor] = [new RgbColor(0, 255, 0), new RgbColor(255, 0, 0)].map((rgb) => {
-			return rgb.color().space('hsl').with('s', 0.2).color().oklab().with('l', 0.3);
-		});*/
-		function unease(t: number): number {
-			// Inverse cbrt ease.
-			return Math.sqrt(t);
-		}
-
-		function symmetrify(unease: (t: number) => number): (t: number) => number {
-			return (t: number) => {
-				if (t < 0.5) {
-					return unease(t) / (2 * unease(0.5));
-				} else {
-					return -(unease(1 - t) / (2 * unease(0.5))) + 1;
-				}
-			};
-		}
-
-		let t = symmetrify(unease)(rangeMap(dist, [min, max], [0, 1]));
-		let sample = PerceptualGradient.Icefire.sample(t);
-		if (!sample) return null;
-		let sampleDarker = sample.with('l', Math.min(sample.l, 0.3));
-		let sampleHsl = sampleDarker.color().space('hsl');
-		let color = sampleDarker.color().space('hsl').with('s', Math.min(sampleHsl.s, 0.4)).color();
-		return color;
-	}
 </script>
 
 <div>
 	<div
-		class="grid overflow-scroll"
+		class="grid overflow-scroll text-white"
 		style:grid-template-columns={`repeat(${length + 1}, minmax(auto, 1fr))`}
 	>
 		<div class="m-2 text-center" />
@@ -95,11 +70,27 @@
 				{#if index != index1}
 					<div
 						class="tabular-nums py-2 px-2 border-gray-500 border-1 border"
-						style={`background-color:${(distColor(value) ?? new RgbColor(0.2, 0.2, 0.2).color())
+						style={`background-color:${(
+							distColor(value, [min, max]) ?? new RgbColor(0.2, 0.2, 0.2).color()
+						)
 							.rgb()
 							.css()}`}
 					>
-						{value.toFixed(digits)}
+						{#if editable}
+							<input
+								class="border-none w-full"
+								type="number"
+								bind:value={values[index][index1]}
+								disabled={symmetric && index > index1}
+								style={`background-color:${(
+									distColor(value, [min, max])?.lighten(0.05) ?? new RgbColor(0.2, 0.2, 0.2).color()
+								)
+									.rgb()
+									.css()}`}
+							/>
+						{:else}
+							{value.toFixed(digits)}
+						{/if}
 					</div>
 				{:else}
 					<div class="py-2 px-2 border-gray-500 border-1 border">–</div>
@@ -108,3 +99,17 @@
 		{/each}
 	</div>
 </div>
+
+<style>
+	input::-webkit-outer-spin-button,
+	input::-webkit-inner-spin-button {
+		/* display: none; <- Crashes Chrome on hover */
+		-webkit-appearance: none;
+		margin: 0; /* <-- Apparently some margin are still there even though it's hidden */
+	}
+
+	input[type='number'] {
+		-moz-appearance: textfield; /* Firefox */
+		appearance: textfield;
+	}
+</style>

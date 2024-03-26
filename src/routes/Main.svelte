@@ -43,7 +43,7 @@
 			imgSource: 'R. D. Smith',
 			href: '/hamilton-path',
 			text: 'Hamilton-Pfad',
-			desc: 'Den kürzesten Hamilton-Pfad eines beliebigen schlichten Graphen finden, einzugeben über dessen Adjazenzmatrix' 
+			desc: 'Den kürzesten Hamilton-Pfad eines beliebigen schlichten Graphen finden, einzugeben über dessen Adjazenzmatrix'
 		}
 	];
 	let displayCards: typeof cards = [];

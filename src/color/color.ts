@@ -113,12 +113,24 @@ export class Color {
 		return this;
 	}
 
-	css() {
+	css(): string {
 		return this.rgb().css();
 	}
 
-	readable() {
+	readable(): Color {
 		return this.oklab().l > 0.7 ? new Color(0, 0, 0) : new Color(1, 1, 1);
+	}
+
+	lighten(perc: number = 0.1): Color {
+		return this.oklab()
+			.with('l', this.oklab().l + perc)
+			.color();
+	}
+
+	darken(perc: number = 0.1): Color {
+		return this.oklab()
+			.with('l', this.oklab().l - perc)
+			.color();
 	}
 
 	async name(nameList?: ColorNameList): Promise<ColorNameMetadata> {
