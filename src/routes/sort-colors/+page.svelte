@@ -377,7 +377,7 @@
 						/>
 					</div>
 				{:else}
-					{@const randomColors = new Array(10)
+					{@const randomColors = new Array(100)
 						.fill(0)
 						.map((_) => new RgbColor(Math.random(), Math.random(), Math.random()).color())}
 					{@const randomColor = randomColors[0]}
@@ -386,7 +386,7 @@
 						style={`background-color:${randomColor.css()}; color:${randomColor.readable().css()}`}
 						in:scale
 					>
-						<div class="text-2xl">Keine Farben ausgewählt</div>
+						<div class="text-3xl">Keine Farben ausgewählt</div>
 						<div>
 							Klicke auf Hinzufügen oder Laden im Optionen-Dialog rechts und erstelle so eine zu
 							sortierende Liste von Farben.
@@ -423,10 +423,17 @@
 							>
 							<button
 								class="p-2 mt-2 rounded text-white"
-								style:background={gradient(randomColors.slice(1).map((c) => c.darken(0.2)))}
-								on:click={() => (colors = randomColors)}
+								style:background={gradient(randomColors.slice(1, 10).map((c) => c.darken(0.4)))}
+								on:click={() => (colors = randomColors.slice(0, 10))}
 							>
 								<b>10 zufällige</b> Farben auswählen
+							</button>
+							<button
+								class="p-2 mt-2 rounded text-white"
+								style:background={gradient(randomColors.slice(1, 100).map((c) => c.darken(0.4)))}
+								on:click={() => (colors = randomColors.slice(0, 100))}
+							>
+								<b>100 zufällige</b> Farben auswählen
 							</button>
 						</div>
 					</div>
