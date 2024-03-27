@@ -22,6 +22,17 @@
 
 	let vertexNames = ['a', 'b', 'c', 'd', 'e'];
 
+	let uniqueVertexNames = vertexNames;
+	$: {
+		const set = new Set(vertexNames);
+		const unique = set.size === vertexNames.length;
+		if (unique) {
+			uniqueVertexNames = vertexNames;
+		} else {
+			uniqueVertexNames = vertexNames.map((str, i) => `${i + 1}/${str}`);
+		}
+	}
+
 	let symmetric = true;
 	$: if (symmetric) {
 		for (let i = 0; i < vertexNames.length; i++) {
@@ -176,11 +187,11 @@
 		class="grid grid-cols-12 gap-8 auto-cols-max align-stretch justify-stretch justify-items-stretch"
 	>
 		<div class="col-span-12 xl:col-span-6 grid grid-cols-1 gap-8">
-			<Window title="Adjazenzmatrix (bearbeitbar)" xlCol={12} mdCol={12}>
+			<Window title="Adjazenzmatrix (bearbeitbar)" xlCol={12} mdCol={12} scrollable>
 				<AdjacencyMatrix
 					bind:values={matrixValues}
 					{symmetric}
-					vertexNames={vertexNames.map((v, i) => `${i}/${v}`)}
+					vertexNames={uniqueVertexNames}
 					editable
 				/>
 			</Window>
@@ -211,24 +222,22 @@
 			</Window>
 		</div>
 		<div class="col-span-12 xl:col-span-6">
-			<Window title="Knoten">
-				<div class="flex flex-row gap-2 m-2 text-xl flex-wrap">
+			<Window title="Knoten" scrollable>
+				<div class="grid grid-cols-3 gap-2 m-2 text-xl">
 					{#each vertexNames as name, index}
 						<div class="bg-gray-700 p-2 px-4 flex flex-row items-center gap-4">
-							<input
-								class="bg-gray-700 w-full min-w-[50px] max-w-[60px]"
-								bind:value={vertexNames[index]}
-							/>
+							<input class="bg-gray-700 w-full min-w-[50px]" bind:value={vertexNames[index]} />
 							<button on:click={() => removeVertex(index)} class="hover:text-white transition-all"
 								><Icon.TrashBinSolid size="sm" /></button
 							>
 						</div>
 					{/each}
-					<div class="bg-gray-700 p-2 px-4 flex flex-row items-center gap-4">
-						<button on:click={() => addVertex()} class="hover:text-white transition-all"
-							><Icon.PlusSolid size="sm" /></button
-						>
-					</div>
+					<button
+						on:click={() => addVertex()}
+						class="hover:bg-gray-600 transition-all bg-gray-700 p-2 px-4 flex flex-row items-center gap-4 col-span-3 min-h-[50px]"
+					>
+						<Icon.PlusSolid size="sm" />
+					</button>
 				</div>
 			</Window>
 		</div>

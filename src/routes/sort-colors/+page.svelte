@@ -29,6 +29,7 @@
 	import LoadColor from './LoadColor.svelte';
 	import CopyButton from '../../components/CopyButton.svelte';
 	import { fromUrlString, toUrlString } from './url';
+	import { adjacencyMatrix } from '../../graph/adjacency';
 
 	title.set('Farben sortieren');
 
@@ -379,7 +380,7 @@
 			</div>
 		</div>
 		<Options
-			show={['colorSpace']}
+			show={['colorSpace', 'asGraph']}
 			on:blowUp={blowUp}
 			bind:invalidate
 			bind:locked={colorsLocked}
@@ -401,6 +402,19 @@
 									.join('i')
 							)
 							.join('o')
+				);
+			})}
+			on:asGraph={invalidate(async () => {
+				goto(
+					'/hamilton-path?v=' +
+						adjacencyMatrix(
+							colors.map((c) => c.space(space).point().values()),
+							metric
+						)
+							.map((row) => row.map((entry) => entry.toFixed(3)).join('i'))
+							.join('o') +
+						'&n=' +
+						(await Promise.all(colors.map((c) => c.name()))).map((meta) => meta.name).join('_')
 				);
 			})}
 			xlCol={4}

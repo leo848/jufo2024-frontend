@@ -53,7 +53,7 @@
 		<div class="m-2 text-center" />
 		{#each sorted as { name }, index (name)}
 			<div class="border-gray-500 border">
-				<div class="bg-gray-700 text-center text-xl">{collapseNames ? index + 1 : name}</div>
+				<div class="bg-gray-700 text-center">{collapseNames ? index + 1 : name}</div>
 				{#if collapseNames}
 					<Tooltip type="light">{name}</Tooltip>
 				{/if}
@@ -62,7 +62,7 @@
 		{#each sorted as { name, index }, trueIndex (name)}
 			{@const vector = values[index]}
 			<div class="border-gray-500 border">
-				<div class="bg-gray-700 h-full text-center text-xl">
+				<div class="bg-gray-700 h-full text-center">
 					{collapseNames ? trueIndex + 1 : name}
 				</div>
 				{#if collapseNames}
