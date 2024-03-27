@@ -257,7 +257,7 @@
 		<div class="col-span-12 xl:col-span-6 flex flex-col gap-8">
 			<Window title="Knoten" scrollable>
 				<div class="grid grid-cols-3 gap-2 m-2 text-xl">
-					{#each vertexNames as name, index}
+					{#each vertexNames as _, index}
 						<div class="bg-gray-700 p-2 px-4 flex flex-row items-center gap-4">
 							<input class="bg-gray-700 w-full min-w-[50px]" bind:value={vertexNames[index]} />
 							<button on:click={() => removeVertex(index)} class="hover:text-white transition-all"
