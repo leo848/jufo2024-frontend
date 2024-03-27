@@ -426,7 +426,7 @@
 								style:background={gradient(randomColors.slice(1, 10).map((c) => c.darken(0.4)))}
 								on:click={() => (colors = randomColors.slice(0, 10))}
 							>
-							<b><span class="opacity-0">0</span>10 zufällige</b> Farben auswählen
+								<b><span class="opacity-0">0</span>10 zufällige</b> Farben auswählen
 							</button>
 							<button
 								class="p-2 mt-2 rounded text-white"

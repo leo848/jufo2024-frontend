@@ -23,7 +23,7 @@
 
 	export let horizontal: boolean = false;
 
-	let progress = { ongoing: false, value: 0 as null | number };
+	let progress = { ongoing: false, value: 0 as null | number, start: new Date() };
 	let path: number[][] | null | number[] = null;
 
 	type ActionKind = 'construction' | 'improvement';
@@ -68,7 +68,7 @@
 						'Alle möglichen Permutationen der Punkte werden ausprobiert und die minimale wird gewählt.',
 					method: 'bruteForce',
 					complexity: 'O(n!)',
-					expectedTime: (n: number) => Math.max((latency / 1000) * n, factorial(n) / 100000),
+					expectedTime: (n: number) => Math.max((latency / 1000) * n, factorial(n) / 15128000),
 					icon: Icon.HourglassOutline
 				},
 				{
@@ -109,7 +109,7 @@
 					description: 'Finde die optimale Lösung mittels des externen Tools Concorde',
 					method: null,
 					icon: Icon.WandMagicSparklesOutline
-}*/
+				}*/
 			] as const
 		).map((e, i) => {
 			let send;
@@ -126,7 +126,12 @@
 								matrix: values
 							}
 						} as const));
-				send = payload && (() => sendWebsocket(payload()));
+				send =
+					payload &&
+					(() => {
+						progress.start = new Date();
+						sendWebsocket(payload());
+					});
 			} else {
 				const payload =
 					e.method &&
@@ -142,7 +147,12 @@
 								values
 							}
 						} as const));
-				send = payload && (() => sendWebsocket(payload()));
+				send =
+					payload &&
+					(() => {
+						progress.start = new Date();
+						sendWebsocket(payload());
+					});
 			}
 			return Object.assign({}, e, { index: i, send });
 		}),
@@ -207,7 +217,12 @@
 								matrix: values
 							}
 						} as const));
-				send = payload && (() => sendWebsocket(payload()));
+				send =
+					payload &&
+					(() => {
+						progress.start = new Date();
+						sendWebsocket(payload());
+					});
 			} else {
 				const payload =
 					e.method &&
@@ -223,7 +238,12 @@
 								path: values
 							}
 						} as const));
-				send = payload && (() => sendWebsocket(payload()));
+				send =
+					payload &&
+					(() => {
+						progress.start = new Date();
+						sendWebsocket(payload());
+					});
 			}
 			return Object.assign({}, e, { index: i, send });
 		})
@@ -245,8 +265,8 @@
 	}
 	$: open = (kind: ActionKind) => selectedItem[kind] !== null;
 
-	let latencySlider = 1;
-	$: latency = [0, 100, 250, 500, 1000, 2000][latencySlider];
+	let latencySlider = 2;
+	$: latency = [0, 50, 100, 250, 500, 1000, 2000][latencySlider];
 
 	if (matrix) {
 		let callbackId = registerCallback(serverOutputPathCreation, (pc) => {
@@ -276,6 +296,7 @@
 			if (pc.donePath) {
 				progress.ongoing = false;
 				path = pc.donePath;
+				console.log('took ' + (new Date().getTime() - progress.start.getTime()) + 'ms');
 			} else {
 				progress.ongoing = true;
 				progress.value = pc.progress ?? null;
@@ -349,8 +370,61 @@
 								<div>Erwartete Zeit: beliebig</div>
 							{:else if time < 1}
 								<div>Erwartete Zeit: <b>&lt;1</b> Sekunde</div>
+							{:else if time < 60}
+								<div>
+									Erwartete Zeit: <b>{time < 10 ? time.toFixed(1) : time.toFixed(0)}</b> Sekunden
+								</div>
+							{:else if time < 60 * 1.5}
+								<div>Erwartete Zeit: <b>&lt;1</b> Minute</div>
+							{:else if time < 60 * 60}
+								<div>Erwartete Zeit: <b>{(time / 60).toFixed()}</b> Minuten</div>
+							{:else if time < 60 * 60 * 1.5}
+								<div>Erwartete Zeit: <b>&lt;1</b> Stunde</div>
+							{:else if time < 60 * 60 * 24}
+								<div>Erwartete Zeit: <b>{(time / 60 / 60).toFixed()}</b> Stunden</div>
+							{:else if time < 60 * 60 * 24 * 1.5}
+								<div>Erwartete Zeit: <b>&lt;1</b> Tag</div>
+							{:else if time < 60 * 60 * 24 * 365}
+								<div>Erwartete Zeit: <b>{(time / 60 / 60 / 24).toFixed()}</b> Tage</div>
+							{:else if time < 60 * 60 * 24 * 365 * 1.5}
+								<div>Erwartete Zeit: <b>&lt;1</b> Jahr</div>
+							{:else if time < 60 * 60 * 24 * 365 * 100}
+								<div>Erwartete Zeit: <b>{(time / 60 / 60 / 24 / 365).toFixed()}</b> Jahre</div>
+							{:else if time < 60 * 60 * 24 * 365 * 100 * 1.5}
+								<div>Erwartete Zeit: <b>&lt;1</b> Jahrhundert</div>
+							{:else if time < 60 * 60 * 24 * 365 * 100 * 10}
+								<div>
+									Erwartete Zeit: <b>{(time / 60 / 60 / 24 / 365 / 100).toFixed()}</b> Jahrhunderte
+								</div>
+							{:else if time < 60 * 60 * 24 * 365 * 100 * 10 * 1.5}
+								<div>Erwartete Zeit: <b>&lt;1</b> Jahrtausend</div>
+							{:else if time < 60 * 60 * 24 * 365 * 100 * 10 * 1000}
+								<div>
+									Erwartete Zeit: <b>{(time / 60 / 60 / 24 / 365 / 100 / 10).toFixed()}</b> Jahrtausende
+								</div>
+							{:else if time < 60 * 60 * 24 * 365 * 100 * 10 * 1000 * 1.5}
+								<div>Erwartete Zeit: <b>&lt;1</b> Million Jahre</div>
+							{:else if time < 60 * 60 * 24 * 365 * 100 * 10 * 1000 * 1000}
+								<div>
+									Erwartete Zeit: <b>{(time / 60 / 60 / 24 / 365 / 100 / 10 / 1000).toFixed()}</b> Millionen
+									Jahre
+								</div>
+							{:else if time < 60 * 60 * 24 * 365 * 100 * 10 * 1000 * 1000 * 1.5}
+								<div>Erwartete Zeit: <b>&lt;1</b> Milliarde Jahre</div>
+							{:else if time < 60 * 60 * 24 * 365 * 100 * 10 * 1000 * 1000 * 1000}
+								<div>
+									Erwartete Zeit: <b
+										>{(time / 60 / 60 / 24 / 365 / 100 / 10 / 1000 / 1000).toFixed()}</b
+									> Milliarden Jahre
+								</div>
+							{:else if time < 60 * 60 * 24 * 365 * 100 * 10 * 1000 * 1000 * 1000 * 1.5}
+								<div>Erwartete Zeit: <b>&lt;1</b> Billion Jahre</div>
 							{:else}
-								<div>Erwartete Zeit: <b>{time}</b> Sekunden</div>
+								<div>
+									Erwartete Zeit: <b
+										>{(time / 60 / 60 / 24 / 365 / 100 / 10 / 1000 / 1000 / 1000).toFixed()}</b
+									> Billionen Jahre
+								</div>
 							{/if}
 						{/if}
 					{/key}
@@ -371,7 +445,7 @@
 						type="range"
 						bind:value={latencySlider}
 						min={0}
-						max={5}
+						max={6}
 						class="w-full bg-transparent text-white grayscale"
 					/>
 				</div>
