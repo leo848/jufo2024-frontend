@@ -9,6 +9,7 @@
 	import Window from '../../components/Window.svelte';
 	import { gradient } from '../../ui/color';
 	import { title } from '../../ui/navbar';
+	import ColorScale from './ColorScale.svelte';
 
 	title.set('Kürzester Hamilton-Pfad');
 
@@ -58,20 +59,6 @@
 					max = entry;
 				}
 			}
-		}
-	}
-
-	const gradientStops = new Array(80)
-		.fill(0)
-		.map((_, index) => distColor(index, [0, 80]) ?? new RgbColor(0.2, 0.2, 0.2).color());
-
-	$: scaleStopAmount = (max ?? 0) >= 1000 ? 5 : 10;
-	let scaleStops: number[] = [];
-	$: if (max !== null && min !== null && max > min) {
-		scaleStops = [];
-		const step = (max - min) / scaleStopAmount;
-		for (let counter = min; counter <= max + step / 2; counter += step) {
-			scaleStops = [...scaleStops, counter];
 		}
 	}
 
@@ -196,14 +183,7 @@
 				/>
 			</Window>
 			<Window title="Skala" xlCol={12} mdCol={12}>
-				<div
-					class="h-20 rounded-b-xl flex flex-row justify-between align-center items-center text-3xl text-white"
-					style:background={gradient(gradientStops, { smooth: true })}
-				>
-					{#each scaleStops as stop}
-						<div>{stop.toFixed((max ?? 0) > 5 ? 0 : 1)}</div>
-					{/each}
-				</div>
+				<ColorScale {min} {max} />
 			</Window>
 			<Window title="Werkzeuge" xlCol={12} mdCol={12}>
 				<div class="flex flex-row gap-4 m-4">
