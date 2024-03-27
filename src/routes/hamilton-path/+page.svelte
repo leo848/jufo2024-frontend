@@ -84,6 +84,7 @@
 	const actions = [
 		{
 			name: 'Umkehren',
+			desc: 'Die Distanzfunktion wird so umgekehrt, dass die Knoten mit größten Distanzen am nächsten zueinander gepaart; solche mit kleinsten Distanzen am weitesten entfernt werden.',
 			execute() {
 				// bmax => block max;
 				let bmax = max ?? 1;
@@ -92,6 +93,7 @@
 		},
 		{
 			name: 'min = 0',
+			desc: 'Von allen Distanzen wird die minimale subtrahiert. Da es sich nur um eine Translation handelt, bleibt das Sortierergebnis gleich.',
 			execute() {
 				let bmin = min ?? 0;
 				forEachMatrix((x) => x - bmin);
@@ -99,6 +101,7 @@
 		},
 		{
 			name: '/ max',
+			desc: 'Alle Distanzen werden durch die maximale geteilt, sodass alle nun im Interval [min/max, 1] liegen.',
 			execute() {
 				let bmax = max ?? 1;
 				forEachMatrix((x) => x / bmax);
@@ -106,30 +109,35 @@
 		},
 		{
 			name: '* 10',
+			desc: 'Alle Distanzen werden mit 10 multipliziert.',
 			execute() {
 				forEachMatrix((x) => x * 10);
 			}
 		},
 		{
 			name: '/ 10',
+			desc: 'Alle Distanzen werden durch 10 geteilt.',
 			execute() {
 				forEachMatrix((x) => x / 10);
 			}
 		},
 		{
 			name: '+1',
+			desc: 'Alle Distanzen werden um 1 erhöht.',
 			execute() {
 				forEachMatrix((x) => x + 1);
 			}
 		},
 		{
 			name: 'Quadrieren',
+			desc: 'Alle Distanzen werden quadriert. Dies hat zur Folge, dass weit entferntere Knoten sich noch weiter entfernen, während nähere relativ zusammenrücken.',
 			execute() {
 				forEachMatrix((x) => x ** 2);
 			}
 		},
 		{
 			name: 'Quadratwurzel',
+			desc: 'Alle Distanzen werden durch ihre Quadratwurzel ersetzt. Dies sorgt für eine niedrigere Gewichtung extremer Werte.',
 			execute() {
 				forEachMatrix(Math.sqrt);
 			}
