@@ -36,10 +36,12 @@
 		min = Infinity;
 	$: {
 		(max = -Infinity), (min = Infinity);
-		for (const vector of values) {
-			for (const dist of vector) {
+		for (let i = 0; i < values.length; i++) {
+			const vector = values[i];
+			for (let j = 0; j < vector.length; j++) {
+				const dist = vector[j];
 				if (dist > max) max = dist;
-				if (dist < min && dist > 0.0001) min = dist;
+				if (dist < min && i != j) min = dist;
 			}
 		}
 	}
