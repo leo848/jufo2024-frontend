@@ -26,7 +26,7 @@
 	import { fromUrlString, toUrlString } from './url';
 	import LoadWords from './LoadWords.svelte';
 	import { presets } from './presets';
-	import type { TrueDistanceType } from '../../geom/dist';
+	import { dist, type TrueDistanceType } from '../../geom/dist';
 
 	title.set('Wörter sortieren');
 
@@ -267,6 +267,28 @@
 						<span class="text-gray-400">{word.index + 1}.&nbsp;</span>
 						{word.inner}
 						<div class="grow" />
+						<div class="flex flex-col text-sm mr-8 opacity-50 items-end">
+							<div class="-mb-1">
+								{#if trueIndex !== 0}
+									d({word.inner}, {words[trueIndex - 1].inner}) =
+									<span class="tabular-nums"
+										>{dist(word.vec, words[trueIndex - 1].vec, metric).toFixed(2)}</span
+									>
+								{:else}
+									&nbsp;
+								{/if}
+							</div>
+							<div class="-mb-1">
+								{#if trueIndex !== words.length - 1}
+									d({word.inner}, {words[trueIndex + 1].inner}) =
+									<span class="tabular-nums"
+										>{dist(word.vec, words[trueIndex + 1].vec, metric).toFixed(2)}</span
+									>
+								{:else}
+									&nbsp;
+								{/if}
+							</div>
+						</div>
 						<button
 							class="text-gray-400 hover:text-white transition-all"
 							on:click={invalidate(() => removeWord(trueIndex))}><Icon.TrashBinSolid /></button
