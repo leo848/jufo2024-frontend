@@ -11,6 +11,7 @@
 	import { registerCallback, unregisterCallback } from '../../server/websocket';
 	import { serverOutputPathCreation, serverOutputPathImprovement } from '../../server/types';
 	import { onDestroy } from 'svelte';
+	import {flip} from 'svelte/animate';
 
 	title.set('Kürzester Hamilton-Pfad');
 
@@ -24,7 +25,15 @@
 
 	let vertexNames = ['a', 'b', 'c', 'd', 'e'];
 	let path: null | number[] = null;
+	let vertexNamesPath: null | {name: string, index: number}[] = null;
 	let edges: [number, number][] = [];
+
+	$: {
+		if (path === null) vertexNamesPath = vertexNames.map((name, index) => ({ name, index }));
+		else {
+			vertexNamesPath = path.map(index => ({ index, name: vertexNames[index] }));
+		}
+	}
 
 	let uniqueVertexNames = vertexNames;
 	$: {
@@ -256,7 +265,7 @@
 		</div>
 		<div class="col-span-12 xl:col-span-6 flex flex-col gap-8">
 			<Window title="Knoten" scrollable>
-				<div class="grid grid-cols-3 gap-2 m-2 text-xl">
+				<div class="grid grid-cols-3 gap-4 m-4 text-xl">
 					{#each vertexNames as _, index}
 						<div class="bg-gray-700 p-2 px-4 flex flex-row items-center gap-4">
 							<input class="bg-gray-700 w-full min-w-[50px]" bind:value={vertexNames[index]} />
@@ -280,6 +289,18 @@
 				horizontal
 				on:deletePath={blowUp}
 			/>
+			{#if vertexNamesPath !== null}
+				<Window title="Liste" scrollable>
+					<div class="m-4 grid grid-cols-1 gap-4">
+						{#each vertexNamesPath as vertex (vertex.name)}
+							<div class="p-2 bg-gray-700 text-xl" animate:flip>
+								<span class="opacity-50">{vertex.index + 1}.</span>
+								{vertex.name}
+							</div>
+						{/each}
+					</div>
+				</Window>
+			{/if}
 		</div>
 	</div>
 </div>

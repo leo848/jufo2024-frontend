@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { Card } from 'flowbite-svelte';
 	import * as Icon from 'flowbite-svelte-icons';
-	import { slide } from 'svelte/transition';
+	import { scale, slide } from 'svelte/transition';
 
 	export let title: string;
 	export let options: boolean = false;
@@ -54,6 +54,7 @@
 	class={` col-span-${closed ? 6 : 12} md:col-span-${closed ? 6 : mdCol} xl:col-span-${
 		closed ? 2 : xlCol
 	} row-span-${closed ? 1 : row} max-w-none md:m-0`}
+	transition:scale
 >
 	<Card
 		class={` rounded-xl max-w-none md:p-0 ${
