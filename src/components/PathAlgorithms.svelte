@@ -77,7 +77,11 @@
 						'Die Methode des nächsten Nachbarn beginnt mit dem Anfangspunkt und wählt stets den nächsten Punkt, der noch nicht besucht wurde, und baut so den Pfad auf.',
 					method: 'nearestNeighbor',
 					complexity: 'O(n²)',
-					expectedTime: (n: number) => (latency / 1000) * n,
+					expectedTime: (n: number) =>
+						Math.max(
+							(latency / 1000) * n,
+							n ** 2 / 30000 + n ** 4.6 / 2000000000000 - n ** 3 / 1000000000
+						),
 					icon: Icon.PhoneOutline
 				},
 				{
@@ -85,6 +89,7 @@
 					description: 'Führt NN für alle Startpunkte aus.',
 					method: 'optimalNearestNeighbor',
 					complexity: 'O(n³)',
+					expectedTime: (n: number) => Math.max(latency / 1000, n ** 3 / 5000000 + (4 * n) / 1000),
 					icon: Icon.PhoneOutline
 				},
 				{
@@ -375,42 +380,42 @@
 									Erwartete Zeit: <b>{time < 10 ? time.toFixed(1) : time.toFixed(0)}</b> Sekunden
 								</div>
 							{:else if time < 60 * 1.5}
-								<div>Erwartete Zeit: <b>&lt;1</b> Minute</div>
+								<div>Erwartete Zeit: <b>1</b> Minute</div>
 							{:else if time < 60 * 60}
 								<div>Erwartete Zeit: <b>{(time / 60).toFixed()}</b> Minuten</div>
 							{:else if time < 60 * 60 * 1.5}
-								<div>Erwartete Zeit: <b>&lt;1</b> Stunde</div>
+								<div>Erwartete Zeit: <b>1</b> Stunde</div>
 							{:else if time < 60 * 60 * 24}
 								<div>Erwartete Zeit: <b>{(time / 60 / 60).toFixed()}</b> Stunden</div>
 							{:else if time < 60 * 60 * 24 * 1.5}
-								<div>Erwartete Zeit: <b>&lt;1</b> Tag</div>
+								<div>Erwartete Zeit: <b>1</b> Tag</div>
 							{:else if time < 60 * 60 * 24 * 365}
 								<div>Erwartete Zeit: <b>{(time / 60 / 60 / 24).toFixed()}</b> Tage</div>
 							{:else if time < 60 * 60 * 24 * 365 * 1.5}
-								<div>Erwartete Zeit: <b>&lt;1</b> Jahr</div>
+								<div>Erwartete Zeit: <b>1</b> Jahr</div>
 							{:else if time < 60 * 60 * 24 * 365 * 100}
 								<div>Erwartete Zeit: <b>{(time / 60 / 60 / 24 / 365).toFixed()}</b> Jahre</div>
 							{:else if time < 60 * 60 * 24 * 365 * 100 * 1.5}
-								<div>Erwartete Zeit: <b>&lt;1</b> Jahrhundert</div>
+								<div>Erwartete Zeit: <b>1</b> Jahrhundert</div>
 							{:else if time < 60 * 60 * 24 * 365 * 100 * 10}
 								<div>
 									Erwartete Zeit: <b>{(time / 60 / 60 / 24 / 365 / 100).toFixed()}</b> Jahrhunderte
 								</div>
 							{:else if time < 60 * 60 * 24 * 365 * 100 * 10 * 1.5}
-								<div>Erwartete Zeit: <b>&lt;1</b> Jahrtausend</div>
+								<div>Erwartete Zeit: <b>1</b> Jahrtausend</div>
 							{:else if time < 60 * 60 * 24 * 365 * 100 * 10 * 1000}
 								<div>
 									Erwartete Zeit: <b>{(time / 60 / 60 / 24 / 365 / 100 / 10).toFixed()}</b> Jahrtausende
 								</div>
 							{:else if time < 60 * 60 * 24 * 365 * 100 * 10 * 1000 * 1.5}
-								<div>Erwartete Zeit: <b>&lt;1</b> Million Jahre</div>
+								<div>Erwartete Zeit: <b>1</b> Million Jahre</div>
 							{:else if time < 60 * 60 * 24 * 365 * 100 * 10 * 1000 * 1000}
 								<div>
 									Erwartete Zeit: <b>{(time / 60 / 60 / 24 / 365 / 100 / 10 / 1000).toFixed()}</b> Millionen
 									Jahre
 								</div>
 							{:else if time < 60 * 60 * 24 * 365 * 100 * 10 * 1000 * 1000 * 1.5}
-								<div>Erwartete Zeit: <b>&lt;1</b> Milliarde Jahre</div>
+								<div>Erwartete Zeit: <b>1</b> Milliarde Jahre</div>
 							{:else if time < 60 * 60 * 24 * 365 * 100 * 10 * 1000 * 1000 * 1000}
 								<div>
 									Erwartete Zeit: <b
@@ -418,7 +423,7 @@
 									> Milliarden Jahre
 								</div>
 							{:else if time < 60 * 60 * 24 * 365 * 100 * 10 * 1000 * 1000 * 1000 * 1.5}
-								<div>Erwartete Zeit: <b>&lt;1</b> Billion Jahre</div>
+								<div>Erwartete Zeit: <b>1</b> Billion Jahre</div>
 							{:else}
 								<div>
 									Erwartete Zeit: <b
