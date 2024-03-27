@@ -550,7 +550,7 @@ export const presets = {
 			{ str: 'Geowissenschaften', desc: 'Ferne Himmelskörper beobachten, das Klima analysieren, Landschaftsstrukturen erkunden oder Versteinerungen freilegen – in diesem Fachgebiet ist alles denkbar, was in die Bereiche Astronomie, Astrophysik, Weltraumforschung, Geografie, Geowissenschaften und Ozeanografie gehört. ' },
 			{ str: 'Mathematik', desc: 'In der Welt der Rätsel und Knobelaufgaben, der Zahlen, Formen und Formeln, der Strukturen und der Algorithmen gibt es viel zu entdecken' },
 			{ str: 'Physik', desc: 'Ob Licht oder Elektrizität, ob Wellen oder feste Körper – hinter beinahe allen Dingen in unserer Umwelt steckt Physik' },
-			{ str: 'Technik', desc: 'Ob Licht oder Elektrizität, ob Wellen oder feste Körper – hinter beinahe allen Dingen in unserer Umwelt steckt Physik' }
+			{ str: 'Technik', desc: 'Für alle, die voller Ideen für neue Erfindungen stecken sowie Spaß an handwerklicher Arbeit haben, ist Technik das richtige Fachgebiet' }
 
 		]
 	}
