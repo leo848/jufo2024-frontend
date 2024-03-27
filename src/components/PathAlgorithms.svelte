@@ -29,10 +29,11 @@
 		value: 0 as null | number,
 		start: new Date(),
 		eta() {
-			const { value, start } = this;
+			const { value, start, ongoing } = this;
 			const now = new Date();
 			const msPassed = now.getTime() - start.getTime();
-			if (msPassed === 0 || value === null || value === 0) return null;
+			if (msPassed === 0 || value === null || value === 0 || !ongoing || msPassed < 100)
+				return null;
 			const estimatedTotalTime = msPassed / value;
 			return estimatedTotalTime - msPassed;
 		}
