@@ -58,8 +58,15 @@ export class Particle {
 
 		// ctx.textAlign = 'center';
 		// ctx.textBaseline = 'middle';
-		ctx.font = fontSize + 'px sans-serif';
+		ctx.font = fontSize + 'px Inter, sans-serif';
+
+		ctx.beginPath();
+		ctx.fillStyle = '#ccc';
+		ctx.ellipse(this.pos.x, this.pos.y, 4, 4, 0, 0, Math.PI * 2);
 		ctx.fillStyle = 'white';
+		ctx.ellipse(this.pos.x, this.pos.y, 3, 3, 0, 0, Math.PI * 2);
+		ctx.fill();
+
 		ctx.fillText(this.name, this.pos.x + 10, this.pos.y + 2);
 	}
 }
