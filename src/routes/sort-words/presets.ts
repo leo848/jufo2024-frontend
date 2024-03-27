@@ -544,14 +544,31 @@ export const presets = {
 		desc: 'Eine Liste der sieben Fachgebiete von Jugend forscht. Die Namen und Beschreibungen wurden der offiziellen Website (https://www.jugend-forscht.de/teilnahme/fachgebiete.html) übernommen.',
 		aiGenerated: false,
 		values: [
-			{ str: 'Arbeitswelt', desc: 'Im Fachgebiet Arbeitswelt steht der Mensch im Mittelpunkt. Vor allem für Auszubildende ist dieses Fach ein ideales Betätigungsfeld' },
-			{ str: 'Biologie', desc: 'Alles, was mit der belebten Umwelt zu tun hat, gehört ins Fachgebiet Biologie' },
+			{
+				str: 'Arbeitswelt',
+				desc: 'Im Fachgebiet Arbeitswelt steht der Mensch im Mittelpunkt. Vor allem für Auszubildende ist dieses Fach ein ideales Betätigungsfeld'
+			},
+			{
+				str: 'Biologie',
+				desc: 'Alles, was mit der belebten Umwelt zu tun hat, gehört ins Fachgebiet Biologie'
+			},
 			{ str: 'Chemie', desc: 'Die Chemie bietet viele Forschungsmöglichkeiten.' },
-			{ str: 'Geowissenschaften', desc: 'Ferne Himmelskörper beobachten, das Klima analysieren, Landschaftsstrukturen erkunden oder Versteinerungen freilegen – in diesem Fachgebiet ist alles denkbar, was in die Bereiche Astronomie, Astrophysik, Weltraumforschung, Geografie, Geowissenschaften und Ozeanografie gehört. ' },
-			{ str: 'Mathematik', desc: 'In der Welt der Rätsel und Knobelaufgaben, der Zahlen, Formen und Formeln, der Strukturen und der Algorithmen gibt es viel zu entdecken' },
-			{ str: 'Physik', desc: 'Ob Licht oder Elektrizität, ob Wellen oder feste Körper – hinter beinahe allen Dingen in unserer Umwelt steckt Physik' },
-			{ str: 'Technik', desc: 'Für alle, die voller Ideen für neue Erfindungen stecken sowie Spaß an handwerklicher Arbeit haben, ist Technik das richtige Fachgebiet' }
-
+			{
+				str: 'Geowissenschaften',
+				desc: 'Ferne Himmelskörper beobachten, das Klima analysieren, Landschaftsstrukturen erkunden oder Versteinerungen freilegen – in diesem Fachgebiet ist alles denkbar, was in die Bereiche Astronomie, Astrophysik, Weltraumforschung, Geografie, Geowissenschaften und Ozeanografie gehört. '
+			},
+			{
+				str: 'Mathematik',
+				desc: 'In der Welt der Rätsel und Knobelaufgaben, der Zahlen, Formen und Formeln, der Strukturen und der Algorithmen gibt es viel zu entdecken'
+			},
+			{
+				str: 'Physik',
+				desc: 'Ob Licht oder Elektrizität, ob Wellen oder feste Körper – hinter beinahe allen Dingen in unserer Umwelt steckt Physik'
+			},
+			{
+				str: 'Technik',
+				desc: 'Für alle, die voller Ideen für neue Erfindungen stecken sowie Spaß an handwerklicher Arbeit haben, ist Technik das richtige Fachgebiet'
+			}
 		]
 	}
 } satisfies Partial<Record<string, WordList>>;

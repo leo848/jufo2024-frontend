@@ -3,9 +3,17 @@
 	import L, { type LatLngLiteral } from 'leaflet';
 	import 'leaflet/dist/leaflet.css';
 	import 'leaflet/dist/images/marker-icon.png';
-	import type { CoordPoint, NamedPoint } from '../../geom/coordPoint';
+	import {
+		coordAdd,
+		coordDelta,
+		coordScale,
+		type CoordPoint,
+		type NamedPoint
+	} from '../../geom/coordPoint';
 	import { scale } from 'svelte/transition';
 	import type { TrueDistanceType } from '../../geom/dist';
+	import { tweened, type Tweened } from 'svelte/motion';
+	import { quadIn, quadInOut } from 'svelte/easing';
 
 	export let points: NamedPoint[];
 	export let edges: [CoordPoint, CoordPoint][];
@@ -18,6 +26,58 @@
 	let map: L.Map;
 
 	let markers: L.Marker[] = [];
+
+	let displayEdges: Tweened<[CoordPoint, CoordPoint][]> = tweened(undefined, {
+		easing: quadInOut,
+		duration: 600,
+		interpolate(a: [CoordPoint, CoordPoint][], b: [CoordPoint, CoordPoint][]) {
+			const noAnim = () => b;
+			if (b.length === 0) {
+				return (tRaw) => {
+					let t = quadIn(tRaw);
+					return a.map((value) => {
+						return [
+							coordAdd(value[0], coordScale(coordDelta(value[0], value[1]), t / 2)),
+							coordAdd(value[1], coordScale(coordDelta(value[1], value[0]), t / 2))
+						];
+					});
+				};
+			}
+			if (a.length + 1 === b.length) {
+				return (t) => {
+					const copy = b.slice();
+					const last = copy[copy.length - 1];
+					copy[copy.length - 1] = [
+						last[0],
+						coordAdd(last[0], coordScale(coordDelta(last[0], last[1]), t))
+					];
+					return copy;
+				};
+			}
+			if (a.length === 0) {
+				return (tRaw) => {
+					let t = quadIn(tRaw);
+					return b.map((value) => {
+						return [
+							coordAdd(value[0], coordScale(coordDelta(value[0], value[1]), 0.5 - t / 2)),
+							coordAdd(value[1], coordScale(coordDelta(value[1], value[0]), 0.5 - t / 2))
+						];
+					});
+				};
+			}
+			if (a.length != b.length) return noAnim;
+			return (t) => {
+				return a.map((valueA, index) => {
+					const valueB = b[index];
+					return [
+						coordAdd(valueA[0], coordScale(coordDelta(valueA[0], valueB[0]), t)),
+						coordAdd(valueA[1], coordScale(coordDelta(valueA[1], valueB[1]), t))
+					];
+				});
+			};
+		}
+	});
+	$: $displayEdges = edges;
 
 	$: if (map) {
 		markers.forEach((m) => m.removeFrom(map));
@@ -35,9 +95,9 @@
 	$: {
 		edgeLines.forEach((l) => l.removeFrom(map));
 		if (metric.norm === 'euclidean') {
-			edgeLines = edges.map((edge) => new L.Polyline([edge]));
+			edgeLines = $displayEdges.map((edge) => new L.Polyline([edge]));
 		} else {
-			edgeLines = edges.map(
+			edgeLines = $displayEdges.map(
 				([point1, point2]) => new L.Polyline([point1, [point2.lat, point1.lng], point2])
 			);
 		}
