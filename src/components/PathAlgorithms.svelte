@@ -104,7 +104,7 @@
 					description: 'Führt NN für alle Startpunkte aus.',
 					method: 'optimalNearestNeighbor',
 					complexity: 'O(n³)',
-					expectedTime: (n: number) => Math.max(latency / 1000, n ** 3 / 5000000 + (4 * n) / 1000),
+					expectedTime: (n: number) => Math.max((latency / 1000) * n, n ** 3 / 5000000 + (4 * n) / 1000),
 					icon: Icon.PhoneOutline
 				},
 				{
