@@ -414,7 +414,9 @@
 							.map((row) => row.map((entry) => entry.toFixed(3)).join('i'))
 							.join('o') +
 						'&n=' +
-						(await Promise.all(colors.map((c) => c.name()))).map((meta) => meta.name).join('_')
+						(await Promise.all(colors.map((c) => c.name('german'))))
+							.map((meta) => meta.name)
+							.join('_')
 				);
 			})}
 			xlCol={4}

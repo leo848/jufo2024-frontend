@@ -270,7 +270,7 @@
 						<div class="flex flex-col text-sm mr-8 opacity-50 items-end">
 							<div class="-mb-1">
 								{#if trueIndex !== 0}
-									d({word.inner}, {words[trueIndex - 1].inner}) =
+									d(~, {words[trueIndex - 1].inner}) =
 									<span class="tabular-nums"
 										>{dist(word.vec, words[trueIndex - 1].vec, metric).toFixed(2)}</span
 									>
@@ -280,7 +280,7 @@
 							</div>
 							<div class="-mb-1">
 								{#if trueIndex !== words.length - 1}
-									d({word.inner}, {words[trueIndex + 1].inner}) =
+									d(~, {words[trueIndex + 1].inner}) =
 									<span class="tabular-nums"
 										>{dist(word.vec, words[trueIndex + 1].vec, metric).toFixed(2)}</span
 									>

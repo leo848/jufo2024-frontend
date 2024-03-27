@@ -323,7 +323,7 @@ export function distColor(dist: number, [min, max]: [number, number]): Color | n
 		};
 	}
 
-	let t = symmetrify(unease)(rangeMap(dist, [min-0.001, max+0.001], [0, 0.8]));
+	let t = symmetrify(unease)(rangeMap(dist, [min - 0.001, max + 0.001], [0, 0.8]));
 	let sample = PerceptualGradient.Icefire.sample(t);
 	if (!sample) return null;
 	return readableIcefire(sample.color());

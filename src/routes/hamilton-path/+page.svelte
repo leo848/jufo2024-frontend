@@ -11,7 +11,7 @@
 	import { registerCallback, unregisterCallback } from '../../server/websocket';
 	import { serverOutputPathCreation, serverOutputPathImprovement } from '../../server/types';
 	import { onDestroy } from 'svelte';
-	import {flip} from 'svelte/animate';
+	import { flip } from 'svelte/animate';
 
 	title.set('Kürzester Hamilton-Pfad');
 
@@ -25,13 +25,13 @@
 
 	let vertexNames = ['a', 'b', 'c', 'd', 'e'];
 	let path: null | number[] = null;
-	let vertexNamesPath: null | {name: string, index: number}[] = null;
+	let vertexNamesPath: { name: string; index: number }[];
 	let edges: [number, number][] = [];
 
 	$: {
-		if (path === null) vertexNamesPath = vertexNames.map((name, index) => ({ name, index }));
+		if (path === null) vertexNamesPath = uniqueVertexNames.map((name, index) => ({ name, index }));
 		else {
-			vertexNamesPath = path.map(index => ({ index, name: vertexNames[index] }));
+			vertexNamesPath = path.map((index) => ({ index, name: uniqueVertexNames[index] }));
 		}
 	}
 
@@ -289,18 +289,39 @@
 				horizontal
 				on:deletePath={blowUp}
 			/>
-			{#if vertexNamesPath !== null}
-				<Window title="Liste" scrollable>
-					<div class="m-4 grid grid-cols-1 gap-4">
-						{#each vertexNamesPath as vertex (vertex.name)}
-							<div class="p-2 bg-gray-700 text-xl" animate:flip>
-								<span class="opacity-50">{vertex.index + 1}.</span>
-								{vertex.name}
+			<Window title="Liste" scrollable>
+				<div class="m-4 grid grid-cols-1 gap-4">
+					{#each vertexNamesPath as vertex, trueIndex (vertex.name)}
+						<div class="p-2 bg-gray-700 text-xl rounded flex flex-row gap-2" animate:flip>
+							<span class="opacity-50">{vertex.index + 1}.</span>
+							{vertex.name}
+							<div class="grow" />
+							<div class="flex flex-col text-sm mr-8 opacity-70 items-end">
+								<div class="-mb-1">
+									{#if trueIndex !== 0}
+										d({vertex.name}, {vertexNamesPath[trueIndex - 1].name}) =
+										<span class="tabular-nums"
+											>{matrixValues[vertex.index][vertexNamesPath[trueIndex - 1].index]}</span
+										>
+									{:else}
+										&nbsp;
+									{/if}
+								</div>
+								<div class="-mb-1">
+									{#if trueIndex !== vertexNamesPath.length - 1}
+										d({vertex.name}, {vertexNamesPath[trueIndex + 1].name}) =
+										<span class="tabular-nums"
+											>{matrixValues[vertex.index][vertexNamesPath[trueIndex + 1].index]}</span
+										>
+									{:else}
+										&nbsp;
+									{/if}
+								</div>
 							</div>
-						{/each}
-					</div>
-				</Window>
-			{/if}
+						</div>
+					{/each}
+				</div>
+			</Window>
 		</div>
 	</div>
 </div>
