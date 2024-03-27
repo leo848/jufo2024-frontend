@@ -38,7 +38,10 @@
 		let lengthAcc = 0;
 		distances = [];
 		for (let i = 0; i < path.length - 1; i++) {
-			const distance = typeof metric === "function" ? metric(path[i][0], path[i+1][0]) : dist(path[i], path[i + 1], metric);
+			const distance =
+				typeof metric === 'function'
+					? metric(path[i][0], path[i + 1][0])
+					: dist(path[i], path[i + 1], metric);
 			lengthAcc += distance;
 			distances = [...distances, distance];
 		}

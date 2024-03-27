@@ -48,7 +48,7 @@
 	}
 
 	let matrixValuesPath: number[][] = matrixValues;
-	$: if(vertexNamesPath.length === vertexNames.length) {
+	$: if (vertexNamesPath.length === vertexNames.length) {
 		let matrixValuesPath = matrixValues;
 		for (let i = 0; i < vertexNames.length; i++) {
 			for (let j = 0; j < vertexNames.length; j++) {
@@ -297,7 +297,11 @@
 					</button>
 				</div>
 			</Window>
-			<PathProperties path={path?.map(index => [index])} metric={(from, to) => matrixValues[from][to]} length={vertexNames.length} />
+			<PathProperties
+				path={path?.map((index) => [index])}
+				metric={(from, to) => matrixValues[from][to]}
+				length={vertexNames.length}
+			/>
 			<PathAlgorithms
 				values={matrixValuesPath}
 				bind:invalidate={invalidateAlgorithms}

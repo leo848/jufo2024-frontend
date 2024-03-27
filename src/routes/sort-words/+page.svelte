@@ -42,8 +42,8 @@
 	let locked = false;
 	let metric: TrueDistanceType = { norm: 'cosine', invert: false };
 	let invalidate: (c: (arg0: any) => void) => (arg0: any) => void;
-	let edges: [number, number][]; // indices;
-	$: words, (edges = []);
+	let edges: [number, number][] = []; // indices;
+	// $: words, (edges = []);
 
 	let input: string = '';
 	let inputLoading = false;
@@ -148,6 +148,11 @@
 		knownWords.delete(word.inner);
 	}
 
+	function blowUp() {
+		edges = [];
+		invalidateAlgorithms();
+	}
+
 	const callbacks = new Array(4);
 	callbacks[0] = registerCallback(serverOutputWordToVec, (evt) => {
 		inputLoading = false;
@@ -184,7 +189,7 @@
 		inputElement.select();
 	});
 	callbacks[2] = registerCallback(serverOutputPathCreation, (pc) => {
-		console.log(pc);
+		edges = pc.currentEdges;
 		if (pc.donePath) {
 			let newWords: Word[] = [];
 			let newEdges: [number, number][] = [];
@@ -200,15 +205,15 @@
 		locked = true;
 	});
 	callbacks[3] = registerCallback(serverOutputPathImprovement, (pi) => {
-		console.log(pi);
 		if (pi.better) {
+			console.log(pi, edges);
 			const newEdges: [number, number][] = [];
 			pi.currentPath.forEach((index, pathIndex, arr) => {
 				if (index < arr.length - 1) {
-					edges.push([index, arr[pathIndex + 1]]);
+					newEdges.push([index, arr[pathIndex + 1]]);
 				}
 			});
-			setTimeout(() => (edges = newEdges));
+			edges = newEdges;
 		}
 		if (pi.done) {
 			let newWords = [];
@@ -336,7 +341,7 @@
 			metric
 		)}
 		bind:invalidate={invalidateAlgorithms}
-		on:deletePath={invalidate(() => (edges = []))}
+		on:deletePath={invalidate(() => blowUp())}
 		matrix
 	/>
 
@@ -347,6 +352,7 @@
 				metric
 			)}
 			vertexNames={words.toSorted((w1, w2) => w1.index - w2.index).map((w) => w.inner)}
+			highlightEdges={edges.map(([from, to]) => [words[from].index, words[to].index])}
 			collapseNames
 			digits={2}
 			sort={false}
