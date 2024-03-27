@@ -9,11 +9,11 @@
 	export let vertexNames: string[];
 	export let digits: number = 1;
 
-	export let sort: boolean = true;
-	export let collapseNames: boolean = false;
-
 	export let editable: boolean = false;
 	export let symmetric: boolean = true;
+
+	export let sort: boolean = !editable;
+	export let collapseNames: boolean = false;
 
 	$: sorted = sort
 		? vertexNames
@@ -24,7 +24,11 @@
 	$: length = values.length;
 	$: {
 		if (values.length !== length || values.some((inner) => inner.length !== length)) {
-			throw new Error('invalid length');
+			throw new Error(
+				`invalid length: length is ${length}, and lengths are ${values.map(
+					(inner) => inner.length
+				)}`
+			);
 		}
 	}
 

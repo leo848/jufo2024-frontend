@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
 	import { page } from '$app/stores';
+	import * as Icon from 'flowbite-svelte-icons';
 	import { RgbColor } from '../../color/colorSpaces';
 	import { distColor } from '../../color/gradient';
 	import AdjacencyMatrix from '../../components/AdjacencyMatrix.svelte';
@@ -70,6 +71,18 @@
 		);
 	}
 
+	function removeVertex(index: number) {
+		vertexNames = vertexNames.toSpliced(index, 1);
+		matrixValues = matrixValues.toSpliced(index, 1);
+		matrixValues = matrixValues.map((row) => row.toSpliced(index, 1));
+	}
+
+	function addVertex() {
+		vertexNames = [...vertexNames, 'vertex' + vertexNames.length];
+		matrixValues = [...matrixValues, new Array(vertexNames.length - 1).fill(0)];
+		matrixValues = matrixValues.map((row) => [...row, 0]);
+	}
+
 	const actions = [
 		{
 			name: 'Umkehren',
@@ -83,7 +96,7 @@
 			name: 'min = 0',
 			execute() {
 				let bmin = min ?? 0;
-				forEachMatrix(x => x - bmin);
+				forEachMatrix((x) => x - bmin);
 			}
 		},
 		{
@@ -108,7 +121,7 @@
 		{
 			name: '+1',
 			execute() {
-				forEachMatrix(x => x + 1);
+				forEachMatrix((x) => x + 1);
 			}
 		},
 		{
@@ -135,11 +148,21 @@
 		let newData = fromUrlString(queryString);
 		if (newData == null) return;
 		matrixValues = newData;
-		vertexNames = new Array(matrixValues.length).fill(0).map((_, i) => String.fromCharCode(97 + i));
+
+		let queryNames = $page.url.searchParams.get('n');
+		if (queryNames == null) {
+			vertexNames = new Array(matrixValues.length)
+				.fill(0)
+				.map((_, i) => String.fromCharCode(97 + i));
+		} else {
+			vertexNames = queryNames.split('_');
+		}
+
 		requestAnimationFrame(() => redraw());
 	})();
 	$: {
 		$page.url.searchParams.set('v', matrixValues.map((row) => row.join('i')).join('o'));
+		$page.url.searchParams.set('n', vertexNames.join('_'));
 		goto(`?${$page.url.searchParams.toString()}`, {
 			keepFocus: true,
 			replaceState: true,
@@ -154,7 +177,12 @@
 	>
 		<div class="col-span-12 xl:col-span-6 grid grid-cols-1 gap-8">
 			<Window title="Adjazenzmatrix (bearbeitbar)" xlCol={12} mdCol={12}>
-				<AdjacencyMatrix bind:values={matrixValues} {symmetric} {vertexNames} editable />
+				<AdjacencyMatrix
+					bind:values={matrixValues}
+					{symmetric}
+					vertexNames={vertexNames.map((v, i) => `${i}/${v}`)}
+					editable
+				/>
 			</Window>
 			<Window title="Skala" xlCol={12} mdCol={12}>
 				<div
@@ -178,7 +206,29 @@
 			</Window>
 			<Window title="Kräftebasierter Graph" xlCol={12} mdCol={12}>
 				<div class="h-[420px] w-full">
-					<ForceDirectedGraph values={matrixValues} matrix names={vertexNames} />
+					<ForceDirectedGraph bind:redraw values={matrixValues} matrix names={vertexNames} />
+				</div>
+			</Window>
+		</div>
+		<div class="col-span-12 xl:col-span-6">
+			<Window title="Knoten">
+				<div class="flex flex-row gap-2 m-2 text-xl flex-wrap">
+					{#each vertexNames as name, index}
+						<div class="bg-gray-700 p-2 px-4 flex flex-row items-center gap-4">
+							<input
+								class="bg-gray-700 w-full min-w-[50px] max-w-[60px]"
+								bind:value={vertexNames[index]}
+							/>
+							<button on:click={() => removeVertex(index)} class="hover:text-white transition-all"
+								><Icon.TrashBinSolid size="sm" /></button
+							>
+						</div>
+					{/each}
+					<div class="bg-gray-700 p-2 px-4 flex flex-row items-center gap-4">
+						<button on:click={() => addVertex()} class="hover:text-white transition-all"
+							><Icon.PlusSolid size="sm" /></button
+						>
+					</div>
 				</div>
 			</Window>
 		</div>
