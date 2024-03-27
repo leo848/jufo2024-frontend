@@ -138,13 +138,25 @@
 		) {
 			const noAnim = () => b;
 			if (!edgesAnim) return noAnim;
-			if (b.length == 0) {
+			if (b.length === 0) {
 				return (tRaw) => {
 					let t = quadIn(tRaw);
 					return a.map((value) => {
 						return [
 							value[0].add(value[0].delta(new Point3(value[0].x, -0.5, value[0].z)).scale(t)),
 							value[1].add(value[1].delta(new Point3(value[0].x, -0.5, value[0].z)).scale(t)),
+							undefined
+						];
+					});
+				};
+			}
+			if (a.length === 0) {
+				return (tRaw) => {
+					let t = quadIn(tRaw);
+					return b.map((value) => {
+						return [
+							value[0].add(value[0].delta(new Point3(value[0].x, -0.5, value[0].z)).scale(1 - t)),
+							value[1].add(value[1].delta(new Point3(value[0].x, -0.5, value[0].z)).scale(1 - t)),
 							undefined
 						];
 					});
