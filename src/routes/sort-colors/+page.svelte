@@ -376,6 +376,59 @@
 							tooltip={selection?.index !== index}
 						/>
 					</div>
+				{:else}
+					{@const randomColors = new Array(11)
+						.fill(0)
+						.map((_) => new RgbColor(Math.random(), Math.random(), Math.random()).color())}
+					{@const randomColor = randomColors[0]}
+					<div
+						class="m-4 p-4 rounded-md max-w-[50%]"
+						style={`background-color:${randomColor.css()}; color:${randomColor.readable().css()}`}
+					>
+						<div class="text-2xl">Keine Farben ausgewählt</div>
+						<div>
+							Klicke auf Hinzufügen oder Laden im Optionen-Dialog rechts und erstelle so eine zu
+							sortierende Liste von Farben.
+						</div>
+						<div>
+							Oder wie wäre es damit, einfach mit
+
+							{#await randomColor.name('german')}
+								<Spinner />
+							{:then meta}
+								<b>{meta.name}</b>
+							{/await}
+							(#{randomColor.rgb().hex()}) anzufangen?
+						</div>
+						<div>
+							<button class="p-2 mt-2 rounded bg-gray-800 text-white" on:click={addColor}
+								><b>Auswahldialog</b> öffnen</button
+							>
+							<button
+								class="p-2 mt-2 rounded"
+								style={`background-color:${randomColor
+									.readable()
+									.css()};color:${randomColor.css()}`}
+								on:click={() => (colors = [randomColor])}
+							>
+								<b
+									>{#await randomColor.name('german')}
+										<Spinner />
+									{:then meta}
+										{meta.name}
+									{/await}</b
+								>
+								auswählen</button
+							>
+							<button
+								class="p-2 mt-2 rounded text-white"
+								style:background={gradient(randomColors.slice(1).map((c) => c.darken(0.2)))}
+								on:click={() => (colors = randomColors.slice(1))}
+							>
+								<b>10 zufällige</b> Farben auswählen
+							</button>
+						</div>
+					</div>
 				{/each}
 			</div>
 		</div>
