@@ -42,7 +42,8 @@
 		{ url: '/sort-integers', title: 'Zahlen sortieren' },
 		{ url: '/sort-words', title: 'Wörter sortieren' },
 		{ url: '/sort-places', title: 'Orte sortieren' },
-		{ url: '/sort-vectors', title: 'Vektoren sortieren' }
+		{ url: '/sort-vectors', title: 'Vektoren sortieren' },
+		{ url: '/hamilton-path', title: 'Hamilton-Pfad finden' }
 	];
 	const links = [
 		{ url: '/Langfassung.pdf', title: 'Langfassung' },
