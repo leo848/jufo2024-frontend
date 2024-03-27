@@ -2,14 +2,15 @@
 	import { goto } from '$app/navigation';
 	import { page } from '$app/stores';
 	import * as Icon from 'flowbite-svelte-icons';
-	import { RgbColor } from '../../color/colorSpaces';
-	import { distColor } from '../../color/gradient';
 	import AdjacencyMatrix from '../../components/AdjacencyMatrix.svelte';
 	import ForceDirectedGraph from '../../components/ForceDirectedGraph.svelte';
 	import Window from '../../components/Window.svelte';
-	import { gradient } from '../../ui/color';
 	import { title } from '../../ui/navbar';
 	import ColorScale from './ColorScale.svelte';
+	import PathAlgorithms from '../../components/PathAlgorithms.svelte';
+	import { registerCallback, unregisterCallback } from '../../server/websocket';
+	import { serverOutputPathCreation, serverOutputPathImprovement } from '../../server/types';
+	import { onDestroy } from 'svelte';
 
 	title.set('Kürzester Hamilton-Pfad');
 
@@ -22,6 +23,8 @@
 	];
 
 	let vertexNames = ['a', 'b', 'c', 'd', 'e'];
+	let path: null | number[] = null;
+	let edges: [number, number][] = [];
 
 	let uniqueVertexNames = vertexNames;
 	$: {
@@ -144,6 +147,7 @@
 		}
 	];
 
+	// URL-Parserei
 	let redraw: () => void;
 	(() => {
 		function fromUrlString(s: string): number[][] | null {
@@ -175,6 +179,40 @@
 			noScroll: true
 		});
 	}
+
+	let invalidateAlgorithms: () => void;
+	function blowUp() {
+		invalidateAlgorithms();
+		path = null;
+		edges = [];
+	}
+
+	// Server-Callbacks
+	const pathCreationCallback = registerCallback(serverOutputPathCreation, (pc) => {
+		edges = pc.currentEdges;
+		if (pc.donePath) {
+			path = pc.donePath;
+		}
+	});
+	onDestroy(() => unregisterCallback(pathCreationCallback));
+
+	const pathImprovementCallback = registerCallback(serverOutputPathImprovement, (pi) => {
+		function pathToEdges(path: number[]): [number, number][] {
+			let edges: [number, number][] = [];
+			for (let i = 0; i < path.length - 1; i++) {
+				let edge: [number, number] = [path[i], path[i + 1]];
+				edges = [...edges, edge];
+			}
+			return edges;
+		}
+		if (pi.better) {
+			edges = pathToEdges(pi.currentPath);
+		}
+		if (pi.done) {
+			path = pi.currentPath;
+		}
+	});
+	onDestroy(() => unregisterCallback(pathImprovementCallback));
 </script>
 
 <div class="mt-4 pb-10 mx-10">
@@ -198,7 +236,7 @@
 					{#each actions as action}
 						<button
 							class="p-2 bg-gray-700 hover:bg-gray-600 transition-all rounded text-xl"
-	   						title={action.desc}
+							title={action.desc}
 							on:click={action.execute}>{action.name}</button
 						>
 					{/each}
@@ -206,11 +244,17 @@
 			</Window>
 			<Window title="Kräftebasierter Graph" xlCol={12} mdCol={12}>
 				<div class="h-[420px] w-full">
-					<ForceDirectedGraph bind:redraw values={matrixValues} matrix names={vertexNames} />
+					<ForceDirectedGraph
+						bind:redraw
+						values={matrixValues}
+						{edges}
+						matrix
+						names={vertexNames}
+					/>
 				</div>
 			</Window>
 		</div>
-		<div class="col-span-12 xl:col-span-6">
+		<div class="col-span-12 xl:col-span-6 flex flex-col gap-8">
 			<Window title="Knoten" scrollable>
 				<div class="grid grid-cols-3 gap-2 m-2 text-xl">
 					{#each vertexNames as name, index}
@@ -229,6 +273,13 @@
 					</button>
 				</div>
 			</Window>
+			<PathAlgorithms
+				values={matrixValues}
+				bind:invalidate={invalidateAlgorithms}
+				matrix
+				horizontal
+				on:deletePath={blowUp}
+			/>
 		</div>
 	</div>
 </div>
