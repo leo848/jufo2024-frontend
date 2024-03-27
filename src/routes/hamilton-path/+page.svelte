@@ -234,6 +234,7 @@
 					bind:values={matrixValues}
 					{symmetric}
 					vertexNames={uniqueVertexNames}
+					highlightEdges={edges}
 					editable
 				/>
 			</Window>
