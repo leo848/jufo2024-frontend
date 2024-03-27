@@ -198,6 +198,7 @@
 					{#each actions as action}
 						<button
 							class="p-2 bg-gray-700 hover:bg-gray-600 transition-all rounded text-xl"
+	   						title={action.desc}
 							on:click={action.execute}>{action.name}</button
 						>
 					{/each}
