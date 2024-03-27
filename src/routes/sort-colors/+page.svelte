@@ -178,25 +178,6 @@
 	}
 </script>
 
-{#if selection !== null && selection.colorPickerOpen && colors.length > selection.index}
-	<ColorPicker
-		valid={(color) => !colors.some((storedColor) => storedColor.approxEquals(color))}
-		defaultSpace={space}
-		value={selection.color ?? colors[selection.index]}
-		on:choose={(color) => {
-			if (selection) {
-				if (selection.appendIndex != null) {
-					colors = colors.toSpliced(selection.appendIndex + 1, 0, color.detail);
-				} else if (selection.index != null && selection.index in colors) {
-					colors[selection.index] = assertColor(color.detail);
-				}
-			}
-			selection = null;
-		}}
-		on:cancel={() => (selection = null)}
-	/>
-{/if}
-
 {#if selection !== null && colors.length > selection.index && selection.index !== -1}
 	<div
 		class="p-2 bg-clip-padding bg-gray-300 backdrop-filter backdrop-blur-md bg-opacity-20 border border-gray-700 text-white rounded-lg z-20 flex flex-col px-4"
@@ -539,3 +520,22 @@
 		</Window>
 	</div>
 </div>
+
+{#if selection !== null && selection.colorPickerOpen && colors.length > selection.index}
+	<ColorPicker
+		valid={(color) => !colors.some((storedColor) => storedColor.approxEquals(color))}
+		defaultSpace={space}
+		value={selection.color ?? colors[selection.index]}
+		on:choose={(color) => {
+			if (selection) {
+				if (selection.appendIndex != null) {
+					colors = colors.toSpliced(selection.appendIndex + 1, 0, color.detail);
+				} else if (selection.index != null && selection.index in colors) {
+					colors[selection.index] = assertColor(color.detail);
+				}
+			}
+			selection = null;
+		}}
+		on:cancel={() => (selection = null)}
+	/>
+{/if}

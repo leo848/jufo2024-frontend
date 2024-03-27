@@ -17,7 +17,7 @@
 	import GradientRange from './GradientRange.svelte';
 	import GradientDiagram from './GradientDiagram.svelte';
 	import DeltaBadge from './DeltaBadge.svelte';
-	import { createEventDispatcher, type EventDispatcher } from 'svelte';
+	import { createEventDispatcher, onMount, type EventDispatcher } from 'svelte';
 	import NumericMappedInput from '../../components/NumericMappedInput.svelte';
 	import ColorNameListPopover from './ColorNameListPopover.svelte';
 	import { ExclamationCircleOutline } from 'flowbite-svelte-icons';
@@ -68,6 +68,9 @@
 
 	const dispatch: EventDispatcher<{ choose: Color; cancel: undefined }> = createEventDispatcher();
 
+	let enterElement: HTMLButtonElement;
+	onMount(() => enterElement.focus());
+
 	function complement() {
 		modalColor = modalColor.rgbMap((c: number) => 1 - c);
 	}
@@ -99,9 +102,9 @@
 		size="xl"
 		defaultClass="dark:bg-black dark:backdrop-blur dark:bg-clip-padding dark:backdrop-filter dark:backdrop-blur-xl dark:bg-opacity-10 dark:border dark:border-gray-800"
 	>
-		<svelte:fragment slot="header">
+		<div slot="header">
 			<p class="text-2xl 2xl:text-4xl text-bold 2xl:my-2 text-white">Farbauswahl</p>
-		</svelte:fragment>
+		</div>
 		<div class="flex flex-row gap-8">
 			<div class="color-preview" style={'background-color: ' + modalColor.rgb().css()}>
 				{#if !proxies[space].approxEqualsValues(proxies[space]
@@ -525,23 +528,40 @@
 				</div>
 			</TabItem>
 		</Tabs>
-		<svelte:fragment slot="footer">
-			<Button
-				disabled={!valid(modalColor)}
-				on:click={() => {
+		<div slot="footer">
+			<form
+				on:submit={() => {
+					if (!valid(modalColor)) return;
 					value = modalColor;
 					modal = false;
 					dispatch('choose', value);
-				}}>Auswählen</Button
+				}}
 			>
-			<Button
-				color="alternative"
-				on:click={() => {
-					modal = false;
-					dispatch('cancel');
-				}}>Abbrechen</Button
-			>
-		</svelte:fragment>
+				<button
+					style:background-color={valid(modalColor)
+						? modalColor.css()
+						: new RgbColor(0.3, 0.3, 0.3).css()}
+					style:color={valid(modalColor)
+						? modalColor.readable().css()
+						: new RgbColor(0.5, 0.5, 0.5).css()}
+					class="rounded-md p-2 px-4 m-2"
+					disabled={!valid(modalColor)}
+					bind:this={enterElement}
+					on:click={() => {
+						value = modalColor;
+						modal = false;
+						dispatch('choose', value);
+					}}>Auswählen</button
+				>
+				<Button
+					color="alternative"
+					on:click={() => {
+						modal = false;
+						dispatch('cancel');
+					}}>Abbrechen</Button
+				>
+			</form>
+		</div>
 	</Modal>
 </div>
 
