@@ -23,7 +23,14 @@
 
 	export let horizontal: boolean = false;
 
-	let progress = { ongoing: false, value: 0 as null | number, start: new Date() };
+	let progress = { ongoing: false, value: 0 as null | number, start: new Date(), eta() {
+		const { value, start, ongoing } = this;
+		const now = new Date();
+		const msPassed = now.getTime() - start.getTime();
+		if (msPassed === 0 || value === null || value === 0) return null;
+		const estimatedTotalTime = msPassed / value;
+		return estimatedTotalTime - msPassed;
+	} };
 	let path: number[][] | null | number[] = null;
 
 	type ActionKind = 'construction' | 'improvement';
@@ -464,6 +471,10 @@
 					{:else if progress.value === null}
 						<Spinner />
 					{:else}
+						{@const eta = progress.eta()}
+						{#if eta !== null}
+							<div>{(eta/1000).toFixed(0)} Sekunden verbleibend</div>
+						{/if}
 						<Progressbar progress={progress.value * 100} />
 					{/if}
 				{/if}
