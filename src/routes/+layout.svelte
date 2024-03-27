@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { Navbar, NavBrand, NavUl, NavLi, NavHamburger, Toast, Button } from 'flowbite-svelte';
+	import { Navbar, NavUl, NavLi, NavHamburger, Toast, Button } from 'flowbite-svelte';
 	import ServerStatus from './ServerStatus.svelte';
 
 	import { onMount } from 'svelte';
@@ -74,9 +74,7 @@
 
 <div class="complete min-h-screen dark:bg-gray-900">
 	<Navbar let:toggle color="primary" class="max-lg:py-0 max-lg:px-0">
-		<NavBrand href="/">
-			<span class="self-center whitespace-nowrap text-3xl font-semibold">jufo2024</span>
-		</NavBrand>
+		<span class="self-center whitespace-nowrap text-3xl font-semibold"><a href="/">jufo2024</a></span>
 		{#if $title}
 			{#if typeof $title === 'string'}
 				<div class="flex flex-col content-center items-center h-full">
