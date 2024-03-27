@@ -1,5 +1,5 @@
 import { Color, NamedColor } from '../color/color';
-import { RgbColor } from '../color/colorSpaces';
+import { OklabColor, RgbColor } from '../color/colorSpaces';
 
 function chunks<T>(array: T[], n: number): T[][] {
 	const chunks: T[][] = [];
@@ -10,7 +10,7 @@ function chunks<T>(array: T[], n: number): T[][] {
 }
 
 function transpose<T>(mat: T[][]): T[][] {
-	return mat[0].map((col, i) => mat.map((row) => row[i]));
+	return mat[0].map((_col, i) => mat.map((row) => row[i]));
 }
 
 function mapBuntstifte(input: [number, number, number][]): NamedColor[] {
@@ -24,8 +24,8 @@ function mapBuntstifte(input: [number, number, number][]): NamedColor[] {
 		.toSorted(({ color: c1 }, { color: c2 }) => {
 			let o1 = c1.space('oklab');
 			let o2 = c2.space('oklab');
-			let chromaSquared1 = o1.a * o1.a + o1.b * o1.b;
-			let chromaSquared2 = o2.a * o2.a + o2.b * o2.b;
+			//let chromaSquared1 = o1.a * o1.a + o1.b * o1.b;
+			//let chromaSquared2 = o2.a * o2.a + o2.b * o2.b;
 			let hue1 = Math.atan2(o1.b, o1.a);
 			let hue2 = Math.atan2(o2.b, o2.a);
 			return hue2 - hue1;
@@ -337,6 +337,13 @@ const presets = {
 				let [h1, h2] = [c1, c2].map((c) => c.hsv().h);
 				return h1 - h2;
 			})
+	},
+	brightness: {
+		name: 'Helligkeit',
+		colors: new Array(21)
+			.fill(0)
+			.map((_, i) => new OklabColor(i / 20, 0.5, 0.5).color())
+			.slice(1)
 	}
 } satisfies Partial<Record<string, { name: string; colors: Color[] }>>;
 
