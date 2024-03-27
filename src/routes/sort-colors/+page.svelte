@@ -365,7 +365,7 @@
 		<div class="flex flex-row col-span-12 xl:col-span-8 justify-between align-center gap-4">
 			<div class="flex flex-row flex-wrap justify-start gap-2 items-stretch h-16">
 				{#each colors as color, index (color)}
-					<div animate:flip>
+					<div animate:flip transition:scale>
 						<ColorDisplay
 							{color}
 							selected={selection?.index === index}
@@ -384,6 +384,7 @@
 					<div
 						class="m-4 p-4 rounded-md max-w-[50%]"
 						style={`background-color:${randomColor.css()}; color:${randomColor.readable().css()}`}
+						in:scale
 					>
 						<div class="text-2xl">Keine Farben ausgewählt</div>
 						<div>
