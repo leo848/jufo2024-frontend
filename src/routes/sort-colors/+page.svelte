@@ -98,7 +98,7 @@
 		colors = newData;
 	})();
 
-	$: {
+	$: if ($page.url.pathname.includes('sort-colors')) {
 		$page.url.searchParams.set('v', toUrlString(colors));
 		goto(`?${$page.url.searchParams.toString()}`, {
 			keepFocus: true,
@@ -365,7 +365,7 @@
 		<div class="flex flex-row col-span-12 xl:col-span-8 justify-between align-center gap-4">
 			<div class="flex flex-row flex-wrap justify-start gap-2 items-stretch h-16">
 				{#each colors as color, index (color)}
-					<div animate:flip transition:scale>
+					<div animate:flip transition:scale={{ duration: index === colors.length - 1 ? 400 : 0 }}>
 						<ColorDisplay
 							{color}
 							selected={selection?.index === index}
@@ -377,7 +377,7 @@
 						/>
 					</div>
 				{:else}
-					{@const randomColors = new Array(11)
+					{@const randomColors = new Array(10)
 						.fill(0)
 						.map((_) => new RgbColor(Math.random(), Math.random(), Math.random()).color())}
 					{@const randomColor = randomColors[0]}
@@ -424,7 +424,7 @@
 							<button
 								class="p-2 mt-2 rounded text-white"
 								style:background={gradient(randomColors.slice(1).map((c) => c.darken(0.2)))}
-								on:click={() => (colors = randomColors.slice(1))}
+								on:click={() => (colors = randomColors)}
 							>
 								<b>10 zufällige</b> Farben auswählen
 							</button>
