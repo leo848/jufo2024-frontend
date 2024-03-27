@@ -12,6 +12,7 @@
 	import { serverOutputPathCreation, serverOutputPathImprovement } from '../../server/types';
 	import { onDestroy } from 'svelte';
 	import { flip } from 'svelte/animate';
+	import PathProperties from '../../components/PathProperties.svelte';
 
 	title.set('Kürzester Hamilton-Pfad');
 
@@ -43,6 +44,17 @@
 			uniqueVertexNames = vertexNames;
 		} else {
 			uniqueVertexNames = vertexNames.map((str, i) => `${i + 1}/${str}`);
+		}
+	}
+
+	let matrixValuesPath: number[][] = matrixValues;
+	$: if(vertexNamesPath.length === vertexNames.length) {
+		let matrixValuesPath = matrixValues;
+		for (let i = 0; i < vertexNames.length; i++) {
+			for (let j = 0; j < vertexNames.length; j++) {
+				matrixValuesPath[i][j] = matrixValues[vertexNamesPath[i].index][vertexNamesPath[j].index];
+				console.log(matrixValuesPath[i][j]);
+			}
 		}
 	}
 
@@ -216,6 +228,7 @@
 		}
 		if (pi.better) {
 			edges = pathToEdges(pi.currentPath);
+			path = pi.currentPath;
 		}
 		if (pi.done) {
 			path = pi.currentPath;
@@ -235,7 +248,7 @@
 					{symmetric}
 					vertexNames={uniqueVertexNames}
 					highlightEdges={edges}
-					editable
+					editable={edges.length === 0}
 				/>
 			</Window>
 			<Window title="Skala" xlCol={12} mdCol={12}>
@@ -247,6 +260,7 @@
 						<button
 							class="p-2 bg-gray-700 hover:bg-gray-600 transition-all rounded text-xl"
 							title={action.desc}
+							disabled={path !== null}
 							on:click={action.execute}>{action.name}</button
 						>
 					{/each}
@@ -283,8 +297,9 @@
 					</button>
 				</div>
 			</Window>
+			<PathProperties path={path?.map(index => [index])} metric={(from, to) => matrixValues[from][to]} length={vertexNames.length} />
 			<PathAlgorithms
-				values={matrixValues}
+				values={matrixValuesPath}
 				bind:invalidate={invalidateAlgorithms}
 				matrix
 				horizontal
