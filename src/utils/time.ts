@@ -31,3 +31,37 @@ export function relativeTimeFromElapsed(elapsed: number): string {
 	}
 	return '';
 }
+
+export function formatTimespan(span: number | null): [string, string] {
+	if (span === null) return ['', 'beliebig'];
+	else if (span < 1) return ['<1', 'Sekunde'];
+	else if (span < 60) return [span < 10 ? span.toFixed(1) : span.toFixed(0), 'Sekunden'];
+	else if (span < 60 * 1.5) return ['1', 'Minute'];
+	else if (span < 60 * 60) return [(span / 60).toFixed(), 'Minuten'];
+	else if (span < 60 * 60 * 1.5) return ['1', 'Stunde'];
+	else if (span < 60 * 60 * 24) return [(span / 60 / 60).toFixed(), 'Stunden'];
+	else if (span < 60 * 60 * 24 * 1.5) return ['1', 'Tag'];
+	else if (span < 60 * 60 * 24 * 365) return [(span / 60 / 60 / 24).toFixed(), 'Tage'];
+	else if (span < 60 * 60 * 24 * 365 * 1.5) return ['1', 'Jahr'];
+	else if (span < 60 * 60 * 24 * 365 * 100) return [(span / 60 / 60 / 24 / 365).toFixed(), 'Jahre'];
+	else if (span < 60 * 60 * 24 * 365 * 100 * 1.5) return ['1', 'Jahrhundert'];
+	else if (span < 60 * 60 * 24 * 365 * 100 * 10)
+		return [(span / 60 / 60 / 24 / 365 / 100).toFixed(), 'Jahrhunderte'];
+	else if (span < 60 * 60 * 24 * 365 * 100 * 10 * 1.5) return ['1', 'Jahrtausend'];
+	else if (span < 60 * 60 * 24 * 365 * 100 * 10 * 1000)
+		return [(span / 60 / 60 / 24 / 365 / 100 / 10).toFixed(), 'Jahrtausende'];
+	else if (span < 60 * 60 * 24 * 365 * 100 * 10 * 1000 * 1.5) return ['1', 'Million Jahre'];
+	else if (span < 60 * 60 * 24 * 365 * 100 * 10 * 1000 * 1000)
+		return [(span / 60 / 60 / 24 / 365 / 100 / 10 / 1000).toFixed(), 'Millionen Jahre'];
+	else if (span < 60 * 60 * 24 * 365 * 100 * 10 * 1000 * 1000 * 1.5)
+		return ['1', 'Milliarde Jahre'];
+	else if (span < 60 * 60 * 24 * 365 * 100 * 10 * 1000 * 1000 * 1000)
+		return [(span / 60 / 60 / 24 / 365 / 100 / 10 / 1000 / 1000).toFixed(), 'Milliarden Jahre'];
+	else if (span < 60 * 60 * 24 * 365 * 100 * 10 * 1000 * 1000 * 1000 * 1.5)
+		return ['1', 'Billion Jahre'];
+	else
+		return [
+			(span / 60 / 60 / 24 / 365 / 100 / 10 / 1000 / 1000 / 1000).toFixed(),
+			'Billionen Jahre'
+		];
+}

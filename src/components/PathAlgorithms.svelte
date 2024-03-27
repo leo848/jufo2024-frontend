@@ -15,6 +15,7 @@
 	import { createEventDispatcher, onDestroy } from 'svelte';
 	import Window from './Window.svelte';
 	import { DistanceType, distanceTypeToObject } from '../geom/dist';
+	import { formatTimespan } from '../utils/time';
 
 	export let values: number[][];
 	export let dimensions = 3;
@@ -23,14 +24,19 @@
 
 	export let horizontal: boolean = false;
 
-	let progress = { ongoing: false, value: 0 as null | number, start: new Date(), eta() {
-		const { value, start, ongoing } = this;
-		const now = new Date();
-		const msPassed = now.getTime() - start.getTime();
-		if (msPassed === 0 || value === null || value === 0) return null;
-		const estimatedTotalTime = msPassed / value;
-		return estimatedTotalTime - msPassed;
-	} };
+	let progress = {
+		ongoing: false,
+		value: 0 as null | number,
+		start: new Date(),
+		eta() {
+			const { value, start } = this;
+			const now = new Date();
+			const msPassed = now.getTime() - start.getTime();
+			if (msPassed === 0 || value === null || value === 0) return null;
+			const estimatedTotalTime = msPassed / value;
+			return estimatedTotalTime - msPassed;
+		}
+	};
 	let path: number[][] | null | number[] = null;
 
 	type ActionKind = 'construction' | 'improvement';
@@ -47,6 +53,7 @@
 			icon: ComponentType;
 			index: number;
 			complexity?: string;
+			stepwise?: boolean;
 			expectedTime?: (n: number) => null | number;
 			send: (() => void) | null;
 		}[]
@@ -181,6 +188,7 @@
 					name: 'Swap',
 					description: 'Swap tauscht zwei Kanten, falls dies die Kantenlänge verringert.',
 					method: 'swap',
+					stepwise: true,
 					icon: Icon.ChervonDoubleDownSolid
 				},
 				{
@@ -189,6 +197,7 @@
 						'Beim 2-opt-Verfahren werden Überkreuzungen zweier Kanten gesucht und durch Tauschen der Knoten behoben.',
 					method: 'twoOpt',
 					complexity: 'O(n²)',
+					stepwise: true,
 					icon: Icon.SwatchbookOutline
 				},
 				{
@@ -196,6 +205,7 @@
 					description: 'Beim 3-opt-Verfahren werden drei Kanten getauscht.',
 					method: 'threeOpt',
 					complexity: 'O(n³)',
+					stepwise: true,
 					icon: Icon.SwatchbookSolid
 				},
 				{
@@ -203,6 +213,7 @@
 					description: 'Wie Rotieren, nur auf jeden sequentielle Teilpfad des Pfades angewandt.',
 					method: 'innerRotate',
 					complexity: 'O(n³)',
+					stepwise: true,
 					icon: Icon.RotateOutline
 				},
 				{
@@ -370,7 +381,7 @@
 			</button>
 		{/each}
 		{#if selectedItemAction !== null}
-			{@const { description, send, expectedTime, complexity } =
+			{@const { description, send, expectedTime, complexity, stepwise } =
 				items[currentAction][selectedItemAction]}
 			<div class="flex flex-col justify-between grow">
 				<div>
@@ -378,66 +389,8 @@
 					{#key latency}
 						{#if expectedTime}
 							{@const time = expectedTime(values.length)}
-							{#if time === null}
-								<div>Erwartete Zeit: beliebig</div>
-							{:else if time < 1}
-								<div>Erwartete Zeit: <b>&lt;1</b> Sekunde</div>
-							{:else if time < 60}
-								<div>
-									Erwartete Zeit: <b>{time < 10 ? time.toFixed(1) : time.toFixed(0)}</b> Sekunden
-								</div>
-							{:else if time < 60 * 1.5}
-								<div>Erwartete Zeit: <b>1</b> Minute</div>
-							{:else if time < 60 * 60}
-								<div>Erwartete Zeit: <b>{(time / 60).toFixed()}</b> Minuten</div>
-							{:else if time < 60 * 60 * 1.5}
-								<div>Erwartete Zeit: <b>1</b> Stunde</div>
-							{:else if time < 60 * 60 * 24}
-								<div>Erwartete Zeit: <b>{(time / 60 / 60).toFixed()}</b> Stunden</div>
-							{:else if time < 60 * 60 * 24 * 1.5}
-								<div>Erwartete Zeit: <b>1</b> Tag</div>
-							{:else if time < 60 * 60 * 24 * 365}
-								<div>Erwartete Zeit: <b>{(time / 60 / 60 / 24).toFixed()}</b> Tage</div>
-							{:else if time < 60 * 60 * 24 * 365 * 1.5}
-								<div>Erwartete Zeit: <b>1</b> Jahr</div>
-							{:else if time < 60 * 60 * 24 * 365 * 100}
-								<div>Erwartete Zeit: <b>{(time / 60 / 60 / 24 / 365).toFixed()}</b> Jahre</div>
-							{:else if time < 60 * 60 * 24 * 365 * 100 * 1.5}
-								<div>Erwartete Zeit: <b>1</b> Jahrhundert</div>
-							{:else if time < 60 * 60 * 24 * 365 * 100 * 10}
-								<div>
-									Erwartete Zeit: <b>{(time / 60 / 60 / 24 / 365 / 100).toFixed()}</b> Jahrhunderte
-								</div>
-							{:else if time < 60 * 60 * 24 * 365 * 100 * 10 * 1.5}
-								<div>Erwartete Zeit: <b>1</b> Jahrtausend</div>
-							{:else if time < 60 * 60 * 24 * 365 * 100 * 10 * 1000}
-								<div>
-									Erwartete Zeit: <b>{(time / 60 / 60 / 24 / 365 / 100 / 10).toFixed()}</b> Jahrtausende
-								</div>
-							{:else if time < 60 * 60 * 24 * 365 * 100 * 10 * 1000 * 1.5}
-								<div>Erwartete Zeit: <b>1</b> Million Jahre</div>
-							{:else if time < 60 * 60 * 24 * 365 * 100 * 10 * 1000 * 1000}
-								<div>
-									Erwartete Zeit: <b>{(time / 60 / 60 / 24 / 365 / 100 / 10 / 1000).toFixed()}</b> Millionen
-									Jahre
-								</div>
-							{:else if time < 60 * 60 * 24 * 365 * 100 * 10 * 1000 * 1000 * 1.5}
-								<div>Erwartete Zeit: <b>1</b> Milliarde Jahre</div>
-							{:else if time < 60 * 60 * 24 * 365 * 100 * 10 * 1000 * 1000 * 1000}
-								<div>
-									Erwartete Zeit: <b
-										>{(time / 60 / 60 / 24 / 365 / 100 / 10 / 1000 / 1000).toFixed()}</b
-									> Milliarden Jahre
-								</div>
-							{:else if time < 60 * 60 * 24 * 365 * 100 * 10 * 1000 * 1000 * 1000 * 1.5}
-								<div>Erwartete Zeit: <b>1</b> Billion Jahre</div>
-							{:else}
-								<div>
-									Erwartete Zeit: <b
-										>{(time / 60 / 60 / 24 / 365 / 100 / 10 / 1000 / 1000 / 1000).toFixed()}</b
-									> Billionen Jahre
-								</div>
-							{/if}
+							{@const [amount, suffix] = formatTimespan(time)}
+							<div>Erwartete Zeit: <b>{amount}</b> {suffix}</div>
 						{/if}
 					{/key}
 					{#if complexity}
@@ -472,8 +425,12 @@
 						<Spinner />
 					{:else}
 						{@const eta = progress.eta()}
-						{#if eta !== null}
-							<div>{(eta/1000).toFixed(0)} Sekunden verbleibend</div>
+						{#if eta !== null && !stepwise}
+							{@const [amount, suffix] = formatTimespan(eta / 1000)}
+							<div>
+								{#if eta > 2000}ca. {/if}<b>{amount}</b>
+								{suffix} verbleibend
+							</div>
 						{/if}
 						<Progressbar progress={progress.value * 100} />
 					{/if}
