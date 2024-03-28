@@ -54,6 +54,7 @@
 	let inputElement: HTMLInputElement;
 
 	let invalidateAlgorithms: () => void;
+	let latency: number;
 	let redraw: () => void;
 
 	let fdgOptions: {
@@ -354,6 +355,7 @@
 			metric
 		)}
 		bind:invalidate={invalidateAlgorithms}
+		bind:latency
 		on:deletePath={invalidate(() => blowUp())}
 		matrix
 	/>
@@ -386,6 +388,7 @@
 				{edges}
 				{metric}
 				options={fdgOptions}
+				animDuration={latency}
 				bind:actions={fdgActions}
 			/>
 		</div>

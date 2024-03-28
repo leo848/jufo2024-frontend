@@ -116,7 +116,6 @@
 					return particles[fromIdx].name + '␞' + particles[toIdx].name;
 				};
 				const bSet = new Set(b.map(key));
-				console.log(bSet);
 				return a.map((valueA, index) => {
 					const valueB = b[index];
 					if (bSet.has(key(valueA))) return valueB;
@@ -299,7 +298,6 @@
 		callback = setInterval(render, 60);
 
 		wrapperDiv.addEventListener('resize', () => {
-			console.log('smth');
 			mount();
 			fullParticleUpdate(true);
 		});

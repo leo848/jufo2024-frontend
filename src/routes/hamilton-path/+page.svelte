@@ -203,6 +203,7 @@
 	}
 
 	let invalidateAlgorithms: () => void;
+	let latency: number;
 	function blowUp() {
 		invalidateAlgorithms();
 		path = null;
@@ -274,6 +275,7 @@
 						values={matrixValues.map((row) => row.slice()).slice()}
 						matrix
 						{edges}
+						animDuration={latency}
 						names={vertexNames}
 					/>
 				</div>
@@ -306,6 +308,7 @@
 			<PathAlgorithms
 				values={matrixValuesPath}
 				bind:invalidate={invalidateAlgorithms}
+				bind:latency
 				matrix
 				horizontal
 				on:deletePath={blowUp}
