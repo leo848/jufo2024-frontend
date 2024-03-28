@@ -7,7 +7,7 @@
 			img: '/vackground-pattern.png',
 			imgSource: 'vackground.com',
 			href: '/sort-integers',
-			text: 'Liste ganzer Zahlen sortieren',
+			text: 'Zahlen sortieren',
 			desc: 'Eine Liste ganzer Zahlen zwischen -9999 und 9999 mittels verschiedener linearithmischer oder quadratischer Algorithmen sortieren und die Sortierung visualisieren'
 		},
 		{
