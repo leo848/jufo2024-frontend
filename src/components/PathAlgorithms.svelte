@@ -431,13 +431,17 @@
 							<button
 								on:click={() => send({ stepwise: false })}
 								class="flex flex-row justify-between p-4 grow rounded-xl text-white bg-gray-700 hover:bg-gray-600 transition-all p-4"
-		><Icon.PlaySolid /><div>Ausführen</div><div></div></button
+								><Icon.PlaySolid />
+								<div>Ausführen</div>
+								<div /></button
 							>
 							{#if stepwise}
 								<button
 									on:click={() => send({ stepwise: true })}
 									class="flex flex-row justify-between p-4 grow rounded-xl text-white bg-gray-700 hover:bg-gray-600 transition-all p-4 items-center"
-		 ><Icon.PlayOutline /><div>Schritt ausführen</div><div></div></button
+									><Icon.PlayOutline />
+									<div>Schritt ausführen</div>
+									<div /></button
 								>
 							{/if}
 						</div>
