@@ -1,8 +1,8 @@
-<script>
-	const isDeployed = import.meta.env["VERCEL"];
+<script lang="ts">
+	const isDeployed = process.env.VERCEL;
 
-	const commitHash = import.meta.env["VERCEL_GIT_COMMIT_SHA"]?.slice(0, 7);
-	const commitMsg = import.meta.env["VERCEL_GIT_COMMIT_MESSAGE"];
+	const commitHash = process.env.VERCEL_GIT_COMMIT_SHA?.slice(0, 7);
+	const commitMsg = process.env.VERCEL_GIT_COMMIT_MESSAGE;
 </script>
 
 {#if isDeployed}
