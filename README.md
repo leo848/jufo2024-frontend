@@ -32,6 +32,20 @@ Ohne Backend können allerdings keine Algorithmen ausgeführt werden. Für die I
   - Farben im interaktiven dreidimensionalen Diagramm anzeigen
 - Vektoren sortieren
   - Vektoren einer beliebigen Dimension eingeben
+  - Adjazenzmatrix
   - Kräftebasierte Graphendarstellung
     - physikalische Simulation (Hooke)
     - mehrdimensionalen Graphen in 2D darstellen
+- Orte sortieren
+  - geografische Orte in interaktiver Kartenanwendung eingeben
+- Wörter sortieren
+  - Wörter in 100-dimensionalen Vektorraum einbetten
+  - Adjazenzmatrix
+  - Sortierung nach semantischer Ähnlichkeit der Wörter
+  - Separation von Wortfeldern
+- Hamilton-Pfad finden
+  - Graph als (symmetrische) Adjazenzmatrix eingeben
+  - Visualisierung durch kräftebasierte Graphendarstellung
+
+
+Dabei steht bei jeder Unterseite stets die Visualisierung der Algorithmen im Vordergrund, um ein Verständnis dessen aufzubauen.
