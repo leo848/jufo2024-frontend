@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { gradient } from '../ui/color';
 	import { OklabColor } from '../color/colorSpaces';
+	import Deployment from './Deployment.svelte';
 
 	const pages = [
 		{ url: '/', title: 'Startseite' },
@@ -48,6 +49,8 @@
 		<div class="text-2xl">
 			Dimensionsbezogene <b>Generalisierung</b><br />vergleichsbasierter <b>Sortierung</b>
 		</div>
+
+		<Deployment />
 	</div>
 	<div class="xl:col-span-2 col-span-3">
 		<a href="https://jugend-forscht.de" target="_blank">
