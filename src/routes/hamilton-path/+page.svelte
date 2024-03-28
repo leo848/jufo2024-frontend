@@ -53,7 +53,6 @@
 		for (let i = 0; i < vertexNames.length; i++) {
 			for (let j = 0; j < vertexNames.length; j++) {
 				matrixValuesPath[i][j] = matrixValues[vertexNamesPath[i].index][vertexNamesPath[j].index];
-				console.log(matrixValuesPath[i][j]);
 			}
 		}
 	} else {
@@ -272,9 +271,9 @@
 				<div class="h-[420px] w-full">
 					<ForceDirectedGraph
 						bind:redraw
-						values={matrixValues}
-						{edges}
+						values={matrixValues.map((row) => row.slice()).slice()}
 						matrix
+						{edges}
 						names={vertexNames}
 					/>
 				</div>
