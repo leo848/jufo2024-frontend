@@ -442,7 +442,7 @@
 		<PathAlgorithms
 			on:deletePath={invalidate(() => ((path = null), (edges = [])))}
 			bind:invalidate={invalidateAlgorithms}
-	  		bind:latency
+			bind:latency
 			{metric}
 			values={colors.map((color) => color.space(space).point().values())}
 		/>

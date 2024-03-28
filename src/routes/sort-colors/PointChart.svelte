@@ -56,7 +56,7 @@
 				{selectedIndex}
 				{edgesAnim}
 				{colorsAnim}
-	   			{animDuration}
+				{animDuration}
 				on:pick
 			/>
 		{/if}
