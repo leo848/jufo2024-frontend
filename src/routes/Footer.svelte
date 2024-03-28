@@ -62,9 +62,9 @@
 		</a>
 		<div class="">Ein <b>jugend forscht</b>-Projekt von Leo Blume</div>
 		<div class="opacity-50">
-			Copyright &copy; 2023, 2024 Leo Blume. Der Quelltext des Projekts (Frontend und Backend)
-			steht unter der GNU GPL v3-Lizenz und ist damit freie Software; er kann unter den
-			Bedingungen dieser Lizenz geteilt und/oder modifiziert werden.
+			Copyright &copy; 2023, 2024 Leo Blume. Der Quelltext des Projekts (Frontend und Backend) steht
+			unter der GNU GPL v3-Lizenz und ist damit freie Software; er kann unter den Bedingungen dieser
+			Lizenz geteilt und/oder modifiziert werden.
 		</div>
 	</div>
 

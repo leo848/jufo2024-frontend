@@ -34,7 +34,6 @@
 		ignore.add(key);
 		errors = errors.filter((e) => keySep([e.error.title, e.error.origin]) != key);
 	}
-
 </script>
 
 <div class="complete min-h-screen dark:bg-gray-900">

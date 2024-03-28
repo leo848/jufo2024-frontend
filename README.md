@@ -47,5 +47,4 @@ Ohne Backend können allerdings keine Algorithmen ausgeführt werden. Für die I
   - Graph als (symmetrische) Adjazenzmatrix eingeben
   - Visualisierung durch kräftebasierte Graphendarstellung
 
-
 Dabei steht bei jeder Unterseite stets die Visualisierung der Algorithmen im Vordergrund, um ein Verständnis dessen aufzubauen.
