@@ -2,6 +2,7 @@
 	import { onDestroy, onMount } from 'svelte';
 	import { Particle } from '../geom/particle';
 	import { Vec2 } from '../geom/vector';
+	import { mouseInBounds } from '../geom/mouse';
 	import type { TrueDistanceType } from '../geom/dist';
 	import { positiveAdjacencyMatrix } from '../graph/adjacency';
 
@@ -42,10 +43,14 @@
 	let ctx: CanvasRenderingContext2D | null = null;
 	let width = 0,
 		height = 0;
+	let mouse = { x: 0, y: 0 };
+	let mousedown = false;
 	let callback: null | NodeJS.Timeout = null;
 
 	let particles: Particle[] = [];
 	let averageTrueDist = 1;
+
+	let selectedParticle: null | Particle = null;
 
 	let frozen = false;
 	$: width, height, edges, values, metric, (frozen = false);
@@ -65,7 +70,9 @@
 
 		if (!frozen) {
 			for (const particle of particles) {
-				particle.update({ friction: forces.friction });
+				if (particle !== selectedParticle || !mousedown) {
+					particle.update({ friction: forces.friction });
+				}
 			}
 		}
 
@@ -78,9 +85,18 @@
 			ctx.stroke();
 		}
 
+		let selected = null;
 		for (let i = particles.length - 1; i >= 0; i--) {
 			const particle = particles[i];
-			particle.draw(ctx);
+			let [tl, br] = particle.draw(ctx);
+			if (mouseInBounds([mouse.x, mouse.y], tl, br)) {
+				selected = i;
+			}
+		}
+		selectedParticle = null;
+		if (selected !== null) {
+			selectedParticle = particles[selected];
+			selectedParticle.draw(ctx, { highlight: true });
 		}
 
 		const totalVel = particles.map((p) => p.vel.mag()).reduce((a, b) => a + b, 0);
@@ -189,6 +205,19 @@
 			mount();
 			fullParticleUpdate(true);
 		});
+
+		canvas.addEventListener('mousemove', (evt) => {
+			let pmouse = { x: evt.offsetX - mouse.x, y: evt.offsetY - mouse.y };
+			mouse = { x: evt.offsetX, y: evt.offsetY };
+			if (mousedown && selectedParticle) {
+				selectedParticle.pos.x += pmouse.x;
+				selectedParticle.pos.y += pmouse.y;
+			}
+		});
+
+		canvas.addEventListener('mousedown', () => (mousedown = true));
+		canvas.addEventListener('mouseup', () => (mousedown = false));
+		canvas.addEventListener('mouseout', () => (mousedown = false));
 	}
 
 	onMount(mount);

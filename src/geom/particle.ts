@@ -43,10 +43,13 @@ export class Particle {
 		this.acc = Vec2.zero();
 	}
 
-	draw(ctx: CanvasRenderingContext2D) {
+	draw(
+		ctx: CanvasRenderingContext2D,
+		options: { highlight: boolean } = { highlight: false }
+	): [[number, number], [number, number]] {
 		ctx.lineWidth = 2;
-		ctx.fillStyle = '#444';
-		ctx.strokeStyle = '#ccc';
+		ctx.fillStyle = options.highlight ? '#ccc' : '#444';
+		ctx.strokeStyle = options.highlight ? '#444' : '#ccc';
 
 		const fontSize = 18;
 		const textWidth = Math.max(fontSize, ctx.measureText(this.name).width + 10);
@@ -61,12 +64,17 @@ export class Particle {
 		ctx.font = fontSize + 'px Inter, sans-serif';
 
 		ctx.beginPath();
-		ctx.fillStyle = '#ccc';
+		ctx.fillStyle = options.highlight ? '#444' : '#ccc';
 		ctx.ellipse(this.pos.x, this.pos.y, 4, 4, 0, 0, Math.PI * 2);
-		ctx.fillStyle = 'white';
+		ctx.fillStyle = options.highlight ? 'black' : 'white';
 		ctx.ellipse(this.pos.x, this.pos.y, 3, 3, 0, 0, Math.PI * 2);
 		ctx.fill();
 
 		ctx.fillText(this.name, this.pos.x + 10, this.pos.y + 2);
+
+		return [
+			[this.pos.x, this.pos.y - 5],
+			[this.pos.x + textWidth + 10, this.pos.y + fontSize + 10]
+		];
 	}
 }
