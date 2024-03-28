@@ -213,6 +213,7 @@
 				if (selectedParticle) {
 					selectedParticle.pos.x += pmouse.x;
 					selectedParticle.pos.y += pmouse.y;
+					frozen = false;
 				} else {
 					particles.forEach(p => {
 						p.pos.x += pmouse.x;
