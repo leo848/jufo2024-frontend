@@ -49,13 +49,15 @@
 
 	let matrixValuesPath: number[][] = matrixValues;
 	$: if (vertexNamesPath.length === vertexNames.length) {
-		let matrixValuesPath = matrixValues;
+		matrixValuesPath = matrixValues;
 		for (let i = 0; i < vertexNames.length; i++) {
 			for (let j = 0; j < vertexNames.length; j++) {
 				matrixValuesPath[i][j] = matrixValues[vertexNamesPath[i].index][vertexNamesPath[j].index];
 				console.log(matrixValuesPath[i][j]);
 			}
 		}
+	} else {
+		matrixValuesPath = matrixValues;
 	}
 
 	let symmetric = true;
@@ -191,7 +193,7 @@
 
 		requestAnimationFrame(() => redraw());
 	})();
-	$: {
+	$: if ($page.url.pathname.includes('hamilton-path')) {
 		$page.url.searchParams.set('v', matrixValues.map((row) => row.join('i')).join('o'));
 		$page.url.searchParams.set('n', vertexNames.join('_'));
 		goto(`?${$page.url.searchParams.toString()}`, {

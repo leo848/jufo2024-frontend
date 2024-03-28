@@ -322,7 +322,7 @@
 						words.map((w) => w.vec),
 						metric
 					)
-	 .map((row) => row.map(entry => entry.toFixed(4)).join('i'))
+						.map((row) => row.map((entry) => entry.toFixed(4)).join('i'))
 						.join('o') +
 					'&n=' +
 					words.map((w) => w.inner).join('_')
