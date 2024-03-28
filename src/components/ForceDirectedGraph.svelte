@@ -209,9 +209,16 @@
 		canvas.addEventListener('mousemove', (evt) => {
 			let pmouse = { x: evt.offsetX - mouse.x, y: evt.offsetY - mouse.y };
 			mouse = { x: evt.offsetX, y: evt.offsetY };
-			if (mousedown && selectedParticle) {
-				selectedParticle.pos.x += pmouse.x;
-				selectedParticle.pos.y += pmouse.y;
+			if (mousedown) {
+				if (selectedParticle) {
+					selectedParticle.pos.x += pmouse.x;
+					selectedParticle.pos.y += pmouse.y;
+				} else {
+					particles.forEach(p => {
+						p.pos.x += pmouse.x;
+						p.pos.y += pmouse.y;
+					})
+				}
 			}
 		});
 
