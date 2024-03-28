@@ -200,7 +200,7 @@
 
 		ctx.textAlign = 'left';
 		ctx.textBaseline = 'hanging';
-		const energy = ((totalVel + totalAcc * 10) / Math.max(particles.length, 10)) * 10;
+		const energy = ((totalVel + totalAcc * 10) / Math.max(particles.length ** 2, 100)) * 100;
 		if (energy < forces.icePoint) frozen = true;
 
 		if (!frozen) ctx.fillText(energy.toFixed(1), 10, 10);
