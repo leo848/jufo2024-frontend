@@ -291,6 +291,8 @@
 	$: open = (kind: ActionKind) => selectedItem[kind] !== null;
 
 	let latencySlider = 2;
+
+	export let latency = 0;
 	$: latency = [0, 50, 100, 250, 500, 1000, 2000][latencySlider];
 
 	if (matrix) {

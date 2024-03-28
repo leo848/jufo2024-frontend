@@ -78,7 +78,7 @@
 		});
 	});
 
-	$: if ($page.url.pathname.includes("sort-words")) {
+	$: if ($page.url.pathname.includes('sort-words')) {
 		$page.url.searchParams.set('v', toUrlString(words.map((w) => w.inner)));
 		goto(`?${$page.url.searchParams.toString()}`, {
 			keepFocus: true,

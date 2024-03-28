@@ -5,13 +5,17 @@
 	import { mouseInBounds } from '../geom/mouse';
 	import type { TrueDistanceType } from '../geom/dist';
 	import { positiveAdjacencyMatrix } from '../graph/adjacency';
+	import { tweened, type Tweened } from 'svelte/motion';
+	import { quadIn, quadInOut } from 'svelte/easing';
 
-	export let edges: [number, number][] = []; // indices
 	export let values: number[][];
+	export let edges: [number, number][] = []; // indices
 	export let names: string[];
 	export let metric: TrueDistanceType = { norm: 'euclidean', invert: false };
 
-	export let matrix: boolean = false;
+	export let matrix: boolean = false; // whether values is matrix or vectors
+
+	export let animDuration: number = 500;
 
 	export let options: {
 		speed?: number;
@@ -37,6 +41,99 @@
 			adjMatrix = positiveAdjacencyMatrix(values, metric);
 		}
 	}
+
+	// [fromPos, fromIndex, toPos, toIndex];
+	let displayEdges: Tweened<(() => [Vec2, number, Vec2, number])[]> = tweened(undefined, {
+		easing: quadInOut,
+		duration(a: (() => [Vec2, number, Vec2, number])[], b: (() => [Vec2, number, Vec2, number])[]) {
+			if (a.length === b.length || a.length + 1 === b.length) return animDuration;
+			else return 1000;
+		},
+		interpolate(
+			a: (() => [Vec2, number, Vec2, number])[],
+			b: (() => [Vec2, number, Vec2, number])[]
+		) {
+			const noAnim = () => b;
+			if (b.length === 0) {
+				return (tRaw: number) => {
+					let t = quadIn(tRaw);
+					return a.map((value) => {
+						return () => [
+							value()[0].add(
+								value()[0]
+									.delta(value()[2])
+									.mul(t / 2)
+							),
+							value()[1],
+							value()[2].add(
+								value()[2]
+									.delta(value()[0])
+									.mul(t / 2)
+							),
+							value()[3]
+						];
+					});
+				};
+			}
+			if (a.length + 1 === b.length) {
+				return (t) => {
+					const copy = b.slice();
+					const last = copy[copy.length - 1];
+					copy[copy.length - 1] = () => [
+						last()[0],
+						last()[1],
+						last()[0].add(last()[0].delta(last()[2]).mul(t)),
+						last()[3]
+					];
+					return copy;
+				};
+			}
+			if (a.length === 0) {
+				return (tRaw: number) => {
+					let t = quadIn(tRaw);
+					return b.map((value) => {
+						return () => [
+							value()[0].add(
+								value()[0]
+									.delta(value()[2])
+									.mul(0.5 - t / 2)
+							),
+							value()[1],
+							value()[2].add(
+								value()[2]
+									.delta(value()[0])
+									.mul(0.5 - t / 2)
+							),
+							value()[3]
+						];
+					});
+				};
+			}
+			if (a.length !== b.length) return noAnim;
+			return (t) => {
+				const key = (f: () => [Vec2, number, Vec2, number]) => {
+					const [_fromPos, fromIdx, _toPos, toIdx] = f();
+					return particles[fromIdx].name + '␞' + particles[toIdx].name;
+				};
+				const bSet = new Set(b.map(key));
+				console.log(bSet);
+				return a.map((valueA, index) => {
+					const valueB = b[index];
+					if (bSet.has(key(valueA))) return valueB;
+					return () => [
+						valueA()[0].add(valueA()[0].delta(valueB()[0]).mul(t)),
+						valueB()[1],
+						valueA()[2].add(valueA()[2].delta(valueB()[2]).mul(t)),
+						valueB()[3]
+					];
+				});
+			};
+		}
+	});
+	let particleKey = 0;
+	$: $displayEdges = edges.map(([indexFrom, indexTo]) => {
+		return () => [particles[indexFrom]?.pos ?? 0, indexFrom, particles[indexTo]?.pos ?? 0, indexTo];
+	});
 
 	let wrapperDiv: HTMLDivElement;
 	let canvas: HTMLCanvasElement;
@@ -68,6 +165,7 @@
 
 		const totalAcc = particles.map((p) => p.acc.mag()).reduce((a, b) => a + b, 0);
 
+		particleKey++;
 		if (!frozen) {
 			for (const particle of particles) {
 				if (particle !== selectedParticle || !mousedown) {
@@ -78,10 +176,10 @@
 
 		ctx.strokeStyle = 'white';
 		ctx.lineWidth = 3;
-		for (const [fromIdx, toIdx] of edges ?? []) {
-			if (!particles[toIdx] || !particles[fromIdx]) continue;
-			ctx.moveTo(particles[fromIdx].pos.x, particles[fromIdx].pos.y);
-			ctx.lineTo(particles[toIdx].pos.x, particles[toIdx].pos.y);
+		for (const f of $displayEdges ?? []) {
+			const [fromPos, _fromIdx, toPos, _toIdx] = f();
+			ctx.moveTo(fromPos.x, fromPos.y);
+			ctx.lineTo(toPos.x, toPos.y);
 			ctx.stroke();
 		}
 
@@ -215,10 +313,10 @@
 					selectedParticle.pos.y += pmouse.y;
 					frozen = false;
 				} else {
-					particles.forEach(p => {
+					particles.forEach((p) => {
 						p.pos.x += pmouse.x;
 						p.pos.y += pmouse.y;
-					})
+					});
 				}
 			}
 		});

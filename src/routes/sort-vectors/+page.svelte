@@ -81,6 +81,8 @@
 
 	let invalidate: <T>(callback: (t: T) => void, invalid?: (t: T) => void) => (t: T) => void;
 	let invalidateAlgorithms: () => void;
+	let latency: number;
+
 	function blowUp() {
 		if (path != null) blownUp = true;
 		path = null;
@@ -289,6 +291,7 @@
 					{metric}
 					options={fdgOptions}
 					bind:actions={fdgActions}
+					animDuration={latency}
 				/>
 			</div>
 		</Window>
@@ -298,6 +301,7 @@
 		<PathAlgorithms
 			on:deletePath={invalidate(() => ((path = null), (edges = [])))}
 			bind:invalidate={invalidateAlgorithms}
+			bind:latency
 			dimensions={dim}
 			{metric}
 			values={points.map((p) => p.inner)}
