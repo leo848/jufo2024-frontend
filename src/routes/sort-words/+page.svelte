@@ -310,10 +310,23 @@
 		bind:locked
 		bind:invalidate
 		hide={['asVector', 'norm']}
+		show={['asGraph']}
 		bind:metric
 		loadAmount={Object.keys(presets).length}
 		on:add={invalidate(() => addInput({ sendRandom: true }))}
 		on:delete={() => (words = [])}
+		on:asGraph={() =>
+			goto(
+				'/hamilton-path?v=' +
+					adjacencyMatrix(
+						words.map((w) => w.vec),
+						metric
+					)
+						.map((row) => row.join('i'))
+						.join('o') +
+					'&n=' +
+					words.map((w) => w.inner).join('_')
+			)}
 	>
 		<LoadWords
 			slot="load"

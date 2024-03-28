@@ -52,7 +52,7 @@
 		return { ...p, inner: vectorLength(p.inner, dim) };
 	});
 
-	$: if ($page.url.pathname.includes("sort-vectors")) {
+	$: if ($page.url.pathname.includes('sort-vectors')) {
 		$page.url.searchParams.set('v', $data.map((v) => v.inner.join('i')).join('o'));
 		goto(`?${$page.url.searchParams.toString()}`, {
 			keepFocus: true,
