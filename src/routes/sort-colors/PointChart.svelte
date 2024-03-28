@@ -15,10 +15,7 @@
 	export let metric: TrueDistanceType;
 	export let ballSize: number = 0.5;
 	export let selectedIndex: number | null = null;
-	/*background={new THREE.Color(0x0c0c0c)}
-		fog={new THREE.FogExp2(0x0c0c0c, 0.015)}
-		antialias
-		shadows*/
+	export let animDuration: number;
 
 	let tryPick: (evt: MouseEvent) => void;
 	let getHoveredIndex: (evt: MouseEvent) => number | null;
@@ -59,6 +56,7 @@
 				{selectedIndex}
 				{edgesAnim}
 				{colorsAnim}
+	   			{animDuration}
 				on:pick
 			/>
 		{/if}

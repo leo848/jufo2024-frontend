@@ -71,6 +71,7 @@
 	let edges: [Point3, Point3, Color | undefined][] = [];
 
 	let invalidateAlgorithms: () => void;
+	let latency: number;
 	function blowUp() {
 		path = null;
 		edges = [];
@@ -152,7 +153,7 @@
 			colorsLocked = true;
 			if (pc.donePath) {
 				path = pc.donePath.map(Point3.fromArray);
-				edgesAnim = false;
+				// edgesAnim = false;
 				edges = pathToEdges(pc.donePath);
 				setTimeout(() => (edgesAnim = true));
 				setColorsFromPath(pc.donePath);
@@ -424,6 +425,7 @@
 					{projection}
 					{space}
 					{metric}
+					animDuration={latency}
 					on:pick={(evt) => (selection = evt.detail)}
 					selectedIndex={selection?.index}
 				/>
@@ -440,6 +442,7 @@
 		<PathAlgorithms
 			on:deletePath={invalidate(() => ((path = null), (edges = [])))}
 			bind:invalidate={invalidateAlgorithms}
+	  		bind:latency
 			{metric}
 			values={colors.map((color) => color.space(space).point().values())}
 		/>

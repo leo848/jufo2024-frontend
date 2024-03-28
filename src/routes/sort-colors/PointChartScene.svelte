@@ -24,6 +24,7 @@
 	export let selectedIndex: number | null = null;
 	export let colorsAnim: boolean;
 	export let edgesAnim: boolean = true;
+	export let animDuration: number = 500;
 
 	export let canvas: HTMLCanvasElement;
 
@@ -139,10 +140,10 @@
 		duration(a: [Point3, Point3, Color | undefined][], b: [Point3, Point3, Color | undefined][]) {
 			if (a == null || b == null) return 0;
 			if (!edgesAnim) return 0;
-			if (b.length == 0) return 1000;
-			if (a.length + 1 === b.length) return 500;
+			if (a.length + 1 === b.length) return animDuration;
+			if (b.length === 0 || a.length === 0) return 1000;
 			if (a.length !== b.length) return 0;
-			return 500;
+			return animDuration;
 		},
 		easing: quadInOut,
 		interpolate(
@@ -163,18 +164,6 @@
 					});
 				};
 			}
-			if (a.length === 0) {
-				return (tRaw) => {
-					let t = quadIn(tRaw);
-					return b.map((value) => {
-						return [
-							value[0].add(value[0].delta(new Point3(value[0].x, -0.5, value[0].z)).scale(1 - t)),
-							value[1].add(value[1].delta(new Point3(value[0].x, -0.5, value[0].z)).scale(1 - t)),
-							undefined
-						];
-					});
-				};
-			}
 			if (a.length + 1 === b.length) {
 				return (t) => {
 					const copy = b.slice();
@@ -185,6 +174,18 @@
 						undefined
 					];
 					return copy;
+				};
+			}
+			if (a.length === 0) {
+				return (tRaw) => {
+					let t = quadIn(tRaw);
+					return b.map((value) => {
+						return [
+							value[0].add(value[0].delta(value[1]).scale(1 / 2 - t / 2)),
+							value[1].add(value[1].delta(value[0]).scale(1 / 2 - t / 2)),
+							undefined
+						];
+					});
 				};
 			}
 			if (a.length != b.length) return noAnim;
