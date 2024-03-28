@@ -56,7 +56,7 @@
 			complexity?: string;
 			stepwise?: boolean;
 			expectedTime?: (n: number) => null | number;
-			send: ((options ?: { stepwise : boolean }) => void) | null;
+			send: ((options?: { stepwise: boolean }) => void) | null;
 		}[]
 	> = {
 		construction: (
@@ -424,13 +424,13 @@
 					{#if !progress.ongoing}
 						<div class="flex flex-row justify-stretch gap-4">
 							<button
-		   on:click={() => send({ stepwise: false })}
+								on:click={() => send({ stepwise: false })}
 								class="grow rounded-xl text-white bg-gray-700 hover:bg-gray-600 transition-all p-4"
 								>Ausführen</button
 							>
 							{#if stepwise}
 								<button
-			   on:click={() => send({ stepwise: true })}
+									on:click={() => send({ stepwise: true })}
 									class="grow rounded-xl text-white bg-gray-700 hover:bg-gray-600 transition-all p-4"
 									>Schritt ausführen</button
 								>

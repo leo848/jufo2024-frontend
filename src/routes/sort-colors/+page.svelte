@@ -30,6 +30,7 @@
 	import CopyButton from '../../components/CopyButton.svelte';
 	import { fromUrlString, toUrlString } from './url';
 	import { adjacencyMatrix } from '../../graph/adjacency';
+	import ColorPlaceholder from './ColorPlaceholder.svelte';
 
 	title.set('Farben sortieren');
 
@@ -358,66 +359,7 @@
 						/>
 					</div>
 				{:else}
-					{@const randomColors = new Array(100)
-						.fill(0)
-						.map((_) => new RgbColor(Math.random(), Math.random(), Math.random()).color())}
-					{@const randomColor = randomColors[0]}
-					<div
-						class="m-4 p-4 rounded-md max-w-[50%]"
-						style={`background-color:${randomColor.css()}; color:${randomColor.readable().css()}`}
-						in:scale
-					>
-						<div class="text-3xl">Keine Farben ausgewählt</div>
-						<div>
-							Klicke auf Hinzufügen oder Laden im Optionen-Dialog rechts und erstelle so eine zu
-							sortierende Liste von Farben.
-						</div>
-						<div>
-							Oder wie wäre es damit, einfach mit
-
-							{#await randomColor.name('german')}
-								<Spinner />
-							{:then meta}
-								<b>{meta.name}</b>
-							{/await}
-							(#{randomColor.rgb().hex()}) anzufangen?
-						</div>
-						<div>
-							<button class="p-2 mt-2 rounded bg-gray-800 text-white" on:click={addColor}
-								><b>Auswahldialog</b> öffnen</button
-							>
-							<button
-								class="p-2 mt-2 rounded"
-								style={`background-color:${randomColor
-									.readable()
-									.css()};color:${randomColor.css()}`}
-								on:click={() => (colors = [randomColor])}
-							>
-								<b
-									>{#await randomColor.name('german')}
-										<Spinner />
-									{:then meta}
-										{meta.name}
-									{/await}</b
-								>
-								auswählen</button
-							>
-							<button
-								class="p-2 mt-2 rounded text-white"
-								style:background={gradient(randomColors.slice(1, 10).map((c) => c.darken(0.4)))}
-								on:click={() => (colors = randomColors.slice(0, 10))}
-							>
-								<b><span class="opacity-0">0</span>10 zufällige</b> Farben auswählen
-							</button>
-							<button
-								class="p-2 mt-2 rounded text-white"
-								style:background={gradient(randomColors.slice(1, 100).map((c) => c.darken(0.4)))}
-								on:click={() => (colors = randomColors.slice(0, 100))}
-							>
-								<b>100 zufällige</b> Farben auswählen
-							</button>
-						</div>
-					</div>
+					<ColorPlaceholder {addColor} bind:colors />
 				{/each}
 			</div>
 		</div>
