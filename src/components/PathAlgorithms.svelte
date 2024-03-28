@@ -28,6 +28,7 @@
 		ongoing: false,
 		value: 0 as null | number,
 		start: new Date(),
+		preferStep: false,
 		eta() {
 			const { value, start, ongoing } = this;
 			const now = new Date();
@@ -151,6 +152,7 @@
 					payload &&
 					(() => {
 						progress.start = new Date();
+						progress.preferStep = false;
 						sendWebsocket(payload());
 					});
 			} else {
@@ -172,6 +174,7 @@
 					payload &&
 					(() => {
 						progress.start = new Date();
+						progress.preferStep = false;
 						sendWebsocket(payload());
 					});
 			}
@@ -247,6 +250,7 @@
 					payload &&
 					((options: { stepwise: boolean } = { stepwise: false }) => {
 						progress.start = new Date();
+						progress.preferStep = options.stepwise;
 						sendWebsocket(payload(options));
 					});
 			} else {
@@ -269,6 +273,7 @@
 					payload &&
 					((options: { stepwise: boolean } = { stepwise: false }) => {
 						progress.start = new Date();
+						progress.preferStep = options.stepwise;
 						sendWebsocket(payload(options));
 					});
 			}
@@ -425,14 +430,14 @@
 						<div class="flex flex-row justify-stretch gap-4">
 							<button
 								on:click={() => send({ stepwise: false })}
-								class="grow rounded-xl text-white bg-gray-700 hover:bg-gray-600 transition-all p-4"
-								>Ausführen</button
+								class="flex flex-row justify-between p-4 grow rounded-xl text-white bg-gray-700 hover:bg-gray-600 transition-all p-4"
+		><Icon.PlaySolid /><div>Ausführen</div><div></div></button
 							>
 							{#if stepwise}
 								<button
 									on:click={() => send({ stepwise: true })}
-									class="grow rounded-xl text-white bg-gray-700 hover:bg-gray-600 transition-all p-4"
-									>Schritt ausführen</button
+									class="flex flex-row justify-between p-4 grow rounded-xl text-white bg-gray-700 hover:bg-gray-600 transition-all p-4 items-center"
+		 ><Icon.PlayOutline /><div>Schritt ausführen</div><div></div></button
 								>
 							{/if}
 						</div>
@@ -440,7 +445,7 @@
 						<Spinner />
 					{:else}
 						{@const eta = progress.eta()}
-						{#if eta !== null && !stepwise}
+						{#if eta !== null && (!stepwise || progress.preferStep)}
 							{@const [amount, suffix] = formatTimespan(eta / 1000)}
 							<div>
 								{#if eta > 2000}ca. {/if}<b>{amount}</b>
