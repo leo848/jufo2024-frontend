@@ -102,6 +102,19 @@
 		interpolate(a: { point: Point3; color: Color }[], b: { point: Point3; color: Color }[]) {
 			const noAnim = () => b;
 			if (!colorsAnim) return noAnim;
+			if (a.length + 1 === b.length && a.length !== 0) {
+				return (t) => {
+					const copy = b.slice();
+					const last = copy[copy.length - 1];
+					const nextToLast = copy[copy.length - 2];
+
+					copy[copy.length - 1] = {
+						point: nextToLast.point.add(nextToLast.point.delta(last.point).scale(t)),
+						color: last.color
+					};
+					return copy;
+				};
+			}
 			if (a.length != b.length) return noAnim;
 			return (t) => {
 				return a.map((valueA, index) => {
