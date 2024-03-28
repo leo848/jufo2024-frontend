@@ -78,7 +78,8 @@ const action = z.discriminatedUnion('type', [
 		dimensions: z.number().positive().int().lt(256),
 		path: z.array(z.array(z.number())),
 		metric: DistanceType,
-		method: pathImproveMethod
+		method: pathImproveMethod,
+		preferStep: z.optional(z.boolean())
 	}),
 	z.object({
 		type: z.literal('createPath'),
@@ -88,7 +89,8 @@ const action = z.discriminatedUnion('type', [
 	z.object({
 		type: z.literal('improvePath'),
 		path: z.array(z.number().int()),
-		method: pathImproveMethod
+		method: pathImproveMethod,
+		preferStep: z.optional(z.boolean())
 	})
 ]);
 

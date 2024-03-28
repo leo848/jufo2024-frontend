@@ -56,7 +56,7 @@
 			complexity?: string;
 			stepwise?: boolean;
 			expectedTime?: (n: number) => null | number;
-			send: (() => void) | null;
+			send: ((options ?: { stepwise : boolean }) => void) | null;
 		}[]
 	> = {
 		construction: (
@@ -231,7 +231,7 @@
 			if (matrix) {
 				const payload =
 					e.method &&
-					(() =>
+					((options: { stepwise: boolean } = { stepwise: false }) =>
 						({
 							type: 'action',
 							latency,
@@ -239,19 +239,20 @@
 								type: 'improvePath',
 								method: { type: e.method },
 								path: path as number[],
-								matrix: values
+								matrix: values,
+								preferStep: options.stepwise
 							}
 						} as const));
 				send =
 					payload &&
-					(() => {
+					((options: { stepwise: boolean } = { stepwise: false }) => {
 						progress.start = new Date();
-						sendWebsocket(payload());
+						sendWebsocket(payload(options));
 					});
 			} else {
 				const payload =
 					e.method &&
-					(() =>
+					((options: { stepwise: boolean } = { stepwise: false }) =>
 						({
 							type: 'action',
 							latency,
@@ -260,14 +261,15 @@
 								method: { type: e.method },
 								metric: distanceTypeToObject(metric),
 								dimensions,
-								path: values
+								path: values,
+								preferStep: options.stepwise
 							}
 						} as const));
 				send =
 					payload &&
-					(() => {
+					((options: { stepwise: boolean } = { stepwise: false }) => {
 						progress.start = new Date();
-						sendWebsocket(payload());
+						sendWebsocket(payload(options));
 					});
 			}
 			return Object.assign({}, e, { index: i, send });
@@ -420,11 +422,20 @@
 				</div>
 				{#if send}
 					{#if !progress.ongoing}
-						<button
-							on:click={send}
-							class="rounded-xl text-white bg-gray-700 hover:bg-gray-600 transition-all p-4"
-							>Ausführen</button
-						>
+						<div class="flex flex-row justify-stretch gap-4">
+							<button
+		   on:click={() => send({ stepwise: false })}
+								class="grow rounded-xl text-white bg-gray-700 hover:bg-gray-600 transition-all p-4"
+								>Ausführen</button
+							>
+							{#if stepwise}
+								<button
+			   on:click={() => send({ stepwise: true })}
+									class="grow rounded-xl text-white bg-gray-700 hover:bg-gray-600 transition-all p-4"
+									>Schritt ausführen</button
+								>
+							{/if}
+						</div>
 					{:else if progress.value === null}
 						<Spinner />
 					{:else}
