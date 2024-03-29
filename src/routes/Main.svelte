@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { Gallery } from 'flowbite-svelte';
 	import { scale } from 'svelte/transition';
+	import SimpleLink from '../components/SimpleLink.svelte';
 
 	const cards = [
 		{
@@ -70,7 +71,7 @@
 				<img src={card.img} class="w-full aspect-ratio-1" alt="Bildvorschau {card.text}" />
 				<div class="text-white text-sm opacity-30 max-md:hidden">
 					Bildquelle: {card.imgSource} über
-					<a href="https://unsplash.com" class="underline">Unsplash</a>
+					<SimpleLink href="https://unsplash.com">Unsplash</SimpleLink>
 				</div>
 				<div class="m-4">
 					<h5 class="mb-2 text-3xl font-bold tracking-tight text-gray-900 dark:text-white">
