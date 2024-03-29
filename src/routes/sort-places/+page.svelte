@@ -151,7 +151,7 @@
 		{#if openRouteKeyPresent}
 			<Window
 				title={durationMatrix === null ? 'Echtzeitdaten ermitteln' : 'Adjazenzmatrix'}
-				scrollable={durationMatrix !== null}
+	   			scrollable
 			>
 				{#if durationMatrix === null}
 					<div class="m-4 p-4 bg-gray-700">
@@ -160,6 +160,10 @@
 							<div class="text-white">
 								Hinweis: Die API kann nur für 50 oder weniger Punkte verwendet werden.
 							</div>
+							<button
+								class="bg-gray-600 hover:bg-gray-500 transition-all rounded text-white p-2"
+		on:click={() => points = points.slice(0, 50)}>Letzte {points.length-50} Punkte löschen</button
+							>
 						{:else}
 							<div>
 								Durch Klick auf den Button unten werden die Standortdaten an OpenRouteService
