@@ -44,6 +44,7 @@
 	let durationMatrix: number[][] | null = null;
 	let openRouteKeyPresent: boolean;
 	$: points, openRouteKeyPresent = !!process.env.OPENROUTE_KEY;
+	$: points, durationMatrix = null;
 
 	async function requestMatrix() {
 		let input: OpenRouteMatrixInput = {
@@ -148,10 +149,13 @@
 		/>
 
 		{#if openRouteKeyPresent}
-			<Window title={durationMatrix === null ? 'Echtzeitdaten ermitteln' : 'Adjazenzmatrix'}>
+			<Window title={durationMatrix === null ? 'Echtzeitdaten ermitteln' : 'Adjazenzmatrix'} scrollable={durationMatrix !== null}>
 				{#if durationMatrix === null}
 					<div class="m-4 p-4 bg-gray-700">
 						<div class="text-xl text-white">Fahrtzeitanfrage über externen Server</div>
+						{#if points.length > 50}
+						<div class="text-white">Hinweis: Die API kann nur für 50 oder weniger Punkte verwendet werden.</div>
+						{:else}
 						<div>
 							Durch Klick auf den Button unten werden die Standortdaten an OpenRouteService
 							gesendet, um die Live-Fahrtzeit zwischen den gegebenen Orten (angegeben in Sekunden)
@@ -162,6 +166,7 @@
 							class="bg-gray-600 hover:bg-gray-500 transition-all rounded text-white p-2"
 							on:click={requestMatrix}>Matrix anfordern</button
 						>
+						{/if}
 					</div>
 				{:else}
 					<AdjacencyMatrix
