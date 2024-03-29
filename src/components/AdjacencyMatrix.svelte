@@ -96,6 +96,7 @@
 						{#if editable}
 							<input
 								class="border-none w-full min-w-[80px]"
+								class:text-gray-300={symmetric && index > index1}
 								type="number"
 								bind:value={values[index][index1]}
 								disabled={symmetric && index > index1}
