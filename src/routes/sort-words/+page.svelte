@@ -209,12 +209,13 @@
 		if (pi.better) {
 			console.log(pi, edges);
 			const newEdges: [number, number][] = [];
-			pi.currentPath.forEach((index, pathIndex, arr) => {
+			pi.currentPath.forEach((_, index, arr) => {
 				if (index < arr.length - 1) {
-					newEdges.push([index, arr[pathIndex + 1]]);
+					newEdges.push([arr[index], arr[index + 1]]);
 				}
 			});
 			edges = newEdges;
+			console.log(edges);
 		}
 		if (pi.done) {
 			let newWords = [];

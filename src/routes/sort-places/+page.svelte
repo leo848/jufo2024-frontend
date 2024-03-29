@@ -124,6 +124,7 @@
 			bind:invalidate
 			bind:locked={pointsLocked}
 			hide={['add']}
+	  		show={durationMatrix ? ['asGraph'] : []}
 			on:delete={invalidate(() => (points = []))}
 			bind:metric
 			loadAmount={Object.keys(presets).length}
@@ -133,6 +134,13 @@
 						points.map((p) => [p.lat, p.lng].map((f) => f.toFixed(5)).join('i')).join('o')
 				);
 			})}
+	  		on:asGraph={invalidate(() => {
+	  			if (!durationMatrix) return;
+	  			goto(
+	  '/hamilton-path?v=' + durationMatrix.map(row => row.map(v => v.toFixed(4)).join("i")).join("o") + "&n=" + points.map(p => p.name).join("_")
+	  		
+	  );
+			  })}
 		>
 			<LoadPlace slot="load" on:load={() => olmKey++} {invalidate} bind:points />
 		</Options>
