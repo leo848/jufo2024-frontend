@@ -2,6 +2,7 @@
 	import { gradient } from '../ui/color';
 	import { OklabColor } from '../color/colorSpaces';
 	import Deployment from './Deployment.svelte';
+	import SimpleLink from '../components/SimpleLink.svelte';
 
 	const pages = [
 		{ url: '/', title: 'Startseite' },
@@ -71,25 +72,16 @@
 	<div class="col-span-2 xl:col-span-1">
 		<div class="text-gray-200 text-2xl">Unterseiten</div>
 		<div class="flex flex-col text-gray-400">
-			{#each pages as page}
-				<a
-					href={page.url}
-					class="underline underline-offset-2 hover:underline-offset-4 transition-all hover:text-gray-200"
-					>{page.title}</a
-				>
+			{#each pages as { url: href, title }}
+				<SimpleLink {href}>{title}</SimpleLink>
 			{/each}
 		</div>
 	</div>
 	<div class="col-span-2 xl:col-span-1">
 		<div class="text-gray-200 text-2xl">Weitere Links</div>
 		<div class="flex flex-col text-gray-400">
-			{#each links as link}
-				<a
-					href={link.url}
-					target={link.target ?? '_blank'}
-					class="underline underline-offset-2 hover:underline-offset-4 transition-all hover:text-gray-200 active:text-gray-200"
-					>{link.title}</a
-				>
+			{#each links as { url: href, target, title }}
+				<SimpleLink {href} {target}>{title}</SimpleLink>
 			{/each}
 		</div>
 	</div>
