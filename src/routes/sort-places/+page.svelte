@@ -42,10 +42,12 @@
 	}
 
 	let durationMatrix: number[][] | null = null;
+	let openRouteKeyPresent: boolean;
+	$: points, openRouteKeyPresent = !!process.env.OPENROUTE_KEY;
 
 	async function requestMatrix() {
 		let input: OpenRouteMatrixInput = {
-			locations: points.map((named) => [named.lat, named.lng])
+			locations: points.map((named) => [named.lng, named.lat])
 		};
 		let response = await getDurationMatrix(input);
 		durationMatrix = response.durations;
@@ -127,7 +129,7 @@
 			on:asVectors={invalidate(() => {
 				goto(
 					'/sort-vectors?v=' +
-						points.map((p) => [p.lng, p.lat].map((f) => f.toFixed(5)).join('i')).join('o')
+						points.map((p) => [p.lat, p.lng].map((f) => f.toFixed(5)).join('i')).join('o')
 				);
 			})}
 		>
@@ -145,7 +147,7 @@
 			values={points.map((p) => [p.lat, p.lng])}
 		/>
 
-		{#if process.env.OPENROUTE_KEY}
+		{#if openRouteKeyPresent}
 			<Window title={durationMatrix === null ? 'Echtzeitdaten ermitteln' : 'Adjazenzmatrix'}>
 				{#if durationMatrix === null}
 					<div class="m-4 p-4 bg-gray-700">
