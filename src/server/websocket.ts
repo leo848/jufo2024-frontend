@@ -94,14 +94,21 @@ websocket.onmessage = onmessage;
 
 let callbacks: { f: (so: ServerOutput) => void; id: number }[] = [];
 
-export function sendWebsocket(input: ServerInput, options?: { noLog?: boolean }) {
+export function sendWebsocket(input: ServerInput, options?: { noLog?: boolean, backoff?: number }) {
 	const noLog = options?.noLog;
 	const status = getStatus();
 	if (status.status === 'offline') {
 		reconnectWebsocket();
 	}
 	statusCallback(getStatus());
-	websocket.send(JSON.stringify(input));
+	try {
+		websocket.send(JSON.stringify(input));
+	} catch(e) {
+		if (e instanceof DOMException) {
+			const expBackoffOptions = { ...(options ?? {}), backoff: (options?.backoff ?? 100) * 1.6 };
+			setTimeout(() => sendWebsocket(input, expBackoffOptions), options?.backoff ?? 100);
+		}
+	}
 	if (!noLog) {
 		connectionData.update((cd) => ({ ...cd, lastRequest: new Date() }));
 		statusCallback({

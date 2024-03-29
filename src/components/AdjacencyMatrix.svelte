@@ -85,7 +85,7 @@
 				{@const value = vector[index1]}
 				{#if index != index1}
 					<div
-						class="tabular-nums py-2 px-2 border-gray-500 border"
+						class="tabular-nums py-2 px-2 border-gray-500 border transition-all"
 						class:border-white={highlightMatrix[index][index1]}
 						class:border-1={!highlightMatrix[index][index1]}
 						class:border-2={highlightMatrix[index][index1]}
