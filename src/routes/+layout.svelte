@@ -13,6 +13,7 @@
 
 	import './fonts.css';
 	import Footer from './Footer.svelte';
+	import Logo from './Logo.svelte';
 
 	let errors: { error: DisplayError; showDetails: boolean }[] = [];
 	let ignore = new Set();
@@ -38,9 +39,7 @@
 
 <div class="complete min-h-screen dark:bg-gray-900">
 	<Navbar let:toggle color="primary" class="max-lg:py-0 max-lg:px-0">
-		<span class="self-center whitespace-nowrap text-3xl font-semibold"
-			><a href="/">jufo2024</a></span
-		>
+		<Logo />
 		{#if $title}
 			{#if typeof $title === 'string'}
 				<div class="flex flex-col content-center items-center h-full">
