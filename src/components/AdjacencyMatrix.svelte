@@ -1,9 +1,7 @@
 <script lang="ts">
 	import { Tooltip } from 'flowbite-svelte';
-	import type { Color } from '../color/color';
 	import { RgbColor } from '../color/colorSpaces';
-	import { rangeMap } from '../utils/math';
-	import { PerceptualGradient, distColor } from '../color/gradient';
+	import { distColor } from '../color/gradient';
 
 	export let values: number[][];
 	export let vertexNames: string[];
