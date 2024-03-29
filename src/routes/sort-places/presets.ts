@@ -1390,40 +1390,40 @@ export const presets = {
 		]
 	},
 	largest: {
-	  "name": "Größte Städte Deutschlands",
-	  "aiGenerated": true,
-	  "values": [
-		{
-		  "name": "Berlin",
-		  "desc": "Berlin ist die Hauptstadt Deutschlands und eine der größten Metropolen Europas.",
-		  "lat": 52.52001,
-		  "lng": 13.40495
-		},
-		{
-		  "name": "Hamburg",
-		  "desc": "Hamburg ist eine bedeutende Hafenstadt und das wirtschaftliche Zentrum Norddeutschlands.",
-		  "lat": 53.55034,
-		  "lng": 10.00065
-		},
-		{
-		  "name": "München",
-		  "desc": "München ist die Hauptstadt Bayerns und bekannt für seine kulturelle Vielfalt und Lebensqualität.",
-		  "lat": 48.13743,
-		  "lng": 11.57549
-		},
-		{
-		  "name": "Köln",
-		  "desc": "Köln ist eine historische Stadt am Rhein und ein wichtiges kulturelles Zentrum in Deutschland.",
-		  "lat": 50.93753,
-		  "lng": 6.96028
-		},
-		{
-		  "name": "Frankfurt am Main",
-		  "desc": "Frankfurt am Main ist ein bedeutendes Finanz- und Handelszentrum und beherbergt die Europäische Zentralbank.",
-		  "lat": 50.11092,
-		  "lng": 8.68213
-		}
-	  ]
+		name: 'Größte Städte Deutschlands',
+		aiGenerated: true,
+		values: [
+			{
+				name: 'Berlin',
+				desc: 'Berlin ist die Hauptstadt Deutschlands und eine der größten Metropolen Europas.',
+				lat: 52.52001,
+				lng: 13.40495
+			},
+			{
+				name: 'Hamburg',
+				desc: 'Hamburg ist eine bedeutende Hafenstadt und das wirtschaftliche Zentrum Norddeutschlands.',
+				lat: 53.55034,
+				lng: 10.00065
+			},
+			{
+				name: 'München',
+				desc: 'München ist die Hauptstadt Bayerns und bekannt für seine kulturelle Vielfalt und Lebensqualität.',
+				lat: 48.13743,
+				lng: 11.57549
+			},
+			{
+				name: 'Köln',
+				desc: 'Köln ist eine historische Stadt am Rhein und ein wichtiges kulturelles Zentrum in Deutschland.',
+				lat: 50.93753,
+				lng: 6.96028
+			},
+			{
+				name: 'Frankfurt am Main',
+				desc: 'Frankfurt am Main ist ein bedeutendes Finanz- und Handelszentrum und beherbergt die Europäische Zentralbank.',
+				lat: 50.11092,
+				lng: 8.68213
+			}
+		]
 	}
 } satisfies Partial<Record<string, PointList>>;
 

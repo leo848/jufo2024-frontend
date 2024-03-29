@@ -18,7 +18,7 @@
 	import Window from '../../components/Window.svelte';
 	import Options from '../../components/Options.svelte';
 	import { goto } from '$app/navigation';
-	import {formatTimespan} from '../../utils/time';
+	import { formatTimespan } from '../../utils/time';
 
 	title.set('Zahlen sortieren');
 
@@ -37,31 +37,31 @@
 			key: 'bubble',
 			name: 'Bubble Sort',
 			desc: 'Beim Bubble-Sort-Verfahren handelt es sich um einen simplen Sortieralgorithmus, der asymptotisch eine quadratische Laufzeit benötigt.',
-			expectedTime: (n: number) => latency * n * n / 2 / 1000,
+			expectedTime: (n: number) => ((latency * n * n) / 2 / 1000) * 1.5
 		},
 		{
 			key: 'selection',
 			name: 'Selection Sort',
 			desc: 'Beim Selection Sort wird wiederholt das minimale Element ausgewählt und so einsortiert, dass ein Teil der Liste sortiert bleibt.',
-			expectedTime: (n: number) => latency * n * n / 2 / 1000,
+			expectedTime: (n: number) => ((latency * n * n) / 2 / 1000) * 1.5
 		},
 		{
 			key: 'insertion',
 			name: 'Insertion Sort',
 			desc: 'Beim Insertion Sort wird jeweils das nächste Element so lange in die links sortierte Teilliste eingefügt, bis diese sortiert ist.',
-			expectedTime: (n: number) => latency * n * n / 4 / 1000,
+			expectedTime: (n: number) => ((latency * n * n) / 4 / 1000) * 1.5
 		},
 		{
 			key: 'quick',
 			name: 'Quick Sort',
 			desc: 'Die Liste wird in zwei Teillisten nach Vergleich zu einem Pivotelement partitioniert, und der Algorithmus auf diesen Teillisten wiederholt.',
-			expectedTime: (n: number) => latency * n * Math.log2(n) / 1000,
+			expectedTime: (n: number) => (latency * n * Math.log2(n)) / 1000
 		},
 		{
 			key: 'merge',
 			name: 'Merge Sort',
 			desc: 'Zwei Teillisten werden mittels Merge Sort sortiert und dann in linearer Zeit zusammengefügt.',
-			expectedTime: (n: number) => latency * n * Math.log2(n) / 1000,
+			expectedTime: (n: number) => (latency * n * Math.log2(n)) / 1000
 		}
 	] as const;
 	let selectedAlgorithm: (ServerInput & {
@@ -69,7 +69,10 @@
 		action: { type: 'sortNumbers' };
 	})['action']['algorithm'] = algorithms[0].key;
 	let expectedTime: [string, string];
-	$: latency, expectedTime = formatTimespan(algorithms.find(c => c.key === selectedAlgorithm)?.expectedTime(numbers.length) ?? 0);
+	$: latency,
+		(expectedTime = formatTimespan(
+			algorithms.find((c) => c.key === selectedAlgorithm)?.expectedTime(numbers.length) ?? 0
+		));
 
 	let funnyNumber = 0;
 	$: {
@@ -156,8 +159,8 @@
 
 	let progress = {
 		ongoing: false,
-		start: new Date(),
-	}
+		start: new Date()
+	};
 
 	let callbackId = registerCallback(serverOutputSortedNumbers, (so) => {
 		numbers = so.numbers.map((value, index) => ({
@@ -261,7 +264,10 @@
 			<GradientButton
 				class="mt-2 mb-4 mx-4 text-xl"
 				disabled={progress.ongoing}
-				on:click={() => serverSend(numbers.map((e) => e.value))}
+				on:click={() => {
+					progress.start = new Date();
+					serverSend(numbers.map((e) => e.value));
+				}}
 				color="teal"
 			>
 				<Icon.ArrowSortLettersOutline class="mr-2" size="xl" />
@@ -295,7 +301,8 @@
 				class="w-full bg-transparent text-white grayscale"
 			/>
 			<div class="mt-2">
-				Erwartete Zeit: <b>{expectedTime[0]}</b> {expectedTime[1]}
+				Erwartete Zeit: <b>{expectedTime[0]}</b>
+				{expectedTime[1]}
 			</div>
 		</div>
 	</Window>

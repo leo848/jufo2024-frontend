@@ -26,8 +26,8 @@ export async function getDurationMatrix(
 			method: 'POST',
 			body: JSON.stringify(input),
 			headers: {
-				"Authorization": process.env.OPENROUTE_KEY as string,
-				"Content-Type": "application/json",
+				Authorization: process.env.OPENROUTE_KEY as string,
+				'Content-Type': 'application/json'
 			}
 		});
 		json = await response.json();
