@@ -207,7 +207,6 @@
 	});
 	callbacks[3] = registerCallback(serverOutputPathImprovement, (pi) => {
 		if (pi.better) {
-			console.log(pi, edges);
 			const newEdges: [number, number][] = [];
 			pi.currentPath.forEach((_, index, arr) => {
 				if (index < arr.length - 1) {
@@ -215,7 +214,6 @@
 				}
 			});
 			edges = newEdges;
-			console.log(edges);
 		}
 		if (pi.done) {
 			let newWords = [];
