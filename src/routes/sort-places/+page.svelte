@@ -151,18 +151,26 @@
 		{#if openRouteKeyPresent}
 			<Window
 				title={durationMatrix === null ? 'Echtzeitdaten ermitteln' : 'Adjazenzmatrix'}
-	   			scrollable
+				scrollable
 			>
 				{#if durationMatrix === null}
 					<div class="m-4 p-4 bg-gray-700">
 						<div class="text-xl text-white">Fahrtzeitanfrage über externen Server</div>
 						{#if points.length > 50}
 							<div class="text-white">
-								Hinweis: Die API kann nur für 50 oder weniger Punkte verwendet werden.
+								Hinweis: Die API kann nur für 50 oder weniger Punkte verwendet werden. Aktuell sind {points.length}
+								Punkte gespeichert. Um dennoch eine Matrix berechnen zu können, können {points.length -
+									50} Punkte aus der Liste entfernt werden.
 							</div>
 							<button
 								class="bg-gray-600 hover:bg-gray-500 transition-all rounded text-white p-2"
-		on:click={() => points = points.slice(0, 50)}>Letzte {points.length-50} Punkte löschen</button
+								on:click={() => (points = points.slice(points.length - 50))}
+								>{points.length - 50} erste löschen</button
+							>
+							<button
+								class="bg-gray-600 hover:bg-gray-500 transition-all rounded text-white p-2"
+								on:click={() => (points = points.slice(0, 50))}
+								>{points.length - 50} letzte löschen</button
 							>
 						{:else}
 							<div>
