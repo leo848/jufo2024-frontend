@@ -151,7 +151,8 @@ export const serverOutputSortedNumbers = z.object({
 	type: z.literal('sortedNumbers'),
 	done: z.boolean(),
 	numbers: z.array(z.number()),
-	highlight: z.array(z.tuple([z.number(), Highlight]))
+	highlight: z.array(z.tuple([z.number(), Highlight])),
+	progress: z.nullable(z.number().gte(0).lte(1)),
 });
 export const serverOutputDistPathCreation = z.object({
 	type: z.literal('distPathCreation'),

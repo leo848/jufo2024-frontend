@@ -8,7 +8,7 @@
 		assertNever
 	} from '../../server/types';
 
-	import { GradientButton } from 'flowbite-svelte';
+	import { GradientButton, Progressbar } from 'flowbite-svelte';
 
 	import { onDestroy } from 'svelte';
 	import { flip } from 'svelte/animate';
@@ -159,7 +159,17 @@
 
 	let progress = {
 		ongoing: false,
-		start: new Date()
+		value: 0,
+		start: new Date(),
+		eta() {
+			const { value, start, ongoing } = this;
+			const now = new Date();
+			const msPassed = now.getTime() - start.getTime();
+			if (msPassed === 0 || value === null || value === 0 || !ongoing || msPassed < 100)
+				return null;
+			const estimatedTotalTime = msPassed / value;
+			return estimatedTotalTime - msPassed;
+		}
 	};
 
 	let callbackId = registerCallback(serverOutputSortedNumbers, (so) => {
@@ -168,6 +178,9 @@
 			id: index,
 			highlight: (so.highlight.find(([i]) => i === index) ?? [])[1]
 		}));
+		if (so.progress) {
+			progress.value = so.progress;
+		}
 		progress.ongoing = !so.done;
 	});
 
@@ -300,10 +313,24 @@
 				max={5}
 				class="w-full bg-transparent text-white grayscale"
 			/>
-			<div class="mt-2">
-				Erwartete Zeit: <b>{expectedTime[0]}</b>
-				{expectedTime[1]}
-			</div>
+			{#if !progress.ongoing}
+				<div class="mt-2">
+					Erwartete Zeit: <b>{expectedTime[0]}</b>
+					{expectedTime[1]}
+				</div>
+			{:else}
+				{@const eta = progress.eta()}
+				<div class="mt-2">
+					{#if eta !== null}
+						{@const [amount, suffix] = formatTimespan(eta / 1000)}
+						<div>
+							{#if eta > 2000}ca. {/if}<b>{amount}</b>
+							{suffix} verbleibend
+						</div>
+					{/if}
+					<Progressbar progress={progress.value * 100} />
+				</div>
+			{/if}
 		</div>
 	</Window>
 </div>
