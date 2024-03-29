@@ -5,7 +5,7 @@ export const LatLngArray = z.tuple([z.number(), z.number()])
 export type LatLngArray = [number, number];
 
 export const OpenRouteMatrixInput = z.object({
-	locations: LatLngArray,
+	locations: z.array(LatLngArray),
 })
 export type OpenRouteMatrixInput = z.infer<typeof OpenRouteMatrixInput>;
 
@@ -24,6 +24,9 @@ export async function getDurationMatrix(input: OpenRouteMatrixInput): Promise<Op
 		response = await fetch("https://api.openrouteservice.org/v2/matrix/driving-car", {
 			method: "POST",
 			body: JSON.stringify(input),
+			headers: { 
+				"Authorization": process.env.OPENROUTE_KEY as string,
+			}
 		});
 		json = await response.json();
 	} catch(e) {
