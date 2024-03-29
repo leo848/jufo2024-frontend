@@ -22,6 +22,11 @@
 	export let matrix: boolean = false;
 	export let metric: DistanceType = 'euclidean';
 
+	export let matrixPath: number[]|null|undefined = undefined;
+	$: if (matrix && matrixPath === undefined) {
+		throw new Error("Matrix given, yet no matrix path defined")
+	}
+
 	export let horizontal: boolean = false;
 
 	let progress = {
@@ -241,7 +246,7 @@
 							action: {
 								type: 'improvePath',
 								method: { type: e.method },
-								path: path as number[],
+								path: matrixPath,
 								matrix: values,
 								preferStep: options.stepwise
 							}

@@ -47,20 +47,6 @@
 		}
 	}
 
-	let matrixValuesPath: number[][] = matrixValues;
-	$: if (vertexNamesPath.length === vertexNames.length) {
-		console.log("if", vertexNamesPath, vertexNames);
-		matrixValuesPath = matrixValues;
-		for (let i = 0; i < vertexNames.length; i++) {
-			for (let j = 0; j < vertexNames.length; j++) {
-				matrixValuesPath[i][j] = matrixValues[vertexNamesPath[i].index][vertexNamesPath[j].index];
-			}
-		}
-	} else {
-		console.log("else", vertexNamesPath, vertexNames);
-		matrixValuesPath = matrixValues;
-	}
-
 	let symmetric = true;
 	$: if (symmetric) {
 		for (let i = 0; i < vertexNames.length; i++) {
@@ -224,6 +210,7 @@
 
 	const pathImprovementCallback = registerCallback(serverOutputPathImprovement, (pi) => {
 		function pathToEdges(path: number[]): [number, number][] {
+			if (path === null) return [];
 			let edges: [number, number][] = [];
 			for (let i = 0; i < path.length - 1; i++) {
 				let edge: [number, number] = [path[i], path[i + 1]];
@@ -233,7 +220,7 @@
 		}
 		if (pi.better) {
 			edges = pathToEdges(pi.currentPath);
-			// path = pi.currentPath;
+			path = pi.currentPath;
 		}
 		if (pi.done) {
 			path = pi.currentPath;
@@ -310,10 +297,11 @@
 			/>
 			<PathAlgorithms
 	   			dimensions={vertexNames.length}
-				values={matrixValuesPath}
+				values={matrixValues}
+				matrix
+	   			matrixPath={path}
 				bind:invalidate={invalidateAlgorithms}
 				bind:latency
-				matrix
 				on:deletePath={blowUp}
 				horizontal
 			/>
