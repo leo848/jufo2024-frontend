@@ -1,6 +1,12 @@
 import type { Color } from '../color/color';
 
-export function gradient(colors: Color[], options: { smooth?: boolean, gradientFunction?: string } = { smooth: false, gradientFunction: "linear-gradient" }) {
+export function gradient(
+	colors: Color[],
+	options: { smooth?: boolean; gradientFunction?: string } = {
+		smooth: false,
+		gradientFunction: 'linear-gradient'
+	}
+) {
 	let str = `${options.gradientFunction}(90deg, `;
 	for (let i = 0; i < colors.length; i++) {
 		const v = i / colors.length;
