@@ -94,7 +94,7 @@ websocket.onmessage = onmessage;
 
 let callbacks: { f: (so: ServerOutput) => void; id: number }[] = [];
 
-export function sendWebsocket(input: ServerInput, options?: { noLog?: boolean, backoff?: number }) {
+export function sendWebsocket(input: ServerInput, options?: { noLog?: boolean; backoff?: number }) {
 	const noLog = options?.noLog;
 	const status = getStatus();
 	if (status.status === 'offline') {
@@ -103,7 +103,7 @@ export function sendWebsocket(input: ServerInput, options?: { noLog?: boolean, b
 	statusCallback(getStatus());
 	try {
 		websocket.send(JSON.stringify(input));
-	} catch(e) {
+	} catch (e) {
 		if (e instanceof DOMException) {
 			const expBackoffOptions = { ...(options ?? {}), backoff: (options?.backoff ?? 100) * 1.6 };
 			setTimeout(() => sendWebsocket(input, expBackoffOptions), options?.backoff ?? 100);

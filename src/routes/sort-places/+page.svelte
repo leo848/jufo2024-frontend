@@ -3,7 +3,12 @@
 	import OpenLayersMap from './OpenLayersMap.svelte';
 	import PathProperties from '../../components/PathProperties.svelte';
 	import PathAlgorithms from '../../components/PathAlgorithms.svelte';
-	import { type CoordPoint, type NamedPoint, coordSimilar, coordDelta } from '../../geom/coordPoint';
+	import {
+		type CoordPoint,
+		type NamedPoint,
+		coordSimilar,
+		coordDelta
+	} from '../../geom/coordPoint';
 	import { registerCallback, unregisterCallback } from '../../server/websocket';
 	import {
 		serverOutputDistPathCreation,
@@ -48,15 +53,18 @@
 	$: points, (durationMatrix = null);
 
 	async function requestMatrix() {
-		const [sumLng, sumLat] = points.reduce(([lngAcc, latAcc], item) => [lngAcc + item.lng, latAcc + item.lat], [0, 0]);
+		const [sumLng, sumLat] = points.reduce(
+			([lngAcc, latAcc], item) => [lngAcc + item.lng, latAcc + item.lat],
+			[0, 0]
+		);
 		const averageCoord = { lng: sumLng / points.length, lat: sumLat / points.length };
-		console.log(points.map(p => p.name));
-		points = sortByKey(points, p => {
+		console.log(points.map((p) => p.name));
+		points = sortByKey(points, (p) => {
 			const fromOrigin = coordDelta(averageCoord, p);
 			const angle = Math.atan2(fromOrigin.lng, fromOrigin.lat);
 			return -angle;
 		});
-		console.log(points.map(p => p.name));
+		console.log(points.map((p) => p.name));
 		let input: OpenRouteMatrixInput = {
 			locations: points.map((named) => [named.lng, named.lat])
 		};
@@ -134,7 +142,7 @@
 			bind:invalidate
 			bind:locked={pointsLocked}
 			hide={['add']}
-	  		show={durationMatrix ? ['asGraph'] : []}
+			show={durationMatrix ? ['asGraph'] : []}
 			on:delete={invalidate(() => (points = []))}
 			bind:metric
 			loadAmount={Object.keys(presets).length}
@@ -144,13 +152,15 @@
 						points.map((p) => [p.lat, p.lng].map((f) => f.toFixed(5)).join('i')).join('o')
 				);
 			})}
-	  		on:asGraph={invalidate(() => {
-	  			if (!durationMatrix) return;
-	  			goto(
-	  '/hamilton-path?v=' + durationMatrix.map(row => row.map(v => v.toFixed(4)).join("i")).join("o") + "&n=" + points.map(p => p.name).join("_")
-	  		
-	  );
-			  })}
+			on:asGraph={invalidate(() => {
+				if (!durationMatrix) return;
+				goto(
+					'/hamilton-path?v=' +
+						durationMatrix.map((row) => row.map((v) => v.toFixed(4)).join('i')).join('o') +
+						'&n=' +
+						points.map((p) => p.name).join('_')
+				);
+			})}
 		>
 			<LoadPlace slot="load" on:load={() => olmKey++} {invalidate} bind:points />
 		</Options>

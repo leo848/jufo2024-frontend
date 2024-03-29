@@ -153,9 +153,9 @@
 	$: frozen = true;
 	$: averageTrueDist = calculateAverageTrueDist(adjMatrix);
 
-	let wrapperWidth: number
+	let wrapperWidth: number;
 	let wrapperHeight: number;
-	$: if (canvas) height = canvas.height = wrapperHeight
+	$: if (canvas) height = canvas.height = wrapperHeight;
 	$: if (canvas) width = canvas.width = wrapperWidth;
 
 	function render() {
@@ -202,7 +202,7 @@
 			}
 		}
 		if (selected !== null) {
-			if (typeof selected === "number") {
+			if (typeof selected === 'number') {
 				selectedParticle = particles[selected];
 			} else selectedParticle = selected;
 			selectedParticle.draw(ctx, { highlight: true });
@@ -341,7 +341,12 @@
 	onMount(mount);
 </script>
 
-<div class="w-full h-full" bind:this={wrapperDiv} bind:offsetHeight={wrapperHeight} bind:offsetWidth={wrapperWidth}>
+<div
+	class="w-full h-full"
+	bind:this={wrapperDiv}
+	bind:offsetHeight={wrapperHeight}
+	bind:offsetWidth={wrapperWidth}
+>
 	<canvas bind:this={canvas} style={values.length === 0 ? 'display: none' : ''} />
 	{#if values.length === 0}
 		<div class="m-10 p-4 bg-gray-700 rounded">

@@ -24,7 +24,7 @@
 // Ausführen von 2-opt
 //
 // matrixValuesPath (2opt) -> server
-// 
+//
 // server -> path
 // (z.B. [0, 1, 2])
 //

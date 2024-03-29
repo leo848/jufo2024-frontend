@@ -357,7 +357,7 @@
 		bind:latency
 		on:deletePath={invalidate(() => blowUp())}
 		matrix
-		 matrixPath={new Array(words.length).fill(0).map((_, index) => index)}
+		matrixPath={new Array(words.length).fill(0).map((_, index) => index)}
 	/>
 
 	<Window xlCol={8} title="Adjazenzmatrix" scrollable>

@@ -296,10 +296,10 @@
 				length={vertexNames.length}
 			/>
 			<PathAlgorithms
-	   			dimensions={vertexNames.length}
+				dimensions={vertexNames.length}
 				values={matrixValues}
 				matrix
-	   			matrixPath={path}
+				matrixPath={path}
 				bind:invalidate={invalidateAlgorithms}
 				bind:latency
 				on:deletePath={blowUp}

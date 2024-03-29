@@ -22,9 +22,9 @@
 	export let matrix: boolean = false;
 	export let metric: DistanceType = 'euclidean';
 
-	export let matrixPath: number[]|null|undefined = undefined;
+	export let matrixPath: number[] | null | undefined = undefined;
 	$: if (matrix && matrixPath === undefined) {
-		throw new Error("Matrix given, yet no matrix path defined")
+		throw new Error('Matrix given, yet no matrix path defined');
 	}
 
 	export let horizontal: boolean = false;
