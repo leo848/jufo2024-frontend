@@ -49,6 +49,7 @@
 
 	let matrixValuesPath: number[][] = matrixValues;
 	$: if (vertexNamesPath.length === vertexNames.length) {
+		console.log("if", vertexNamesPath, vertexNames);
 		matrixValuesPath = matrixValues;
 		for (let i = 0; i < vertexNames.length; i++) {
 			for (let j = 0; j < vertexNames.length; j++) {
@@ -56,6 +57,7 @@
 			}
 		}
 	} else {
+		console.log("else", vertexNamesPath, vertexNames);
 		matrixValuesPath = matrixValues;
 	}
 
@@ -230,7 +232,7 @@
 		}
 		if (pi.better) {
 			edges = pathToEdges(pi.currentPath);
-			path = pi.currentPath;
+			// path = pi.currentPath;
 		}
 		if (pi.done) {
 			path = pi.currentPath;
@@ -306,6 +308,7 @@
 				length={vertexNames.length}
 			/>
 			<PathAlgorithms
+	   			dimensions={vertexNames.length}
 				values={matrixValuesPath}
 				bind:invalidate={invalidateAlgorithms}
 				bind:latency
