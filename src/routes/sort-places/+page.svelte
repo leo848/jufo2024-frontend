@@ -127,7 +127,7 @@
 			on:asVectors={invalidate(() => {
 				goto(
 					'/sort-vectors?v=' +
-						points.map((p) => [p.lat, p.lng].map((f) => f.toFixed(5)).join('i')).join('o')
+						points.map((p) => [p.lng, p.lat].map((f) => f.toFixed(5)).join('i')).join('o')
 				);
 			})}
 		>
