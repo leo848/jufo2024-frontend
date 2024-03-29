@@ -195,10 +195,19 @@
 				selected = i;
 			}
 		}
-		selectedParticle = null;
+		if (selectedParticle) {
+			let [tl, br] = selectedParticle.draw(ctx);
+			if (mouseInBounds([mouse.x, mouse.y], tl, br)) {
+				selected = selectedParticle;
+			}
+		}
 		if (selected !== null) {
-			selectedParticle = particles[selected];
+			if (typeof selected === "number") {
+				selectedParticle = particles[selected];
+			} else selectedParticle = selected;
 			selectedParticle.draw(ctx, { highlight: true });
+		} else {
+			selectedParticle = null;
 		}
 
 		const totalVel = particles.map((p) => p.vel.mag()).reduce((a, b) => a + b, 0);
@@ -268,7 +277,7 @@
 		const center = new Vec2(width / 2, height / 2);
 		for (const particle1 of particles) {
 			// Zentrumskraft
-			particle1.applyForce(center.sub(particle1.pos).setMag(0.05));
+			particle1.applyForce(center.sub(particle1.pos).setMag(0.005));
 			for (const particle2 of particles) {
 				if (particle1.pos.dist(particle2.pos) < 0.001) continue;
 				let delta = particle2.pos.sub(particle1.pos);

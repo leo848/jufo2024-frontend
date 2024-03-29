@@ -205,11 +205,12 @@
 	}
 
 	let invalidateAlgorithms: () => void;
+
 	let latency: number;
 	function blowUp() {
-		invalidateAlgorithms();
 		path = null;
 		edges = [];
+		invalidateAlgorithms();
 	}
 
 	// Server-Callbacks
@@ -271,7 +272,7 @@
 				</div>
 			</Window>
 			<Window title="Kräftebasierter Graph" xlCol={12} mdCol={12}>
-				<div class="h-[420px] w-full">
+				<div class="h-full w-full">
 					<ForceDirectedGraph
 						bind:redraw
 						values={matrixValues.map((row) => row.slice()).slice()}
@@ -313,8 +314,8 @@
 				bind:invalidate={invalidateAlgorithms}
 				bind:latency
 				matrix
-				horizontal
 				on:deletePath={blowUp}
+				horizontal
 			/>
 			<Window title="Liste" scrollable>
 				<div class="m-4 grid grid-cols-1 gap-4">

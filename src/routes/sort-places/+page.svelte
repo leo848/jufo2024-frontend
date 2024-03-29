@@ -3,7 +3,7 @@
 	import OpenLayersMap from './OpenLayersMap.svelte';
 	import PathProperties from '../../components/PathProperties.svelte';
 	import PathAlgorithms from '../../components/PathAlgorithms.svelte';
-	import { type CoordPoint, type NamedPoint, coordSimilar } from '../../geom/coordPoint';
+	import { type CoordPoint, type NamedPoint, coordSimilar, coordDelta } from '../../geom/coordPoint';
 	import { registerCallback, unregisterCallback } from '../../server/websocket';
 	import {
 		serverOutputDistPathCreation,
@@ -18,6 +18,7 @@
 	import LoadPlace from './LoadPlace.svelte';
 	import { getDurationMatrix, type OpenRouteMatrixInput } from './openRoute';
 	import AdjacencyMatrix from '../../components/AdjacencyMatrix.svelte';
+	import { sortByKey } from '../../utils/sort';
 
 	title.set('Orte sortieren');
 
@@ -47,6 +48,15 @@
 	$: points, (durationMatrix = null);
 
 	async function requestMatrix() {
+		const [sumLng, sumLat] = points.reduce(([lngAcc, latAcc], item) => [lngAcc + item.lng, latAcc + item.lat], [0, 0]);
+		const averageCoord = { lng: sumLng / points.length, lat: sumLat / points.length };
+		console.log(points.map(p => p.name));
+		points = sortByKey(points, p => {
+			const fromOrigin = coordDelta(averageCoord, p);
+			const angle = Math.atan2(fromOrigin.lng, fromOrigin.lat);
+			return -angle;
+		});
+		console.log(points.map(p => p.name));
 		let input: OpenRouteMatrixInput = {
 			locations: points.map((named) => [named.lng, named.lat])
 		};
@@ -195,6 +205,7 @@
 					</div>
 				{:else}
 					<AdjacencyMatrix
+						sort={false}
 						values={durationMatrix}
 						vertexNames={points.map((p) => p.name)}
 						collapseNames
