@@ -103,8 +103,8 @@ function colorNameApiToDisplayError(error: ColorNameApiError): DisplayError {
 function openRouteApiToDisplayError(error: OpenRouteApiError): DisplayError {
 	return {
 		...openRouteApiToDisplayErrorRaw(error),
-		origin: 'api',
-	}
+		origin: 'api'
+	};
 }
 
 function colorNameApiToDisplayErrorRaw(error: ColorNameApiError): Omit<DisplayError, 'origin'> {
@@ -131,7 +131,7 @@ function openRouteApiToDisplayErrorRaw(error: OpenRouteApiError): Omit<DisplayEr
 		return {
 			title: 'Keine Antwort erhalten',
 			description: 'Der Server zur Bestimmung der Zeitmatrix hat keine Antwort zurückgegeben.',
-			icon: Icon.GiftBoxSolid,
+			icon: Icon.GiftBoxSolid
 		};
 	} else if (type === 'serde') {
 		return serdeError(error.original, error.error);

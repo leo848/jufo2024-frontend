@@ -16,7 +16,7 @@
 	import type { TrueDistanceType } from '../../geom/dist';
 	import { goto } from '$app/navigation';
 	import LoadPlace from './LoadPlace.svelte';
-	import {getDurationMatrix, type OpenRouteMatrixInput} from './openRoute';
+	import { getDurationMatrix, type OpenRouteMatrixInput } from './openRoute';
 	import AdjacencyMatrix from '../../components/AdjacencyMatrix.svelte';
 
 	title.set('Orte sortieren');
@@ -27,8 +27,6 @@
 
 	let edges: [CoordPoint, CoordPoint][] = [];
 	let metric: TrueDistanceType = { norm: 'euclidean', invert: false };
-
-
 
 	let path: null | number[][] = null;
 	let invalidateAlgorithms: () => {};
@@ -47,7 +45,7 @@
 
 	async function requestMatrix() {
 		let input: OpenRouteMatrixInput = {
-			locations: points.map(named => [named.lat, named.lng])
+			locations: points.map((named) => [named.lat, named.lng])
 		};
 		let response = await getDurationMatrix(input);
 		durationMatrix = response.durations;
@@ -148,15 +146,27 @@
 		/>
 
 		{#if process.env.OPENROUTE_KEY}
-			<Window title={durationMatrix === null ? "Echtzeitdaten ermitteln" : "Adjazenzmatrix"}>
+			<Window title={durationMatrix === null ? 'Echtzeitdaten ermitteln' : 'Adjazenzmatrix'}>
 				{#if durationMatrix === null}
 					<div class="m-4 p-4 bg-gray-700">
 						<div class="text-xl text-white">Fahrtzeitanfrage über externen Server</div>
-		   				<div>Durch Klick auf den Button unten werden die Standortdaten an OpenRouteService gesendet, um die Live-Fahrtzeit zwischen den gegebenen Orten (angegeben in Sekunden) zu ermitteln. Durch anschließendes Wechseln ins Graph-Menü kann die so induzierte Metrik als Sortierkriterium verwendet werden.</div>
-						<button class="bg-gray-600 hover:bg-gray-500 transition-all rounded text-white p-2" on:click={requestMatrix}>Matrix anfordern</button>
+						<div>
+							Durch Klick auf den Button unten werden die Standortdaten an OpenRouteService
+							gesendet, um die Live-Fahrtzeit zwischen den gegebenen Orten (angegeben in Sekunden)
+							zu ermitteln. Durch anschließendes Wechseln ins Graph-Menü kann die so induzierte
+							Metrik als Sortierkriterium verwendet werden.
+						</div>
+						<button
+							class="bg-gray-600 hover:bg-gray-500 transition-all rounded text-white p-2"
+							on:click={requestMatrix}>Matrix anfordern</button
+						>
 					</div>
-			  	{:else}
-					<AdjacencyMatrix values={durationMatrix} vertexNames={points.map(p => p.name)} collapseNames />
+				{:else}
+					<AdjacencyMatrix
+						values={durationMatrix}
+						vertexNames={points.map((p) => p.name)}
+						collapseNames
+					/>
 				{/if}
 			</Window>
 		{/if}

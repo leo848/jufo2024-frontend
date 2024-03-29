@@ -49,7 +49,7 @@ export const openRouteApiError = z.discriminatedUnion('type', [
 		type: z.literal('serde'),
 		error: z.string(),
 		original: z.string()
-	}),
+	})
 ]);
 
 const pathCreateMethod = z.discriminatedUnion('type', [
