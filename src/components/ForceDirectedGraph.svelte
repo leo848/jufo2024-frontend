@@ -149,7 +149,7 @@
 	let selectedParticle: null | Particle = null;
 
 	let frozen = false;
-	$: width, height, edges, values, metric, (frozen = false);
+	$: width, height, values, metric, (frozen = false);
 	$: frozen = true;
 	$: averageTrueDist = calculateAverageTrueDist(adjMatrix);
 
