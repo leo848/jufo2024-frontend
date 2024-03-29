@@ -41,6 +41,17 @@ export const colorNameApiError = z.discriminatedUnion('type', [
 	})
 ]);
 
+export const openRouteApiError = z.discriminatedUnion('type', [
+	z.object({
+		type: z.literal('noResponse')
+	}),
+	z.object({
+		type: z.literal('serde'),
+		error: z.string(),
+		original: z.string()
+	}),
+]);
+
 const pathCreateMethod = z.discriminatedUnion('type', [
 	z.object({ type: z.literal('nearestNeighbor') }),
 	z.object({ type: z.literal('optimalNearestNeighbor') }),
@@ -200,6 +211,7 @@ export type Highlight = z.infer<typeof Highlight>;
 
 export type ClientError = z.infer<typeof clientError>;
 export type ColorNameApiError = z.infer<typeof colorNameApiError>;
+export type OpenRouteApiError = z.infer<typeof openRouteApiError>;
 
 export const serverStatus = z.discriminatedUnion('type', [
 	z.object({
