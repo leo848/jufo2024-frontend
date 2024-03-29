@@ -328,7 +328,9 @@
 							{suffix} verbleibend
 						</div>
 					{/if}
-					<Progressbar progress={progress.value * 100} />
+					{#if progress.value}
+						<Progressbar progress={progress.value * 100} />
+					{/if}
 				</div>
 			{/if}
 		</div>
