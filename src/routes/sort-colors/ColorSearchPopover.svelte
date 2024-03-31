@@ -76,7 +76,7 @@
 		},
 		{
 			name: 'Blau',
-			method: (color) => color.rgb().g
+			method: (color) => color.rgb().b
 		}
 	];
 	let sortOptionIndex = 0;
