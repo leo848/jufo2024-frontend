@@ -71,7 +71,7 @@
 				<img src={card.img} class="w-full aspect-ratio-1" alt="Bildvorschau {card.text}" />
 				<div class="text-white text-sm opacity-30 max-md:hidden">
 					Bildquelle: {card.imgSource} über
-					<SimpleLink href="https://unsplash.com">Unsplash</SimpleLink>
+					<SimpleLink tabindex={-1} href="https://unsplash.com">Unsplash</SimpleLink>
 				</div>
 				<div class="m-4">
 					<h5 class="mb-2 text-3xl font-bold tracking-tight text-gray-900 dark:text-white">
