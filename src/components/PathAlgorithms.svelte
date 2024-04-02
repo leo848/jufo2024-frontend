@@ -123,20 +123,6 @@
 					expectedTime: (n: number) => (latency / 1000) * n,
 					icon: Icon.DollarOutline
 				}
-				/*{
-					name: 'Christofides',
-					description:
-						'Der Christofides-Algorithmus baut zuerst den kürzesten Baum auf, der alle Knoten beinhaltet, und erstellt daraus mittels eines Eulerwegs einen Hamilton-Pfad.',
-					method: 'christofides',
-					complexity: 'O(n⁴)',
-					icon: Icon.ShareNodesOutline
-				},
-				{
-					name: 'Optimal (Concorde)',
-					description: 'Finde die optimale Lösung mittels des externen Tools Concorde',
-					method: null,
-					icon: Icon.WandMagicSparklesOutline
-				}*/
 			] as const
 		).map((e, i) => {
 			let send;
