@@ -115,6 +115,13 @@
 					icon: Icon.PhoneOutline
 				},
 				{
+					name: 'Einfügen',
+					method: 'insertion',
+					description:
+						'In jedem Einfügeschritt wird die beste Möglichkeit ermittelt, einen beliebigen freien Knoten an einer beliebigen Position einzufügen, und die beste ausgewählt, bis der Pfad alle Knoten besucht.',
+					icon: Icon.ArrowUpOutline
+				},
+				{
 					name: 'Greedy',
 					description:
 						'Der Greedy-Algorithmus wählt stets die kürzeste Kante aus, bei deren Auswahl kein Zyklus entsteht.',
@@ -128,9 +135,10 @@
 					method: 'heldKarp',
 					description:
 						'Der Held-Karp-Algorithmus wurde 1962 für die Lösung des Travelling-Salesman-Problems entwickelt und kann ähnlich auch für die mehrdimensionale Sortierung genutzt werden. Dabei werden mittels dynamischer Programmierung Ergebnisse memoisiert, um die Mehrfachberechnung zu verhindern.',
-					expectedTime: (n: number) => Math.max((latency / 1000) * (n + 32), (n ** 2 * 2 ** n) / 800000 / 1000 ),
+					expectedTime: (n: number) =>
+						Math.max((latency / 1000) * (n + 32), (n ** 2 * 2 ** n) / 800000 / 1000),
 					icon: Icon.CompressOutline
-				}
+				},
 			] as const
 		).map((e, i) => {
 			let send;
