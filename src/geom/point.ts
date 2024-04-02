@@ -1,5 +1,5 @@
 import * as THREE from 'three';
-import { dist, type DistanceType } from './dist';
+import {dist, type DistanceType} from './dist';
 
 function floatsSimilar(a: number, b: number): boolean {
 	return Math.abs(a - b) < 0.0001;
@@ -56,6 +56,10 @@ export class Point3 {
 
 	add(vector: Vec3): Point3 {
 		return new Point3(this.x + vector.x, this.y + vector.y, this.z + vector.z);
+	}
+
+	lerpTo(other: Point3, t: number) {
+		return this.add(this.delta(other).scale(t));
 	}
 
 	equals(other: Point3) {

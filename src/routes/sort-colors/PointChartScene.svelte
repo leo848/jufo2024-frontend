@@ -165,16 +165,40 @@
 				};
 			}
 			if (a.length + 1 === b.length) {
-				return (t) => {
-					const copy = b.slice();
-					const last = copy[copy.length - 1];
-					copy[copy.length - 1] = [
-						last[0],
-						last[0].add(last[0].delta(last[1]).scale(t)),
-						undefined
-					];
-					return copy;
-				};
+				if (a.some((edge, i) => !(edge[0].equals(b[i][0]) && edge[1].equals(b[i][1])))) {
+					let firstDifferentEdge = a.findIndex(
+						(edge, i) => !(edge[0].equals(b[i][0]) && edge[1].equals(b[i][1]))
+					);
+					return (t) => {
+						const copy = b.slice();
+						copy[firstDifferentEdge] = [
+							a[firstDifferentEdge][0],
+							a[firstDifferentEdge][0]
+								.lerpTo(a[firstDifferentEdge][1], 0.5)
+								.lerpTo(b[firstDifferentEdge][1], t),
+							undefined
+						];
+						copy[firstDifferentEdge + 1] = [
+							a[firstDifferentEdge][0]
+								.lerpTo(a[firstDifferentEdge][1], 0.5)
+								.lerpTo(b[firstDifferentEdge][1], t),
+							a[firstDifferentEdge][1],
+							undefined
+						];
+						return copy;
+					};
+				} else {
+					return (t) => {
+						const copy = b.slice();
+						const last = copy[copy.length - 1];
+						copy[copy.length - 1] = [
+							last[0],
+							last[0].add(last[0].delta(last[1]).scale(t)),
+							undefined
+						];
+						return copy;
+					};
+				}
 			}
 			if (a.length === 0) {
 				return (tRaw) => {
