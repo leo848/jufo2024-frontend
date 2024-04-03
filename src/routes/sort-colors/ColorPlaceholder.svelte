@@ -8,10 +8,19 @@
 	export let colors: Color[];
 	export let addColor: () => void;
 
-	const randomColors = new Array(100)
+	$: randomColors = new Array(100)
 		.fill(0)
 		.map((_) => new RgbColor(Math.random(), Math.random(), Math.random()).color());
-	const randomColor = randomColors[0];
+	$: randomColor = randomColors[0];
+
+	let inputAmount = 100;
+
+	$: while (randomColors.length < inputAmount) {
+		randomColors = [
+			...randomColors,
+			new RgbColor(Math.random(), Math.random(), Math.random()).color()
+		];
+	}
 </script>
 
 <div
@@ -54,17 +63,28 @@
 		>
 		<button
 			class="p-2 mt-2 rounded text-white"
-			style:background={gradient(randomColors.slice(1, 10).map((c) => c.darken(0.4)))}
+			style:background={gradient(randomColors.slice(0, 10).map((c) => c.darken(0.4)))}
 			on:click={() => (colors = randomColors.slice(0, 10))}
 		>
 			<b><span class="opacity-0">0</span>10 zufällige</b> Farben auswählen
 		</button>
-		<button
-			class="p-2 mt-2 rounded text-white"
-			style:background={gradient(randomColors.slice(1, 100).map((c) => c.darken(0.4)))}
-			on:click={() => (colors = randomColors.slice(0, 100))}
-		>
-			<b>100 zufällige</b> Farben auswählen
-		</button>
+		<div>
+			<input
+				type="number"
+				bind:value={inputAmount}
+				on:click|preventDefault={() => {}}
+				style:background-color={randomColor.readable().css()}
+				style:color={randomColor.css()}
+				class="w-16 border-none rounded font-bold -pr-2"
+				max={1024}
+			/>
+			<button
+				class="p-2 mt-2 rounded text-white"
+				style:background={gradient(randomColors.slice(0, inputAmount).map((c) => c.darken(0.4)))}
+				on:click={() => (colors = randomColors.slice(0, inputAmount))}
+			>
+				<b> zufällige</b> Farbe{inputAmount === 1 ? '' : 'n'} auswählen
+			</button>
+		</div>
 	</div>
 </div>
