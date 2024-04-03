@@ -136,7 +136,7 @@
 					description:
 						'Der Held-Karp-Algorithmus wurde 1962 für die Lösung des Travelling-Salesman-Problems entwickelt und kann ähnlich auch für die mehrdimensionale Sortierung genutzt werden. Dabei werden mittels dynamischer Programmierung Ergebnisse memoisiert, um die Mehrfachberechnung zu verhindern.',
 					expectedTime: (n: number) =>
-						Math.max((latency / 1000) * (n + 32), (n ** 2 * 2 ** n) / 800000 / 1000),
+						Math.max((latency / 1000) * (n + 32), (n ** 3 * 2 ** n) / 800000 / 1000),
 					icon: Icon.CompressOutline
 				},
 			] as const
