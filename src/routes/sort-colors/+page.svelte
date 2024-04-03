@@ -36,7 +36,7 @@
 
 	let space: ColorSpace = 'rgb';
 
-	let colors: Color[] = []; //presets.nailpolish.colors;
+	let colors: Color[] = [];
 	let colorsLocked = false;
 	let invalidate: <T>(callback: (t: T) => void) => (t: T) => void;
 	let colorsAnim = true;
