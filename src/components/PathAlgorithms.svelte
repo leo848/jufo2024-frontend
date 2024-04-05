@@ -138,6 +138,14 @@
 					expectedTime: (n: number) =>
 						Math.max((latency / 1000) * (n + 32), (n ** 3 * 2 ** n) / 350000 / 1000),
 					icon: Icon.CompressOutline
+				},
+				{
+					name: 'ILP',
+					method: 'ilp',
+					description:
+						'Das Problem der Kettensortierung kann als Problem der ganzzahliges lineares Optimierung (engl. integer linear program, kurz ILP) formuliert werden. Dieses wird iterativ mithilfe einer C-Bibliothek gelöst.',
+					expectedTime: () => null,
+					icon: Icon.BrainOutline
 				}
 			] as const
 		).map((e, i) => {
