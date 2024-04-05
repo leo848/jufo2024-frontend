@@ -62,6 +62,7 @@ const pathCreateMethod = z.discriminatedUnion('type', [
 	z.object({type: z.literal('transmute')}),
 	z.object({type: z.literal('heldKarp')}),
 	z.object({type: z.literal('insertion')}),
+	z.object({type: z.literal('ilp')}),
 ]);
 
 const pathImproveMethod = z.discriminatedUnion('type', [
