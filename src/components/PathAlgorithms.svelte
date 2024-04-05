@@ -256,7 +256,11 @@
 							action: {
 								type: 'improvePath',
 								method: { type: e.method },
-								path: matrixPath,
+								path:
+									matrixPath ??
+									(() => {
+										throw new Error('no matrix path given');
+									})(),
 								matrix: values,
 								preferStep: options.stepwise
 							}
