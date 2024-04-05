@@ -7,6 +7,7 @@
 	import colorLists from './colorLists.json';
 	import { RgbColor } from '../../color/colorSpaces';
 	import type { ColorNameList } from '../../color/colorName';
+	import { colorKeys } from '../../color/comparisonSort';
 	import { scale } from 'svelte/transition';
 
 	export let triggeredBy: string;
@@ -42,43 +43,26 @@
 			.map(({ item }) => item);
 	}
 
+	const keys: {
+		name: string;
+		method: (color: Color, item: ColorItem) => string | number;
+	}[] = colorKeys.map(({ name, keyExtractor }) => ({ name, method: keyExtractor }));
 	const sortOptions: {
 		name: string;
 		method: (color: Color, item: ColorItem) => number | string;
-	}[] = [
-		{
-			name: 'Relevanz',
-			method: (_) => 0
-		},
-		{
-			name: 'Alphabetisch',
-			method: (_, item) => item.name
-		},
-		{
-			name: 'Buntwert',
-			method: (color) => color.hsv().h
-		},
-		{
-			name: 'Helligkeit',
-			method: (color) => color.oklab().l
-		},
-		{
-			name: 'Sättigung',
-			method: (color) => color.hsv().s
-		},
-		{
-			name: 'Rot',
-			method: (color) => color.rgb().r
-		},
-		{
-			name: 'Grün',
-			method: (color) => color.rgb().g
-		},
-		{
-			name: 'Blau',
-			method: (color) => color.rgb().b
-		}
-	];
+	}[] = keys
+		.slice(0, 0)
+		.concat([
+			{
+				name: 'Relevanz',
+				method: (_: Color) => 0
+			},
+			{
+				name: 'Alphabetisch',
+				method: (_: Color, item: ColorItem) => item.name
+			}
+		])
+		.concat(keys);
 	let sortOptionIndex = 0;
 	let sortInvert = false;
 
@@ -163,7 +147,7 @@
 						</div>
 					</div>
 				{/if}
-				{#each matches as match, matchIndex}
+				{#each matches as match}
 					{@const color = RgbColor.fromNumeric(
 						parseInt(match.hex.startsWith('#') ? match.hex.slice(1) : match.hex, 16)
 					).color()}
