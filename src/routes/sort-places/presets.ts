@@ -1357,6 +1357,314 @@ export const presets = {
 			}
 		]
 	},
+	deutschland: {
+		name: 'Städte Deutschlands',
+		aiGenerated: true,
+		values:
+			[
+				{
+					"name": "Berlin",
+					"desc": "Hauptstadt Deutschlands, bekannt für Brandenburger Tor und Politik. 3.755.251 Einwohner",
+					"lat": 52.52015,
+					"lng": 13.40400
+				},
+				{
+					"name": "Hamburg",
+					"desc": "Bedeutende Hafenstadt im Norden Deutschlands. 1.892.122 Einwohner",
+					"lat": 53.55034,
+					"lng": 10.00065
+				},
+				{
+					"name": "München",
+					"desc": "Hauptstadt Bayerns, berühmt für Oktoberfest und Biergärten. 1.512.491 Einwohner",
+					"lat": 48.13743,
+					"lng": 11.57549
+				},
+				{
+					"name": "Köln",
+					"desc": "Domstadt am Rhein mit imposantem Kölner Dom. 1.084.831 Einwohner",
+					"lat": 50.93753,
+					"lng": 6.96028
+				},
+				{
+					"name": "Frankfurt am Main",
+					"desc": "Finanzmetropole mit beeindruckender Skyline. 773.068 Einwohner",
+					"lat": 50.11092,
+					"lng": 8.68213
+				},
+				{
+					"name": "Stuttgart",
+					"desc": "Hauptstadt von Baden-Württemberg, bekannt für Automobilindustrie. 632.865 Einwohner",
+					"lat": 48.77584,
+					"lng": 9.18293
+				},
+				{
+					"name": "Düsseldorf",
+					"desc": "Stadt am Rhein, bekannt für Mode und Wirtschaft. 629.047 Einwohner",
+					"lat": 51.22774,
+					"lng": 6.77346
+				},
+				{
+					"name": "Leipzig",
+					"desc": "Bekannt für Musik und Buchmesse. 616.093 Einwohner",
+					"lat": 51.33962,
+					"lng": 12.37129
+				},
+				{
+					"name": "Dortmund",
+					"desc": "Ehemaliges Zentrum des Kohlebergbaus, heute Industriestadt. 593.317 Einwohner",
+					"lat": 51.51494,
+					"lng": 7.46600
+				},
+				{
+					"name": "Essen",
+					"desc": "Ehemals bedeutendes Zentrum des Ruhrgebiets. 584.580 Einwohner",
+					"lat": 51.45822,
+					"lng": 7.01586
+				},
+				{
+					"name": "Bremen",
+					"desc": "Hansestadt mit großer maritimer Geschichte. 569.396 Einwohner",
+					"lat": 53.07516,
+					"lng": 8.80777
+				},
+				{
+					"name": "Dresden",
+					"desc": "Bekannt für barocke Architektur und Kunstschätze. 563.311 Einwohner",
+					"lat": 51.05089,
+					"lng": 13.73832
+				},
+				{
+					"name": "Hannover",
+					"desc": "Messestadt und Hauptstadt Niedersachsens. 545.045 Einwohner",
+					"lat": 52.37589,
+					"lng": 9.73201
+				},
+				{
+					"name": "Nürnberg",
+					"desc": "Bekannt für historische Altstadt und Christkindlesmarkt. 523.026 Einwohner",
+					"lat": 49.45203,
+					"lng": 11.07675
+				},
+				{
+					"name": "Duisburg",
+					"desc": "Hafenstadt an der Ruhrmündung. 502.211 Einwohner",
+					"lat": 51.43441,
+					"lng": 6.76233
+				},
+				{
+					"name": "Bochum",
+					"desc": "Bekannt für Bergbau und Ruhr-Universität. 365.742 Einwohner",
+					"lat": 51.48184,
+					"lng": 7.21624
+				},
+				{
+					"name": "Wuppertal",
+					"desc": "Bekannt für Schwebebahn und Textilindustrie. 358.876 Einwohner",
+					"lat": 51.26402,
+					"lng": 7.17857
+				},
+				{
+					"name": "Bielefeld",
+					"desc": "Universitätsstadt mit vielfältigem kulturellen Angebot. 338.332 Einwohner",
+					"lat": 52.03023,
+					"lng": 8.53247
+				},
+				{
+					"name": "Bonn",
+					"desc": "Frühere Hauptstadt der Bundesrepublik Deutschland. 336.465 Einwohner",
+					"lat": 50.73743,
+					"lng": 7.09821
+				},
+				{
+					"name": "Münster",
+					"desc": "Bekannt für historische Altstadt und Fahrradfreundlichkeit. 320.946 Einwohner",
+					"lat": 51.96066,
+					"lng": 7.62613
+				},
+				{
+					"name": "Mannheim",
+					"desc": "Wichtiger Wirtschaftsstandort in der Metropolregion Rhein-Neckar. 315.554 Einwohner",
+					"lat": 49.48746,
+					"lng": 8.46604
+				},
+				{
+					"name": "Karlsruhe",
+					"desc": "Bekannt für Technologie und Kultur. 308.707 Einwohner",
+					"lat": 49.00689,
+					"lng": 8.40365
+				},
+				{
+					"name": "Augsburg",
+					"desc": "Eine der ältesten Städte Deutschlands, reiche Geschichte und Kultur. 301.033 Einwohner",
+					"lat": 48.37054,
+					"lng": 10.89779
+				},
+				{
+					"name": "Wiesbaden",
+					"desc": "Hauptstadt Hessens, berühmt für Thermalquellen und Kurhaus. 283.083 Einwohner",
+					"lat": 50.08258,
+					"lng": 8.24932
+				},
+				{
+					"name": "Mönchen­gladbach",
+					"desc": "Industrie- und Handelsstadt am Niederrhein. 268.465 Einwohner",
+					"lat": 51.18046,
+					"lng": 6.44261
+				},
+				{
+					"name": "Gelsenkirchen",
+					"desc": "Bekannt für Fußballverein FC Schalke 04 und Industriegeschichte. 263.000 Einwohner",
+					"lat": 51.51774,
+					"lng": 7.08572
+				},
+				{
+					"name": "Aachen",
+					"desc": "Bedeutende historische Stadt, bekannt für Dom und Karlspreis. 252.136 Einwohner",
+					"lat": 50.77535,
+					"lng": 6.08386
+				},
+				{
+					"name": "Braunschweig",
+					"desc": "Stadt mit reicher historischer Vergangenheit und Technologieunternehmen. 251.804 Einwohner",
+					"lat": 52.26887,
+					"lng": 10.52677
+				},
+				{
+					"name": "Chemnitz",
+					"desc": "Industriestadt mit vielfältiger Geschichte. 248.563 Einwohner",
+					"lat": 50.83226,
+					"lng": 12.92584
+				},
+				{
+					"name": "Kiel",
+					"desc": "Bedeutender Hafen- und Universitätsstadt an der Ostsee. 247.717 Einwohner",
+					"lat": 54.32219,
+					"lng": 10.13573
+				},
+				{
+					"name": "Halle (Saale)",
+					"desc": "Bekannt für historische Altstadt und Martin-Luther-Universität. 242.083 Einwohner",
+					"lat": 51.48250,
+					"lng": 11.97097
+				},
+				{
+					"name": "Magdeburg",
+					"desc": "Landeshauptstadt Sachsen-Anhalts mit reichem kulturellem Erbe. 239.364 Einwohner",
+					"lat": 52.12053,
+					"lng": 11.62762
+				},
+				{
+					"name": "Freiburg im Breisgau",
+					"desc": "Bekannt für Schwarzwald, Universität und ökologische Ausrichtung. 236.140 Einwohner",
+					"lat": 47.99901,
+					"lng": 7.84210
+				},
+				{
+					"name": "Krefeld",
+					"desc": "Bekannt für Seidenproduktion und Architektur. 228.426 Einwohner",
+					"lat": 51.33876,
+					"lng": 6.58534
+				},
+				{
+					"name": "Mainz",
+					"desc": "Landeshauptstadt Rheinland-Pfalzs, bekannt für Wein und Gutenberg-Museum. 220.552 Einwohner",
+					"lat": 49.99286,
+					"lng": 8.24725
+				},
+				{
+					"name": "Lübeck",
+					"desc": "Mittelalterliche Hansestadt, bekannt für Holstentor und Marzipan. 218.095 Einwohner",
+					"lat": 53.86893,
+					"lng": 10.68729
+				},
+				{
+					"name": "Erfurt",
+					"desc": "Landeshauptstadt Thüringens, reiche Geschichte und Kulturlandschaft. 214.969 Einwohner",
+					"lat": 50.97870,
+					"lng": 11.03283
+				},
+				{
+					"name": "Oberhausen",
+					"desc": "Stadt im Ruhrgebiet, bekannt für Industriegeschichte und Einkaufszentren. 210.824 Einwohner",
+					"lat": 51.49698,
+					"lng": 6.85149
+				},
+				{
+					"name": "Rostock",
+					"desc": "Große Hafenstadt an der Ostsee, bekannt für Universität und Hafen. 209.920 Einwohner",
+					"lat": 54.09244,
+					"lng": 12.09915
+				},
+				{
+					"name": "Kassel",
+					"desc": "Stadt im Herzen Deutschlands, bekannt für Documenta und Bergpark Wilhelmshöhe. 204.202 Einwohner",
+					"lat": 51.31271,
+					"lng": 9.47975
+				},
+				{
+					"name": "Hagen",
+					"desc": "Stadt im Ruhrgebiet, bekannt für Kunst und Kultur. 189.783 Einwohner",
+					"lat": 51.36081,
+					"lng": 7.47540
+				},
+				{
+					"name": "Potsdam",
+					"desc": "Landeshauptstadt Brandenburgs, bekannt für Schloss Sanssouci und Parks. 185.750 Einwohner",
+					"lat": 52.39108,
+					"lng": 13.06364
+				},
+				{
+					"name": "Saarbrücken",
+					"desc": "Landeshauptstadt des Saarlands, kulturelles Zentrum und Universitätsstadt. 181.759 Einwohner",
+					"lat": 49.24016,
+					"lng": 6.99693
+				},
+				{
+					"name": "Hamm",
+					"desc": "Stadt im Ruhrgebiet, bekannt für Brauchtum und Industriegeschichte. 180.849 Einwohner",
+					"lat": 51.68037,
+					"lng": 7.82045
+				},
+				{
+					"name": "Ludwigshafen am Rhein",
+					"desc": "Stadt am Rhein, bekannt für Chemieindustrie und Rhein-Galerie. 174.265 Einwohner",
+					"lat": 49.47741,
+					"lng": 8.44518
+				},
+				{
+					"name": "Oldenburg (Oldb)",
+					"desc": "Universitätsstadt in Niedersachsen mit historischer Altstadt. 172.830 Einwohner",
+					"lat": 53.14345,
+					"lng": 8.21455
+				},
+				{
+					"name": "Mülheim an der Ruhr",
+					"desc": "Stadt im Ruhrgebiet, bekannt für Kunst und Kultur. 172.404 Einwohner",
+					"lat": 51.43117,
+					"lng": 6.88073
+				},
+				{
+					"name": "Osnabrück",
+					"desc": "Friedensstadt mit reicher Geschichte und Universität. 167.366 Einwohner",
+					"lat": 52.27991,
+					"lng": 8.04718
+				},
+				{
+					"name": "Leverkusen",
+					"desc": "Stadt am Rhein, bekannt für Chemieindustrie und Bayer AG. 166.865 Einwohner",
+					"lat": 51.03030,
+					"lng": 6.98432
+				},
+				{
+					"name": "Heidelberg",
+					"desc": "Bekannt für Schloss, Universität und malerische Altstadt. 160.355 Einwohner",
+					"lat": 49.39875,
+					"lng": 8.67243
+				},
+			]
+
+	}
 } satisfies Partial<Record<string, PointList>>;
 
 export default presets;

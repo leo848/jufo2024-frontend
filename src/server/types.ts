@@ -52,7 +52,7 @@ export const openRouteApiError = z.discriminatedUnion('type', [
 	})
 ]);
 
-const pathCreateMethod = z.discriminatedUnion('type', [
+export const pathCreateMethod = z.discriminatedUnion('type', [
 	z.object({type: z.literal('nearestNeighbor')}),
 	z.object({type: z.literal('optimalNearestNeighbor')}),
 	z.object({type: z.literal('bruteForce')}),
@@ -65,7 +65,7 @@ const pathCreateMethod = z.discriminatedUnion('type', [
 	z.object({type: z.literal('ilp')}),
 ]);
 
-const pathImproveMethod = z.discriminatedUnion('type', [
+export const pathImproveMethod = z.discriminatedUnion('type', [
 	z.object({type: z.literal('rotate')}),
 	z.object({type: z.literal('innerRotate')}),
 	z.object({type: z.literal('twoOpt')}),
