@@ -16,7 +16,7 @@
 	import { DistanceType, distanceTypeToObject } from '../geom/dist';
 	import { formatTimespan } from '../utils/time';
 	import { constructionAlgorithms, improvementAlgorithms } from '../server/algorithms';
-	import { defaultPool, type OptionsPool } from '../server/optionsPool';
+	import { defaultPool, type OptionsPool, type ParameterKey } from '../server/optionsPool';
 
 	export let values: number[][];
 	export let dimensions = 3;
@@ -64,6 +64,7 @@
 			index: number;
 			complexity?: string;
 			stepwise?: boolean;
+			parameters?: ParameterKey[];
 			expectedTime?: (n: number, latency: number) => null | number;
 			send: ((options?: { stepwise: boolean }) => void) | null;
 		}[]
@@ -286,7 +287,7 @@
 			</button>
 		{/each}
 		{#if selectedItemAction !== null}
-			{@const { description, send, expectedTime, complexity, stepwise } =
+			{@const { description, send, expectedTime, complexity, stepwise, parameters } =
 				items[currentAction][selectedItemAction]}
 			<div class="flex flex-col justify-between grow">
 				<div>
@@ -298,6 +299,9 @@
 					{/if}
 					{#if complexity}
 						<div>Komplexität: <b>{complexity}</b></div>
+					{/if}
+					{#if parameters && parameters.length}
+						<div class="my-4">Einstellungen</div>
 					{/if}
 					<div class="mt-2">
 						Minimallatenz:
