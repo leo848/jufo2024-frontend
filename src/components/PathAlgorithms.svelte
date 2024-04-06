@@ -16,6 +16,7 @@
 	import { DistanceType, distanceTypeToObject } from '../geom/dist';
 	import { formatTimespan } from '../utils/time';
 	import { constructionAlgorithms, improvementAlgorithms } from '../server/algorithms';
+	import { defaultPool, type OptionsPool } from '../server/optionsPool';
 
 	export let values: number[][];
 	export let dimensions = 3;
@@ -45,6 +46,8 @@
 		}
 	};
 	let path: number[][] | null | number[] = null;
+
+	let pool: OptionsPool = defaultPool();
 
 	type ActionKind = 'construction' | 'improvement';
 	type ForAction<T> = Record<ActionKind, T>;
@@ -78,7 +81,8 @@
 								type: 'createPath',
 								method: { type: e.method },
 								matrix: values
-							}
+							},
+							pool
 						} as const));
 				send =
 					payload &&
@@ -100,7 +104,8 @@
 								metric: distanceTypeToObject(metric),
 								dimensions,
 								values
-							}
+							},
+							pool
 						} as const));
 				send =
 					payload &&
@@ -131,7 +136,8 @@
 									})(),
 								matrix: values,
 								preferStep: options.stepwise
-							}
+							},
+							pool
 						} as const));
 				send =
 					payload &&
@@ -154,7 +160,8 @@
 								dimensions,
 								path: values,
 								preferStep: options.stepwise
-							}
+							},
+							pool
 						} as const));
 				send =
 					payload &&

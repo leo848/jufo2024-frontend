@@ -1,9 +1,9 @@
-import type {Color} from "./color";
+import type { Color } from './color';
 
 type ColorKey = {
 	name: string;
-	keyExtractor: ((color: Color) => number);
-}
+	keyExtractor: (color: Color) => number;
+};
 
 export const colorKeys: ColorKey[] = [
 	{
@@ -30,4 +30,4 @@ export const colorKeys: ColorKey[] = [
 		name: 'Blau',
 		keyExtractor: (color) => color.rgb().b
 	}
-]
+];

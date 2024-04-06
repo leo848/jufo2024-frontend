@@ -1,24 +1,26 @@
-import type {ComponentType} from "svelte";
-import type {pathCreateMethod, pathImproveMethod} from "./types";
-import type {z} from "zod";
-import * as Icon from "flowbite-svelte-icons";
-import {factorial} from "../utils/math";
+import type { ComponentType } from 'svelte';
+import type { pathCreateMethod, pathImproveMethod } from './types';
+import type { z } from 'zod';
+import * as Icon from 'flowbite-svelte-icons';
+import { factorial } from '../utils/math';
 
-type SpecificParameter = {
-	type: "number",
-	min: number,
-	max: number,
-	default: number,
-	logarithmic?: boolean,
-} | {
-	type: "boolean",
-	default: boolean
-} | {
-	type: "option",
-	values: string[],
-	default: string,
-}
-
+type SpecificParameter =
+	| {
+			type: 'number';
+			min: number;
+			max: number;
+			default: number;
+			logarithmic?: boolean;
+	  }
+	| {
+			type: 'boolean';
+			default: boolean;
+	  }
+	| {
+			type: 'option';
+			values: string[];
+			default: string;
+	  };
 
 type Parameter = {
 	name: string;
@@ -33,18 +35,18 @@ type Algorithm = {
 	expectedTime?: (n: number, latency: number) => number | null;
 	parameters?: Parameter[];
 	icon: ComponentType;
-}
+};
 
-type ConstructionMethod = z.infer<typeof pathCreateMethod>["type"];
+type ConstructionMethod = z.infer<typeof pathCreateMethod>['type'];
 type ConstructionAlgorithm = Algorithm & {
-	method: ConstructionMethod
-}
+	method: ConstructionMethod;
+};
 
-type ImprovementMethod = z.infer<typeof pathImproveMethod>["type"];
+type ImprovementMethod = z.infer<typeof pathImproveMethod>['type'];
 type ImprovementAlgorithm = Algorithm & {
 	stepwise?: boolean;
-	method: ImprovementMethod,
-}
+	method: ImprovementMethod;
+};
 
 export const constructionAlgorithms: ConstructionAlgorithm[] = [
 	{
@@ -69,7 +71,8 @@ export const constructionAlgorithms: ConstructionAlgorithm[] = [
 			'Alle möglichen Permutationen der Punkte werden ausprobiert und die minimale wird gewählt.',
 		method: 'bruteForce',
 		complexity: 'O(n!)',
-		expectedTime: (n: number, latency: number) => Math.max((latency / 1000) * n, factorial(n) / 15128000),
+		expectedTime: (n: number, latency: number) =>
+			Math.max((latency / 1000) * n, factorial(n) / 15128000),
 		icon: Icon.HourglassOutline
 	},
 	{
@@ -126,20 +129,18 @@ export const constructionAlgorithms: ConstructionAlgorithm[] = [
 			'Das Problem der Kettensortierung kann als Problem der ganzzahliges lineares Optimierung (engl. integer linear program, kurz ILP) formuliert werden. Dieses wird iterativ mithilfe einer C-Bibliothek gelöst.',
 		parameters: [
 			{
-				name: "Solver-Bibliothek",
-				desc: "Die hinterlegende Bibliothek, die das ILP-Problem löst.",
-				type: "option",
-				values: [
-					"coinOrCbc",
-				],
-				default: "coinOrCbc",
-				key: "solver",
+				name: 'Solver-Bibliothek',
+				desc: 'Die hinterlegende Bibliothek, die das ILP-Problem löst.',
+				type: 'option',
+				values: ['coinOrCbc'],
+				default: 'coinOrCbc',
+				key: 'milpSolver'
 			}
 		],
 		expectedTime: () => null,
 		icon: Icon.BrainOutline
 	}
-]
+];
 
 export const improvementAlgorithms: ImprovementAlgorithm[] = [
 	{
@@ -183,16 +184,15 @@ export const improvementAlgorithms: ImprovementAlgorithm[] = [
 	},
 	{
 		name: 'Simulated Annealing',
-		description:
-			'Zu Beginn werden Knoten zufällig getauscht, zum Schluss hin nur noch taktisch.',
+		description: 'Zu Beginn werden Knoten zufällig getauscht, zum Schluss hin nur noch taktisch.',
 		method: 'simulatedAnnealing',
 		parameters: [
 			{
-				name: "k",
-				desc: "Anzahl der Iterationen",
-				type: "number",
+				name: 'k',
+				desc: 'Anzahl der Iterationen',
+				type: 'number',
 				default: 10 ** 10,
-				key: "iterationCount",
+				key: 'iterationCount',
 				max: 10 ** 15,
 				min: 10 ** 5,
 				logarithmic: true
@@ -200,4 +200,4 @@ export const improvementAlgorithms: ImprovementAlgorithm[] = [
 		],
 		icon: Icon.ChartSolid
 	}
-]
+];

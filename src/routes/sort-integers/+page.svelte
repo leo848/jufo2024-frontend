@@ -19,6 +19,7 @@
 	import Options from '../../components/Options.svelte';
 	import { goto } from '$app/navigation';
 	import { formatTimespan } from '../../utils/time';
+	import { defaultPool } from '../../server/optionsPool';
 
 	title.set('Zahlen sortieren');
 
@@ -122,7 +123,8 @@
 				type: 'sortNumbers',
 				algorithm: selectedAlgorithm,
 				numbers
-			}
+			},
+			pool: defaultPool()
 		});
 	}
 

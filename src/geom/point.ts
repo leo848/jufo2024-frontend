@@ -1,5 +1,5 @@
 import * as THREE from 'three';
-import {dist, type DistanceType} from './dist';
+import { dist, type DistanceType } from './dist';
 
 function floatsSimilar(a: number, b: number): boolean {
 	return Math.abs(a - b) < 0.0001;
