@@ -4,11 +4,34 @@ import type {z} from "zod";
 import * as Icon from "flowbite-svelte-icons";
 import {factorial} from "../utils/math";
 
+type SpecificParameter = {
+	type: "number",
+	min: number,
+	max: number,
+	default: number,
+	logarithmic?: boolean,
+} | {
+	type: "boolean",
+	default: boolean
+} | {
+	type: "option",
+	values: string[],
+	default: string,
+}
+
+
+type Parameter = {
+	name: string;
+	key: string;
+	desc: string;
+} & SpecificParameter;
+
 type Algorithm = {
 	name: string;
 	description: string;
 	complexity?: string;
 	expectedTime?: (n: number, latency: number) => number | null;
+	parameters?: Parameter[];
 	icon: ComponentType;
 }
 
@@ -101,6 +124,18 @@ export const constructionAlgorithms: ConstructionAlgorithm[] = [
 		method: 'ilp',
 		description:
 			'Das Problem der Kettensortierung kann als Problem der ganzzahliges lineares Optimierung (engl. integer linear program, kurz ILP) formuliert werden. Dieses wird iterativ mithilfe einer C-Bibliothek gelöst.',
+		parameters: [
+			{
+				name: "Solver-Bibliothek",
+				desc: "Die hinterlegende Bibliothek, die das ILP-Problem löst.",
+				type: "option",
+				values: [
+					"coinOrCbc",
+				],
+				default: "coinOrCbc",
+				key: "solver",
+			}
+		],
 		expectedTime: () => null,
 		icon: Icon.BrainOutline
 	}
@@ -151,6 +186,18 @@ export const improvementAlgorithms: ImprovementAlgorithm[] = [
 		description:
 			'Zu Beginn werden Knoten zufällig getauscht, zum Schluss hin nur noch taktisch.',
 		method: 'simulatedAnnealing',
+		parameters: [
+			{
+				name: "k",
+				desc: "Anzahl der Iterationen",
+				type: "number",
+				default: 10 ** 10,
+				key: "iterationCount",
+				max: 10 ** 15,
+				min: 10 ** 5,
+				logarithmic: true
+			}
+		],
 		icon: Icon.ChartSolid
 	}
 ]
