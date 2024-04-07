@@ -24,7 +24,7 @@
 </script>
 
 <div
-	class="m-4 p-4 rounded-md max-w-[50%]"
+	class="m-4 p-4 rounded-md md:max-w-[50%]"
 	style={`background-color:${randomColor.css()}; color:${randomColor.readable().css()}`}
 	in:scale
 >

@@ -53,11 +53,11 @@
 <div
 	class={` col-span-${closed ? 6 : 12} md:col-span-${closed ? 6 : mdCol} xl:col-span-${
 		closed ? 2 : xlCol
-	} row-span-${closed ? 1 : row} max-w-none md:m-0`}
+	} row-span-${closed ? 1 : row} max-w-none md:m-0 m-0`}
 	transition:scale
 >
 	<Card
-		class={` rounded-xl max-w-none md:p-0 ${
+		class={` rounded-xl max-w-none p-0 md:p-0 ${
 			closed ? 'w-auto h-auto' : 'h-full max-h-[600px]'
 		} transition-all`}
 	>
