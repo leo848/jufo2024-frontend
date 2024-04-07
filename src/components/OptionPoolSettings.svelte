@@ -38,6 +38,12 @@
 		} else throw new Error(`invalid type ${typeof value}`);
 	}
 
+	function extractString(evt: Event): string {
+		let value: any = (evt.target ?? ({} as any))['value' as any] as any;
+		if (typeof value === 'string') return value;
+		else throw new Error(`invalid type ${typeof value}`);
+	}
+
 	const relax = (p: Parameter): Parameter => p;
 </script>
 
@@ -51,7 +57,7 @@
 				<div class="text-white">{p.name}</div>
 				<div>{p.desc}</div>
 			</div>
-			{#if p.type === 'number'}
+			{#if pR.type === 'number'}
 				{@const entry = pool[paramKey]}
 				{#key poolKey}
 					<div>
@@ -66,13 +72,22 @@
 				{/key}
 				<input
 					type="range"
-					min={p.min}
-					max={p.max}
-					step={p.step}
-					value={p.default}
+					min={pR.min}
+					max={pR.max}
+					step={pR.step}
+					value={pR.default}
 					on:input={(e) => setValue(paramKey, pool, extractNumber(e))}
 					class="w-full bg-transparent text-white grayscale"
 				/>
+			{:else if pR.type === 'option'}
+				<select
+					class="bg-gray-600 text-gray-200"
+					on:input={(e) => setValue(paramKey, pool, extractString(e))}
+				>
+					{#each pR.values as option}
+						<option>{option}</option>
+					{/each}
+				</select>
 			{/if}
 		{/each}
 	</div>
