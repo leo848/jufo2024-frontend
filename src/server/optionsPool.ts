@@ -43,7 +43,7 @@ export const poolOptions = {
 		type: "number",
 		name: "t",
 		desc: "Initialtemperatur",
-		default: 1.0,
+		default: 0.15,
 		max: 1.0,
 		min: 0.01,
 		step: 0.01,
