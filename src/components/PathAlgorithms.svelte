@@ -17,6 +17,7 @@
 	import { formatTimespan } from '../utils/time';
 	import { constructionAlgorithms, improvementAlgorithms } from '../server/algorithms';
 	import { defaultPool, type OptionsPool, type ParameterKey } from '../server/optionsPool';
+	import OptionPoolSettings from './OptionPoolSettings.svelte';
 
 	export let values: number[][];
 	export let dimensions = 3;
@@ -48,6 +49,7 @@
 	let path: number[][] | null | number[] = null;
 
 	let pool: OptionsPool = defaultPool();
+	$: pool, console.log(pool);
 
 	type ActionKind = 'construction' | 'improvement';
 	type ForAction<T> = Record<ActionKind, T>;
@@ -301,7 +303,7 @@
 						<div>Komplexität: <b>{complexity}</b></div>
 					{/if}
 					{#if parameters && parameters.length}
-						<div class="my-4">Einstellungen</div>
+						<OptionPoolSettings bind:pool {parameters} />
 					{/if}
 					<div class="mt-2">
 						Minimallatenz:

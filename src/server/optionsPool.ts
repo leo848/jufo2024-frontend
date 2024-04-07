@@ -5,8 +5,10 @@ type SpecificParameter =
 		type: "number",
 		min: number;
 		max: number;
+		step: number;
 		default: number;
-		logarithmic?: boolean;
+		transform?: (original: number) => number;
+		display?: (n: number) => string;
 	}
 	| {
 		type: "boolean",
@@ -18,7 +20,7 @@ type SpecificParameter =
 		default: string;
 	};
 
-type Parameter = {
+export type Parameter = {
 	name: string;
 	key: string;
 	desc: string;
@@ -28,15 +30,27 @@ export const poolOptions = {
 	iterationCount: {
 		type: "number",
 		name: 'k',
-		desc: 'Anzahl der Iterationen',
-		default: 10 ** 10,
+		desc: 'Anzahl der Iterationen bei t=1',
+		default: 10,
 		key: 'iterationCount',
-		max: 10 ** 15,
-		min: 10 ** 5,
-		logarithmic: true
+		max: 15,
+		min: 5,
+		step: 1,
+		transform: n => 10 ** n,
+		display: n => "10^" + Math.log10(n),
+	},
+	initialTemperature: {
+		type: "number",
+		name: "t",
+		desc: "Initialtemperatur",
+		default: 1.0,
+		max: 1.0,
+		min: 0.05,
+		step: 0.01,
+		key: 'initialTemperature',
 	},
 	milpSolver: {
-		name: 'Solver-Bibliothek',
+		name: 'solver',
 		desc: 'Die hinterlegende Bibliothek, die das ILP-Problem löst.',
 		type: 'option',
 		values: ['coinOrCbc'],
@@ -50,11 +64,14 @@ export type ParameterKey = keyof typeof poolOptions;
 export const OptionsPool = z
 	.object({
 		iterationCount: z.number(),
-		milpSolver: z.literal('coinOrCbc')
+		milpSolver: z.literal('coinOrCbc'),
+		initialTemperature: z.number(),
 	})
 	.partial();
 export type OptionsPool = z.infer<typeof OptionsPool>;
 
 export function defaultPool(): OptionsPool {
-	return {};
+	return Object.fromEntries(
+		Object.values(poolOptions).map(obj => [obj.key, (obj as any).transform !== undefined ? (obj as any).transform(obj.default) : obj.default])
+	)
 }

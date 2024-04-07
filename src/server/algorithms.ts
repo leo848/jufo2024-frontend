@@ -154,7 +154,7 @@ export const improvementAlgorithms: ImprovementAlgorithm[] = [
 		name: 'Simulated Annealing',
 		description: 'Zu Beginn werden Knoten zufällig getauscht, zum Schluss hin nur noch taktisch.',
 		method: 'simulatedAnnealing',
-		parameters: ["iterationCount"],
+		parameters: ["iterationCount", "initialTemperature"],
 		icon: Icon.ChartSolid
 	}
 ];
