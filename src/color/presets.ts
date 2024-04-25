@@ -34,6 +34,10 @@ function mapBuntstifte(input: [number, number, number][]): NamedColor[] {
 		.map(({ color, index }) => NamedColor.fromColor(color, leftPadZeroes(3, index + 1)));
 }
 
+function rgb(hex: string): Color {
+	return RgbColor.fromNumeric(Number.parseInt(hex.substring(1), 16)).color();
+}
+
 const books = {
 	name: 'Mathematikbücher',
 	colors: (
@@ -344,6 +348,25 @@ const presets = {
 			.fill(0)
 			.map((_, i) => new OklabColor(i / 20, 0.5, 0.5).color())
 			.slice(1)
+	},
+	plakatRgb: {
+		name: 'Plakat 1: RGB',
+		colors: [
+			rgb('#2ecc40'),
+			rgb('#ff851b'),
+			rgb('#b10dc9'),
+			rgb('#000000'),
+			rgb('#42024c'),
+			rgb('#00ff00'),
+			rgb('#ff4136'),
+			rgb('#aaaaaa'),
+			rgb('#888888'),
+			rgb('#383bcd'),
+			rgb('#bada55'),
+			rgb('#b00b1e'),
+			rgb('#ffb3af'),
+			rgb('#97c077')
+		]
 	}
 } satisfies Partial<Record<string, { name: string; colors: Color[] }>>;
 

@@ -1,24 +1,24 @@
-import {z} from 'zod';
+import { z } from 'zod';
 
 type SpecificParameter =
 	| {
-		type: "number",
-		min: number;
-		max: number;
-		step: number;
-		default: number;
-		transform?: (original: number) => number;
-		display?: (n: number) => string;
-	}
+			type: 'number';
+			min: number;
+			max: number;
+			step: number;
+			default: number;
+			transform?: (original: number) => number;
+			display?: (n: number) => string;
+	  }
 	| {
-		type: "boolean",
-		default: boolean;
-	}
+			type: 'boolean';
+			default: boolean;
+	  }
 	| {
-		type: "option",
-		values: string[];
-		default: string;
-	};
+			type: 'option';
+			values: string[];
+			default: string;
+	  };
 
 export type Parameter = {
 	name: string;
@@ -28,7 +28,7 @@ export type Parameter = {
 
 export const poolOptions = {
 	iterationCount: {
-		type: "number",
+		type: 'number',
 		name: 'k',
 		desc: 'Anzahl der Iterationen bei t=1',
 		default: 9.5,
@@ -36,18 +36,18 @@ export const poolOptions = {
 		max: 15,
 		min: 5,
 		step: 0.5,
-		transform: n => Math.floor(10 ** n),
-		display: n => "10^" + Math.round(Math.log10(n) * 10) / 10,
+		transform: (n) => Math.floor(10 ** n),
+		display: (n) => '10^' + Math.round(Math.log10(n) * 10) / 10
 	},
 	initialTemperature: {
-		type: "number",
-		name: "t",
-		desc: "Initialtemperatur",
+		type: 'number',
+		name: 't',
+		desc: 'Initialtemperatur',
 		default: 0.15,
 		max: 1.0,
 		min: 0.01,
 		step: 0.01,
-		key: 'initialTemperature',
+		key: 'initialTemperature'
 	},
 	milpSolver: {
 		name: 'solver',
@@ -55,7 +55,7 @@ export const poolOptions = {
 		type: 'option',
 		values: ['coinOrCbc'],
 		default: 'coinOrCbc',
-		key: 'milpSolver',
+		key: 'milpSolver'
 	}
 } as const satisfies Partial<Record<string, Parameter>>;
 
@@ -65,13 +65,16 @@ export const OptionsPool = z
 	.object({
 		iterationCount: z.number(),
 		milpSolver: z.literal('coinOrCbc'),
-		initialTemperature: z.number(),
+		initialTemperature: z.number()
 	})
 	.partial();
 export type OptionsPool = z.infer<typeof OptionsPool>;
 
 export function defaultPool(): OptionsPool {
 	return Object.fromEntries(
-		Object.values(poolOptions).map(obj => [obj.key, (obj as any).transform !== undefined ? (obj as any).transform(obj.default) : obj.default])
-	)
+		Object.values(poolOptions).map((obj) => [
+			obj.key,
+			(obj as any).transform !== undefined ? (obj as any).transform(obj.default) : obj.default
+		])
+	);
 }

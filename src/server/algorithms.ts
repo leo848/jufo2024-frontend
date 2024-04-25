@@ -1,9 +1,9 @@
-import type {ComponentType} from 'svelte';
-import type {pathCreateMethod, pathImproveMethod} from './types';
-import type {z} from 'zod';
+import type { ComponentType } from 'svelte';
+import type { pathCreateMethod, pathImproveMethod } from './types';
+import type { z } from 'zod';
 import * as Icon from 'flowbite-svelte-icons';
-import {factorial} from '../utils/math';
-import type {ParameterKey} from './optionsPool';
+import { factorial } from '../utils/math';
+import type { ParameterKey } from './optionsPool';
 
 type Algorithm = {
 	name: string;
@@ -104,7 +104,7 @@ export const constructionAlgorithms: ConstructionAlgorithm[] = [
 		method: 'ilp',
 		description:
 			'Das Problem der Kettensortierung kann als Problem der ganzzahliges lineares Optimierung (engl. integer linear program, kurz ILP) formuliert werden. Dieses wird iterativ mithilfe einer C-Bibliothek gelöst.',
-		parameters: ["milpSolver"],
+		parameters: ['milpSolver'],
 		expectedTime: () => null,
 		icon: Icon.BrainOutline
 	}
@@ -154,7 +154,7 @@ export const improvementAlgorithms: ImprovementAlgorithm[] = [
 		name: 'Simulated Annealing',
 		description: 'Zu Beginn werden Knoten zufällig getauscht, zum Schluss hin nur noch taktisch.',
 		method: 'simulatedAnnealing',
-		parameters: ["iterationCount", "initialTemperature"],
+		parameters: ['iterationCount', 'initialTemperature'],
 		icon: Icon.ChartSolid
 	}
 ];
