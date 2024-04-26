@@ -1,9 +1,9 @@
-import type { ComponentType } from 'svelte';
-import type { pathCreateMethod, pathImproveMethod } from './types';
-import type { z } from 'zod';
+import type {ComponentType} from 'svelte';
+import type {PathCreateMethod, PathImproveMethod} from './types';
+import type {z} from 'zod';
 import * as Icon from 'flowbite-svelte-icons';
-import { factorial } from '../utils/math';
-import type { ParameterKey } from './optionsPool';
+import {factorial} from '../utils/math';
+import type {ParameterKey} from './optionsPool';
 
 type Algorithm = {
 	name: string;
@@ -14,12 +14,12 @@ type Algorithm = {
 	icon: ComponentType;
 };
 
-type ConstructionMethod = z.infer<typeof pathCreateMethod>['type'];
+type ConstructionMethod = z.infer<typeof PathCreateMethod>['type'];
 type ConstructionAlgorithm = Algorithm & {
 	method: ConstructionMethod;
 };
 
-type ImprovementMethod = z.infer<typeof pathImproveMethod>['type'];
+type ImprovementMethod = z.infer<typeof PathImproveMethod>['type'];
 type ImprovementAlgorithm = Algorithm & {
 	stepwise?: boolean;
 	method: ImprovementMethod;

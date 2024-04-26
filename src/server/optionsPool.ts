@@ -1,24 +1,24 @@
-import { z } from 'zod';
+import {z} from 'zod';
 
 type SpecificParameter =
 	| {
-			type: 'number';
-			min: number;
-			max: number;
-			step: number;
-			default: number;
-			transform?: (original: number) => number;
-			display?: (n: number) => string;
-	  }
+		type: 'number';
+		min: number;
+		max: number;
+		step: number;
+		default: number;
+		transform?: (original: number) => number;
+		display?: (n: number) => string;
+	}
 	| {
-			type: 'boolean';
-			default: boolean;
-	  }
+		type: 'boolean';
+		default: boolean;
+	}
 	| {
-			type: 'option';
-			values: string[];
-			default: string;
-	  };
+		type: 'option';
+		values: string[];
+		default: string;
+	};
 
 export type Parameter = {
 	name: string;
@@ -56,6 +56,16 @@ export const poolOptions = {
 		values: ['coinOrCbc'],
 		default: 'coinOrCbc',
 		key: 'milpSolver'
+	},
+	ilpMaxDuration: {
+		name: 'ilpMaxDuration',
+		desc: 'Wie lange maximal beim ILP gewartet wird, in Sekunden',
+		type: 'number',
+		max: 3600,
+		min: 1,
+		step: 1,
+		default: 30,
+		key: 'ilpMaxDuration'
 	}
 } as const satisfies Partial<Record<string, Parameter>>;
 
@@ -65,7 +75,8 @@ export const OptionsPool = z
 	.object({
 		iterationCount: z.number(),
 		milpSolver: z.literal('coinOrCbc'),
-		initialTemperature: z.number()
+		initialTemperature: z.number(),
+		ilpMaxDuration: z.number(),
 	})
 	.partial();
 export type OptionsPool = z.infer<typeof OptionsPool>;

@@ -1,5 +1,5 @@
-import { z } from 'zod';
-import { rangeMap } from '../utils/math';
+import {z} from 'zod';
+import {rangeMap} from '../utils/math';
 
 export const Norm = z.enum(['euclidean', 'manhattan', 'max', 'cosine']);
 export type Norm = z.infer<typeof Norm>;
@@ -11,7 +11,7 @@ export type TrueDistanceType = z.infer<typeof DistanceType>;
 export type DistanceType = TrueDistanceType | Norm;
 
 export function distanceTypeToObject(dist: DistanceType): z.infer<typeof DistanceType> {
-	if (typeof dist === 'string') dist = { norm: dist, invert: false };
+	if (typeof dist === 'string') dist = {norm: dist, invert: false};
 	return dist;
 }
 
@@ -72,4 +72,12 @@ export function cosineDist(a: number[], b: number[]): number {
 
 function assertNever(ignored: never): never {
 	throw new Error('If this function gets called, type safety has been compromised.', ignored);
+}
+
+export function chainLength(path: number[][], distanceType: DistanceType = "euclidean"): number {
+	let cL = 0;
+	for (let i = 0; i < path.length - 1; i++) {
+		cL += dist(path[i], path[i + 1], distanceType);
+	}
+	return cL;
 }
