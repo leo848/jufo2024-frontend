@@ -1,5 +1,5 @@
-import { Color, NamedColor } from '../color/color';
-import { OklabColor, RgbColor } from '../color/colorSpaces';
+import {Color, NamedColor} from '../color/color';
+import {OklabColor, RgbColor} from '../color/colorSpaces';
 
 function chunks<T>(array: T[], n: number): T[][] {
 	const chunks: T[][] = [];
@@ -15,13 +15,13 @@ function transpose<T>(mat: T[][]): T[][] {
 
 function mapBuntstifte(input: [number, number, number][]): NamedColor[] {
 	return input
-		.map(([r, g, b], index) => ({ r, g, b, index }))
-		.map(({ r, g, b, index }) => ({
+		.map(([r, g, b], index) => ({r, g, b, index}))
+		.map(({r, g, b, index}) => ({
 			color: new RgbColor(r / 255, g / 255, b / 255).color(),
 			index
 		}))
 		.slice(0, 100)
-		.toSorted(({ color: c1 }, { color: c2 }) => {
+		.toSorted(({color: c1}, {color: c2}) => {
 			let o1 = c1.space('oklab');
 			let o2 = c2.space('oklab');
 			//let chromaSquared1 = o1.a * o1.a + o1.b * o1.b;
@@ -30,12 +30,25 @@ function mapBuntstifte(input: [number, number, number][]): NamedColor[] {
 			let hue2 = Math.atan2(o2.b, o2.a);
 			return hue2 - hue1;
 		})
-		.filter(({ index }) => index % 2 == 0)
-		.map(({ color, index }) => NamedColor.fromColor(color, leftPadZeroes(3, index + 1)));
+		.filter(({index}) => index % 2 == 0)
+		.map(({color, index}) => NamedColor.fromColor(color, leftPadZeroes(3, index + 1)));
 }
 
 function rgb(hex: string): Color {
 	return RgbColor.fromNumeric(Number.parseInt(hex.substring(1), 16)).color();
+}
+function leftPadZeroes(len: number, num: number): string {
+	let str = '' + num;
+	while (str.length < len) str = '0' + str;
+	return str;
+}
+
+function arrange<T>(array: T[], indices: number[]): T[] {
+	let vs: T[] = [];
+	for (const index of indices) {
+		vs.push(array[index]);
+	}
+	return vs;
 }
 
 const books = {
@@ -367,13 +380,12 @@ const presets = {
 			rgb('#ffb3af'),
 			rgb('#97c077')
 		]
+	},
+	plakatOklab1: {
+		name: 'Plakat 2: Farbauswahl',
+		colors: arrange([[0.5914011514502124, 0.5089514143761735, 0.2800511762481829], [0.5954890470450107, 0.6499999956547772, 0.30000002476520615], [0.5992255875279227, 0.7084398938005532, 0.5107491709806289], [0.6014743717301569, 0.3951406652495834, 0.6555694740127327], [0.5972363098110967, 0.5022584746631034, 0.38425468781633987], [0.5977745295536842, 0.5543966560544072, 0.5103997991555596], [0.6127855390025474, 0.4322250656412217, 0.4648790413151119], [0.6039260630241432, 0.7099999971813594, 0.41000127790815133], [0.5947573915601344, 0.6296113775112827, 0.44709120742109115], [0.602952859903856, 0.4493045658603685, 0.5562660136451636], [0.5988702788536409, 0.6229923792086761, 0.6516486786222625], [0.5978289947272879, 0.7420338474263394, 0.6350007363296681],].map(([_, a, b]) => new OklabColor(0.6, a, b).color()), [3, 12, 11, 4, 8, 9, 6, 10, 2, 1, 5, 7].map(n => n - 1)).map((c, i) => NamedColor.fromColor(c, "l_" + (i + 1)))
 	}
-} satisfies Partial<Record<string, { name: string; colors: Color[] }>>;
+} satisfies Partial<Record<string, {name: string; colors: Color[]}>>;
 
-function leftPadZeroes(len: number, num: number): string {
-	let str = '' + num;
-	while (str.length < len) str = '0' + str;
-	return str;
-}
 
 export default presets;
