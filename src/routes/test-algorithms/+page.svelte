@@ -1,11 +1,18 @@
 <script lang="ts">
 	import { Progressbar } from 'flowbite-svelte';
-	import { RgbColor } from '../../color/colorSpaces';
+	import { OklabColor, RgbColor } from '../../color/colorSpaces';
 	import { chainLength } from '../../geom/dist';
-	import { serverOutputDistPathCreation, type PathCreateMethod } from '../../server/types';
+	import {
+		serverOutputDistPathCreation,
+		PathCreateMethod,
+		PathImproveMethod,
+		serverOutputDistPathImprovement
+	} from '../../server/types';
 	import { registerCallback, sendWebsocket } from '../../server/websocket';
 	import { title } from '../../ui/navbar';
 	import CopyButton from '../../components/CopyButton.svelte';
+	import type { Color } from '../../color/color';
+	import ColorDisplay from '../sort-colors/ColorDisplay.svelte';
 
 	title.set('Algorithmen testen');
 
@@ -19,15 +26,21 @@
 				type: 'getOptimal';
 				data: Array<number>[];
 				repeat: number;
-				lastStartTime: Date;
 				sizeBound: SizeBound;
+		  }
+		| {
+				type: 'getNN';
+				data: Array<number>[];
+				repeat: number;
+				sizeBound: SizeBound;
+				optimal: number;
 		  }
 		| {
 				type: 'getOther';
 				data: Array<number>[];
+				nnEstimate: Array<number>[];
 				optimal: number;
-				lastStartTime: Date;
-				algorithmsLeft: Array<PathCreateMethod['type']>;
+				algorithmsLeft: Array<PathCreateMethod | PathImproveMethod>;
 				repeat: number;
 				sizeBound: SizeBound;
 		  }
@@ -39,10 +52,10 @@
 	type DataPoint = {
 		size: number;
 		algorithm: string;
-		time: number;
 		chainLengthPercent: number;
 	};
 
+	let colorsForViz: Color[] = [];
 	let dataPoints: DataPoint[] = [];
 
 	function advanceState() {
@@ -63,7 +76,6 @@
 				type: 'getOptimal',
 				repeat: state.repeat,
 				sizeBound: state.sizeBound,
-				lastStartTime: new Date(),
 				data
 			};
 			return advanceState();
@@ -80,7 +92,7 @@
 			sendWebsocket({
 				type: 'action',
 				pool: {
-					ilpMaxDuration: state.sizeBound.current,
+					ilpMaxDuration: state.sizeBound.current
 				},
 				action: {
 					type: 'createDistPath',
@@ -95,14 +107,14 @@
 					}
 				}
 			});
-		} else if (state.type === 'getOther') {
+		} else if (state.type === 'getNN') {
 			sendWebsocket({
 				type: 'action',
 				pool: {},
 				action: {
 					type: 'createDistPath',
 					method: {
-						type: state.algorithmsLeft[0]
+						type: 'nearestNeighbor'
 					},
 					values: state.data,
 					dimensions: 3,
@@ -112,11 +124,76 @@
 					}
 				}
 			});
+		} else if (state.type === 'getOther') {
+			let algorithm = state.algorithmsLeft[0];
+			let create = PathCreateMethod.safeParse(algorithm);
+			if (create.success) {
+				sendWebsocket({
+					type: 'action',
+					pool: {},
+					action: {
+						type: 'createDistPath',
+						method: create.data,
+						values: state.data,
+						dimensions: 3,
+						metric: {
+							norm: 'euclidean',
+							invert: false
+						}
+					}
+				});
+			} else {
+				let improve = PathImproveMethod.parse(algorithm);
+				sendWebsocket({
+					type: 'action',
+					pool: {},
+					action: {
+						type: 'improveDistPath',
+						method: improve,
+						path: state.nnEstimate,
+						dimensions: 3,
+						metric: {
+							norm: 'euclidean',
+							invert: false
+						}
+					}
+				});
+			}
+		}
+	}
+
+	function advanceStateOther() {
+		if (state.type !== 'getOther') return;
+		if (state.algorithmsLeft.length > 1) {
+			state = {
+				...state,
+				type: 'getOther',
+				algorithmsLeft: state.algorithmsLeft.slice(1)
+			};
+		} else if (state.repeat > 1) {
+			state = {
+				type: 'repeat',
+				repeat: state.repeat - 1,
+				sizeBound: state.sizeBound
+			};
+		} else if (state.sizeBound.current < state.sizeBound.end) {
+			state = {
+				type: 'repeat',
+				repeat: repet,
+				sizeBound: {
+					...state.sizeBound,
+					current: state.sizeBound.current + 1
+				}
+			};
+		} else {
+			colorsForViz = [];
+			state = {
+				type: 'done'
+			};
 		}
 	}
 
 	registerCallback(serverOutputDistPathCreation, (dpc) => {
-		console.log(dpc);
 		if (!dpc.donePath) return;
 		if (state.type === 'getOptimal') {
 			let newChainLength = chainLength(dpc.donePath);
@@ -128,79 +205,76 @@
 				};
 				return advanceState();
 			}
+			console.log('get optimal done');
 			state = {
 				...state,
-				type: 'getOther',
-				optimal: chainLength(dpc.donePath),
-				lastStartTime: new Date(),
-				algorithmsLeft: getAlgorithms(state.sizeBound.current)
+				type: 'getNN',
+				optimal: chainLength(dpc.donePath)
 			};
 			dataPoints = [
 				...dataPoints,
 				{
 					algorithm: 'ilp',
 					chainLengthPercent: 1,
-					time: new Date().getTime() - state.lastStartTime.getTime(),
 					size: state.sizeBound.current
 				}
 			];
+			colorsForViz = dpc.donePath.map((v) => new OklabColor(v[0], v[1], v[2]).color());
+			return advanceState();
+		} else if (state.type === 'getNN') {
+			console.log('nn done');
+			state = {
+				...state,
+				type: 'getOther',
+				nnEstimate: dpc.donePath,
+				algorithmsLeft: getAlgorithms()
+			};
+			dataPoints.push({
+				algorithm: 'nearestNeighbor',
+				chainLengthPercent: chainLength(dpc.donePath) / state.optimal,
+				size: state.sizeBound.current
+			});
+			dataPoints = dataPoints;
 			return advanceState();
 		} else if (state.type === 'getOther') {
-			dataPoints = [
-				...dataPoints,
-				{
-					algorithm: state.algorithmsLeft[0],
-					chainLengthPercent: chainLength(dpc.donePath) / state.optimal,
-					time: new Date().getTime() - state.lastStartTime.getTime(),
-					size: state.sizeBound.current
-				}
-			];
-			if (state.algorithmsLeft.length > 1) {
-				state = {
-					...state,
-					type: 'getOther',
-					lastStartTime: new Date(),
-					algorithmsLeft: state.algorithmsLeft.slice(1)
-				};
-			} else if (state.repeat > 0) {
-				state = {
-					type: 'repeat',
-					repeat: state.repeat - 1,
-					sizeBound: state.sizeBound
-				};
-			} else if (state.sizeBound.current < state.sizeBound.end) {
-				state = {
-					type: 'repeat',
-					repeat: repet,
-					sizeBound: {
-						...state.sizeBound,
-						current: state.sizeBound.current + 1
-					}
-				};
-			} else {
-				state = {
-					type: 'done'
-				};
-			}
+			dataPoints.push({
+				algorithm: state.algorithmsLeft[0].type,
+				chainLengthPercent: chainLength(dpc.donePath) / state.optimal,
+				size: state.sizeBound.current
+			});
+			dataPoints = dataPoints;
+			advanceStateOther();
+			return advanceState();
+		}
+	});
+
+	registerCallback(serverOutputDistPathImprovement, (dpi) => {
+		if (!dpi.done) return;
+		if (state.type === 'getOther') {
+			dataPoints.push({
+				algorithm: state.algorithmsLeft[0].type,
+				chainLengthPercent: chainLength(dpi.currentPath) / state.optimal,
+				size: state.sizeBound.current
+			});
+			dataPoints = dataPoints;
+			advanceStateOther();
 			advanceState();
 		}
 	});
 
-	function getAlgorithms(problemSize: number): Array<PathCreateMethod['type']> {
-		let alwaysIncluded: Array<PathCreateMethod['type']> = [
-			'nearestNeighbor',
-			'optimalNearestNeighbor',
-			'greedy',
-			'transmute',
-			'insertion'
+	function getAlgorithms(): Array<PathCreateMethod | PathImproveMethod> {
+		let alwaysIncluded: Array<PathCreateMethod | PathImproveMethod> = [
+			{ type: 'optimalNearestNeighbor' },
+			{ type: 'greedy' },
+			{ type: 'transmute' },
+			{ type: 'insertion' },
+			{ type: 'twoOpt' },
+			{ type: 'innerRotate' }
 		];
 		let algorithms = alwaysIncluded;
 		/*if (problemSize < 13) {
 			algorithms.push('bruteForce');
 		}*/
-		if (problemSize < 16) {
-			algorithms.push('heldKarp');
-		}
 		return algorithms;
 	}
 
@@ -241,6 +315,12 @@
 		</div>
 	{/if}
 
+	{#each [] as color}
+		<div class="mt-4 inline">
+			<ColorDisplay offline {color} />
+		</div>
+	{/each}
+
 	{#if state.type !== 'start' && state.type !== 'done'}
 		<div class="text-white text-xl">n={state.sizeBound.current}</div>
 	{/if}
@@ -252,6 +332,6 @@
 	<div class="text-white text-xl">{state.type}</div>
 
 	{#if state.type === 'getOther'}
-		<div class="text-white text-xl">A={state.algorithmsLeft[0]}</div>
+		<div class="text-white text-xl">A={state.algorithmsLeft[0].type}</div>
 	{/if}
 </div>

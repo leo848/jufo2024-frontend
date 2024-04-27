@@ -6,6 +6,7 @@
 	export let selected: boolean = false;
 	export let size: 'xs' | 'sm' | 'md' | 'lg' | 'xl' = 'md';
 	export let tooltip: boolean = true;
+	export let offline: boolean = false;
 
 	$: sizeRem = (
 		{
@@ -31,7 +32,11 @@
 	<div class={sizeClass} />
 </button>
 {#if tooltip}
-	{#await color.name() then meta}
-		<Tooltip>{meta.name}</Tooltip>
-	{/await}
+	{#if offline}
+		<Tooltip>{color.css()}</Tooltip>
+	{:else}
+		{#await color.name() then meta}
+			<Tooltip>{meta.name}</Tooltip>
+		{/await}
+	{/if}
 {/if}
