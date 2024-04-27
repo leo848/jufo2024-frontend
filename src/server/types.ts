@@ -71,6 +71,7 @@ export const PathImproveMethod = z.discriminatedUnion('type', [
 	z.object({type: z.literal('rotate')}),
 	z.object({type: z.literal('innerRotate')}),
 	z.object({type: z.literal('twoOpt')}),
+	z.object({type: z.literal('twoOptAndInnerRotate')}),
 	z.object({type: z.literal('threeOpt')}),
 	z.object({type: z.literal('simulatedAnnealing')}),
 	z.object({type: z.literal('swap')})
