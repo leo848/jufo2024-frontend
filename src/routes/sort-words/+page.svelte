@@ -15,7 +15,7 @@
 	import { goto } from '$app/navigation';
 	import { page } from '$app/stores';
 	import { gradient } from '../../ui/color';
-	import { RgbColor } from '../../color/colorSpaces';
+	import { HslColor, HsvColor, RgbColor } from '../../color/colorSpaces';
 	import type { Color } from '../../color/color';
 	import Options from '../../components/Options.svelte';
 	import PathAlgorithms from '../../components/PathAlgorithms.svelte';
@@ -27,6 +27,7 @@
 	import LoadWords from './LoadWords.svelte';
 	import { presets } from './presets';
 	import { dist, type TrueDistanceType } from '../../geom/dist';
+	import { dark } from '../../ui/darkmode';
 
 	title.set('Wörter sortieren');
 
@@ -126,18 +127,16 @@
 	function vecToColors(vec: number[]): Color[] {
 		return vec
 			.map((number) => {
-				if (number > 0)
-					return new RgbColor(0, 255, 0)
-						.color()
-						.space('hsv')
-						.with('v', number * 3);
-				else
-					return new RgbColor(255, 0, 0)
-						.color()
-						.space('hsv')
-						.with('v', -number * 3);
+				let rgbColor = number > 0 ? new RgbColor(0, 1, 0) : new RgbColor(1, 0, 0);
+				let hsvColor = rgbColor.color().space('hsv');
+				if ($dark) {
+					hsvColor = hsvColor.with('v', Math.abs(number) * 3);
+				} else {
+					hsvColor = hsvColor.with('v', 1 - Math.abs(number)).with('s', Math.abs(number) * 3);
+				}
+				return hsvColor;
 			})
-			.map((hsl) => hsl.color());
+			.map((hsv) => hsv.color());
 	}
 
 	function removeWord(trueIndex: number) {
@@ -234,14 +233,14 @@
 			<form on:submit|preventDefault={invalidate(addInput)}>
 				<div class="flex flex-row gap-4 mb-4">
 					<input
-						class="bg-gray-600 text-xl p-2 rounded text-white grow"
+						class="dark:bg-gray-600 bg-gray-100 text-xl p-2 rounded dark:text-white text-black grow"
 						placeholder="Gib ein deutsches Wort ein..."
 						bind:value={input}
 						bind:this={inputElement}
 						disabled={inputError && inputError.type === 'unsupported'}
 					/>
 					<button
-						class={`bg-gray-600 hover:bg-gray-500 text-white p-4 rounded-full`}
+						class={`dark:bg-gray-600 bg-gray-100 dark:hover:bg-gray-500 hover:bg-gray-200 dark:text-white text-black p-4 rounded-full`}
 						on:click={invalidate(() => addInput())}
 						disabled={inputLoading}
 					>
@@ -268,7 +267,10 @@
 			</form>
 			{#each words as word, trueIndex (word.inner)}
 				<div animate:flip>
-					<div class="p-2 rounded text-xl text-white bg-gray-700 flex flex-row" title={word.desc}>
+					<div
+						class="p-2 rounded text-xl dark:text-white text-black dark:bg-gray-700 bg-gray-100 flex flex-row"
+						title={word.desc}
+					>
 						<span class="text-gray-400">{word.index + 1}.&nbsp;</span>
 						{word.inner}
 						<div class="grow" />
