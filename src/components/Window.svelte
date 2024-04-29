@@ -64,14 +64,14 @@
 		} transition-all`}
 	>
 		<div
-			class={`gap-4 text-2xl dark:text-white bg-gray-700 p-2 rounded-t-xl flex flex-row ${
+			class={`gap-4 text-2xl text-black dark:text-white bg-gray-300 dark:bg-gray-700 p-2 rounded-t-xl flex flex-row ${
 				closed ? 'truncate' : 'justify-between'
 			}`}
 		>
 			<div class="flex flex-row gap-4">
 				{#if closable}<div>
 						<button
-							class="bg-gray-600 hover:bg-gray-500 transition-all rounded-xl p-2"
+							class="bg-gray-400 dark:bg-gray-600 hover:bg-gray-500 transition-all rounded-xl p-2"
 							on:click={() => (closed = !closed)}
 						>
 							{#if closed}
@@ -85,8 +85,9 @@
 			</div>
 			{#if options}
 				<div>
-					<button class="bg-gray-600 rounded-xl p-2" on:click={() => (showOptions = !showOptions)}
-						><Icon.CogOutline /></button
+					<button
+						class="bg-gray-400 dark:bg-gray-600 rounded-xl p-2"
+						on:click={() => (showOptions = !showOptions)}><Icon.CogOutline /></button
 					>
 				</div>
 			{/if}
