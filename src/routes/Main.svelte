@@ -66,7 +66,7 @@
 		<div transition:scale>
 			<button
 				on:click={() => (location.href = card.href)}
-				class="mb-4 h-full w-full transition-all lg:flex lg:flex-col max-md:grid max-md:grid-cols-2 bg-gray-800 hover:bg-gray-700 transition-all rounded-xl overflow-hidden"
+				class="mb-4 h-full w-full transition-all lg:flex lg:flex-col max-md:grid max-md:grid-cols-2 dark:bg-gray-800 bg-gray-100 dark:hover:bg-gray-700 hover:bg-gray-300 transition-all rounded-xl overflow-hidden"
 			>
 				<img src={card.img} class="w-full aspect-ratio-1" alt="Bildvorschau {card.text}" />
 				<div class="text-white text-sm opacity-30 max-md:hidden">
