@@ -273,7 +273,7 @@
 				disabled={progress.ongoing}
 			>
 				<div
-					class="bg-gray-300 dark:bg-gray-700 dark:hover:bg-gray-600 hover:bg-gray-100 transition-all p-2 rounded-xl border dark:border-gray-600"
+					class="bg-gray-100 dark:bg-gray-700 dark:hover:bg-gray-600 hover:bg-gray-100 transition-all p-2 rounded-xl border dark:border-gray-600"
 				>
 					<div class="flex items-center justify-between">
 						<Icon.AngleRightSolid
