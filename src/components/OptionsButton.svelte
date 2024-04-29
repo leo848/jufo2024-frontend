@@ -12,11 +12,11 @@
 
 {#if show}
 	<button
-		class="pr-2 inline-flex gap-2 justify-between items-center justify-items-center bg-gray-700 hover:bg-gray-600 transition-all rounded-xl text-white"
+		class="pr-2 inline-flex gap-2 justify-between items-center justify-items-center bg-gray-300 dark:bg-gray-700 hover:dark:bg-gray-600 hover:bg-gray-400 transition-all rounded-xl text-black dark:text-white"
 		on:click
 		bind:this={elt}
 	>
-		<div class="bg-gray-600 p-2 rounded-xl" style={iconStyle}>
+		<div class="bg-gray-400 dark:bg-gray-600 p-2 rounded-xl" style={iconStyle}>
 			<svelte:component this={icon} size="md" />
 		</div>
 		<div>{title}</div>
