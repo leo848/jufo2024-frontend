@@ -191,7 +191,7 @@
 		let selected = null;
 		for (let i = particles.length - 1; i >= 0; i--) {
 			const particle = particles[i];
-			let [tl, br] = particle.draw(ctx);
+			let [tl, br] = particle.draw(ctx, { highlight: false, dark: $dark });
 			if (mouseInBounds([mouse.x, mouse.y], tl, br)) {
 				selected = i;
 			}
@@ -206,7 +206,7 @@
 			if (typeof selected === 'number') {
 				selectedParticle = particles[selected];
 			} else selectedParticle = selected;
-			selectedParticle.draw(ctx, { highlight: true });
+			selectedParticle.draw(ctx, { highlight: true, dark: $dark });
 		} else {
 			selectedParticle = null;
 		}
