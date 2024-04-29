@@ -1,6 +1,6 @@
-import {z} from 'zod';
-import {DistanceType} from '../geom/dist';
-import {OptionsPool} from './optionsPool';
+import { z } from 'zod';
+import { DistanceType } from '../geom/dist';
+import { OptionsPool } from './optionsPool';
 
 export const serverError = z.discriminatedUnion('type', [
 	z.object({
@@ -54,27 +54,27 @@ export const openRouteApiError = z.discriminatedUnion('type', [
 ]);
 
 export const PathCreateMethod = z.discriminatedUnion('type', [
-	z.object({type: z.literal('nearestNeighbor')}),
-	z.object({type: z.literal('optimalNearestNeighbor')}),
-	z.object({type: z.literal('bruteForce')}),
-	z.object({type: z.literal('greedy')}),
-	z.object({type: z.literal('christofides')}),
-	z.object({type: z.literal('random')}),
-	z.object({type: z.literal('transmute')}),
-	z.object({type: z.literal('heldKarp')}),
-	z.object({type: z.literal('insertion')}),
-	z.object({type: z.literal('ilp')})
+	z.object({ type: z.literal('nearestNeighbor') }),
+	z.object({ type: z.literal('optimalNearestNeighbor') }),
+	z.object({ type: z.literal('bruteForce') }),
+	z.object({ type: z.literal('greedy') }),
+	z.object({ type: z.literal('christofides') }),
+	z.object({ type: z.literal('random') }),
+	z.object({ type: z.literal('transmute') }),
+	z.object({ type: z.literal('heldKarp') }),
+	z.object({ type: z.literal('insertion') }),
+	z.object({ type: z.literal('ilp') })
 ]);
 export type PathCreateMethod = z.infer<typeof PathCreateMethod>;
 
 export const PathImproveMethod = z.discriminatedUnion('type', [
-	z.object({type: z.literal('rotate')}),
-	z.object({type: z.literal('innerRotate')}),
-	z.object({type: z.literal('twoOpt')}),
-	z.object({type: z.literal('twoOptAndInnerRotate')}),
-	z.object({type: z.literal('threeOpt')}),
-	z.object({type: z.literal('simulatedAnnealing')}),
-	z.object({type: z.literal('swap')})
+	z.object({ type: z.literal('rotate') }),
+	z.object({ type: z.literal('innerRotate') }),
+	z.object({ type: z.literal('twoOpt') }),
+	z.object({ type: z.literal('twoOptAndInnerRotate') }),
+	z.object({ type: z.literal('threeOpt') }),
+	z.object({ type: z.literal('simulatedAnnealing') }),
+	z.object({ type: z.literal('swap') })
 ]);
 export type PathImproveMethod = z.infer<typeof PathImproveMethod>;
 
@@ -112,14 +112,14 @@ const action = z.discriminatedUnion('type', [
 	})
 ]);
 
-const serverInputLog = z.object({type: z.literal('log'), message: z.string()});
+const serverInputLog = z.object({ type: z.literal('log'), message: z.string() });
 const serverInputAction = z.object({
 	type: z.literal('action'),
 	action,
 	latency: z.number().optional(),
 	pool: OptionsPool
 });
-const serverInputLatency = z.object({type: z.literal('latency')});
+const serverInputLatency = z.object({ type: z.literal('latency') });
 const serverInputWordToVec = z.object({
 	type: z.literal('wordToVec'),
 	desc: z.optional(z.string()),
@@ -193,9 +193,9 @@ export const serverOutputWordToVec = z.object({
 	word: z.string(),
 	desc: z.nullable(z.string()),
 	result: z.discriminatedUnion('type', [
-		z.object({type: z.literal('ok'), vec: z.array(z.number())}),
-		z.object({type: z.literal('unknownWord')}),
-		z.object({type: z.literal('unsupported')})
+		z.object({ type: z.literal('ok'), vec: z.array(z.number()) }),
+		z.object({ type: z.literal('unknownWord') }),
+		z.object({ type: z.literal('unsupported') })
 	])
 });
 export const serverOutputRandomWord = z.object({

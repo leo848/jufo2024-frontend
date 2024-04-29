@@ -1,24 +1,24 @@
-import {z} from 'zod';
+import { z } from 'zod';
 
 type SpecificParameter =
 	| {
-		type: 'number';
-		min: number;
-		max: number;
-		step: number;
-		default: number;
-		transform?: (original: number) => number;
-		display?: (n: number) => string;
-	}
+			type: 'number';
+			min: number;
+			max: number;
+			step: number;
+			default: number;
+			transform?: (original: number) => number;
+			display?: (n: number) => string;
+	  }
 	| {
-		type: 'boolean';
-		default: boolean;
-	}
+			type: 'boolean';
+			default: boolean;
+	  }
 	| {
-		type: 'option';
-		values: string[];
-		default: string;
-	};
+			type: 'option';
+			values: string[];
+			default: string;
+	  };
 
 export type Parameter = {
 	name: string;
@@ -76,7 +76,7 @@ export const OptionsPool = z
 		iterationCount: z.number(),
 		milpSolver: z.literal('coinOrCbc'),
 		initialTemperature: z.number(),
-		ilpMaxDuration: z.number(),
+		ilpMaxDuration: z.number()
 	})
 	.partial();
 export type OptionsPool = z.infer<typeof OptionsPool>;
