@@ -1,6 +1,6 @@
-import { lerp, rangeMap } from '../utils/math';
-import type { Color } from './color';
-import { OklabColor, RgbColor } from './colorSpaces';
+import {lerp, rangeMap} from '../utils/math';
+import type {Color} from './color';
+import {OklabColor, RgbColor} from './colorSpaces';
 
 function rgb(hex: string): Color {
 	return RgbColor.fromNumeric(parseInt(hex.substring(1), 16)).color();
@@ -304,7 +304,7 @@ export class PerceptualGradient {
 		return string;
 	}
 }
-export function distColor(dist: number, [min, max]: [number, number]): Color | null {
+export function distColor(dist: number, [min, max]: [number, number], {dark}: {dark: boolean} = {dark: true}): Color | null {
 	/*let [minColor, maxColor] = [new RgbColor(0, 255, 0), new RgbColor(255, 0, 0)].map((rgb) => {
 		return rgb.color().space('hsl').with('s', 0.2).color().oklab().with('l', 0.3);
 	});*/
@@ -326,12 +326,17 @@ export function distColor(dist: number, [min, max]: [number, number]): Color | n
 	let t = symmetrify(unease)(rangeMap(dist, [min - 0.001, max + 0.001], [0, 0.8]));
 	let sample = PerceptualGradient.Icefire.sample(t);
 	if (!sample) return null;
-	return readableIcefire(sample.color());
+	return readableIcefire(sample.color(), {dark});
 }
 
-export function readableIcefire(sample: Color) {
-	let sampleDarker = sample.oklab().with('l', rangeMap(sample.oklab().l, [0, 1], [0.3, 0.6]));
-	let sampleHsl = sampleDarker.color().space('hsl');
-	let color = sampleHsl.with('s', Math.min(sampleHsl.s, 0.4));
-	return color.color();
+export function readableIcefire(sample: Color, {dark}: {dark: boolean} = {dark: false}) {
+	if (dark) {
+		let sampleDarker = sample.oklab().with('l', rangeMap(sample.oklab().l, [0, 1], [0.3, 0.6]));
+		let sampleHsl = sampleDarker.color().space('hsl');
+		let color = sampleHsl.with('s', Math.min(sampleHsl.s, 0.4));
+		return color.color();
+	} else {
+		let hsv = sample.space("hsv");
+		return hsv.with("v", 0.5 + 0.5 - hsv.v / 2).color()
+	}
 }

@@ -2,6 +2,7 @@
 	import { Tooltip } from 'flowbite-svelte';
 	import { RgbColor } from '../color/colorSpaces';
 	import { distColor } from '../color/gradient';
+	import { dark } from '../ui/darkmode';
 
 	export let values: number[][];
 	export let vertexNames: string[];
@@ -59,13 +60,15 @@
 
 <div>
 	<div
-		class="grid overflow-scroll text-white"
+		class="grid overflow-scroll dark:text-white text-black"
 		style:grid-template-columns={`repeat(${length + 1}, minmax(auto, 1fr))`}
 	>
 		<div class="m-2 text-center" />
 		{#each sorted as { name }, index (name)}
-			<div class="border-gray-500 border">
-				<div class="bg-gray-700 text-center">{collapseNames ? index + 1 : name}</div>
+			<div class="dark:border-gray-500 border-gray-200 border">
+				<div class="dark:bg-gray-700 bg-gray-100 text-center">
+					{collapseNames ? index + 1 : name}
+				</div>
 				{#if collapseNames}
 					<Tooltip type="light">{name}</Tooltip>
 				{/if}
@@ -73,8 +76,8 @@
 		{/each}
 		{#each sorted as { name, index }, trueIndex (name)}
 			{@const vector = values[index]}
-			<div class="border-gray-500 border">
-				<div class="bg-gray-700 h-full text-center">
+			<div class="dark:border-gray-500 border-gray-200 border">
+				<div class="dark:bg-gray-700 bg-gray-100 h-full text-center">
 					{collapseNames ? trueIndex + 1 : name}
 				</div>
 				{#if collapseNames}
@@ -85,10 +88,11 @@
 				{@const value = vector[index1]}
 				{#if index != index1}
 					<div
-						class="tabular-nums py-2 px-2 border-gray-700 border-2 border transition-all"
-						class:border-white={highlightMatrix[index][index1]}
+						class="tabular-nums py-2 px-2 dark:border-gray-700 border-gray-200 border-2 border transition-all"
+						class:dark:border-white={highlightMatrix[index][index1]}
+						class:border-black={highlightMatrix[index][index1]}
 						style={`background-color:${(
-							distColor(value, [min, max]) ?? new RgbColor(0.2, 0.2, 0.2).color()
+							distColor(value, [min, max], { dark: $dark }) ?? new RgbColor(0.2, 0.2, 0.2).color()
 						)
 							.rgb()
 							.css()}`}
@@ -101,7 +105,8 @@
 								bind:value={values[index][index1]}
 								disabled={symmetric && index > index1}
 								style={`background-color:${(
-									distColor(value, [min, max])?.lighten(0.05) ?? new RgbColor(0.2, 0.2, 0.2).color()
+									distColor(value, [min, max], { dark: $dark })?.lighten(0.05) ??
+									new RgbColor(0.2, 0.2, 0.2).color()
 								)
 									.rgb()
 									.css()}`}
@@ -111,7 +116,7 @@
 						{/if}
 					</div>
 				{:else}
-					<div class="py-2 px-2 border-gray-500 border-1 border">–</div>
+					<div class="py-2 px-2 dark:border-gray-500 border-gray-100 border-1 border">–</div>
 				{/if}
 			{/each}
 		{/each}
