@@ -1,4 +1,4 @@
-import { Vec2 } from './vector';
+import {Vec2} from './vector';
 
 export class Particle {
 	pos: Vec2;
@@ -35,7 +35,7 @@ export class Particle {
 		this.acc = this.acc.add(force);
 	}
 
-	update({ friction }: { friction?: number }) {
+	update({friction}: {friction?: number}) {
 		this.vel = this.vel.add(this.acc);
 		this.pos = this.pos.add(this.vel);
 
@@ -45,11 +45,11 @@ export class Particle {
 
 	draw(
 		ctx: CanvasRenderingContext2D,
-		options: { highlight: boolean } = { highlight: false }
+		options: {highlight: boolean, dark: boolean} = {highlight: false, dark: false}
 	): [[number, number], [number, number]] {
 		ctx.lineWidth = 2;
-		ctx.fillStyle = options.highlight ? '#ccc' : '#444';
-		ctx.strokeStyle = options.highlight ? '#444' : '#ccc';
+		ctx.fillStyle = options.highlight === options.dark ? '#ccc' : '#444';
+		ctx.strokeStyle = options.highlight === options.dark ? '#444' : '#ccc';
 
 		const fontSize = 18;
 		const textWidth = Math.max(fontSize, ctx.measureText(this.name).width + 10);
@@ -64,9 +64,9 @@ export class Particle {
 		ctx.font = fontSize + 'px Inter, sans-serif';
 
 		ctx.beginPath();
-		ctx.fillStyle = options.highlight ? '#444' : '#ccc';
+		ctx.fillStyle = options.highlight === options.dark ? '#444' : '#ccc';
 		ctx.ellipse(this.pos.x, this.pos.y, 4, 4, 0, 0, Math.PI * 2);
-		ctx.fillStyle = options.highlight ? 'black' : 'white';
+		ctx.fillStyle = options.highlight === options.dark ? 'black' : 'white';
 		ctx.ellipse(this.pos.x, this.pos.y, 3, 3, 0, 0, Math.PI * 2);
 		ctx.fill();
 

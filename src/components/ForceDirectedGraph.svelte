@@ -7,6 +7,7 @@
 	import { positiveAdjacencyMatrix } from '../graph/adjacency';
 	import { tweened, type Tweened } from 'svelte/motion';
 	import { quadIn, quadInOut } from 'svelte/easing';
+	import { dark } from '../ui/darkmode';
 
 	export let values: number[][];
 	export let edges: [number, number][] = []; // indices
@@ -162,8 +163,8 @@
 		if (ctx == null) return;
 		// ctx.translate(width / 2, height / 2)
 
-		ctx.fillStyle = 'rgb(31 41 55)';
-		ctx.fillRect(0, 0, width, height);
+		ctx.fillStyle = $dark ? 'rgb(31 41 55)' : 'rgb(250 250 255)';
+		ctx.fillRect(0, 0, width, height); // background
 
 		applyForces();
 
@@ -178,7 +179,7 @@
 			}
 		}
 
-		ctx.strokeStyle = 'white';
+		ctx.strokeStyle = $dark ? 'white' : 'black';
 		ctx.lineWidth = 3;
 		for (const f of $displayEdges ?? []) {
 			const [fromPos, _fromIdx, toPos, _toIdx] = f();
@@ -196,7 +197,7 @@
 			}
 		}
 		if (selectedParticle) {
-			let [tl, br] = selectedParticle.draw(ctx);
+			let [tl, br] = selectedParticle.draw(ctx, { highlight: false, dark: $dark });
 			if (mouseInBounds([mouse.x, mouse.y], tl, br)) {
 				selected = selectedParticle;
 			}
