@@ -15,7 +15,7 @@
 	export let degrees = false;
 
 	const arrowClass =
-		'w-6 dark:bg-gray-600 bg-gray-200 dark:hover:bg-gray-500 hover:bg-gray-300 transition-all disabled:bg-gray-700 h-full text-sm text-center';
+		'w-6 dark:bg-gray-600 bg-gray-200 dark:hover:bg-gray-500 hover:bg-gray-300 transition-all dark:disabled:bg-gray-700 disabled:bg-gray-400 h-full text-sm text-center';
 
 	// $: displayValue = mapDisplay(value);
 	let displayValue: number = mapDisplay(value);
