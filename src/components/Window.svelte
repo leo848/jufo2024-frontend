@@ -71,7 +71,7 @@
 			<div class="flex flex-row gap-4">
 				{#if closable}<div>
 						<button
-							class="bg-gray-300 dark:bg-gray-600 hover:bg-gray-500 transition-all rounded-xl p-2"
+							class="bg-gray-300 dark:bg-gray-600 dark:hover:bg-gray-500 hover:bg-gray-400 transition-all rounded-xl p-2"
 							on:click={() => (closed = !closed)}
 						>
 							{#if closed}
