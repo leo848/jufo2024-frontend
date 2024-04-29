@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { dark } from '../ui/darkmode';
 	import { gradient } from '../ui/color';
 	import { OklabColor } from '../color/colorSpaces';
 	import Deployment from './Deployment.svelte';
@@ -24,15 +25,15 @@
 	];
 
 	let footerGradient: string;
-	{
+	$: {
 		const amount = 100;
 		let range = new Array(amount)
 			.fill(0)
 			.map((_v, i) => i / (amount - 1))
 			.map((v) => v * Math.PI * 2)
 			.map((h) => {
-				const l = 0.3;
-				const c = 0.05;
+				const l = $dark ? 0.3 : 0.7;
+				const c = $dark ? 0.05 : 0.1;
 				const [a, b] = [c * Math.sin(h), c * Math.cos(h)];
 				return OklabColor.fromUnnormalOklab(l, a, b).color();
 			});
@@ -41,7 +42,7 @@
 </script>
 
 <div
-	class="min-h-40 bg-gray-800 text-gray-300 p-10 grid grid-cols-6 gap-12 rotating-bg"
+	class="min-h-40 bg-gray-800 dark:text-gray-300 text-black p-10 grid grid-cols-6 gap-12 rotating-bg"
 	style={`background:${footerGradient}`}
 >
 	<!-- footer -->
@@ -70,16 +71,16 @@
 	</div>
 
 	<div class="col-span-2 xl:col-span-1">
-		<div class="text-gray-200 text-2xl">Unterseiten</div>
-		<div class="flex flex-col text-gray-400">
+		<div class="dark:text-gray-200 text-gray-900 text-2xl">Unterseiten</div>
+		<div class="flex flex-col dark:text-gray-400 text-gray-800">
 			{#each pages as { url: href, title }}
 				<SimpleLink {href}>{title}</SimpleLink>
 			{/each}
 		</div>
 	</div>
 	<div class="col-span-2 xl:col-span-1">
-		<div class="text-gray-200 text-2xl">Weitere Links</div>
-		<div class="flex flex-col text-gray-400">
+		<div class="dark:text-gray-200 text-gray-900 text-2xl">Weitere Links</div>
+		<div class="flex flex-col dark:text-gray-400 text-gray-800">
 			{#each links as { url: href, target, title }}
 				<SimpleLink {href} {target}>{title}</SimpleLink>
 			{/each}
