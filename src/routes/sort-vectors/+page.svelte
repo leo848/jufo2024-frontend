@@ -142,6 +142,9 @@
 	let fdgOptions = { speed: 3 };
 	let fdgActions: { freeze: () => void };
 
+	let dimBtnClassName =
+		'dark:bg-gray-800 bg-gray-100 dark:hover:bg-gray-700 hover:bg-gray-200 transition-all dark:text-white text-gray-500 py-2 rounded grow flex flex-row justify-center';
+
 	function pathToEdges(path: number[][]): [number, number][] {
 		let edges = [];
 		for (let i = 0; i < path.length - 1; i++) {
@@ -210,7 +213,7 @@
 			<div class="flex-col flex p-2 gap-2 rounded mt-[12px]">
 				<div class="flex flex-row justify-stretch gap-2 justify-items-center">
 					<button
-						class="bg-gray-800 hover:bg-gray-700 transition-all text-white py-2 rounded grow flex flex-row justify-center"
+						class={dimBtnClassName}
 						class:opacity-0={locked}
 						disabled={locked}
 						on:click={() => (dim -= 1)}
@@ -218,7 +221,7 @@
 						<Icon.MinusSolid />
 					</button>
 					<button
-						class="bg-gray-800 hover:bg-gray-700 transition-all text-white py-2 rounded grow flex flex-row justify-center"
+						class={dimBtnClassName}
 						class:opacity-0={locked}
 						disabled={locked}
 						on:click={incrementDim}
@@ -227,20 +230,24 @@
 					</button>
 				</div>
 				{#each { length: dim } as _, comp}
-					<div class="bg-gray-800 text-white text-2xl py-2 px-6 rounded">
+					<div
+						class="dark:bg-gray-800 bg-gray-200 dark:text-white text-gray-800 text-2xl py-2 px-6 rounded"
+					>
 						x<sub>{comp + 1}</sub>
 					</div>
 				{/each}
 			</div>
 			{#each $data as vector, index (vector.name)}
-				<div class="bg-gray-800 flex-col flex p-2 gap-2 rounded" animate:flip>
-					<div class="text-4xl text-gray-300 text-center mb-2">{@html vector.name}</div>
+				<div class="dark:bg-gray-800 bg-gray-100 flex-col flex p-2 gap-2 rounded" animate:flip>
+					<div class="text-4xl dark:text-gray-300 text-gray-600 text-center mb-2">
+						{@html vector.name}
+					</div>
 					{#each { length: dim } as _, comp}
 						<input
 							type="number"
 							step="0.00001"
 							disabled={locked}
-							class="w-20 px-4 py-2 text-2xl text-white bg-gray-700 border-none rounded overflow-hidden text-center"
+							class="w-20 px-4 py-2 text-2xl dark:text-white text-gray-700 dark:bg-gray-700 bg-gray-200 border-none rounded overflow-hidden text-center"
 							value={vector.inner[comp]}
 							on:change={invalidate(
 								(evt) => setValue(evt, index, comp),
@@ -252,16 +259,16 @@
 			{/each}
 			{#if !locked}
 				<button
-					class="bg-gray-800 flex-col flex p-2 gap-2 rounded opacity-50"
+					class="dark:bg-gray-800 bg-gray-400 flex-col flex p-2 gap-2 rounded opacity-50"
 					on:click={addEmptyVector}
 				>
-					<div class="text-4xl text-gray-300 text-center mb-2">
+					<div class="text-4xl dark:text-gray-300 text-gray-500 text-center mb-2">
 						{@html getName(length)}
 					</div>
 					{#each { length: dim } as _}
 						<input
 							type="number"
-							class="w-20 px-4 py-2 text-2xl text-white bg-gray-700 border-none rounded overflow-hidden text-center"
+							class="w-20 px-4 py-2 text-2xl text-white dark:bg-gray-700 bg-gray-500 border-none rounded overflow-hidden text-center"
 							value={0}
 						/>
 					{/each}
