@@ -56,6 +56,8 @@
 	};
 
 	let colorsForViz: Color[] = [];
+	let vizTimeout: NodeJS.Timeout | null = null;
+
 	let dataPoints: DataPoint[] = [];
 
 	function advanceState() {
@@ -219,7 +221,16 @@
 					size: state.sizeBound.current
 				}
 			];
-			colorsForViz = dpc.donePath.map((v) => new OklabColor(v[0], v[1], v[2]).color());
+			let path = dpc.donePath;
+			let timeout = setTimeout(() => {
+				if (vizTimeout !== null && vizTimeout !== timeout) {
+					clearTimeout(vizTimeout);
+					vizTimeout = null;
+					return;
+				}
+				colorsForViz = path.map((v) => new OklabColor(v[0], v[1], v[2]).color());
+			}, 500);
+			vizTimeout = timeout;
 			return advanceState();
 		} else if (state.type === 'getNN') {
 			console.log('nn done');
@@ -269,7 +280,8 @@
 			{ type: 'transmute' },
 			{ type: 'insertion' },
 			{ type: 'twoOpt' },
-			{ type: 'innerRotate' }
+			{ type: 'innerRotate' },
+			{ type: 'twoOptAndInnerRotate' }
 		];
 		let algorithms = alwaysIncluded;
 		/*if (problemSize < 13) {
@@ -315,11 +327,11 @@
 		</div>
 	{/if}
 
-	{#each [] as color}
-		<div class="mt-4 inline">
+	<div class="mt-4">
+		{#each colorsForViz as color}
 			<ColorDisplay offline {color} />
-		</div>
-	{/each}
+		{/each}
+	</div>
 
 	{#if state.type !== 'start' && state.type !== 'done'}
 		<div class="text-white text-xl">n={state.sizeBound.current}</div>
