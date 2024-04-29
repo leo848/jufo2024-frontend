@@ -1,7 +1,8 @@
 import {readonly, writable} from "svelte/store";
 
-let writableDark = writable(true);
-let writableDarkValue = true;
+let oldValue = document.documentElement.classList.contains("dark");
+let writableDark = writable(oldValue);
+let writableDarkValue = oldValue;
 export let dark = readonly(writableDark);
 
 setInterval(() => {

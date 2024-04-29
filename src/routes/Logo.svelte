@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { onDestroy } from 'svelte';
+	import { dark } from '../ui/darkmode';
 	import type { Color } from '../color/color';
 	import { HslColor, RgbColor } from '../color/colorSpaces';
 	import { PerceptualGradient } from '../color/gradient';
@@ -177,25 +177,17 @@
 		]
 	].map((list) => list.map(([r, g, b]) => new RgbColor(r, g, b).color().lighten(0.2)));
 
-	$: dark = document.documentElement.classList.contains('dark');
-	let interval = setInterval(() => {
-		let newDark = document.documentElement.classList.contains('dark');
-		if (newDark != dark) dark = newDark;
-	}, 1000);
-
-	onDestroy(() => clearInterval(interval));
-
 	let list: Color[] = new Array(5).fill(
-		(dark ? new RgbColor(1, 1, 1) : new RgbColor(0, 0, 0)).color()
+		($dark ? new RgbColor(1, 1, 1) : new RgbColor(0, 0, 0)).color()
 	);
-	$: dark,
+	$: $dark,
 		(() => {
 			if (Math.random() < 0.02) {
 				list = sortedLists[Math.floor(Math.random() * sortedLists.length)];
 			} else {
 				list = new Array(100).fill(0).map((_, i) => {
 					const color = new HslColor(i / 120, 1, 0.5).color();
-					if (dark) {
+					if ($dark) {
 						return color.lighten(0.5);
 					} else {
 						return color.darken(0.5);

@@ -23,7 +23,7 @@
 	});
 
 	let animDistances: Tweened<{ dist: number; color: string }[]> = tweened(
-		distances.map((dist) => ({ dist, color: '#aaa' })),
+		distances.map((dist) => ({ dist, color: $dark ? '#aaa' : '#333' })),
 		{
 			duration: 500,
 			easing: quadInOut,
@@ -36,7 +36,7 @@
 						if (valueA.dist === valueB.dist || setB.has(valueA.dist)) return valueB;
 						return {
 							dist: lerp([valueA.dist, valueB.dist], t),
-							color: valueA.dist < valueB.dist ? '#faa' : '#afa'
+							color: valueA.dist < valueB.dist ? ($dark ? '#faa' : '#c00') : $dark ? '#afa' : '#0c0'
 						};
 					});
 				};
