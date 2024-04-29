@@ -103,7 +103,7 @@
 		defaultClass="dark:bg-black dark:backdrop-blur dark:bg-clip-padding dark:backdrop-filter dark:backdrop-blur-xl dark:bg-opacity-10 dark:border dark:border-gray-800"
 	>
 		<div slot="header">
-			<p class="text-2xl 2xl:text-4xl text-bold 2xl:my-2 text-white">Farbauswahl</p>
+			<p class="text-2xl 2xl:text-4xl text-bold 2xl:my-2 dark:text-white text-black">Farbauswahl</p>
 		</div>
 		<div class="flex flex-row gap-8">
 			<div class="color-preview" style={'background-color: ' + modalColor.rgb().css()}>
@@ -139,7 +139,7 @@
 				{/key}
 				<div class="flex justify-start">
 					<button
-						class="text-3xl 2xl:text-4xl text-white flex-row flex align-center"
+						class="text-3xl 2xl:text-4xl dark:text-white text-black flex-row flex align-center"
 						disabled={!Object.keys(colorLists).includes(colorNameList)}
 						id="color-picker-title-germanclick"
 					>
@@ -155,7 +155,7 @@
 					{:then meta}
 						<button
 							id="color-picker-title-thing"
-							class="border border-2 border-gray-700 hover:border-gray-500 transition-all rounded-xl text-white px-2 ml-4 mr-n2 text-base self-end opacity-50 flex flex-row items-center"
+							class="border border-2 border-gray-700 hover:border-gray-500 transition-all rounded-xl dark:text-white text-black px-2 ml-4 mr-n2 text-base self-end opacity-50 flex flex-row items-center"
 						>
 							{#await getColorNameListInfo(colorNameList)}
 								<Spinner size="sm" />
