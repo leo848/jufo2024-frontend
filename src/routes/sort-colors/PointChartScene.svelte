@@ -10,6 +10,7 @@
 	import { createEventDispatcher, onMount } from 'svelte';
 	import { type Tweened, tweened } from 'svelte/motion';
 	import type { TrueDistanceType } from '../../geom/dist';
+	import { dark } from '../../ui/darkmode';
 
 	extend({
 		OrbitControls
@@ -372,7 +373,7 @@
 	{/if}
 {/each}
 
-<T.AmbientLight intensity={0.5} />
+<T.AmbientLight intensity={$dark ? 0.5 : 2} />
 
 {#each [0, 5, 10] as x}
 	{#each [0, 5, 10] as y}
@@ -402,7 +403,7 @@
 
 		<T
 			is={THREE.GridHelper}
-			args={[10, 10, 0x444444, 0x555555]}
+			args={[10, 10, $dark ? 0x444444 : 0xaaaaaa, $dark ? 0x555555 : 0xcccccc]}
 			position={[...gridPositions[index]]}
 		/>
 	</T.Group>
