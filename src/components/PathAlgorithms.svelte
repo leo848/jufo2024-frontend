@@ -273,14 +273,14 @@
 				disabled={progress.ongoing}
 			>
 				<div
-					class="bg-gray-700 hover:bg-gray-600 transition-all p-2 rounded-xl border border-gray-600"
+					class="bg-gray-300 dark:bg-gray-700 dark:hover:bg-gray-600 hover:bg-gray-100 transition-all p-2 rounded-xl border dark:border-gray-600"
 				>
 					<div class="flex items-center justify-between">
 						<Icon.AngleRightSolid
 							class="transition"
 							style={`transform: rotate(${open(currentAction) ? 90 : 0}deg)`}
 						/>
-						<span class="text-gray-100">
+						<span class="dark:text-gray-100 text-gray-900">
 							{item.name}
 						</span>
 						<svelte:component this={item.icon} />
