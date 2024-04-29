@@ -69,7 +69,7 @@
 				class="mb-4 h-full w-full transition-all lg:flex lg:flex-col max-md:grid max-md:grid-cols-2 dark:bg-gray-800 bg-gray-100 dark:hover:bg-gray-700 hover:bg-gray-300 transition-all rounded-xl overflow-hidden"
 			>
 				<img src={card.img} class="w-full aspect-ratio-1" alt="Bildvorschau {card.text}" />
-				<div class="text-white text-sm opacity-30 max-md:hidden">
+				<div class="dark:text-white text-black text-sm opacity-30 max-md:hidden">
 					Bildquelle: {card.imgSource} über
 					<SimpleLink tabindex={-1} href="https://unsplash.com">Unsplash</SimpleLink>
 				</div>
