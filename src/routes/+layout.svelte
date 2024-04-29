@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { Navbar, NavUl, NavLi, NavHamburger, Toast, Button } from 'flowbite-svelte';
+	import { Navbar, NavUl, NavLi, NavHamburger, Toast, Button, DarkMode } from 'flowbite-svelte';
 	import ServerStatus from './ServerStatus.svelte';
 
 	import { onMount } from 'svelte';
@@ -14,6 +14,7 @@
 	import './fonts.css';
 	import Footer from './Footer.svelte';
 	import Logo from './Logo.svelte';
+	import { SunSolid, MoonSolid } from 'flowbite-svelte-icons';
 
 	let errors: { error: DisplayError; showDetails: boolean }[] = [];
 	let ignore = new Set();
@@ -53,16 +54,18 @@
 			<NavLi>
 				<ServerStatus />
 			</NavLi>
-			<!-- <NavLi>
-				<DarkMode>
-					<svelte:fragment slot="lightIcon">
-						<SunSolid />
-					</svelte:fragment>
-					<svelte:fragment slot="darkIcon">
-						<MoonSolid />
-					</svelte:fragment>
-				</DarkMode>
-			</NavLi> -->
+			<NavLi>
+				{#if import.meta.env.DEV}
+					<DarkMode>
+						<svelte:fragment slot="lightIcon">
+							<SunSolid />
+						</svelte:fragment>
+						<svelte:fragment slot="darkIcon">
+							<MoonSolid />
+						</svelte:fragment>
+					</DarkMode>
+				{/if}
+			</NavLi>
 		</NavUl>
 		<NavHamburger on:click={toggle} />
 	</Navbar>

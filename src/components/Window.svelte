@@ -8,6 +8,8 @@
 	export let closable: boolean = true;
 	export let scrollable: boolean = false;
 
+	export let demo: boolean = false;
+
 	export let closed = false;
 	export let showOptions = false;
 
@@ -58,7 +60,7 @@
 >
 	<Card
 		class={` rounded-xl max-w-none p-0 md:p-0 ${
-			closed ? 'w-auto h-auto' : 'h-full max-h-[600px]'
+			closed ? 'w-auto h-auto' : 'h-full' + (demo ? '' : ' max-h-[600px]')
 		} transition-all`}
 	>
 		<div
