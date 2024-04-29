@@ -124,12 +124,12 @@
 		});
 	}
 
-	function vecToColors(vec: number[]): Color[] {
+	function vecToColors(vec: number[], dark: boolean): Color[] {
 		return vec
 			.map((number) => {
 				let rgbColor = number > 0 ? new RgbColor(0, 1, 0) : new RgbColor(1, 0, 0);
 				let hsvColor = rgbColor.color().space('hsv');
-				if ($dark) {
+				if (dark) {
 					hsvColor = hsvColor.with('v', Math.abs(number) * 3);
 				} else {
 					hsvColor = hsvColor.with('v', 1 - Math.abs(number)).with('s', Math.abs(number) * 3);
@@ -301,7 +301,7 @@
 							on:click={invalidate(() => removeWord(trueIndex))}><Icon.TrashBinSolid /></button
 						>
 					</div>
-					<div style={`background: ${gradient(vecToColors(word.vec))}`} class="grow h-5" />
+					<div style={`background: ${gradient(vecToColors(word.vec, $dark))}`} class="grow h-5" />
 				</div>
 			{/each}
 		</div>
