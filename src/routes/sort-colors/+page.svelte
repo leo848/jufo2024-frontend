@@ -469,7 +469,7 @@
 {#if selection !== null && selection.colorPickerOpen && colors.length > selection.index}
 	<ColorPicker
 		valid={(color) => !colors.some((storedColor) => storedColor.approxEquals(color))}
-		defaultSpace={space}
+		defaultSpace={'rgb'}
 		value={selection.color ?? colors[selection.index]}
 		on:choose={(color) => {
 			if (selection) {
