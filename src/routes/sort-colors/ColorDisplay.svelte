@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { Tooltip } from 'flowbite-svelte';
 	import type { Color } from '../../color/color';
+	import { dark } from '../../ui/darkmode';
 
 	export let color: Color;
 	export let selected: boolean = false;
@@ -26,7 +27,9 @@
 	style={`background-color: ${color.rgb().css()}; border-radius: 10px; border: ${Math.min(
 		sizeRem / 4,
 		3
-	)}px solid rgb(0,0,0,0.3); ${selected ? 'transform: scale(1.1); border-color: white' : ''}`}
+	)}px solid ${$dark ? 'rgb(0,0,0,0.3)' : 'rgb(255,255,255,0.3)'}; ${
+		selected ? 'transform: scale(1.1); border-color: white' : ''
+	}`}
 	on:click
 >
 	<div class={sizeClass} />
