@@ -3,6 +3,7 @@
 	import { lerp, rangeMap } from '../utils/math';
 	import { tweened, type Tweened } from 'svelte/motion';
 	import { cubicOut, quadInOut } from 'svelte/easing';
+	import { dark } from '../ui/darkmode';
 
 	export let distances: number[];
 	export let selectedIndex: number | null = null;
@@ -82,7 +83,7 @@
 			const x = rangeMap(gridX, [min, maxBound], [10, width - 10]);
 			ctx.beginPath();
 			ctx.font = '12px Inter';
-			ctx.fillStyle = '#888';
+			ctx.fillStyle = $dark ? '#888' : '#333';
 			ctx.fillText(gridX.toFixed(1), x, height / 2 - 10);
 		}
 

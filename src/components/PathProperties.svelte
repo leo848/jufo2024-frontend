@@ -72,7 +72,7 @@
 	<div class="text-xl tabular-nums">
 		<div class={`grid grid-cols-${horizontal ? 4 : 2} gap-4 m-4`}>
 			<div
-				class="col-span-1 rounded-2xl bg-gray-700 py-4 text-gray-400 flex-col flex justify-around items-center"
+				class="col-span-1 rounded-2xl dark:bg-gray-700 bg-gray-300 py-4 dark:text-gray-400 text-gray-800 flex-col flex justify-around items-center"
 			>
 				{#key length}
 					<div class="text-5xl" in:scale>{$displayLength.toFixed(0)}</div>
@@ -81,7 +81,7 @@
 			</div>
 			{#if path != null}
 				<div
-					class="col-span-1 rounded-2xl bg-gray-700 py-4 text-gray-400 flex-col flex justify-around items-center"
+					class="col-span-1 rounded-2xl dark:bg-gray-700 bg-gray-300 py-4 dark:text-gray-400 text-gray-800 flex-col flex justify-around items-center"
 				>
 					<div class="text-5xl">
 						{#if averageDistDisplay == 'NaN' || averageDistDisplay == 'Infinity'}
@@ -93,25 +93,27 @@
 					<div>Ø Distanz</div>
 				</div>
 				<div
-					class="col-span-2 rounded-2xl bg-gray-700 py-4 text-gray-400 flex-col flex justify-around items-center"
+					class="col-span-2 rounded-2xl dark:bg-gray-700 bg-gray-300 py-4 dark:text-gray-400 text-gray-800 flex-col flex justify-around items-center"
 				>
 					<div class="text-8xl">{chainLengthDisplay}</div>
 					<div>Kettenlänge</div>
 				</div>
-				<div class="col-span-2 rounded-2xl bg-gray-700 py-2 text-gray-400 max-h-[100px]">
+				<div
+					class="col-span-2 rounded-2xl dark:bg-gray-700 bg-gray-300 py-2 dark:text-gray-400 text-gray-800 max-h-[100px]"
+				>
 					<EdgeDistances {distances} {selectedIndex} />
 				</div>
 			{:else}
-				<div class="col-span-2 p-4 bg-gray-700 rounded">
+				<div class="col-span-2 p-4 dark:bg-gray-700 bg-gray-300 rounded">
 					{#if blownUp}
-						<div class="text-4xl text-white">Pfad gelöscht</div>
+						<div class="text-4xl dark:text-white text-black">Pfad gelöscht</div>
 						<div>
 							Durch eine Änderung der Werte im entsperrten Modus wurde der Pfad gelöscht. Drücke auf <b
 								>Aktuelle Anordnung</b
 							>, um einen Pfad aus der vorliegenden Reihenfolge zu erstellen.
 						</div>
 					{:else}
-						<div class="text-4xl text-white">Kein Pfad</div>
+						<div class="text-4xl dark:text-white text-black">Kein Pfad</div>
 						<div>Erzeuge einen Pfad mittels der <b>Konstruktion</b>.</div>
 					{/if}
 				</div>
