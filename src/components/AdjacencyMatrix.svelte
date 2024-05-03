@@ -92,7 +92,8 @@
 						class:dark:border-white={highlightMatrix[index][index1]}
 						class:border-black={highlightMatrix[index][index1]}
 						style={`background-color:${(
-							distColor(value, [min, max], { dark: $dark }) ?? new RgbColor(0.2, 0.2, 0.2).color()
+							distColor(value, [min, max], { dark: $dark }) ??
+							($dark ? new RgbColor(0.2, 0.2, 0.2) : new RgbColor(0.7, 0.7, 0.7)).color()
 						)
 							.rgb()
 							.css()}`}
@@ -100,7 +101,8 @@
 						{#if editable}
 							<input
 								class="border-none w-full min-w-[80px]"
-								class:text-gray-300={symmetric && index > index1}
+								class:text-gray-300={$dark && symmetric && index > index1}
+								class:text-gray-500={!$dark && symmetric && index > index1}
 								type="number"
 								bind:value={values[index][index1]}
 								disabled={symmetric && index > index1}
