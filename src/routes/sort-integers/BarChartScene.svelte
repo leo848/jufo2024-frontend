@@ -61,6 +61,7 @@
 	$: len = values.length;
 
 	function position(index: number, value: number): [number, number, number] {
+		if (len === 0) return [0, 0, 0];
 		return [(index + 1 / 2) / (len + 1) + index / len / len, value / len / 2 - 1 / 2, 0];
 	}
 
@@ -83,16 +84,18 @@
 	<T.DirectionalLight intensity={0.8} {position} />
 {/each}
 
-<T.Group position={[0, -1 / 2, 0]}>
-	<T.Mesh
-		geometry={new THREE.PlaneGeometry(50, 50, len, len)}
-		material={new THREE.MeshStandardMaterial({ color: 'black' })}
-		rotation={[-Math.PI / 2, 0, 0]}
-		receiveShadow
-	/>
+{#if len}
+	<T.Group position={[0, -1 / 2, 0]}>
+		<T.Mesh
+			geometry={new THREE.PlaneGeometry(50, 50, len, len)}
+			material={new THREE.MeshStandardMaterial({ color: 'black' })}
+			rotation={[-Math.PI / 2, 0, 0]}
+			receiveShadow
+		/>
 
-	<T is={new THREE.GridHelper(50, 50, 0x444444, 0x555555)} position={[0, 0.001, 0]} />
-</T.Group>
+		<T is={new THREE.GridHelper(50, 50, 0x444444, 0x555555)} position={[0, 0.001, 0]} />
+	</T.Group>
+{/if}
 
 {#each values as { value, highlight }, index (value)}
 	<T.Mesh
@@ -109,16 +112,18 @@
 	<T.DirectionalLight intensity={0.8} {position} />
 {/each}
 
-<T.Group position={[0, -1 / 2, 0]}>
-	<T.Mesh
-		geometry={new THREE.PlaneGeometry(50, 50, len, len)}
-		material={new THREE.MeshStandardMaterial({ color: 'black' })}
-		rotation={[-Math.PI / 2, 0, 0]}
-		receiveShadow
-	/>
+{#if len}
+	<T.Group position={[0, -1 / 2, 0]}>
+		<T.Mesh
+			geometry={new THREE.PlaneGeometry(50, 50, len, len)}
+			material={new THREE.MeshStandardMaterial({ color: 'black' })}
+			rotation={[-Math.PI / 2, 0, 0]}
+			receiveShadow
+		/>
 
-	<T is={new THREE.GridHelper(50, 50, 0x444444, 0x555555)} position={[0, 0.001, 0]} />
-</T.Group>
+		<T is={new THREE.GridHelper(50, 50, 0x444444, 0x555555)} position={[0, 0.001, 0]} />
+	</T.Group>
+{/if}
 
 <T.PerspectiveCamera let:ref makeDefault position={[0.5, 0.5, 3]} target={[0.5, 0.5, 0.5]}>
 	<T.OrbitControls

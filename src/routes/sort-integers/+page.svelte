@@ -139,21 +139,21 @@
 
 	function colorClass(highlight: Highlight | undefined): string {
 		if (highlight === undefined) {
-			return 'dark:bg-[#484848]';
+			return 'dark:bg-[#484848] bg-[#cecece]';
 		} else if (highlight == 'compare') {
-			return 'dark:bg-[#5f4f30]';
+			return 'dark:bg-[#5f4f30] bg-[#efcfa0]';
 		} else if (highlight === 'swap') {
-			return 'dark:bg-[#3e305f]';
+			return 'dark:bg-[#3e305f] bg-[#aea0cf]';
 		} else if (highlight === 'correct') {
-			return 'dark:bg-[#355f30]';
+			return 'dark:bg-[#355f30] bg-[#a5efa0]';
 		} else if (highlight === 'consider') {
-			return 'dark:bg-[#6a6a6a]';
+			return 'dark:bg-[#6a6a6a] bg-[#bababa]';
 		} else if (highlight === 'smaller') {
-			return 'dark:bg-[#456484]';
+			return 'dark:bg-[#456484] bg-[#a5c4f4]';
 		} else if (highlight === 'larger') {
-			return 'dark:bg-[#223141]';
+			return 'dark:bg-[#223141] bg-[#92a1b1]';
 		} else if (highlight === 'pivot') {
-			return 'dark:bg-[#1c4773]';
+			return 'dark:bg-[#1c4773] bg-[#4c97b3]';
 		} else {
 			return assertNever(highlight);
 		}
@@ -193,7 +193,7 @@
 	<Window title="Zahlen" xlCol={7}>
 		{#if error}
 			<div
-				class="mx-0 bg-gray-500 p-2 text-white flex flex-row justify-between"
+				class="mx-0 dark:bg-gray-500 bg-gray-100 p-2 dark:text-white text-black flex flex-row justify-between"
 				transition:slide={{ axis: 'y' }}
 			>
 				{#if error == 'range'}
@@ -202,20 +202,20 @@
 					<div>Bereits eingegeben.</div>
 				{/if}
 				<button
-					class="text-gray-400 hover:text-white transition-all"
+					class="dark:text-gray-400 hover:text-white transition-all"
 					on:click={() => (error = null)}><Icon.CloseCircleSolid /></button
 				>
 			</div>
 		{/if}
 		<div class={`ml-2 flex flex-row overflow-scroll my-2 ${flexWrap ? 'flex-wrap' : ''}`}>
 			{#if !progress.ongoing}
-				<button class="p-6 my-2 mx-2 bg-gray-700 rounded-xl">
+				<button class="p-6 my-2 mx-2 dark:bg-gray-700 bg-gray-200 rounded-xl">
 					<form on:submit|preventDefault={addNumber}>
 						<input
 							bind:value
 							bind:this={numberInput}
 							placeholder={String(funnyNumber)}
-							class="w-20 px-0 mb-2 text-3xl font-light mx-auto tracking-tight dark:text-white bg-gray-700 focus:outline-0"
+							class="w-20 px-0 mb-2 text-3xl font-light mx-auto tracking-tight dark:text-white dark:bg-gray-700 bg-gray-200 focus:outline-0"
 						/>
 					</form>
 				</button>
@@ -234,7 +234,7 @@
 							numbers.splice(index, 1);
 							numbers = numbers;
 						}}
-						class={colorClass(number.highlight) + ' p-6 m-2 bg-gray-700 rounded-xl'}
+						class={colorClass(number.highlight) + ' p-6 m-2 rounded-xl'}
 					>
 						<h5 class="px-0 mb-2 text-3xl font-light mx-auto tracking-tight dark:text-white">
 							{number.value}
@@ -262,14 +262,14 @@
 		<div class="flex flex-row overflow-scroll gap-4 m-4">
 			{#each algorithms as { key, name, desc }}
 				<button
-					class={` p-2 bg-gray-${
-						selectedAlgorithm === key ? 600 : 700
+					class={` p-2 dark:bg-gray-${selectedAlgorithm === key ? 700 : 600} bg-gray-${
+						selectedAlgorithm === key ? 200 : 100
 					} flex flex-col justify-between rounded-xl transition-all min-w-64`}
 					disabled={progress.ongoing}
 					on:click={() => (selectedAlgorithm = key)}
 				>
 					<h2 class="text-2xl font-bold dark:text-white">{name}</h2>
-					<div>{desc}</div>
+					<div class="dark:text-gray-400 text-gray-600">{desc}</div>
 				</button>
 			{/each}
 		</div>
