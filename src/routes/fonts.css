@@ -11,9 +11,13 @@
 	font-family: -apple-system, Inter, Helvetica, Arial, ui-sans-serif, sans-serif;
 }
 
+html.dark .complete code {
+	background: black;
+}
+
 .complete code {
 	font-family: 'Ubuntu Mono', monospace;
-	background: black;
+	background: rgb(95% 95% 95%);
 	padding: 10px;
 	border-radius: 5px;
 }

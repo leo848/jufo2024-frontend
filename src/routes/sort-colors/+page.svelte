@@ -428,6 +428,7 @@
 					animDuration={latency}
 					on:pick={(evt) => (selection = evt.detail)}
 					selectedIndex={selection?.index}
+					demo={false}
 				/>
 			</div>
 		</Window>
