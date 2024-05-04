@@ -250,7 +250,7 @@
 				<div class="flex flex-row gap-4 m-4">
 					{#each actions as action}
 						<button
-							class="p-2 bg-gray-700 hover:bg-gray-600 transition-all rounded text-xl"
+							class="p-2 dark:bg-gray-700 dark:hover:bg-gray-600 bg-gray-100 transition-all rounded text-xl"
 							title={action.desc}
 							disabled={path !== null}
 							on:click={action.execute}>{action.name}</button
@@ -275,8 +275,13 @@
 			<Window title="Knoten" scrollable>
 				<div class="grid grid-cols-3 gap-4 m-4 text-xl">
 					{#each vertexNames as _, index}
-						<div class="bg-gray-700 p-2 px-4 flex flex-row items-center gap-4">
-							<input class="bg-gray-700 w-full min-w-[50px]" bind:value={vertexNames[index]} />
+						<div
+							class="dark:bg-gray-700 bg-gray-100 p-2 px-4 flex flex-row items-center gap-4 rounded"
+						>
+							<input
+								class="dark:bg-gray-700 bg-gray-100 w-full min-w-[50px]"
+								bind:value={vertexNames[index]}
+							/>
 							<button on:click={() => removeVertex(index)} class="hover:text-white transition-all"
 								><Icon.TrashBinSolid size="sm" /></button
 							>
@@ -284,7 +289,7 @@
 					{/each}
 					<button
 						on:click={() => addVertex()}
-						class="hover:bg-gray-600 transition-all bg-gray-700 p-2 px-4 flex flex-row items-center gap-4 col-span-3 min-h-[50px]"
+						class="dark:hover:bg-gray-600 hover:bg-gray-300 transition-all dark:bg-gray-700 bg-gray-100 p-2 px-4 flex flex-row items-center gap-4 col-span-3 min-h-[50px] rounded"
 					>
 						<Icon.PlusSolid size="sm" />
 					</button>
@@ -308,7 +313,10 @@
 			<Window title="Liste" scrollable>
 				<div class="m-4 grid grid-cols-1 gap-4">
 					{#each vertexNamesPath as vertex, trueIndex (vertex.name)}
-						<div class="p-2 bg-gray-700 text-xl rounded flex flex-row gap-2" animate:flip>
+						<div
+							class="p-2 dark:bg-gray-700 bg-gray-100 text-xl rounded flex flex-row gap-2"
+							animate:flip
+						>
 							<span class="opacity-50">{vertex.index + 1}.</span>
 							{vertex.name}
 							<div class="grow" />
