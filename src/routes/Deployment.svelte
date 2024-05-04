@@ -1,4 +1,6 @@
 <script lang="ts">
+	import SimpleLink from '../components/SimpleLink.svelte';
+
 	const isDeployed = process.env.VERCEL;
 
 	const fullCommitHash = process.env.VERCEL_GIT_COMMIT_SHA;
@@ -14,7 +16,7 @@
 			<div class="h-4 w-4 rounded-full opacity-40" style:background-color="#0a0" />
 			<div class="opacity-50">{commitHash}</div>
 			<div class="opacity-90">
-				<a href={commitLink}>{commitMsg}</a>
+				<SimpleLink href={commitLink}>{commitMsg}</SimpleLink>
 			</div>
 		</div>
 	</div>
