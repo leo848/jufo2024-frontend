@@ -106,11 +106,11 @@
 	<Window title="Farbsuche" closable={false}>
 		<div class="m-4">
 			<form
-				class="grid grid-cols-12 gap-4 text-gray-300 p-2 rounded mb-4 max-h-[300px] min-w-[400px] overflow-scroll"
+				class="grid grid-cols-12 gap-4 dark:text-gray-300 text-gray-700 p-2 rounded mb-4 max-h-[300px] min-w-[400px] overflow-scroll"
 			>
 				<input
 					bind:this={inputElement}
-					class="col-span-12 text-xl md-4 bg-gray-700 p-2 rounded"
+					class="col-span-12 text-xl md-4 dark:bg-gray-700 bg-gray-100 p-2 rounded"
 					placeholder={randomColorName}
 					bind:value={search}
 				/>
@@ -155,7 +155,7 @@
 					<div class="col-span-12 md:col-span-4">
 						<button
 							transition:scale
-							class="bg-gray-700 rounded p-2 text-md w-full"
+							class="dark:bg-gray-700 bg-gray-100 rounded p-2 text-md w-full"
 							style:background-color={color.css()}
 							style:color={bright > 0.7 ? 'black' : 'white'}
 							on:click={() => (value = color)}
@@ -164,7 +164,7 @@
 						</button>
 					</div>
 				{:else}
-					<div class="col-span-12 bg-gray-700 rounded">
+					<div class="col-span-12 dark:bg-gray-700 bg-gray-100 rounded">
 						<div class="p-4 text-2xl">
 							Keine Treffer gefunden
 							<div>

@@ -196,7 +196,7 @@
 		</div>
 		<Tabs
 			style="full"
-			class="grow ml-8 border-solid border-gray-500 border-2"
+			class="grow ml-8 border-solid dark:border-gray-500 border-gray-200 border-2"
 			defaultClass="flex rounded-lg divide-x divide-gray-200 shadow dark:divide-gray-700"
 			inactiveClasses="dark:bg-gray-600"
 		>
