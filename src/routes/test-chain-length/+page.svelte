@@ -60,7 +60,7 @@
 				action: {
 					type: 'createDistPath',
 					method: {
-						type: 'nearestNeighbor'
+						type: 'ilp'
 					},
 					values: data,
 					dimensions: currentDim,
