@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
-	import L, { type LatLngLiteral } from 'leaflet';
+	import L, { type LatLngLiteral, type MapOptions } from 'leaflet';
 	import 'leaflet/dist/leaflet.css';
 	import 'leaflet/dist/images/marker-icon.png';
 	import {
@@ -21,10 +21,13 @@
 	export let metric: TrueDistanceType = { norm: 'euclidean', invert: false };
 	export let invalidate: <T>(c: (t: T) => void) => (t: T) => void;
 
+	export let demo: boolean = false;
+
 	let wrapperDiv: HTMLDivElement;
 	let selectElt: HTMLDivElement;
 	let map: L.Map;
 
+	let tileLayer: L.TileLayer;
 	let markers: L.Marker[] = [];
 
 	let displayEdges: Tweened<[CoordPoint, CoordPoint][]> = tweened(undefined, {
@@ -81,24 +84,27 @@
 
 	$: if (map) {
 		markers.forEach((m) => m.removeFrom(map));
-		markers = points.map((p) => {
+		markers = (demo ? [] : points).map((p) => {
 			const marker = L.marker(p, { opacity: 0.8 });
 			marker.bindTooltip(p.name);
+			marker.addTo(map);
 			return marker;
-		});
-		markers.forEach((m) => {
-			m.addTo(map);
 		});
 	}
 
 	let edgeLines: L.Path[] = [];
-	$: {
+	$: if (map) {
 		edgeLines.forEach((l) => l.removeFrom(map));
 		if (metric.norm === 'euclidean') {
-			edgeLines = $displayEdges.map((edge) => new L.Polyline([edge]));
+			edgeLines = $displayEdges.map(
+				(edge) => new L.Polyline([edge], demo ? { color: 'red', weight: 12 } : undefined)
+			);
 		} else {
 			edgeLines = $displayEdges.map(
-				([point1, point2]) => new L.Polyline([point1, [point2.lat, point1.lng], point2])
+				([point1, point2]) =>
+					new L.Polyline([point1, [point2.lat, point1.lng], point2], {
+						color: demo ? 'red' : undefined
+					})
 			);
 		}
 		edgeLines.forEach((l) => l.addTo(map));
@@ -114,17 +120,16 @@
 	$: selection === null && selectionPopup && map.closePopup(selectionPopup);
 
 	onMount(() => {
-		const config = {
+		const config: MapOptions = {
 			center: center(points),
 			zoom: 13,
 			minZoom: 5,
-			attributionControl: false,
-			rotate: true
+			attributionControl: false
 			// maxBounds: [[ 50.7, 6.0 ], [ 50.8, 6.1 ]]
 		};
 		map = L.map(wrapperDiv, config);
 
-		L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+		tileLayer = L.tileLayer('https://tile.openstreetmap.de/{z}/{x}/{y}.png', {
 			attribution:
 				'&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
 		}).addTo(map);
@@ -192,7 +197,11 @@
 	</div>
 </div>
 
-<div class="h-full" bind:this={wrapperDiv} />
+<div
+	class="h-full"
+	style={demo ? 'left:0;top:0;height:100vh;width:100vw;position:fixed;z-index:20' : ''}
+	bind:this={wrapperDiv}
+/>
 
 <style>
 	:global(.popup-thing) {

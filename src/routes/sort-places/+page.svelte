@@ -103,6 +103,7 @@
 			path = pc.donePath;
 			setDataFromPath(pc.donePath);
 			edges = pathToEdges(pc.donePath);
+			if (demo) olmKey++;
 		} else {
 			edges = pc.currentEdges.map(([from, to]) => [
 				{ lat: from[0], lng: from[1] },
@@ -122,6 +123,8 @@
 		edges = pathToEdges(pi.currentPath);
 	});
 	onDestroy(() => unregisterCallback(callbackIdImprovement));
+
+	let demo = true;
 </script>
 
 <div class="mt-4 pb-10 mx-10">
@@ -129,9 +132,14 @@
 		class="mt-8 grid grid-cols-12 gap-8 auto-cols-max align-stretch justify-stretch justify-items-stretch"
 	>
 		<Window title="Karte" options row={3}>
-			<div class="h-full m-0">
+			<div
+				class="h-full m-0"
+				style={demo && path !== null
+					? 'width:100vw;height:100vh;position:fixed;left:0;top:0;z-index:20'
+					: ''}
+			>
 				{#key olmKey}
-					<OpenLayersMap {invalidate} {metric} bind:points {edges} />
+					<OpenLayersMap {invalidate} {metric} bind:points {edges} demo={demo && path !== null} />
 				{/key}
 			</div>
 		</Window>
