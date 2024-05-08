@@ -22,7 +22,7 @@
 
 	const initialState: typeof state = {
 		type: 'start',
-		size: { start: 5, end: 30, current: 5 }
+		size: { start: 3, end: 50, current: 3 }
 	};
 	let state:
 		| { type: 'start'; size: SizeBound }
