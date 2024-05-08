@@ -1,9 +1,9 @@
-import type { ComponentType } from 'svelte';
-import type { PathCreateMethod, PathImproveMethod } from './types';
-import type { z } from 'zod';
+import type {ComponentType} from 'svelte';
+import type {PathCreateMethod, PathImproveMethod} from './types';
+import type {z} from 'zod';
 import * as Icon from 'flowbite-svelte-icons';
-import { factorial } from '../utils/math';
-import type { ParameterKey } from './optionsPool';
+import {factorial} from '../utils/math';
+import type {ParameterKey} from './optionsPool';
 
 type Algorithm = {
 	name: string;
@@ -104,7 +104,7 @@ export const constructionAlgorithms: ConstructionAlgorithm[] = [
 		method: 'ilp',
 		description:
 			'Das Problem der Kettensortierung kann als Problem der ganzzahliges lineares Optimierung (engl. integer linear program, kurz ILP) formuliert werden. Dieses wird iterativ mithilfe einer C-Bibliothek gelöst.',
-		parameters: ['milpSolver'],
+		parameters: ['milpSolver', 'ilpMaxDuration'],
 		expectedTime: () => null,
 		icon: Icon.BrainOutline
 	}

@@ -1,4 +1,4 @@
-import type { NamedPoint } from '../../geom/coordPoint';
+import type {NamedPoint} from '../../geom/coordPoint';
 
 function wikiCoord(coord: string): number {
 	let deg, min, sec;
@@ -19,6 +19,7 @@ export type PointList = {
 	rotation?: number;
 	values: NamedPoint[];
 	desc?: string;
+	weird?: boolean;
 };
 
 export const presets = {
@@ -546,16 +547,16 @@ export const presets = {
 		name: 'New York City',
 		rotation: 60,
 		values: [
-			{ name: 'One World Trade Center', lat: 40.71274, lng: -74.01339 },
-			{ name: 'Empire State Building', lat: 40.74844, lng: -73.98565 },
-			{ name: 'Chrysler Building', lat: 40.75174, lng: -73.9756 },
-			{ name: 'Bank of America Tower', lat: 40.75856, lng: -73.98295 },
-			{ name: 'The New York Times Building', lat: 40.75652, lng: -73.99035 },
-			{ name: 'One Bryant Park', lat: 40.75566, lng: -73.98342 },
-			{ name: '432 Park Avenue', lat: 40.76144, lng: -73.97137 },
-			{ name: 'One57', lat: 40.76526, lng: -73.97923 },
-			{ name: '30 Hudson Yards', lat: 40.75362, lng: -74.00164 },
-			{ name: 'MetLife Building', lat: 40.75462, lng: -73.97645 }
+			{name: 'One World Trade Center', lat: 40.71274, lng: -74.01339},
+			{name: 'Empire State Building', lat: 40.74844, lng: -73.98565},
+			{name: 'Chrysler Building', lat: 40.75174, lng: -73.9756},
+			{name: 'Bank of America Tower', lat: 40.75856, lng: -73.98295},
+			{name: 'The New York Times Building', lat: 40.75652, lng: -73.99035},
+			{name: 'One Bryant Park', lat: 40.75566, lng: -73.98342},
+			{name: '432 Park Avenue', lat: 40.76144, lng: -73.97137},
+			{name: 'One57', lat: 40.76526, lng: -73.97923},
+			{name: '30 Hudson Yards', lat: 40.75362, lng: -74.00164},
+			{name: 'MetLife Building', lat: 40.75462, lng: -73.97645}
 		]
 	},
 	/* marlSights: {
@@ -680,24 +681,26 @@ export const presets = {
 		]
 	},
 	duisburgChurches: {
+		weird: true,
 		name: 'Kirchen Duisburgs',
 		values: [
-			{ name: 'Salvatorkirche', lat: 51.43586, lng: 6.76115 },
-			{ name: 'Liebfrauenkirche', lat: 51.43441, lng: 6.76952 },
-			{ name: 'St. Ludger', lat: 51.4303, lng: 6.7826 },
-			{ name: 'St. Anna', lat: 51.43226, lng: 6.79825 },
-			{ name: 'Kirche Jesu Christi der Heiligen der Letzten Tage', lat: 51.43291, lng: 6.72462 },
-			{ name: 'St. Johannes', lat: 51.45286, lng: 6.70989 },
-			{ name: 'Evangelisch-Freikirchliche Gemeinde', lat: 51.44898, lng: 6.70889 },
-			{ name: 'Sankt Peter in den Haesen', lat: 51.45656, lng: 6.69147 },
-			{ name: 'Nederlandse Kerk an de Ruhr', lat: 51.454, lng: 6.73027 },
-			{ name: 'Sankt Maximilian', lat: 51.45372, lng: 6.73418 },
-			{ name: 'Christengemeinde Duisburg', lat: 51.45372, lng: 6.73418 },
-			{ name: 'St. Joseph-Kirche', lat: 51.45372, lng: 6.73418 },
-			{ name: 'Neuapostolische Kirche', lat: 51.42279, lng: 6.76477 }
+			{name: 'Salvatorkirche', lat: 51.43586, lng: 6.76115},
+			{name: 'Liebfrauenkirche', lat: 51.43441, lng: 6.76952},
+			{name: 'St. Ludger', lat: 51.4303, lng: 6.7826},
+			{name: 'St. Anna', lat: 51.43226, lng: 6.79825},
+			{name: 'Kirche Jesu Christi der Heiligen der Letzten Tage', lat: 51.43291, lng: 6.72462},
+			{name: 'St. Johannes', lat: 51.45286, lng: 6.70989},
+			{name: 'Evangelisch-Freikirchliche Gemeinde', lat: 51.44898, lng: 6.70889},
+			{name: 'Sankt Peter in den Haesen', lat: 51.45656, lng: 6.69147},
+			{name: 'Nederlandse Kerk an de Ruhr', lat: 51.454, lng: 6.73027},
+			{name: 'Sankt Maximilian', lat: 51.45372, lng: 6.73418},
+			{name: 'Christengemeinde Duisburg', lat: 51.45372, lng: 6.73418},
+			{name: 'St. Joseph-Kirche', lat: 51.45372, lng: 6.73418},
+			{name: 'Neuapostolische Kirche', lat: 51.42279, lng: 6.76477}
 		]
 	},
 	duisburgGeneral: {
+		weird: true,
 		name: 'Sehenswürdigkeiten Duisburgs',
 		aiGenerated: true,
 		values: [
@@ -1662,6 +1665,97 @@ export const presets = {
 				lng: 8.67243
 			}
 		]
+	},
+	deutschland100: {
+		name: 'Großstädte Deutschlands',
+		aiGenerated: true,
+		values:
+
+			[
+				{"name": "Berlin", "desc": "Hauptstadt Deutschlands", "lat": 52.52000, "lng": 13.40500},
+				{"name": "Hamburg", "desc": "Deutschlands zweitgrößte Stadt und ein wichtiger Hafen", "lat": 53.55000, "lng": 9.99300},
+				{"name": "Köln", "desc": "Bekannt für seinen Dom und eine lebendige Kulturszene", "lat": 50.93836, "lng": 6.95997},
+				{"name": "München", "desc": "Bayerische Hauptstadt und Zentrum für Kunst und Bier", "lat": 48.13743, "lng": 11.57549},
+				{"name": "Bremen", "desc": "Bedeutender Hafenstadt an der Weser", "lat": 53.07516, "lng": 8.80777},
+				{"name": "Dortmund", "desc": "Ehemaliges Industriezentrum im Ruhrgebiet", "lat": 51.51425, "lng": 7.46849},
+				{"name": "Dresden", "desc": "Bekannt für seine barocke Architektur und Kunstschätze", "lat": 51.05089, "lng": 13.73832},
+				{"name": "Duisburg", "desc": "Großstadt im Ruhrgebiet und bedeutender Binnenhafen", "lat": 51.43441, "lng": 6.76233},
+				{"name": "Düsseldorf", "desc": "Internationales Wirtschafts- und Modezentrum am Rhein", "lat": 51.22774, "lng": 6.77346},
+				{"name": "Essen", "desc": "Einst ein Zentrum des Bergbaus und der Schwerindustrie", "lat": 51.45657, "lng": 7.01228},
+				{"name": "Frankfurt am Main", "desc": "Wirtschafts- und Finanzzentrum Deutschlands", "lat": 50.11092, "lng": 8.68213},
+				{"name": "Hannover", "desc": "Messestadt und Hauptstadt von Niedersachsen", "lat": 52.37589, "lng": 9.73201},
+				{"name": "Leipzig", "desc": "Kulturelles Zentrum in Ostdeutschland mit einer reichen Geschichte", "lat": 51.33962, "lng": 12.37129},
+				{"name": "Nürnberg", "desc": "Bekannt für seine mittelalterliche Altstadt und die Nürnberger Prozesse", "lat": 49.45203, "lng": 11.07675},
+				{"name": "Stuttgart", "desc": "Industrie- und Automobilzentrum im Südwesten Deutschlands", "lat": 48.77584, "lng": 9.18293},
+				{"name": "Aachen", "desc": "Historische Stadt nahe der Grenze zu Belgien und den Niederlanden", "lat": 50.77664, "lng": 6.08342},
+				{"name": "Augsburg", "desc": "Eine der ältesten Städte Deutschlands mit einer reichen Geschichte", "lat": 48.37154, "lng": 10.89826},
+				{"name": "Bielefeld", "desc": "Bekannt für seine Wirtschaft und Bildungseinrichtungen", "lat": 52.01971, "lng": 8.53172},
+				{"name": "Bochum", "desc": "Teil des Ruhrgebiets mit einer Industriegeschichte", "lat": 51.48158, "lng": 7.21648},
+				{"name": "Bonn", "desc": "Ehemalige Hauptstadt und UNO-Standort am Rhein", "lat": 50.73585, "lng": 7.10066},
+				{"name": "Braunschweig", "desc": "Stadt mit einer langen Geschichte und bedeutender Forschungseinrichtungen", "lat": 52.26887, "lng": 10.52677},
+				{"name": "Gelsenkirchen", "desc": "Teil des Ruhrgebiets und bekannt für den Fußballverein Schalke 04", "lat": 51.51774, "lng": 7.08572},
+				{"name": "Karlsruhe", "desc": "Bedeutendes Technologie- und Forschungszentrum in Süddeutschland", "lat": 49.00689, "lng": 8.40365},
+				{"name": "Mannheim", "desc": "Industrie- und Handelsstadt in Baden-Württemberg", "lat": 49.48746, "lng": 8.46604},
+				{"name": "Mönchengladbach", "desc": "Stadt im Rheinland mit einer langen Textilindustrie-Tradition", "lat": 51.18046, "lng": 6.44208},
+				{"name": "Münster", "desc": "Bekannt für seine Fahrradfreundlichkeit und die historische Altstadt", "lat": 51.96236, "lng": 7.62571},
+				{"name": "Wiesbaden", "desc": "Landeshauptstadt von Hessen und bekannt für seine heißen Quellen", "lat": 50.08258, "lng": 8.24932},
+				{"name": "Wuppertal", "desc": "Bekannt für seine Schwebebahn und als Industriestandort im Bergischen Land", "lat": 51.26486, "lng": 7.17852},
+				{"name": "Bergisch Gladbach", "desc": "Stadt in der Nähe von Köln mit einer grünen Umgebung", "lat": 50.98563, "lng": 7.13211},
+				{"name": "Bottrop", "desc": "Teil des Ruhrgebiets und bekannt für den Freizeitpark Movie Park Germany", "lat": 51.52373, "lng": 6.92965},
+				{"name": "Bremerhaven", "desc": "Wichtiger Hafen- und Fischereistandort an der Nordsee", "lat": 53.53958, "lng": 8.58094},
+				{"name": "Chemnitz", "desc": "Ehemals als Karl-Marx-Stadt bekannt und heute eine moderne Industriestadt", "lat": 50.82785, "lng": 12.92137},
+				{"name": "Darmstadt", "desc": "Stadt des Jugendstils und der Wissenschaft im Rhein-Main-Gebiet", "lat": 49.87283, "lng": 8.65119},
+				{"name": "Erfurt", "desc": "Landeshauptstadt von Thüringen mit einer gut erhaltenen Altstadt", "lat": 50.97870, "lng": 11.03283},
+				{"name": "Erlangen", "desc": "Bekannt für seine Universität und als Zentrum der Hightech-Industrie", "lat": 49.59099, "lng": 11.00479},
+				{"name": "Freiburg im Breisgau", "desc": "Stadt am Rande des Schwarzwaldes mit einem milden Klima und einer lebendigen Kulturszene", "lat": 47.99609, "lng": 7.84940},
+				{"name": "Fürth", "desc": "Stadt in der Metropolregion Nürnberg mit einer lebendigen Geschichte", "lat": 49.47505, "lng": 10.98852},
+				{"name": "Göttingen", "desc": "Bekannt für seine Universität und als Zentrum der Forschung und Wissenschaft", "lat": 51.54128, "lng": 9.91580},
+				{"name": "Gütersloh", "desc": "Stadt in Ostwestfalen-Lippe und Sitz großer Unternehmen wie Bertelsmann", "lat": 51.90693, "lng": 8.38076},
+				{"name": "Hagen", "desc": "Stadt im östlichen Ruhrgebiet und bekannt für seine grünen Naherholungsgebiete", "lat": 51.36105, "lng": 7.47449},
+				{"name": "Halle (Saale)", "desc": "Stadt in Sachsen-Anhalt mit einer reichen Kultur- und Industriegeschichte", "lat": 51.48290, "lng": 11.97290},
+				{"name": "Hamm", "desc": "Stadt an der Lippe und ein bedeutender Verkehrsknotenpunkt in Westfalen", "lat": 51.68033, "lng": 7.82096},
+				{"name": "Hanau", "desc": "Stadt im Rhein-Main-Gebiet und Geburtsort der Gebrüder Grimm", "lat": 50.12758, "lng": 8.91453},
+				{"name": "Heidelberg", "desc": "Bekannt für seine romantische Altstadt und die renommierte Universität", "lat": 49.39875, "lng": 8.67243},
+				{"name": "Heilbronn", "desc": "Stadt am Neckar und bekannt für seine Weinanbaugebiete", "lat": 49.14269, "lng": 9.21091},
+				{"name": "Herne", "desc": "Stadt im Ruhrgebiet und Teil der Metropolregion Ruhr", "lat": 51.53799, "lng": 7.21785},
+				{"name": "Hildesheim", "desc": "Stadt mit einer reichen Geschichte und bedeutenden Kulturschätzen", "lat": 52.15077, "lng": 9.95112},
+				{"name": "Ingolstadt", "desc": "Bekannt für seine Audi-Werke und die historische Altstadt", "lat": 48.76508, "lng": 11.42372},
+				{"name": "Jena", "desc": "Stadt in Thüringen und bekannt für seine Universität und Optikindustrie", "lat": 50.92705, "lng": 11.58924},
+				{"name": "Kaiserslautern", "desc": "Stadt in Rheinland-Pfalz und bekannt für seine US-Militärbasis", "lat": 49.44326, "lng": 7.76832},
+				{"name": "Kassel", "desc": "Bekannt für die documenta-Kunstausstellung und den Bergpark Wilhelmshöhe", "lat": 51.31271, "lng": 9.47975},
+				{"name": "Kiel", "desc": "Hafenstadt an der Ostsee und Landeshauptstadt von Schleswig-Holstein", "lat": 54.32329, "lng": 10.13489},
+				{"name": "Koblenz", "desc": "Stadt an der Mündung von Mosel und Rhein und bekannt für sein Deutsches Eck", "lat": 50.35694, "lng": 7.58848},
+				{"name": "Krefeld", "desc": "Stadt am Niederrhein und bekannt für seine Textilindustrie", "lat": 51.33876, "lng": 6.58534},
+				{"name": "Leverkusen", "desc": "Stadt am Rhein und bekannt für den Chemiekonzern Bayer", "lat": 51.04592, "lng": 6.98848},
+				{"name": "Lübeck", "desc": "Stadt an der Ostsee und berühmt für sein historisches Zentrum", "lat": 53.86624, "lng": 10.68441},
+				{"name": "Ludwigshafen am Rhein", "desc": "Industriestadt am Rhein und Sitz großer Chemieunternehmen", "lat": 49.48454, "lng": 8.44735},
+				{"name": "Magdeburg", "desc": "Landeshauptstadt von Sachsen-Anhalt und eine alte Hansestadt", "lat": 52.12053, "lng": 11.62762},
+				{"name": "Mainz", "desc": "Landeshauptstadt von Rheinland-Pfalz und bekannt für seinen Dom", "lat": 49.99286, "lng": 8.24725},
+				{"name": "Moers", "desc": "Stadt am Niederrhein und bekannt für seinen Schlosspark", "lat": 51.45080, "lng": 6.63464},
+				{"name": "Mülheim an der Ruhr", "desc": "Stadt im Ruhrgebiet und bekannt für ihre grünen Parks und Gärten", "lat": 51.42604, "lng": 6.88233},
+				{"name": "Neuss", "desc": "Stadt am Rhein und bekannt für ihre historische Innenstadt", "lat": 51.19845, "lng": 6.69359},
+				{"name": "Oberhausen", "desc": "Stadt im Ruhrgebiet und bekannt für das Einkaufszentrum CentrO", "lat": 51.49698, "lng": 6.85155},
+				{"name": "Offenbach am Main", "desc": "Stadt im Rhein-Main-Gebiet und bekannt für ihre Lederwarenindustrie", "lat": 50.10176, "lng": 8.76764},
+				{"name": "Oldenburg (Oldb)", "desc": "Stadt in Niedersachsen und bekannt für seine Grünflächen und Parks", "lat": 53.14345, "lng": 8.21455},
+				{"name": "Osnabrück", "desc": "Friedensstadt mit einer reichen Geschichte und grünen Oasen", "lat": 52.27991, "lng": 8.04718},
+				{"name": "Paderborn", "desc": "Stadt in Nordrhein-Westfalen und bekannt für seinen Dom und die Universität", "lat": 51.71573, "lng": 8.75200},
+				{"name": "Pforzheim", "desc": "Bedeutende Stadt in Baden-Württemberg und bekannt für seine Schmuckindustrie", "lat": 48.89211, "lng": 8.69821},
+				{"name": "Potsdam", "desc": "Landeshauptstadt von Brandenburg und bekannt für seine Schlösser und Gärten", "lat": 52.39057, "lng": 13.06447},
+				{"name": "Recklinghausen", "desc": "Stadt im Ruhrgebiet und bekannt für das Ruhrfestspielhaus", "lat": 51.61479, "lng": 7.19738},
+				{"name": "Regensburg", "desc": "UNESCO-Welterbestadt an der Donau mit einer gut erhaltenen Altstadt", "lat": 49.01343, "lng": 12.10162},
+				{"name": "Remscheid", "desc": "Stadt im Bergischen Land und bekannt für seine Werkzeugindustrie", "lat": 51.17901, "lng": 7.19242},
+				{"name": "Reutlingen", "desc": "Stadt in Baden-Württemberg und bekannt für ihre Textilindustrie", "lat": 48.49371, "lng": 9.20885},
+				{"name": "Rostock", "desc": "Hansestadt an der Ostsee und bekannt für ihre Universität und Häfen", "lat": 54.09244, "lng": 12.09915},
+				{"name": "Saarbrücken", "desc": "Landeshauptstadt des Saarlandes und Zentrum der saarländischen Kultur", "lat": 49.23342, "lng": 6.99603},
+				{"name": "Salzgitter", "desc": "Stadt in Niedersachsen und bekannt für ihre Stahlindustrie", "lat": 52.15714, "lng": 10.41599},
+				{"name": "Siegen", "desc": "Stadt in Nordrhein-Westfalen und bekannt für ihre Universität und Fachhochschule", "lat": 50.87430, "lng": 8.02096},
+				{"name": "Solingen", "desc": "Stadt im Bergischen Land und bekannt für ihre Schneidwarenindustrie", "lat": 51.16522, "lng": 7.06786},
+				{"name": "Trier", "desc": "Die älteste Stadt Deutschlands, bekannt für ihre römische Geschichte und Denkmäler", "lat": 49.75632, "lng": 6.64171},
+				{"name": "Ulm", "desc": "Stadt an der Donau und bekannt für ihr gotisches Münster", "lat": 48.40108, "lng": 9.98761},
+				{"name": "Wolfsburg", "desc": "Sitz des Automobilherstellers Volkswagen und bekannt für sein Autostadt-Museum", "lat": 52.42265, "lng": 10.78655},
+				{"name": "Würzburg", "desc": "Bayerische Stadt am Main und bekannt für ihre barocke Architektur und Weine", "lat": 49.79130, "lng": 9.95335}
+			]
+
 	}
 } satisfies Partial<Record<string, PointList>>;
 
