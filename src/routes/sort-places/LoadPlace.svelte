@@ -27,20 +27,24 @@
 	}
 </script>
 
-<div class="grid grid-cols-6 gap-2 mb-2">
+<div class="grid grid-cols-6 gap-2 mb-2 text-black dark:text-white">
 	{#if selectedPointList === null}
 		<!-- {#each colorListCategories as key} -->
-		<div class="first:mt-0 text-sm bg-gray-600 align-center px-2 py-1 rounded col-span-6">
+		<div
+			class="first:mt-0 text-sm dark:bg-gray-600 bg-gray-100 align-center px-2 py-1 rounded col-span-6"
+		>
 			{translate('default')}
 		</div>
 		{#each Object.keys(pointsLists) as name}
 			{@const list = pointsLists[name]}
 			<div class="col-span-3 rounded overflow-hidden">
 				<button
-					class="text-xl bg-gray-700 hover:bg-gray-600 transition-all p-2 color-white w-full items-center justify-between flex flex-row"
+					class="text-xl dark:bg-gray-700 dark:hover:bg-gray-600 bg-gray-100 hover:bg-gray-200 transition-all p-2 color-white w-full items-center justify-between flex flex-row"
 					on:click={() => (selectedPointList = list)}
 				>
-					<div class="text-white truncate">{list.name}</div>
+					<div class="dark:text-white text-gray-600 truncate">
+						{list.name} ({list.values.length})
+					</div>
 					<div><Icon.ArrowRightSolid /></div>
 				</button>
 			</div>
