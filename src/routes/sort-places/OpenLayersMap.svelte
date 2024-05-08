@@ -123,7 +123,7 @@
 		const config: MapOptions = {
 			center: center(points),
 			zoom: 13,
-			minZoom: 5,
+			minZoom: 4,
 			attributionControl: false
 			// maxBounds: [[ 50.7, 6.0 ], [ 50.8, 6.1 ]]
 		};
