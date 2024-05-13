@@ -124,7 +124,7 @@
 	});
 	onDestroy(() => unregisterCallback(callbackIdImprovement));
 
-	let demo = true;
+	let demo = false;
 </script>
 
 <div class="mt-4 pb-10 mx-10">
