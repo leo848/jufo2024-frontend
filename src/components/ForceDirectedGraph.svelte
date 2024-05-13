@@ -116,6 +116,7 @@
 			return (t) => {
 				const key = (f: () => [Vec2, number, Vec2, number]) => {
 					const [_fromPos, fromIdx, _toPos, toIdx] = f();
+					if (particles[fromIdx] == null || particles[toIdx] == null) return 'nullKey';
 					return particles[fromIdx].name + '␞' + particles[toIdx].name;
 				};
 				const bSet = new Set(b.map(key));

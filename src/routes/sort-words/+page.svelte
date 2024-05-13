@@ -371,7 +371,9 @@
 				metric
 			)}
 			vertexNames={words.toSorted((w1, w2) => w1.index - w2.index).map((w) => w.inner)}
-			highlightEdges={edges.map(([from, to]) => [words[from].index, words[to].index])}
+			highlightEdges={edges
+				.map(([from, to]) => [words[from]?.index, words[to]?.index])
+				.filter(([from, to]) => from != null && to != null)}
 			collapseNames
 			digits={2}
 			sort={false}
