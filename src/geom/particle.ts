@@ -48,10 +48,10 @@ export class Particle {
 		options: {highlight: boolean, dark: boolean} = {highlight: false, dark: false}
 	): [[number, number], [number, number]] {
 		ctx.lineWidth = 2;
-		ctx.fillStyle = options.highlight === options.dark ? '#ccc' : '#444';
-		ctx.strokeStyle = options.highlight === options.dark ? '#444' : '#ccc';
+		ctx.fillStyle = options.highlight === options.dark ? 'rgba(80%, 80%, 80%, 40%)' : 'rgba(25%, 25%, 25%, 40%)';
+		ctx.strokeStyle = options.highlight === options.dark ? 'rgba(25%, 25%, 25%, 40%)' : 'rgba(80%, 80%, 80%, 40%)';
 
-		const fontSize = 18;
+		const fontSize = 28;
 		const textWidth = Math.max(fontSize, ctx.measureText(this.name).width + 10);
 
 		ctx.beginPath();

@@ -28,6 +28,8 @@
 		}
 	};
 
+	export let demo: boolean = false;
+
 	$: forces = {
 		friction: [0.95, 0.975, 0.985, 0.99, 0.995][5 - (options.speed ?? 3)],
 		attraction: [0.001, 0.0001, 0.00003, 0.00001, 0.00001][5 - (options.speed ?? 3)],
@@ -163,7 +165,7 @@
 		if (ctx == null) return;
 		// ctx.translate(width / 2, height / 2)
 
-		ctx.fillStyle = $dark ? 'rgb(31 41 55)' : 'rgb(250 250 255)';
+		ctx.fillStyle = $dark ? 'rgb(31 41 55)' : 'rgb(95% 95% 95%)';
 		ctx.fillRect(0, 0, width, height); // background
 
 		applyForces();
@@ -179,13 +181,15 @@
 			}
 		}
 
-		ctx.strokeStyle = $dark ? 'white' : 'black';
+		ctx.strokeStyle = $dark ? 'rgba(255,255,255,50%)' : 'rgba(0,0,0,50%)';
 		ctx.lineWidth = 3;
 		for (const f of $displayEdges ?? []) {
 			const [fromPos, _fromIdx, toPos, _toIdx] = f();
+			ctx.beginPath();
 			ctx.moveTo(fromPos.x, fromPos.y);
 			ctx.lineTo(toPos.x, toPos.y);
 			ctx.stroke();
+			ctx.closePath();
 		}
 
 		let selected = null;
@@ -285,7 +289,9 @@
 				let displayDist = delta.mag();
 				let trueDist =
 					(adjMatrix[particle1.vectorIdx] ?? [])[particle2.vectorIdx] ?? averageTrueDist;
-				let trueDisplayDist = (trueDist * 160) / averageTrueDist;
+				let trueDisplayDist = ((trueDist * width) / 400) * 140;
+
+				trueDisplayDist /= averageTrueDist;
 
 				const factor = displayDist - trueDisplayDist;
 				const force = particle2.pos.sub(particle1.pos).mul(factor);
@@ -344,6 +350,7 @@
 
 <div
 	class="w-full h-full"
+	style={demo ? 'width: 100vw; height: 100vh; z-index: 10; position: fixed; left: 0; top: 0' : ''}
 	bind:this={wrapperDiv}
 	bind:offsetHeight={wrapperHeight}
 	bind:offsetWidth={wrapperWidth}

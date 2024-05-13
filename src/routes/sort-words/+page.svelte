@@ -228,7 +228,7 @@
 </script>
 
 <div class="grid grid-cols-12 gap-8 mt-8 mx-10">
-	<Window xlCol={4} row={1} title="Wörter" scrollable>
+	<Window xlCol={4} row={1} title="Wörter" scrollable demo>
 		<div class="grid m-4 gap-2">
 			<form on:submit|preventDefault={invalidate(addInput)}>
 				<div class="flex flex-row gap-4 mb-4">
@@ -272,9 +272,9 @@
 						title={word.desc}
 					>
 						<span class="text-gray-400">{word.index + 1}.&nbsp;</span>
-						{word.inner}
+						<span class="text-2xl -my-1">{word.inner}</span>
 						<div class="grow" />
-						<div class="flex flex-col text-sm mr-8 opacity-50 items-end">
+						<div class="flex flex-col text-sm opacity-50 items-end">
 							<div class="-mb-1">
 								{#if trueIndex !== 0}
 									d(~, {words[trueIndex - 1].inner}) =
@@ -296,10 +296,12 @@
 								{/if}
 							</div>
 						</div>
-						<button
-							class="text-gray-400 hover:text-white transition-all"
-							on:click={invalidate(() => removeWord(trueIndex))}><Icon.TrashBinSolid /></button
-						>
+						{#if edges.length === 0}
+							<button
+								class="text-gray-400 hover:text-white transition-all ml-8"
+								on:click={invalidate(() => removeWord(trueIndex))}><Icon.TrashBinSolid /></button
+							>
+						{/if}
 					</div>
 					<div style={`background: ${gradient(vecToColors(word.vec, $dark))}`} class="grow h-5" />
 				</div>
