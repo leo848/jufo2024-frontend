@@ -228,7 +228,7 @@
 </script>
 
 <div class="grid grid-cols-12 gap-8 mt-8 mx-10">
-	<Window xlCol={4} row={1} title="Wörter" scrollable demo>
+	<Window xlCol={4} row={1} title="Wörter" scrollable>
 		<div class="grid m-4 gap-2">
 			<form on:submit|preventDefault={invalidate(addInput)}>
 				<div class="flex flex-row gap-4 mb-4">
