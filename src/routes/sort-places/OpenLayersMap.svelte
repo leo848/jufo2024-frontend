@@ -146,6 +146,7 @@
 				selection = null;
 				return;
 			}
+			if (edges.length > 0) return;
 			selection = {
 				position: evt.latlng,
 				name: 'Punkt ' + (points.length + 1)
