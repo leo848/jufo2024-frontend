@@ -1,4 +1,4 @@
-import {constrain, matrixVectorMultiplication, rangeMap} from '../utils/math';
+import { constrain, matrixVectorMultiplication, rangeMap } from '../utils/math';
 import {
 	Color,
 	type ColorComponent,
@@ -9,9 +9,9 @@ import {
 	type HslComponent,
 	type XyzComponent
 } from './color';
-import {linearGradient} from './canvas';
-import {toGamma, toLinear} from './linearity';
-import {Point3} from '../geom/point';
+import { linearGradient } from './canvas';
+import { toGamma, toLinear } from './linearity';
+import { Point3 } from '../geom/point';
 
 export abstract class AbstractColor<
 	Self extends AbstractColor<Self, Component>,
@@ -199,7 +199,7 @@ export class HsvColor extends AbstractColor<HsvColor, HsvComponent> {
 
 	color(): Color {
 		const sixty_deg = 1 / 6;
-		const {h, s, v} = this;
+		const { h, s, v } = this;
 		const max = v;
 		const chroma = s * v;
 		const min = max - chroma;
@@ -229,7 +229,7 @@ export class HsvColor extends AbstractColor<HsvColor, HsvComponent> {
 	}
 
 	point(): Point3 {
-		const {h, s, v} = this;
+		const { h, s, v } = this;
 		const angle = h * 2 * Math.PI;
 		const radius = s;
 		const height = v;
@@ -282,7 +282,7 @@ export class HslColor extends AbstractColor<HslColor, HslComponent> {
 	}
 
 	static fromRgb(r: number, g: number, b: number): HslColor {
-		const {abs} = Math;
+		const { abs } = Math;
 		const [max, min] = [Math.max(r, g, b), Math.min(r, g, b)];
 		const delta = max - min;
 		let h = delta < 0.001 ? 0 : HslColor.#calculateHue(r, g, b, max, delta);
@@ -305,7 +305,7 @@ export class HslColor extends AbstractColor<HslColor, HslComponent> {
 	}
 
 	point(): Point3 {
-		const {h, s, l} = this;
+		const { h, s, l } = this;
 		const angle = h * 2 * Math.PI;
 		const radius = s;
 		const height = l;
@@ -318,9 +318,9 @@ export class HslColor extends AbstractColor<HslColor, HslComponent> {
 	}
 
 	color(): Color {
-		const {abs} = Math;
+		const { abs } = Math;
 		const sixty_deg = 1 / 6;
-		const {h, s, l} = this;
+		const { h, s, l } = this;
 		const chroma = s * (1 - abs(2 * l - 1));
 		const normalHue = h / sixty_deg;
 		const x = chroma * (1 - Math.abs((normalHue % 2) - 1));
@@ -428,7 +428,7 @@ export class OklabColor extends AbstractColor<OklabColor, LabComponent> {
 		return new OklabColor(l, rangeMap(a, [-0.4, 0.4], [0, 1]), rangeMap(b, [-0.4, 0.4], [0, 1]));
 	}
 
-	unnormal(): {l: number; a: number; b: number} {
+	unnormal(): { l: number; a: number; b: number } {
 		return {
 			l: this.l,
 			a: rangeMap(this.a, [0, 1], [-0.4, 0.4]),
@@ -456,7 +456,7 @@ export class OklabColor extends AbstractColor<OklabColor, LabComponent> {
 	}
 
 	point(): Point3 {
-		const {l, a, b} = this;
+		const { l, a, b } = this;
 		return new Point3(a, l, b);
 	}
 
@@ -527,7 +527,7 @@ export class XyzColor extends AbstractColor<XyzColor, XyzComponent> {
 	}
 
 	static fromRgb(gammaR: number, gammaG: number, gammaB: number): XyzColor {
-		const {r, g, b} = LinearRgbColor.fromRgb(gammaR, gammaG, gammaB);
+		const { r, g, b } = LinearRgbColor.fromRgb(gammaR, gammaG, gammaB);
 
 		const matrix = [
 			[0.4124564, 0.3575761, 0.1804375],
@@ -541,7 +541,7 @@ export class XyzColor extends AbstractColor<XyzColor, XyzComponent> {
 	}
 
 	color(): Color {
-		const {x, y, z} = this;
+		const { x, y, z } = this;
 
 		const invMatrix = [
 			[3.2404542, -1.5371385, -0.4985314],
@@ -620,7 +620,7 @@ export class CielabColor extends AbstractColor<CielabColor, LabComponent> {
 	}
 
 	color(): Color {
-		const {l: normalL, a: normalA, b: normalB} = this;
+		const { l: normalL, a: normalA, b: normalB } = this;
 		const [l, a, b] = [
 			rangeMap(normalL, [0, 1], [0, 120]),
 			rangeMap(normalA, [0, 1], [-100, 100]),
