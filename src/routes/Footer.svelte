@@ -21,7 +21,8 @@
 		{ url: 'https://github.com/leo848/jufo2024-backend', title: 'Quelltext Backend' },
 		{ url: 'https://github.com/leo848/jufo2024-frontend', title: 'Quelltext Frontend' },
 		{ url: '/Karten.pdf', title: 'Farbkarten (ausdruckbar)' },
-		{ url: '/Abbildungen.pdf', title: 'Abbildungen' }
+		{ url: '/Abbildungen.pdf', title: 'Abbildungen' },
+		{ url: '/Plakate.pdf', title: 'Plakate Bundeswettbewerb' }
 	];
 
 	let footerGradient: string;
