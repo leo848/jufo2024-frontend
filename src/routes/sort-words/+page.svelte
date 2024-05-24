@@ -15,7 +15,7 @@
 	import { goto } from '$app/navigation';
 	import { page } from '$app/stores';
 	import { gradient } from '../../ui/color';
-	import { HslColor, HsvColor, RgbColor } from '../../color/colorSpaces';
+	import { RgbColor } from '../../color/colorSpaces';
 	import type { Color } from '../../color/color';
 	import Options from '../../components/Options.svelte';
 	import PathAlgorithms from '../../components/PathAlgorithms.svelte';
@@ -122,6 +122,10 @@
 			type: 'wordToVec',
 			word
 		});
+	}
+
+	function array2<T>(value0: T, value1: T): [T, T] {
+		return [value0, value1];
 	}
 
 	function vecToColors(vec: number[], dark: boolean): Color[] {
@@ -372,7 +376,7 @@
 			)}
 			vertexNames={words.toSorted((w1, w2) => w1.index - w2.index).map((w) => w.inner)}
 			highlightEdges={edges
-				.map(([from, to]) => [words[from]?.index, words[to]?.index])
+				.map(([from, to]) => array2(words[from]?.index, words[to]?.index))
 				.filter(([from, to]) => from != null && to != null)}
 			collapseNames
 			digits={2}

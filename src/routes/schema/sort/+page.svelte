@@ -14,7 +14,7 @@
 
 	let aborted = false;
 
-	function abort(pkey: null | string) {
+	function abort(pkey: null | string): any {
 		const url = pkey !== null ? '/schema/list?invalid=' + pkey : '/schema/list';
 		goto(url, { replaceState: true });
 		aborted = true;
