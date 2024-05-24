@@ -48,7 +48,7 @@
 	onMount(() => {
 		setStatusCallback((ss: ServerStatus) => {
 			if (ss.type === 'status') {
-				setting = ss.status;
+				setTimeout(() => (setting = ss.status), 200);
 			} else if (ss.type === 'interact') {
 				setting = 'online';
 				if (ss.status === 'upload') {

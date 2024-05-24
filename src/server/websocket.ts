@@ -1,5 +1,5 @@
-import type { ZodSchema } from 'zod';
-import { handleClientError, handleServerError } from './error';
+import type {ZodSchema} from 'zod';
+import {handleClientError, handleServerError} from './error';
 import {
 	serverOutput,
 	type ServerInput,
@@ -8,11 +8,11 @@ import {
 	type ConnectionData,
 	serverOutputLatency
 } from './types';
-import { writable, type Writable } from 'svelte/store';
+import {writable, type Writable} from 'svelte/store';
 
 let statusCallback: (ss: ServerStatus) => void = () => {};
 
-export function getStatus(): ServerStatus & { type: 'status' } {
+export function getStatus(): ServerStatus & {type: 'status'} {
 	const states = ['loading', 'online', 'offline', 'offline'] as const;
 	const status = states[websocket.readyState];
 	if (status != 'online') {
@@ -23,7 +23,7 @@ export function getStatus(): ServerStatus & { type: 'status' } {
 			latency: null
 		});
 	}
-	return { type: 'status', status };
+	return {type: 'status', status};
 }
 
 let interval: null | NodeJS.Timeout = null;
@@ -92,25 +92,31 @@ const onmessage = (input: MessageEvent<unknown>) => {
 websocket.onerror = onerror;
 websocket.onmessage = onmessage;
 
-let callbacks: { f: (so: ServerOutput) => void; id: number }[] = [];
+let callbacks: {f: (so: ServerOutput) => void; id: number}[] = [];
 
-export function sendWebsocket(input: ServerInput, options?: { noLog?: boolean; backoff?: number }) {
+export function sendWebsocket(input: ServerInput, options?: {noLog?: boolean; noReconnect?: boolean; backoff?: number}) {
 	const noLog = options?.noLog;
 	const status = getStatus();
 	if (status.status === 'offline') {
-		reconnectWebsocket();
+		if (!options?.noReconnect) {
+			reconnectWebsocket();
+			setTimeout(() => {
+				sendWebsocket(input, {...options, noReconnect: true});
+			}, 200);
+			return;
+		}
 	}
 	statusCallback(getStatus());
 	try {
 		websocket.send(JSON.stringify(input));
 	} catch (e) {
 		if (e instanceof DOMException) {
-			const expBackoffOptions = { ...(options ?? {}), backoff: (options?.backoff ?? 100) * 1.6 };
+			const expBackoffOptions = {...(options ?? {}), backoff: (options?.backoff ?? 100) * 1.6};
 			setTimeout(() => sendWebsocket(input, expBackoffOptions), options?.backoff ?? 100);
 		}
 	}
 	if (!noLog) {
-		connectionData.update((cd) => ({ ...cd, lastRequest: new Date() }));
+		connectionData.update((cd) => ({...cd, lastRequest: new Date()}));
 		statusCallback({
 			type: 'interact',
 			status: 'upload'
@@ -119,7 +125,7 @@ export function sendWebsocket(input: ServerInput, options?: { noLog?: boolean; b
 }
 
 export function reconnectWebsocket(): boolean {
-	statusCallback({ type: 'status', status: 'loading' });
+	statusCallback({type: 'status', status: 'loading'});
 	try {
 		websocket = new WebSocket(uri);
 	} catch (e) {
@@ -167,7 +173,7 @@ function handleServerOutput(output: ServerOutput) {
 				lastResponse: new Date()
 			}));
 		}
-		for (const { f } of callbacks) {
+		for (const {f} of callbacks) {
 			f(output);
 		}
 	}
