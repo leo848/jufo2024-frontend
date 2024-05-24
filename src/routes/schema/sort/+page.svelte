@@ -55,7 +55,7 @@
 						class="p-2 dark:bg-gray-700 bg-gray-200 rounded flex flex-row gap-2 align-center items-center"
 						animate:flip
 					>
-						<span>{dataPoint.name}</span>
+						<span class="dark:text-white">{dataPoint.name}</span>
 						<span class="flex-grow" />
 						<button
 							class="p-2 bg-gray-300 dark:bg-gray-600 rounded-full"
