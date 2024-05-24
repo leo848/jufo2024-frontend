@@ -27,8 +27,8 @@ const defaultSchemas: Schemas = {
 		name: 'sort-places',
 		desc: 'Geografische Orte sortieren',
 		numericDimensions: [
-			{name: 'Längengrad', weight: 1},
-			{name: 'Breitengrad', weight: 1}
+			{name: 'Breitengrad', weight: 1},
+			{name: 'Längengrad', weight: 1}
 		],
 		optionDimensions: []
 	},
@@ -36,8 +36,8 @@ const defaultSchemas: Schemas = {
 		name: 'sort-german-places',
 		desc: 'Deutsche Städte unter Berücksichtigung des Bundeslands sortieren',
 		numericDimensions: [
-			{name: 'Längengrad', weight: 1},
-			{name: 'Breitengrad', weight: 1}
+			{name: 'Breitengrad (Süd -> Nord)', weight: 1, min: 47, max: 56},
+			{name: 'Längengrad (West -> Ost)', weight: 1, min: 5, max: 16},
 		],
 		optionDimensions: [
 			{

@@ -62,7 +62,7 @@
 								class="dark:bg-transparent rounded text-lg w-full"
 								min={dim?.min}
 								max={dim?.max}
-								step={dim?.step}
+								step={dim?.step ?? 0.01}
 							/>
 						{/if}
 						<input

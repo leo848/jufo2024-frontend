@@ -27,7 +27,11 @@
 
 	let dataPoints: DataPoint[] = [];
 
-	let picker: null | { type: 'append' } | { type: 'edit'; index: number } = null;
+	let picker:
+		| null
+		| { type: 'append' }
+		| { type: 'edit'; index: number }
+		| { type: 'insert'; index: number } = null;
 </script>
 
 <div class="m-8 grid grid-cols-12 gap-8">
@@ -53,6 +57,10 @@
 						>
 						<button
 							class="p-2 bg-gray-300 dark:bg-gray-600 rounded-full"
+							on:click={() => (picker = { type: 'insert', index })}><Icon.CopySolid /></button
+						>
+						<button
+							class="p-2 bg-gray-300 dark:bg-gray-600 rounded-full"
 							on:click={() => (dataPoints = dataPoints.toSpliced(index, 1))}
 							><Icon.TrashBinOutline /></button
 						>
@@ -71,14 +79,19 @@
 		{schema}
 		on:create={(evt) => {
 			if (picker == null) return;
+			const newDataPoint = evt.detail;
 			if (picker.type === 'append') {
-				dataPoints = [...dataPoints, evt.detail];
+				dataPoints = [...dataPoints, newDataPoint];
 			} else if (picker.type === 'edit') {
-				dataPoints[picker.index] = evt.detail;
+				dataPoints[picker.index] = newDataPoint;
+			} else if (picker.type === 'insert') {
+				dataPoints = dataPoints.toSpliced(picker.index + 1, 0, newDataPoint);
 			}
 			picker = null;
 		}}
 		on:cancel={() => (picker = null)}
-		initialValue={picker.type === 'edit' ? dataPoints[picker.index] : undefined}
+		initialValue={picker.type === 'edit' || picker.type === 'insert'
+			? dataPoints[picker.index]
+			: undefined}
 	/>
 {/if}
