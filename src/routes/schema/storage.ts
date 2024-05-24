@@ -102,10 +102,12 @@ function saveSchemas(schemas: Schemas) {
 }
 
 export function saveSchema(schema: Schema) {
-	const schemas = Object.assign({}, loadSchemas(), { [schema.name]: schema });
+	const schemas = Object.assign({}, loadSchemas(), { [schema.name]: schema.deserialize() });
 	saveSchemas(schemas);
 }
 
 export function loadSchema(key: string): Schema | null {
-	return new Schema(loadSchemasRaw()[key]) ?? null;
+	const raw = loadSchemasRaw()[key];
+	if (raw == null) return null;
+	else return new Schema(raw);
 }
