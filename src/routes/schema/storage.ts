@@ -17,9 +17,9 @@ const defaultSchemas: Schemas = {
 		name: 'sort-colors-rgb',
 		desc: 'Farben im RGB-Farbraum sortieren',
 		numericDimensions: [
-			{name: 'Rot', min: 0, max: 255, weight: 1},
-			{name: 'Grün', min: 0, max: 255, weight: 1},
-			{name: 'Blau', min: 0, max: 255, weight: 1}
+			{name: 'Rot', min: 0, max: 255, weight: 1, step: 1},
+			{name: 'Grün', min: 0, max: 255, weight: 1, step: 1},
+			{name: 'Blau', min: 0, max: 255, weight: 1, step: 1}
 		],
 		optionDimensions: []
 	},

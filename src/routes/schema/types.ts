@@ -127,16 +127,15 @@ export class DataPoint {
 	#validFor: Schema;
 	#numericDimensions: number[];
 	#optionDimensions: string[];
-	#name: string;
+	name: string;
 
 	constructor(schema: Schema, {numericDimensions, optionDimensions, name}: PossibleDataPoint) {
 		this.#validFor = schema;
 		this.#numericDimensions = numericDimensions;
 		this.#optionDimensions = optionDimensions;
-		this.#name = name
+		this.name = name
 	}
 
-	public get name(): string {return this.#name}
 	public get validFor(): Schema {
 		return this.#validFor;
 	}

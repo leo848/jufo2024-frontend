@@ -45,6 +45,13 @@
 			href: '/hamilton-path',
 			text: 'Hamilton-Pfad',
 			desc: 'Den kürzesten Hamilton-Pfad eines beliebigen schlichten Graphen finden, einzugeben über dessen Adjazenzmatrix'
+		},
+		{
+			img: '/jason-leung.png',
+			imgSource: 'Jason Leung',
+			href: '/schema/list',
+			text: 'Eigenes Schema',
+			desc: 'Ein eigenes Schema mit numerischen und kategoriellen Dimensionen erstellen, Datenpunkte eingeben und sortieren.'
 		}
 	];
 	let displayCards: typeof cards = [];

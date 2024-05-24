@@ -20,8 +20,8 @@
 		aborted = true;
 	}
 
-	let schema: Schema;
 	$: key = $page.url.searchParams.get('pkey') ?? abort(null);
+	let schema: Schema;
 	$: if (!aborted) schema = loadSchema(key) ?? abort(key || null);
 	$: if (schema) title.set(schema.name);
 
@@ -80,6 +80,20 @@
 		on:create={(evt) => {
 			if (picker == null) return;
 			const newDataPoint = evt.detail;
+			while (dataPoints.map((p) => p.name).includes(newDataPoint.name)) {
+				const matches = /\(\d+\)/.exec(newDataPoint.name);
+				if (matches === null) {
+					newDataPoint.name = newDataPoint.name + ' (2)';
+				} else {
+					const match = matches[0].substring(1, matches[0].length - 1);
+					if (!Number.isNaN(+match)) {
+						newDataPoint.name = newDataPoint.name.replace(
+							'(' + match + ')',
+							'(' + (+match + 1) + ')'
+						);
+					}
+				}
+			}
 			if (picker.type === 'append') {
 				dataPoints = [...dataPoints, newDataPoint];
 			} else if (picker.type === 'edit') {
