@@ -59,7 +59,7 @@
 	setTimeout(function oneMore() {
 		if (displayCards.length == cards.length) return;
 		displayCards = [...displayCards, cards[displayCards.length]];
-		setTimeout(oneMore, 200);
+		setTimeout(oneMore, 100);
 	});
 </script>
 
