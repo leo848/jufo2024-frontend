@@ -33,7 +33,7 @@
 		{#if schema.dimAmount().option > 0}
 			<br /><b class="pl-2">{schema.dimAmount().option}</b> kategorisch
 			{#each schema.optionDimensions as dim}
-				<div class="ml-4">
+				<div class="ml-4" title={showDetails ? undefined : dim.options.join(' | ')}>
 					<span class="opacity-50">–</span>
 					{dim.name}
 					{#if showDetails}
