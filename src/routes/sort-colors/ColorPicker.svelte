@@ -95,7 +95,7 @@
 	}
 </script>
 
-<div class="inline-block transition color-picker h-n4 m-0 p-0">
+<div class="inline-block transition picker h-n4 m-0 p-0">
 	<Modal
 		bind:open={modal}
 		backdropClass="modal-background"
@@ -566,7 +566,7 @@
 </div>
 
 <style>
-	:global(.color-picker .modal-background) {
+	:global(.picker .modal-background) {
 		z-index: 40;
 		inset: 0;
 		position: fixed;

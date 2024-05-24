@@ -82,25 +82,25 @@ export class Schema {
 		};
 	}
 
-	validateDataPoint(possibleDataPoint: PossibleDataPoint): DataPoint | {error: string} {
+	validateDataPoint(possibleDataPoint: PossibleDataPoint): {success: true; value: DataPoint} | {success: false; error: string} {
 		if (possibleDataPoint.numericDimensions.length != this.numericDimensions.length) {
-			return {error: 'Wrong amount of numeric dimensions'};
+			return {success: false, error: 'Wrong amount of numeric dimensions'};
 		}
 		if (possibleDataPoint.optionDimensions.length != this.optionDimensions.length) {
-			return {error: 'Wrong amount of option dimensions'};
+			return {success: false, error: 'Wrong amount of option dimensions'};
 		}
 		for (let i = 0; i < this.numericDimensions.length; i++) {
 			const dimensionSchema = this.numericDimensions[i];
 			const providedValue = possibleDataPoint.numericDimensions[i];
 			if (dimensionSchema.min !== undefined && providedValue < dimensionSchema.min) {
-				return {error: 'Value less than minimum'};
+				return {success: false, error: 'Value less than minimum'};
 			} else if (dimensionSchema.max !== undefined && providedValue > dimensionSchema.max) {
-				return {error: 'Value more than maximum'};
+				return {success: false, error: 'Value more than maximum'};
 			} else if (dimensionSchema.step !== undefined) {
 				const shouldBeInt = (providedValue - (dimensionSchema.min ?? 0)) / dimensionSchema.step;
 				const integer = Math.round(shouldBeInt);
 				if (Math.abs(shouldBeInt - integer) > 0.0001) {
-					return {error: 'Step size not respected'};
+					return {success: false, error: 'Step size not respected'};
 				}
 			}
 		}
@@ -108,10 +108,18 @@ export class Schema {
 			const dimensionSchema = this.optionDimensions[i];
 			const providedValue = possibleDataPoint.optionDimensions[i];
 			if (!dimensionSchema.options.includes(providedValue)) {
-				return {error: 'Invalid value'};
+				return {success: false, error: 'Invalid value'};
 			}
 		}
-		return new DataPoint(this, possibleDataPoint);
+		return {success: true, value: new DataPoint(this, possibleDataPoint)};
+	}
+
+	stubPossibleDataPoint(): PossibleDataPoint {
+		return {
+			name: "Datenpunkt " + new Date().toISOString(),
+			numericDimensions: new Array(this.numericDimensions.length).fill(0).map((_, i) => this.numericDimensions[i].min ?? 0),
+			optionDimensions: new Array(this.optionDimensions.length).fill(0).map((_, i) => this.optionDimensions[i].options[0])
+		}
 	}
 }
 
@@ -159,6 +167,14 @@ export class DataPoint {
 			}
 		}
 		return numericVector.concat(optionVector);
+	}
+
+	toInvalidated(): PossibleDataPoint {
+		return {
+			name: this.name,
+			numericDimensions: this.numericDimensions,
+			optionDimensions: this.optionDimensions
+		};
 	}
 }
 
