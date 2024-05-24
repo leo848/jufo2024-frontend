@@ -10,19 +10,21 @@
 
 	let modal = true;
 
-	let error: string | null = null;
-
 	let partial: PossibleDataPoint =
 		initialValue == null ? schema.stubPossibleDataPoint() : initialValue.toInvalidated();
 
 	function requestCreation() {
 		let result = schema.validateDataPoint(partial);
-		if (!result.success) error = result.error;
-		else {
+		if (!result.success) {
+			error = result.error;
+		} else {
 			modal = false;
 			dispatch('create', result.value);
 		}
 	}
+
+	let error: string | null = null;
+	$: partial, (error = null);
 
 	let titleElement: HTMLInputElement;
 	onMount(() => titleElement.select());
@@ -40,6 +42,11 @@
 				Datenpunkt hinzufügen
 			</p>
 		</div>
+		{#if error}
+			<div class="w-full p-5 dark:bg-red-700 bg-red-300 dark:text-white text-black rounded">
+				{error}
+			</div>
+		{/if}
 		<div>
 			<div>Titel</div>
 			<input
@@ -98,17 +105,7 @@
 			</div>
 		{/if}
 		<div slot="footer">
-			{#if error}
-				<div class="w-full bg-red-500">
-					{error}
-				</div>
-			{/if}
-			<form
-				on:submit={() => {
-					modal = false;
-				}}
-				class="text-xl"
-			>
+			<form class="text-xl">
 				<button
 					class="rounded p-2 dark:bg-gray-300 dark:text-black bg-green-400 text-white"
 					on:click={requestCreation}

@@ -20,10 +20,16 @@
 		aborted = true;
 	}
 
-	$: key = $page.url.searchParams.get('pkey') ?? abort(null);
 	let schema: Schema;
-	$: if (!aborted) schema = loadSchema(key) ?? abort(key || null);
-	$: if (schema) title.set(schema.name);
+
+	let key = $page.url.searchParams.get('pkey') ?? abort(null);
+	if (!aborted) {
+		let schemathere = loadSchema(key) ?? abort(key || null);
+		if (schemathere) {
+			schema = schemathere;
+			title.set(schema.name);
+		}
+	}
 
 	let dataPoints: DataPoint[] = [];
 

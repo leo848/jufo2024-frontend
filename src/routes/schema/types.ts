@@ -88,23 +88,23 @@ export class Schema {
 		possibleDataPoint: PossibleDataPoint
 	): {success: true; value: DataPoint} | {success: false; error: string} {
 		if (possibleDataPoint.numericDimensions.length != this.numericDimensions.length) {
-			return {success: false, error: 'Wrong amount of numeric dimensions'};
+			return {success: false, error: `Erwartete ${this.numericDimensions.length} numerische Komponenten, erhielt ${possibleDataPoint.numericDimensions.length}`};
 		}
 		if (possibleDataPoint.optionDimensions.length != this.optionDimensions.length) {
-			return {success: false, error: 'Wrong amount of option dimensions'};
+			return {success: false, error: `Erwartete ${this.optionDimensions.length} numerische Komponenten, erhielt ${possibleDataPoint.optionDimensions.length}`};
 		}
 		for (let i = 0; i < this.numericDimensions.length; i++) {
 			const dimensionSchema = this.numericDimensions[i];
 			const providedValue = possibleDataPoint.numericDimensions[i];
 			if (dimensionSchema.min !== undefined && providedValue < dimensionSchema.min) {
-				return {success: false, error: 'Value less than minimum'};
+				return {success: false, error: `Wert ${providedValue} geringer als Minimum ${dimensionSchema.min}`};
 			} else if (dimensionSchema.max !== undefined && providedValue > dimensionSchema.max) {
-				return {success: false, error: 'Value more than maximum'};
+				return {success: false, error: `Wert ${providedValue} höher als Maximum ${dimensionSchema.max}`};
 			} else if (dimensionSchema.step !== undefined) {
 				const shouldBeInt = (providedValue - (dimensionSchema.min ?? 0)) / dimensionSchema.step;
 				const integer = Math.round(shouldBeInt);
 				if (Math.abs(shouldBeInt - integer) > 0.0001) {
-					return {success: false, error: 'Step size not respected'};
+					return {success: false, error: `Wert ${providedValue} passt nicht zur Schrittgröße ${dimensionSchema.step}`};
 				}
 			}
 		}
@@ -112,7 +112,7 @@ export class Schema {
 			const dimensionSchema = this.optionDimensions[i];
 			const providedValue = possibleDataPoint.optionDimensions[i];
 			if (!dimensionSchema.options.includes(providedValue)) {
-				return {success: false, error: 'Invalid value'};
+				return {success: false, error: `Ungültiger Wert: ${providedValue}. Möglich sind: ${new Intl.ListFormat("de").format(dimensionSchema.options)}`};
 			}
 		}
 		return {success: true, value: new DataPoint(this, possibleDataPoint)};
