@@ -76,7 +76,7 @@
 		</div>
 	</Window>
 	<Window title="Schema">
-		<SchemaDisplay {schema} />
+		<SchemaDisplay {schema} showDetails />
 	</Window>
 </div>
 

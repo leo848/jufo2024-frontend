@@ -4,6 +4,7 @@
 	export let schema: Schema;
 
 	export let selectable: boolean = false;
+	export let showDetails: boolean = false;
 </script>
 
 <div
@@ -35,14 +36,16 @@
 				<div class="ml-4">
 					<span class="opacity-50">–</span>
 					{dim.name}
-					<div class="ml-8 opacity-50 text-xs">
-						{#each dim.options as option, index}
-							{option}
-							{#if index < dim.options.length - 1}
-								<span class="opacity-50"> | </span>
-							{/if}
-						{/each}
-					</div>
+					{#if showDetails}
+						<div class="ml-8 opacity-50 text-xs">
+							{#each dim.options as option, index}
+								{option}
+								{#if index < dim.options.length - 1}
+									<span class="opacity-50"> | </span>
+								{/if}
+							{/each}
+						</div>
+					{/if}
 				</div>
 			{/each}
 		{/if}
