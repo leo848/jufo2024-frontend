@@ -125,6 +125,28 @@ export class DataPoint {
 	public get optionDimensions(): string[] {
 		return deepCopy(this.#optionDimensions);
 	}
+
+	toVector() {
+		const numericVector = [];
+		for (let i = 0; i < this.validFor.numericDimensions.length; i++) {
+			const dimensionSchema = this.validFor.numericDimensions[i];
+			const providedValue = this.#numericDimensions[i];
+			numericVector.push(dimensionSchema.weight * providedValue);
+		}
+		const optionVector = [];
+		for (let i = 0; i < this.validFor.optionDimensions.length; i++) {
+			const dimensionSchema = this.validFor.optionDimensions[i];
+			const providedValue = this.#optionDimensions[i];
+			for (const option of dimensionSchema.options) {
+				if (providedValue == option) {
+					optionVector.push(dimensionSchema.weight);
+				} else {
+					optionVector.push(0);
+				}
+			}
+		}
+		return numericVector.concat(optionVector);
+	}
 }
 
 export type DimensionAmount = {
