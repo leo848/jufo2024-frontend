@@ -17,8 +17,8 @@ class DeepMap {
 		return Array.isArray(value)
 			? this.mapArray(value)
 			: typeof value === 'object' && !this.leafCondition(value)
-			? this.mapObject(value)
-			: this.mapFn.call(undefined, value, key);
+				? this.mapObject(value)
+				: this.mapFn.call(undefined, value, key);
 	}
 
 	private mapArray(arr: any[]): any[] {
@@ -53,4 +53,9 @@ class DeepMap {
 
 		return result;
 	}
+}
+
+type DeepCopyable = string | number | DeepCopyable[] | {[key: string]: DeepCopyable}
+export function deepCopy<T extends DeepCopyable>(t: T): T {
+	return JSON.parse(JSON.stringify(t))
 }
