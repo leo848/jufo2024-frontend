@@ -86,17 +86,19 @@
 		on:create={(evt) => {
 			if (picker == null) return;
 			const newDataPoint = evt.detail;
-			while (dataPoints.map((p) => p.name).includes(newDataPoint.name)) {
-				const matches = /\(\d+\)/.exec(newDataPoint.name);
-				if (matches === null) {
-					newDataPoint.name = newDataPoint.name + ' (2)';
-				} else {
-					const match = matches[0].substring(1, matches[0].length - 1);
-					if (!Number.isNaN(+match)) {
-						newDataPoint.name = newDataPoint.name.replace(
-							'(' + match + ')',
-							'(' + (+match + 1) + ')'
-						);
+			if (picker.type != 'edit') {
+				while (dataPoints.map((p) => p.name).includes(newDataPoint.name)) {
+					const matches = /\(\d+\)/.exec(newDataPoint.name);
+					if (matches === null) {
+						newDataPoint.name = newDataPoint.name + ' (2)';
+					} else {
+						const match = matches[0].substring(1, matches[0].length - 1);
+						if (!Number.isNaN(+match)) {
+							newDataPoint.name = newDataPoint.name.replace(
+								'(' + match + ')',
+								'(' + (+match + 1) + ')'
+							);
+						}
 					}
 				}
 			}
