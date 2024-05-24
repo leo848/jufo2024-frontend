@@ -6,6 +6,7 @@ export const NumericDimension = z.object({
 	min: z.optional(z.number()),
 	max: z.optional(z.number()),
 	step: z.optional(z.number()),
+	default: z.optional(z.number()),
 	weight: z.number()
 });
 type NumericDimension = z.infer<typeof NumericDimension>;
@@ -13,6 +14,7 @@ type NumericDimension = z.infer<typeof NumericDimension>;
 export const OptionDimensions = z.object({
 	name: z.string().max(128),
 	options: z.array(z.string()),
+	default: z.optional(z.string()),
 	weight: z.number()
 });
 type OptionDimensions = z.infer<typeof OptionDimensions>;
@@ -82,7 +84,9 @@ export class Schema {
 		};
 	}
 
-	validateDataPoint(possibleDataPoint: PossibleDataPoint): {success: true; value: DataPoint} | {success: false; error: string} {
+	validateDataPoint(
+		possibleDataPoint: PossibleDataPoint
+	): {success: true; value: DataPoint} | {success: false; error: string} {
 		if (possibleDataPoint.numericDimensions.length != this.numericDimensions.length) {
 			return {success: false, error: 'Wrong amount of numeric dimensions'};
 		}
@@ -116,10 +120,14 @@ export class Schema {
 
 	stubPossibleDataPoint(): PossibleDataPoint {
 		return {
-			name: "Datenpunkt " + new Date().toISOString(),
-			numericDimensions: new Array(this.numericDimensions.length).fill(0).map((_, i) => this.numericDimensions[i].min ?? 0),
-			optionDimensions: new Array(this.optionDimensions.length).fill(0).map((_, i) => this.optionDimensions[i].options[0])
-		}
+			name: 'Datenpunkt ' + new Date().toISOString(),
+			numericDimensions: new Array(this.numericDimensions.length)
+				.fill(0)
+				.map((_, i) => this.numericDimensions[i].default ?? this.numericDimensions[i].min ?? 0),
+			optionDimensions: new Array(this.optionDimensions.length)
+				.fill(0)
+				.map((_, i) => this.optionDimensions[i].default ?? this.optionDimensions[i].options[0])
+		};
 	}
 }
 
@@ -133,7 +141,7 @@ export class DataPoint {
 		this.#validFor = schema;
 		this.#numericDimensions = numericDimensions;
 		this.#optionDimensions = optionDimensions;
-		this.name = name
+		this.name = name;
 	}
 
 	public get validFor(): Schema {
