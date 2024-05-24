@@ -8,6 +8,7 @@
 	import type { DataPoint, Schema } from '../types';
 	import SchemaDisplay from '../SchemaDisplay.svelte';
 	import DataPointPicker from '../DataPointPicker.svelte';
+	import { flip } from 'svelte/animate';
 
 	title.set('Eigenes Schema');
 
@@ -26,7 +27,7 @@
 
 	let dataPoints: DataPoint[] = [];
 
-	let pickerOpen: boolean = false;
+	let picker: null | { type: 'append' } | { type: 'edit'; index: number } = null;
 </script>
 
 <div class="m-8 grid grid-cols-12 gap-8">
@@ -34,13 +35,28 @@
 		<div class="m-4">
 			<button
 				class="p-4 mb-4 dark:bg-gray-600 bg-gray-300 dark:hover:bg-gray-500 hover:bg-gray-400 transition-all rounded-full"
-				on:click={() => (pickerOpen = true)}
+				on:click={() => (picker = { type: 'append' })}
 			>
 				<Icon.PlusSolid size="xl" />
 			</button>
 			<div class="flex flex-col gap-2">
-				{#each dataPoints as dataPoint}
-					<div class="p-2 bg-gray-700 rounded">{dataPoint.name}</div>
+				{#each dataPoints as dataPoint, index (dataPoint.name)}
+					<div
+						class="p-2 dark:bg-gray-700 bg-gray-200 rounded flex flex-row gap-2 align-center items-center"
+						animate:flip
+					>
+						<span>{dataPoint.name}</span>
+						<span class="flex-grow" />
+						<button
+							class="p-2 bg-gray-300 dark:bg-gray-600 rounded-full"
+							on:click={() => (picker = { type: 'edit', index })}><Icon.EditOutline /></button
+						>
+						<button
+							class="p-2 bg-gray-300 dark:bg-gray-600 rounded-full"
+							on:click={() => (dataPoints = dataPoints.toSpliced(index, 1))}
+							><Icon.TrashBinOutline /></button
+						>
+					</div>
 				{/each}
 			</div>
 		</div>
@@ -50,13 +66,19 @@
 	</Window>
 </div>
 
-{#if pickerOpen}
+{#if picker != null}
 	<DataPointPicker
 		{schema}
 		on:create={(evt) => {
-			pickerOpen = false;
-			dataPoints = [...dataPoints, evt.detail];
+			if (picker == null) return;
+			if (picker.type === 'append') {
+				dataPoints = [...dataPoints, evt.detail];
+			} else if (picker.type === 'edit') {
+				dataPoints[picker.index] = evt.detail;
+			}
+			picker = null;
 		}}
-		on:cancel={() => (pickerOpen = false)}
+		on:cancel={() => (picker = null)}
+		initialValue={picker.type === 'edit' ? dataPoints[picker.index] : undefined}
 	/>
 {/if}

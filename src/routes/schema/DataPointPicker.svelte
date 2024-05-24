@@ -107,12 +107,20 @@
 				on:submit={() => {
 					modal = false;
 				}}
+				class="text-xl"
 			>
-				<button class="rounded p-2 dark:bg-gray-300 dark:text-black" on:click={requestCreation}
-					>Erstellen</button
-				>
 				<button
-					class="rounded p-2 bg-gray-800"
+					class="rounded p-2 dark:bg-gray-300 dark:text-black bg-green-400 text-white"
+					on:click={requestCreation}
+				>
+					{#if initialValue != null}
+						Speichern
+					{:else}
+						Erstellen
+					{/if}
+				</button>
+				<button
+					class="rounded p-2 dark:bg-gray-800 bg-gray-200"
 					on:click={() => {
 						modal = false;
 						dispatch('cancel');
