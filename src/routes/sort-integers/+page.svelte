@@ -262,14 +262,14 @@
 		<div class="flex flex-row overflow-scroll gap-4 m-4">
 			{#each algorithms as { key, name, desc }}
 				<button
-					class={` p-2 dark:bg-gray-${selectedAlgorithm === key ? 700 : 600} bg-gray-${
+					class={` p-2 dark:bg-gray-${selectedAlgorithm === key ? 600 : 700} bg-gray-${
 						selectedAlgorithm === key ? 200 : 100
-					} flex flex-col justify-between rounded-xl transition-all min-w-64`}
+					} flex flex-col justify-between rounded-xl transition-all md:min-w-64 min-w-32`}
 					disabled={progress.ongoing}
 					on:click={() => (selectedAlgorithm = key)}
 				>
-					<h2 class="text-2xl font-bold dark:text-white">{name}</h2>
-					<div class="dark:text-gray-400 text-gray-600">{desc}</div>
+					<h2 class="text-xl md:text-2xl font-bold dark:text-white">{name}</h2>
+					<div class="dark:text-gray-400 text-gray-600 max-sm:text-xs">{desc}</div>
 				</button>
 			{/each}
 		</div>
