@@ -2,6 +2,7 @@
 	import { Gallery } from 'flowbite-svelte';
 	import { scale } from 'svelte/transition';
 	import SimpleLink from '../components/SimpleLink.svelte';
+	import * as Icon from 'flowbite-svelte-icons';
 
 	const cards = [
 		{
@@ -61,19 +62,21 @@
 		displayCards = [...displayCards, cards[displayCards.length]];
 		setTimeout(oneMore, 100);
 	});
+
+	let mobileExpand: number | null = null;
 </script>
 
 <Gallery
-	class="gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 2xl:grid-cols-4 mx-32 mt-4"
+	class="gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 2xl:grid-cols-4 md:mx-32 mx-4 mt-4"
 >
 	{#each cards as { img, text }}
 		<img src={img} alt={text} class="hidden" />
 	{/each}
-	{#each displayCards as card (card.text)}
+	{#each displayCards as card, cardIndex (card.text)}
 		<div transition:scale>
 			<button
 				on:click={() => (location.href = card.href)}
-				class="mb-4 h-full w-full transition-all lg:flex lg:flex-col max-md:grid max-md:grid-cols-2 dark:bg-gray-800 bg-gray-100 dark:hover:bg-gray-700 hover:bg-gray-300 transition-all rounded-xl overflow-hidden"
+				class="md:mb-4 h-full w-full transition-all lg:flex lg:flex-col max-md:grid max-md:grid-cols-2 dark:bg-gray-800 bg-gray-100 dark:hover:bg-gray-700 hover:bg-gray-300 transition-all rounded-xl overflow-hidden"
 			>
 				<img src={card.img} class="w-full aspect-ratio-1" alt="Bildvorschau {card.text}" />
 				<div class="dark:text-white text-black text-sm opacity-30 max-md:hidden">
@@ -81,12 +84,32 @@
 					<SimpleLink tabindex={-1} href="https://unsplash.com">Unsplash</SimpleLink>
 				</div>
 				<div class="m-4">
-					<h5 class="mb-2 text-3xl font-bold tracking-tight text-gray-900 dark:text-white">
+					<h5 class="mb-2 text-3xl md:font-bold tracking-tight text-gray-900 dark:text-white">
 						{card.text}
 					</h5>
-					<p class="font-normal text-gray-700 dark:text-gray-400 leading-tight">
+					<p class="font-normal text-gray-700 dark:text-gray-400 leading-tight max-sm:hidden">
 						{card.desc}
 					</p>
+					{#if mobileExpand == cardIndex}
+						<p class="font-normal text-gray-700 dark:text-gray-400 leading-tight md:hidden">
+							{card.desc}
+						</p>
+					{/if}
+					<div class="md:hidden flex flex-col items-center">
+						<button
+							class="dark:text-white flex flex-col items-center opacity-40 hover:opacity-80 active:opacity-80"
+							on:click|stopPropagation={() =>
+								(mobileExpand = mobileExpand === cardIndex ? null : cardIndex)}
+						>
+							{#if mobileExpand != cardIndex}
+								Mehr anzeigen
+								<Icon.ChevronDownSolid size="sm" />
+							{:else}
+								Weniger anzeigen
+								<Icon.ChevronUpSolid size="sm" />
+							{/if}
+						</button>
+					</div>
 				</div>
 			</button>
 		</div>
