@@ -47,7 +47,7 @@
 	style={`background:${footerGradient}`}
 >
 	<!-- footer -->
-	<div class="xl:col-span-2 col-span-3">
+	<div class="xl:col-span-2 md:col-span-3 col-span-6">
 		<div class="text-6xl">sorting the colors</div>
 		<div class="text-2xl">
 			Dimensionsbezogene <b>Generalisierung</b><br />vergleichsbasierter <b>Sortierung</b>
@@ -55,7 +55,7 @@
 
 		<Deployment />
 	</div>
-	<div class="xl:col-span-2 col-span-3">
+	<div class="xl:col-span-2 md:col-span-3 col-span-6">
 		<a href="https://jugend-forscht.de" target="_blank">
 			<img
 				class="bg-white-transparent p-2 rounded-md mb-4"
@@ -71,7 +71,7 @@
 		</div>
 	</div>
 
-	<div class="col-span-2 xl:col-span-1">
+	<div class="col-span-6 md:col-span-2 xl:col-span-1">
 		<div class="dark:text-gray-200 text-gray-900 text-2xl">Unterseiten</div>
 		<div class="flex flex-col dark:text-gray-400 text-gray-800">
 			{#each pages as { url: href, title }}
@@ -79,7 +79,7 @@
 			{/each}
 		</div>
 	</div>
-	<div class="col-span-2 xl:col-span-1">
+	<div class="col-span-6 md:col-span-2 xl:col-span-1">
 		<div class="dark:text-gray-200 text-gray-900 text-2xl">Weitere Links</div>
 		<div class="flex flex-col dark:text-gray-400 text-gray-800">
 			{#each links as { url: href, target, title }}
