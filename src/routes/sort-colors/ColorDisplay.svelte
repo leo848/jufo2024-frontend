@@ -38,7 +38,7 @@
 	{#if offline}
 		<Tooltip>{color.css()}</Tooltip>
 	{:else}
-		{#await color.name() then meta}
+		{#await color.name('german') then meta}
 			<Tooltip>{meta.name}</Tooltip>
 		{/await}
 	{/if}
