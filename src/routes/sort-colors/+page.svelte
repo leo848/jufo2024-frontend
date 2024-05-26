@@ -49,7 +49,10 @@
 		colorPickerOpen?: boolean;
 		position: { x: number; y: number };
 	} | null = null;
-	$: colors, (selection = null);
+	$: {
+		colors;
+		if (!bypassMode) selection = null;
+	}
 	function selectCard(evt: MouseEvent, index: number) {
 		if (!evt.target) return;
 		if (selection?.index === index) {
@@ -91,6 +94,8 @@
 			colorPickerOpen: true
 		};
 	}
+
+	let bypassMode = false;
 
 	(() => {
 		let queryString = $page.url.searchParams.get('v');
@@ -481,6 +486,7 @@
 		defaultSpace={'rgb'}
 		value={selection.color ?? colors[selection.index]}
 		on:choose={(color) => {
+			bypassMode = false;
 			if (selection) {
 				if (selection.appendIndex != null) {
 					colors = colors.toSpliced(selection.appendIndex + 1, 0, color.detail);
@@ -490,6 +496,7 @@
 			}
 			selection = null;
 		}}
-		on:cancel={() => (selection = null)}
+		on:bypassChoose={({ detail: color }) => ((bypassMode = true), (colors = [...colors, color]))}
+		on:cancel={() => ((selection = null), (bypassMode = false))}
 	/>
 {/if}

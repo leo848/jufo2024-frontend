@@ -2,7 +2,7 @@
 	import { Popover } from 'flowbite-svelte';
 	import type { Color } from '../../color/color';
 	import Window from '../../components/Window.svelte';
-	import { onMount } from 'svelte';
+	import { createEventDispatcher, onMount, tick } from 'svelte';
 
 	import colorLists from './colorLists.json';
 	import { RgbColor } from '../../color/colorSpaces';
@@ -86,6 +86,25 @@
 		});
 	}
 
+	function hexToColor(hex: string): Color {
+		return RgbColor.fromNumeric(parseInt(hex.startsWith('#') ? hex.slice(1) : hex, 16)).color();
+	}
+
+	const dispatch = createEventDispatcher<{ bypassChoose: null }>();
+
+	async function tryBypass() {
+		if (!search?.endsWith('#')) return;
+		search = search.substring(0, search.length - 1);
+		await tick();
+		const firstMatch = matches[0];
+		if (firstMatch == null) return;
+		const color = hexToColor(firstMatch.hex);
+		value = color;
+		dispatch('bypassChoose');
+		await tick();
+		search = '';
+	}
+
 	$: randomColorName = 'Farbname';
 	$: {
 		let randomIndex = new Date().getTime() % colors.length;
@@ -113,6 +132,7 @@
 					class="col-span-12 text-xl md-4 dark:bg-gray-700 bg-gray-100 p-2 rounded"
 					placeholder={randomColorName}
 					bind:value={search}
+					on:input={tryBypass}
 				/>
 				<div class="col-span-12">
 					{#if search?.length}Suche nach <i>{search}</i> • {/if}
@@ -148,9 +168,7 @@
 					</div>
 				{/if}
 				{#each matches as match}
-					{@const color = RgbColor.fromNumeric(
-						parseInt(match.hex.startsWith('#') ? match.hex.slice(1) : match.hex, 16)
-					).color()}
+					{@const color = hexToColor(match.hex)}
 					{@const bright = color.space('oklab').l}
 					<div class="col-span-12 md:col-span-4">
 						<button

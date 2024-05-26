@@ -66,7 +66,8 @@
 
 	$: colorMetadata = modalColor.name(colorNameList);
 
-	const dispatch: EventDispatcher<{ choose: Color; cancel: undefined }> = createEventDispatcher();
+	const dispatch: EventDispatcher<{ choose: Color; cancel: undefined; bypassChoose: Color }> =
+		createEventDispatcher();
 
 	let enterElement: HTMLButtonElement;
 	onMount(() => enterElement.focus());
@@ -135,6 +136,11 @@
 						{colorNameList}
 						triggeredBy="#color-picker-title-germanclick"
 						bind:value={modalColor}
+						on:bypassChoose={() => {
+							if (valid(modalColor)) {
+								dispatch('bypassChoose', modalColor);
+							}
+						}}
 					/>
 				{/key}
 				<div class="flex justify-start">
