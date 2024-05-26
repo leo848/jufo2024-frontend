@@ -418,7 +418,7 @@ export class Compatibility {
 			return 1;
 		} else if (this === Compatibility.None) {
 			return 0;
-		} else return -1;
+		} else return -this.#value;
 	}
 
 	public toString(): string {

@@ -379,7 +379,7 @@
 	<hr class="opacity-20" />
 	<div>Aktionen</div>
 	<div class="flex flex-row gap-4">
-		{#if schemaResult.success}
+		{#if schemaResult.success && !error.titleDuplicate}
 			<button
 				class="text-xl dark:bg-gray-800 dark:hover:bg-gray-700 bg-gray-200 p-2 rounded transition-all w-full"
 				on:click={save}
