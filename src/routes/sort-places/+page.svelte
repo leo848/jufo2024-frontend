@@ -169,6 +169,13 @@
 						points.map((p) => p.name).join('_')
 				);
 			})}
+			json={points.map((p) => ({
+				name: p.name,
+				data: {
+					Längengrad: p.lng,
+					Breitengrad: p.lat
+				}
+			}))}
 		>
 			<LoadPlace slot="load" on:load={() => olmKey++} {invalidate} bind:points />
 		</Options>

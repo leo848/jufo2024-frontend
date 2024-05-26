@@ -15,7 +15,7 @@
 	import { serverOutputPathCreation } from '../../../server/types';
 	import { Spinner } from 'flowbite-svelte';
 	import { onDestroy } from 'svelte';
-	import { download, upload } from '../../../utils/download.ts';
+	import { download, upload } from '../../../utils/download';
 	import { slide } from 'svelte/transition';
 
 	title.set('Eigenes Schema');

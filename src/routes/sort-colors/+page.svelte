@@ -374,6 +374,14 @@
 			bind:metric
 			bind:colorSpace={space}
 			loadAmount={Object.keys(presets).length}
+			json={colors.map((c) => ({
+				name: c.rgb().hex(),
+				data: {
+					Helligkeit: c.oklab().l,
+					'Farbwert a': c.oklab().a,
+					'Farbwert b': c.oklab().b
+				}
+			}))}
 			on:asVectors={invalidate(() => {
 				goto(
 					'/sort-vectors?v=' +

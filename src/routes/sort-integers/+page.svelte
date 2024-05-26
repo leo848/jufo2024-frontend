@@ -250,6 +250,12 @@
 		on:add={() => numberInput.focus()}
 		on:delete={() => (numbers = [])}
 		on:asVectors={() => goto('/sort-vectors?v=' + numbers.map((n) => n.value).join('o'))}
+		json={numbers.map((n) => ({
+			name: n.value.toString(),
+			data: {
+				Zahlwert: n.value
+			}
+		}))}
 		hide={['norm', 'lock', 'load']}
 		metric={{ norm: 'manhattan', invert: false }}
 		xlCol={5}

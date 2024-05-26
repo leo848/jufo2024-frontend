@@ -317,7 +317,7 @@
 		xlCol={4}
 		bind:locked
 		bind:invalidate
-		hide={['asVector', 'norm']}
+		hide={['asVector', 'norm', 'downloadJSON']}
 		show={['asGraph']}
 		bind:metric
 		loadAmount={Object.keys(presets).length}
@@ -335,6 +335,7 @@
 					'&n=' +
 					words.map((w) => w.inner).join('_')
 			)}
+		json={[]}
 	>
 		<LoadWords
 			slot="load"

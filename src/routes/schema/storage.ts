@@ -116,5 +116,5 @@ export function saveSchema(schema: Schema) {
 export function loadSchema(key: string): Schema | null {
 	const raw = loadSchemasRaw()[key];
 	if (raw == null) return null;
-	else return new Schema(raw);
+	else return Schema.fromSchemaType(raw);
 }

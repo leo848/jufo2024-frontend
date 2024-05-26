@@ -281,11 +281,12 @@
 			bind:invalidate
 			bind:metric
 			xlCol={4}
-			hide={['asVector', 'load']}
+			hide={['asVector', 'load', 'downloadJSON']}
 			show={['asGraph']}
 			on:asGraph={() => goto('/hamilton-path?v=' + matrix.map((row) => row.join('i')).join('o'))}
 			on:add={invalidate(addEmptyVector)}
 			on:delete={invalidate(() => data.set([]))}
+			json={[]}
 		/>
 		<Window title="Ansicht des Graphen (FDGD)" options xlCol={5}>
 			<ForceDirectedGraphOptions slot="options" bind:options={fdgOptions} actions={fdgActions} />

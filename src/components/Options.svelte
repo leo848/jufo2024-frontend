@@ -8,6 +8,7 @@
 	import type { ColorSpace } from '../color/colorSpaces';
 	import OptionsButton from './OptionsButton.svelte';
 	import OptionsSelect from './OptionsSelect.svelte';
+	import { download } from '../utils/download';
 
 	type State = 'default' | 'load' | 'store';
 	let state: State = 'default';
@@ -25,7 +26,8 @@
 		| 'load'
 		| 'store'
 		| 'asVector'
-		| 'asGraph';
+		| 'asGraph'
+		| 'downloadJSON';
 
 	const defaultShow = new Set([
 		'add',
@@ -34,10 +36,13 @@
 		'norm',
 		'modifiedNorm',
 		'load',
-		'asVector'
+		'asVector',
+		'downloadJSON'
 	] as Module[]);
 	export let show: Module[] = [];
 	export let hide: Module[] = [];
+
+	export let json: { name: string; data: Partial<Record<string, string | number>> }[];
 
 	export let loadAmount: number = 0;
 
@@ -151,7 +156,7 @@
 					on:click={invalidate(() => (state = 'load'))}
 					show={display.has('load')}
 					title={`Laden${loadAmount ? ' (' + loadAmount + ')' : ''}`}
-					icon={Icon.DownloadSolid}
+					icon={Icon.ListOutline}
 				/>
 				<OptionsButton
 					on:click={invalidate(() => (state = 'store'))}
@@ -170,6 +175,13 @@
 					title="Als Graph"
 					icon={Icon.ArrowRightBigOutline}
 					on:click={() => dispatch('asGraph')}
+				/>
+				<OptionsButton
+					show={display.has('downloadJSON')}
+					title="Schema-JSON"
+					icon={Icon.DownloadOutline}
+					on:click={() =>
+						download(new Date().toISOString() + '.json', JSON.stringify(json, undefined, 4))}
 				/>
 			</div>
 		{:else}
