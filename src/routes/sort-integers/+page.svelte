@@ -189,7 +189,7 @@
 	onDestroy(() => unregisterCallback(callbackId));
 </script>
 
-<div class="mx-10 mt-4 grid grid-cols-12 gap-4">
+<div class="md:mx-10 mx-4 mt-4 grid grid-cols-12 gap-4">
 	<Window title="Zahlen" xlCol={7}>
 		{#if error}
 			<div
@@ -209,13 +209,13 @@
 		{/if}
 		<div class={`ml-2 flex flex-row overflow-scroll my-2 ${flexWrap ? 'flex-wrap' : ''}`}>
 			{#if !progress.ongoing}
-				<button class="p-6 my-2 mx-2 dark:bg-gray-700 bg-gray-200 rounded-xl">
+				<button class="md:p-6 p-2 my-2 mx-2 dark:bg-gray-700 bg-gray-200 rounded-xl">
 					<form on:submit|preventDefault={addNumber}>
 						<input
 							bind:value
 							bind:this={numberInput}
 							placeholder={String(funnyNumber)}
-							class="w-20 px-0 mb-2 text-3xl font-light mx-auto tracking-tight dark:text-white dark:bg-gray-700 bg-gray-200 focus:outline-0"
+							class="md:w-20 w-8 px-0 mb-2 md:text-xl lg:text-3xl font-light mx-auto tracking-tight dark:text-white dark:bg-gray-700 bg-gray-200 focus:outline-0"
 						/>
 					</form>
 				</button>
@@ -234,9 +234,11 @@
 							numbers.splice(index, 1);
 							numbers = numbers;
 						}}
-						class={colorClass(number.highlight) + ' p-6 m-2 rounded-xl'}
+						class={colorClass(number.highlight) + ' md:p-6 p-2 m-2 rounded-xl'}
 					>
-						<h5 class="px-0 mb-2 text-3xl font-light mx-auto tracking-tight dark:text-white">
+						<h5
+							class="px-0 mb-2 md:text-xl lg:text-3xl font-light mx-auto tracking-tight dark:text-white"
+						>
 							{number.value}
 						</h5>
 					</button>

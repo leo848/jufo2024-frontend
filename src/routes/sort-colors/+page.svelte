@@ -341,7 +341,7 @@
 {/if}
 
 <div class="w-full h-2 hover:h-28 transition-all" style={`background: ${gradient(colors)}`} />
-<div class="mx-10">
+<div class="md:mx-10 mx-4">
 	<div
 		class="mt-8 grid grid-cols-12 gap-8 auto-cols-max align-stretch justify-stretch justify-items-stretch"
 	>
