@@ -43,11 +43,15 @@ export class Schema {
 	#numericDimensions: NumericDimension[];
 	#optionDimensions: OptionDimensions[];
 
-	constructor({name, desc, numericDimensions, optionDimensions}: SchemaType) {
+	private constructor({name, desc, numericDimensions, optionDimensions}: SchemaType) {
 		this.#name = name;
 		this.#desc = desc;
 		this.#numericDimensions = numericDimensions;
 		this.#optionDimensions = optionDimensions;
+	}
+
+	public static fromSchemaType({name, desc, numericDimensions, optionDimensions}: SchemaType) {
+		return new Schema({name, desc, numericDimensions, optionDimensions})
 	}
 
 	public get name(): string {
@@ -129,6 +133,32 @@ export class Schema {
 				.map((_, i) => this.optionDimensions[i].default ?? this.optionDimensions[i].options[0])
 		};
 	}
+
+	dataPointFromJSON(json: any): {success: true, value: DataPoint} | {success: false, error: string} {
+		const name = json.name;
+		if (!name) return {success: false, error: "Datenpunkt ohne Name"};
+		const data = json.data;
+		if (!data) return {success: false, error: "Datenpunkt ohne Daten"};
+		const numericDimensions = [];
+		for (let i = 0; i < this.numericDimensions.length; i++) {
+			const dimensionSchema = this.numericDimensions[i];
+			const dataElement = json.data[dimensionSchema.name];
+			if (dataElement == null) return {success: false, error: `Kein Wert für ${dimensionSchema.name}`};
+			if (typeof dataElement !== "number") return {success: false, error: `Erwartete Zahl für ${dimensionSchema.name}, erhielt ${dataElement}`};
+			numericDimensions.push(dataElement);
+		}
+		const optionDimensions = [];
+		for (let i = 0; i < this.optionDimensions.length; i++) {
+			const dimensionSchema = this.optionDimensions[i];
+			const dataElement = json.data[dimensionSchema.name];
+			if (dataElement == null) return {success: false, error: `Kein Wert für ${dimensionSchema.name}`};
+			if (typeof dataElement !== "string") return {success: false, error: `Erwartete Zahl für ${dimensionSchema.name}, erhielt ${dataElement}`};
+			optionDimensions.push(dataElement);
+		}
+		return this.validateDataPoint({
+			name, numericDimensions, optionDimensions
+		})
+	}
 }
 
 export class DataPoint {
@@ -154,7 +184,7 @@ export class DataPoint {
 		return deepCopy(this.#optionDimensions);
 	}
 
-	toVector() {
+	public toVector() {
 		const numericVector = [];
 		for (let i = 0; i < this.validFor.numericDimensions.length; i++) {
 			const dimensionSchema = this.validFor.numericDimensions[i];
@@ -176,12 +206,30 @@ export class DataPoint {
 		return numericVector.concat(optionVector);
 	}
 
-	toInvalidated(): PossibleDataPoint {
+	public toInvalidated(): PossibleDataPoint {
 		return {
 			name: this.name,
 			numericDimensions: this.numericDimensions,
 			optionDimensions: this.optionDimensions
 		};
+	}
+
+	public toSelfContainedJSON(): {name: string; data: Record<string, string | number>} {
+		const data: Record<string, string | number> = {};
+		for (let i = 0; i < this.validFor.numericDimensions.length; i++) {
+			const dimensionSchema = this.validFor.numericDimensions[i];
+			const providedValue = this.#numericDimensions[i];
+			data[dimensionSchema.name] = providedValue;
+		}
+		for (let i = 0; i < this.validFor.optionDimensions.length; i++) {
+			const dimensionSchema = this.validFor.optionDimensions[i];
+			const providedValue = this.#optionDimensions[i];
+			data[dimensionSchema.name] = providedValue;
+		}
+		return {
+			name: this.name,
+			data
+		}
 	}
 }
 

@@ -10,6 +10,13 @@
 	import DataPointPicker from '../DataPointPicker.svelte';
 	import { flip } from 'svelte/animate';
 	import { dark } from '../../../ui/darkmode';
+	import { adjacencyMatrix } from '../../../graph/adjacency';
+	import { registerCallback, sendWebsocket, unregisterCallback } from '../../../server/websocket';
+	import { serverOutputPathCreation } from '../../../server/types';
+	import { Spinner } from 'flowbite-svelte';
+	import { onDestroy } from 'svelte';
+	import { download, upload } from '../../../utils/download.ts';
+	import { slide } from 'svelte/transition';
 
 	title.set('Eigenes Schema');
 
@@ -39,16 +46,122 @@
 		| { type: 'append' }
 		| { type: 'edit'; index: number }
 		| { type: 'insert'; index: number } = null;
+
+	function downloadJSON() {
+		const json = dataPoints.map((point) => point.toSelfContainedJSON());
+		const text = JSON.stringify(json, undefined, 4);
+		download(schema.name + '.json', text);
+	}
+
+	let error: string | null = null;
+	$: dataPoints, (error = null);
+
+	function uploadJSON() {
+		upload('application/json', (content) => {
+			const json = JSON.parse(content);
+			if (!Array.isArray(json)) {
+				error = 'Erwartete Liste von Daten, erhielt Objekt';
+				return;
+			}
+			const results = json.map((entry) => schema.dataPointFromJSON(entry));
+			const result: { value: DataPoint[]; success: true } | { error: string; success: false } =
+				results.reduce(
+					(acc, item) => {
+						if (!acc.success && item.success) return acc;
+						else if (!acc.success && !item.success) {
+							let error = acc.error;
+							if (!error.includes(item.error)) {
+								error += ' • ' + item.error;
+							}
+							return {
+								error,
+								success: false
+							};
+						} else if (acc.success && !item.success) {
+							return {
+								error: item.error,
+								success: false
+							};
+						} else if (acc.success && item.success) {
+							return {
+								value: [...acc.value, item.value],
+								success: true
+							};
+						} else return acc;
+					},
+					{ value: [], success: true } as
+						| { value: DataPoint[]; success: true }
+						| { error: string; success: false }
+				);
+			if (result.success) {
+				dataPoints = result.value;
+			} else {
+				error = result.error;
+			}
+		});
+	}
+
+	let sortingOngoing = false;
+	function sort() {
+		const matrix = adjacencyMatrix(
+			dataPoints.map((d) => d.toVector()),
+			{ norm: 'euclidean', invert: false }
+		);
+		sendWebsocket({
+			type: 'action',
+			action: {
+				type: 'createPath',
+				matrix,
+				method: { type: 'ilp' }
+			},
+			pool: {
+				ilpMaxDuration: 60
+			}
+		});
+		sortingOngoing = true;
+	}
+
+	const callback = registerCallback(serverOutputPathCreation, (pc) => {
+		if (pc.donePath) {
+			sortingOngoing = false;
+			dataPoints = pc.donePath.map((idx) => dataPoints[idx]);
+		}
+	});
+	onDestroy(() => unregisterCallback(callback));
 </script>
 
 <div class="md:mx-8 mx-4 mt-4 grid grid-cols-12 gap-8">
-	<Window title="Datenpunkte">
+	<Window title="Datenpunkte" scrollable>
+		{#if error}
+			<div
+				class="mx-0 dark:bg-gray-500 bg-gray-100 p-2 dark:text-white text-black flex flex-row justify-between"
+				transition:slide={{ axis: 'y' }}
+			>
+				<div>{error}</div>
+				<button
+					class="dark:text-gray-400 hover:text-white transition-all"
+					on:click={() => (error = null)}><Icon.CloseCircleSolid /></button
+				>
+			</div>
+		{/if}
 		<div class="m-4">
 			<button
 				class="p-4 mb-4 dark:bg-gray-600 bg-gray-300 dark:hover:bg-gray-500 hover:bg-gray-400 transition-all rounded-full"
 				on:click={() => (picker = { type: 'append' })}
 			>
 				<Icon.PlusSolid size="xl" />
+			</button>
+			<button
+				class="p-4 mb-4 dark:bg-gray-600 bg-gray-300 dark:hover:bg-gray-500 hover:bg-gray-400 transition-all rounded-full"
+				on:click={downloadJSON}
+			>
+				<Icon.DownloadSolid size="xl" />
+			</button>
+			<button
+				class="p-4 mb-4 dark:bg-gray-600 bg-gray-300 dark:hover:bg-gray-500 hover:bg-gray-400 transition-all rounded-full"
+				on:click={uploadJSON}
+			>
+				<Icon.UploadSolid size="xl" />
 			</button>
 			<div class="flex flex-col gap-2">
 				{#each dataPoints as dataPoint, index (dataPoint.name)}
@@ -80,13 +193,7 @@
 		<SchemaDisplay {schema} showDetails />
 	</Window>
 	<div class="col-span-12 lg:col-span-6">
-		{#if dataPoints.length >= 3}
-			<button
-				class="p-4 text-black text-xl md:text-2xl lg:text-6xl w-full rounded-xl transition-all sort-btn"
-			>
-				Sortieren
-			</button>
-		{:else}
+		{#if dataPoints.length < 3}
 			<div
 				class="p-4 text-black text-xl md:text-2xl lg:text-6xl w-full rounded-xl transition-all"
 				style={`background: linear-gradient(to right, ${$dark ? '#ccc' : '#666'} 0%, ${
@@ -97,6 +204,18 @@
 			>
 				{dataPoints.length} / 3
 			</div>
+		{:else}
+			<button
+				class="p-4 text-black text-2xl md:text-3xl lg:text-6xl w-full rounded-xl transition-all sort-btn"
+				on:click={sort}
+				disabled={sortingOngoing}
+			>
+				{#if sortingOngoing}
+					<Spinner />
+				{:else}
+					Sortieren
+				{/if}
+			</button>
 		{/if}
 	</div>
 </div>
@@ -148,7 +267,8 @@
 		background-blend-mode: screen;
 	}
 
-	.sort-btn:hover {
+	.sort-btn:hover,
+	.sort-btn:active {
 		background-size: 200%;
 		font-weight: 900;
 	}
