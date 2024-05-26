@@ -12,7 +12,8 @@
 		{ url: '/sort-words', title: 'Wörter sortieren' },
 		{ url: '/sort-places', title: 'Orte sortieren' },
 		{ url: '/sort-vectors', title: 'Vektoren sortieren' },
-		{ url: '/hamilton-path', title: 'Hamilton-Pfad finden' }
+		{ url: '/hamilton-path', title: 'Hamilton-Pfad finden' },
+		{ url: '/schema/sort', title: 'Eigenes Schema' }
 	];
 	const links = [
 		{ url: '/Langfassung.pdf', title: 'Langfassung' },
