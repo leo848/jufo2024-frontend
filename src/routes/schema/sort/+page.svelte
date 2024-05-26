@@ -9,6 +9,7 @@
 	import SchemaDisplay from '../SchemaDisplay.svelte';
 	import DataPointPicker from '../DataPointPicker.svelte';
 	import { flip } from 'svelte/animate';
+	import { dark } from '../../../ui/darkmode';
 
 	title.set('Eigenes Schema');
 
@@ -40,7 +41,7 @@
 		| { type: 'insert'; index: number } = null;
 </script>
 
-<div class="m-8 grid grid-cols-12 gap-8">
+<div class="md:mx-8 mx-4 mt-4 grid grid-cols-12 gap-8">
 	<Window title="Datenpunkte">
 		<div class="m-4">
 			<button
@@ -78,6 +79,26 @@
 	<Window title="Schema">
 		<SchemaDisplay {schema} showDetails />
 	</Window>
+	<div class="col-span-12 lg:col-span-6">
+		{#if dataPoints.length >= 3}
+			<button
+				class="p-4 text-black text-xl md:text-2xl lg:text-6xl w-full rounded-xl transition-all sort-btn"
+			>
+				Sortieren
+			</button>
+		{:else}
+			<div
+				class="p-4 text-black text-xl md:text-2xl lg:text-6xl w-full rounded-xl transition-all"
+				style={`background: linear-gradient(to right, ${$dark ? '#ccc' : '#666'} 0%, ${
+					$dark ? '#ccc' : '#666'
+				} ${(dataPoints.length / 3) * 100}%, ${$dark ? '#666' : '#ccc'} ${
+					(dataPoints.length / 3) * 100
+				}%, ${$dark ? '#666' : '#ccc'} 100%)`}
+			>
+				{dataPoints.length} / 3
+			</div>
+		{/if}
+	</div>
 </div>
 
 {#if picker != null}
@@ -117,3 +138,18 @@
 			: undefined}
 	/>
 {/if}
+
+<style>
+	.sort-btn {
+		background-image: linear-gradient(darkgray, darkgray), url('/sorting-emojis.png');
+		background-size: 100%;
+		background-position-y: 50%;
+		background-position-x: 50%;
+		background-blend-mode: screen;
+	}
+
+	.sort-btn:hover {
+		background-size: 200%;
+		font-weight: 900;
+	}
+</style>
