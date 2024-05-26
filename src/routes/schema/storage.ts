@@ -101,7 +101,11 @@ function loadSchemasRaw(): Schemas {
 }
 
 export function loadSchemas(): Schema[] {
-	return Object.values(loadSchemasRaw()).map((t) => Schema.fromSchemaType(t));
+	return Object.values(loadSchemasRaw()).flatMap((t) => {
+		const result = Schema.fromSchemaType(t);
+		if (result.success) return [result.value];
+		else return [];
+	});
 }
 
 function saveSchemas(schemas: Schemas) {
@@ -109,12 +113,20 @@ function saveSchemas(schemas: Schemas) {
 }
 
 export function saveSchema(schema: Schema) {
-	const schemas = Object.assign({}, loadSchemas(), {[schema.name]: schema.deserialize()});
+	const schemas = Object.assign({}, loadSchemasRaw(), {[schema.name]: schema.deserialize()});
 	saveSchemas(schemas);
 }
 
 export function loadSchema(key: string): Schema | null {
 	const raw = loadSchemasRaw()[key];
 	if (raw == null) return null;
-	else return Schema.fromSchemaType(raw);
+	const result = Schema.fromSchemaType(raw);
+	if (!result.success) return null;
+	return result.value;
+}
+
+export function deleteSchema(key: string) {
+	const raw = loadSchemasRaw();
+	delete raw[key];
+	saveSchemas(raw);
 }

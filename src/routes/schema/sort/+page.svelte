@@ -190,7 +190,9 @@
 		</div>
 	</Window>
 	<Window title="Schema">
-		<SchemaDisplay {schema} showDetails />
+		{#if schema}
+			<SchemaDisplay {schema} showDetails />
+		{/if}
 	</Window>
 	<div class="col-span-12 lg:col-span-6">
 		{#if dataPoints.length < 3}

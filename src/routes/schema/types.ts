@@ -9,7 +9,7 @@ export const NumericDimension = z.object({
 	default: z.optional(z.number()),
 	weight: z.number()
 });
-type NumericDimension = z.infer<typeof NumericDimension>;
+export type NumericDimension = z.infer<typeof NumericDimension>;
 
 export const OptionDimensions = z.object({
 	name: z.string().max(128),
@@ -17,7 +17,7 @@ export const OptionDimensions = z.object({
 	default: z.optional(z.string()),
 	weight: z.number()
 });
-type OptionDimensions = z.infer<typeof OptionDimensions>;
+export type OptionDimensions = z.infer<typeof OptionDimensions>;
 
 export const SchemaType = z.object({
 	name: z.string().max(128),
@@ -50,8 +50,16 @@ export class Schema {
 		this.#optionDimensions = optionDimensions;
 	}
 
-	public static fromSchemaType({name, desc, numericDimensions, optionDimensions}: SchemaType) {
-		return new Schema({name, desc, numericDimensions, optionDimensions})
+	public static fromSchemaType({name, desc, numericDimensions, optionDimensions}: SchemaType): {success: true; value: Schema} | {success: false; error: string} {
+		if (name.length == 0) return {success: false, error: "Fehlender Name"};
+		if (encodeURIComponent(name) != name) return {success: false, error: "Name nicht URL-sicher"};
+		if (numericDimensions.length == 0 && optionDimensions.length == 0) return {success: false, error: "Mindestens eine Dimension benötigt"};
+		if (numericDimensions.some(dim => dim.max && dim.min && dim.max < dim.min)) return {success: false, error: "Maximum geringer als Minimum"};
+		const allDimensions = [...numericDimensions, ...optionDimensions];
+		if (allDimensions.some(dim => dim.weight < 0)) return {success: false, error: "Gewicht darf nicht negativ sein"};
+		if (new Set(allDimensions.map(dim => dim.name)).size < allDimensions.length) return {success: false, error: "Doppelt vorkommender Name"}
+
+		return {success: true, value: new Schema({name, desc, numericDimensions, optionDimensions})}
 	}
 
 	public get name(): string {
