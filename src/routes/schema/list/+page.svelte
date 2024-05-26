@@ -70,7 +70,7 @@
 		<span>Neues Schema</span>
 	</a>
 	{#each schemas as schema, schemaIdx}
-		<div class="col-span-6 xl:col-span-2 md:col-span-4" bind:this={schemaElements[schemaIdx]}>
+		<div class="col-span-12 md:col-span-4 xl:col-span-2" bind:this={schemaElements[schemaIdx]}>
 			<SchemaDisplay
 				{schema}
 				highlight={highlight === schema.name}

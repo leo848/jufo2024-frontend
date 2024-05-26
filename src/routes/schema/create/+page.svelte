@@ -185,7 +185,7 @@
 				</div>
 				<div class="col-span-12">
 					<div>Gewichtung</div>
-					<div class="flex flex-row gap-4">
+					<div class="flex flex-row flex-wrap gap-4">
 						<input
 							type="number"
 							min="0"
@@ -225,15 +225,7 @@
 						{/if}
 					</div>
 				{/each}
-				<div class="col-span-4">
-					<button
-						class="p-2 px-4 dark:bg-gray-700 dark:hover:bg-gray-600 transition-all flex rounded flex-row gap-4 w-full"
-						on:click={() =>
-							(schemaType.numericDimensions = schemaType.numericDimensions.toSpliced(dimIndex, 1))}
-						><Icon.TrashBinSolid /> <span>Dimension löschen</span></button
-					>
-				</div>
-				<div class="col-span-4">
+				<div class="col-span-12 md:col-span-4">
 					<button
 						class="p-2 px-4 dark:bg-gray-700 dark:hover:bg-gray-600 transition-all flex rounded flex-row gap-4 w-full"
 						on:click={() =>
@@ -244,11 +236,19 @@
 							))}><Icon.CopySolid /> <span>Dimension duplizieren</span></button
 					>
 				</div>
-				<div class="col-span-4">
+				<div class="col-span-12 md:col-span-4">
 					<button
 						class="p-2 px-4 dark:bg-gray-700 dark:hover:bg-gray-600 transition-all flex rounded flex-row gap-4 w-full"
 						on:click={() => addNumericDimension(dimIndex)}
 						><Icon.ArrowLeftToBracketOutline /> <span>Dimension zurücksetzen</span></button
+					>
+				</div>
+				<div class="col-span-12 md:col-span-4">
+					<button
+						class="p-2 px-4 dark:bg-gray-700 dark:hover:bg-gray-600 transition-all flex rounded flex-row gap-4 w-full"
+						on:click={() =>
+							(schemaType.numericDimensions = schemaType.numericDimensions.toSpliced(dimIndex, 1))}
+						><Icon.TrashBinSolid /> <span>Dimension löschen</span></button
 					>
 				</div>
 			</div>
@@ -269,7 +269,7 @@
 			</div>
 			<div class="col-span-12">
 				<div>Gewichtung</div>
-				<div class="flex flex-row gap-4">
+				<div class="flex flex-row flex-wrap gap-4">
 					<input
 						type="number"
 						min="0"
@@ -308,7 +308,7 @@
 					>
 				</div>
 			</div>
-			<div class="col-span-4">
+			<div class="col-span-12 md:col-span-4">
 				<button
 					class="p-2 px-4 dark:bg-gray-700 dark:hover:bg-gray-600 transition-all flex rounded flex-row gap-4 w-full"
 					on:click={() =>
@@ -316,7 +316,7 @@
 					><Icon.TrashBinSolid /> <span>Dimension löschen</span></button
 				>
 			</div>
-			<div class="col-span-4">
+			<div class="col-span-12 md:col-span-4">
 				<button
 					class="p-2 px-4 dark:bg-gray-700 dark:hover:bg-gray-600 transition-all flex rounded flex-row gap-4 w-full"
 					on:click={() =>
@@ -327,7 +327,7 @@
 						))}><Icon.CopySolid /> <span>Dimension duplizieren</span></button
 				>
 			</div>
-			<div class="col-span-4">
+			<div class="col-span-12 md:col-span-4">
 				<button
 					class="p-2 px-4 dark:bg-gray-700 dark:hover:bg-gray-600 transition-all flex rounded flex-row gap-4 w-full"
 					on:click={() => addOptionDimension(dimIndex)}
