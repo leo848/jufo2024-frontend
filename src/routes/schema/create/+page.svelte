@@ -8,6 +8,7 @@
 	import SchemaDisplay from '../SchemaDisplay.svelte';
 	import { goto } from '$app/navigation';
 	import { page } from '$app/stores';
+	import { groupBy } from '../../../utils/array';
 
 	title.set('Schema erstellen');
 
@@ -107,9 +108,14 @@
 		goto('/schema/list?highlight=' + schema.name);
 	}
 
-	$: compatibility = otherSchemas
-		.map((other) => (schemaResult.success ? schemaResult.value.compatibility(other) : null))
-		.filter(Boolean);
+	$: compatibility = groupBy(
+		otherSchemas.flatMap((other) =>
+			schemaResult.success ? [[other, schemaResult.value.compatibility(other)] as const] : []
+		),
+		([_, comp]) => comp
+	)
+		.map((group) => ({ ...group, value: group.values.map(([schema, _comp]) => schema) }))
+		.toReversed();
 </script>
 
 <div class="mx-4 mt-4 md:mx-32 dark:text-white text-black grid grid-cols-1 gap-4">
@@ -281,7 +287,7 @@
 			<div class="col-span-12">
 				<div>Auswahlmöglichkeiten</div>
 				<div class="ml-4 flex flex-col gap-2">
-					{#each dim.options as option, optionIndex}
+					{#each dim.options as _option, optionIndex}
 						<div class="flex flex-row gap-2">
 							<input
 								bind:value={dim.options[optionIndex]}
@@ -350,6 +356,24 @@
 		<hr class="opacity-20" />
 
 		<div>Kompatibilität</div>
+
+		<div class="flex flex-col gap-4">
+			{#each compatibility as group}
+				<div class="flex flex-row p-4 dark:bg-gray-800 rounded gap-4">
+					<svelte:component this={group.key.icon()} size="xl" />
+					<div>
+						<div class="text-xl">{group.key.toString()}</div>
+						{#each group.value as value}
+							<div>{value.name}</div>
+						{/each}
+					</div>
+					<div class="grow" />
+					<div class="max-w-64 opacity-50">
+						<div>{group.key.description()}</div>
+					</div>
+				</div>
+			{/each}
+		</div>
 	{/if}
 
 	<hr class="opacity-20" />

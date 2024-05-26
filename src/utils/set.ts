@@ -1,10 +1,10 @@
-type Setty<T> = UsefulSet<T> | Set<T>;
+type Setty<T> = UsefulSet<T> | Set<T> | T[];
 
 function toSet<T>(s: Setty<T>): Set<T> {
-	return s instanceof UsefulSet ? s.inner : s;
+	return s instanceof UsefulSet ? s.inner : Array.isArray(s) ? new Set(s) : s;
 }
 
-class UsefulSet<T> {
+export class UsefulSet<T> {
 	#inner: Set<T>;
 
 	constructor(inner: Setty<T>) {
@@ -13,6 +13,10 @@ class UsefulSet<T> {
 
 	public get inner(): Set<T> {
 		return new Set(this.#inner);
+	}
+
+	public get size(): number {
+		return this.inner.size
 	}
 
 	isSubsetOf(other: Setty<T>): boolean {
@@ -27,6 +31,21 @@ class UsefulSet<T> {
 
 	isSupersetOf(other: Setty<T>): boolean {
 		return new UsefulSet(other).isSubsetOf(this);
+	}
+
+	isProperSubsetOf(other: Setty<T>): boolean {
+		const otherSet = toSet(other);
+		return this.isSubsetOf(otherSet) && this.inner.size < otherSet.size;
+	}
+
+	isProperSupersetOf(other: Setty<T>): boolean {
+		const otherSet = toSet(other);
+		return this.isSupersetOf(otherSet) && this.inner.size > otherSet.size;
+	}
+
+	equals(other: Setty<T>): boolean {
+		const otherSet = toSet(other);
+		return this.inner.size === otherSet.size && this.isSubsetOf(otherSet);
 	}
 
 	union(other: Setty<T>): UsefulSet<T> {
@@ -79,7 +98,15 @@ class UsefulSet<T> {
 		return new UsefulSet(resultSet);
 	}
 
+	isSubsetIncomparable(other: Setty<T>): boolean {
+		return !this.isSubsetOf(other) && !new UsefulSet(other).isSubsetOf(this);
+	}
+
 	isDisjointFrom(other: Setty<T>): boolean {
 		return this.intersection(other).inner.size === 0;
+	}
+
+	[Symbol.iterator](): Iterator<T> {
+		return this.inner[Symbol.iterator]();
 	}
 }

@@ -14,21 +14,21 @@ export function download(filename: string, text: string) {
 export function upload(accept: string, callback: (content: string) => void) {
 	const element = document.createElement('input');
 	element.accept = accept;
-	element.type = "file"
-	element.style.display = 'none'
+	element.type = 'file';
+	element.style.display = 'none';
 	document.body.appendChild(element);
 	element.click();
-	element.addEventListener('input', _ => {
+	element.addEventListener('input', (_) => {
 		if (!element.files) return;
 		const file = element.files[0];
 
 		const fileReader = new FileReader();
 
-		fileReader.readAsText(file)
+		fileReader.readAsText(file);
 
-		fileReader.addEventListener("load", _ => {
+		fileReader.addEventListener('load', (_) => {
 			const result: string = fileReader.result as string;
 			callback(result);
-		})
-	})
+		});
+	});
 }
