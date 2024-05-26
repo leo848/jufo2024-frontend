@@ -167,6 +167,19 @@ export class Schema {
 			name, numericDimensions, optionDimensions
 		})
 	}
+
+	compatibility(otherSchema: Schema): Compatibility {
+		let compatibility = Compatibility.Full;
+
+		// TODO
+
+		for (let i = 0; i < this.numericDimensions.length; i++) {
+			const dimensionSchema = this.numericDimensions[i];
+		}
+		for (let i = 0; i < this.optionDimensions.length; i++) {
+			const dimensionSchema = this.optionDimensions[i];
+		}
+	}
 }
 
 export class DataPoint {
@@ -238,6 +251,34 @@ export class DataPoint {
 			name: this.name,
 			data
 		}
+	}
+}
+
+export class Compatibility {
+	static Full = new Compatibility("full");
+	static Subset = new Compatibility("subset");
+	static Superset = new Compatibility("superset");
+	static Mixed = new Compatibility("mixed");
+	static None = new Compatibility("none");
+
+	#value: string
+
+	private constructor(value: string) {
+		this.#value = value;
+	};
+
+	public and(other: Compatibility) {
+		if (this === Compatibility.Full) {
+			return other;
+		} else if (other === Compatibility.Full) {
+			return this;
+		} else if (this === Compatibility.None) {
+			return this;
+		} else if (other === Compatibility.None) {
+			return other;
+		} else if (this === other) {
+			return this;
+		} else return Compatibility.Mixed;
 	}
 }
 

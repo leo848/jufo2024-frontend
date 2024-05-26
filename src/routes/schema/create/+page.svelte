@@ -106,6 +106,10 @@
 		saveSchema(schema);
 		goto('/schema/list?highlight=' + schema.name);
 	}
+
+	$: compatibility = otherSchemas
+		.map((other) => (schemaResult.success ? schemaResult.value.compatibility(other) : null))
+		.filter(Boolean);
 </script>
 
 <div class="mx-4 mt-4 md:mx-32 dark:text-white text-black grid grid-cols-1 gap-4">
@@ -340,6 +344,12 @@
 		<div class="p-8 text-2xl bg-red-900 rounded">
 			Fehler: {schemaResult.error}
 		</div>
+	{/if}
+
+	{#if schemaResult.success}
+		<hr class="opacity-20" />
+
+		<div>Kompatibilität</div>
 	{/if}
 
 	<hr class="opacity-20" />
