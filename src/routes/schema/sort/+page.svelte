@@ -13,10 +13,11 @@
 	import { adjacencyMatrix } from '../../../graph/adjacency';
 	import { registerCallback, sendWebsocket, unregisterCallback } from '../../../server/websocket';
 	import { serverOutputPathCreation } from '../../../server/types';
-	import { Spinner } from 'flowbite-svelte';
-	import { onDestroy } from 'svelte';
+	import { Spinner, Tooltip } from 'flowbite-svelte';
+	import { onDestroy, type ComponentType } from 'svelte';
 	import { download, upload } from '../../../utils/download';
 	import { slide } from 'svelte/transition';
+	import { shuffle } from '../../../utils/array';
 
 	title.set('Eigenes Schema');
 
@@ -101,6 +102,56 @@
 		});
 	}
 
+	const actionButtons = [
+		{
+			icon: Icon.PlusSolid,
+			action: () => (picker = { type: 'append' }),
+			desc: 'Datenpunkt hinzufügen'
+		},
+		{
+			icon: Icon.DownloadSolid,
+			action: downloadJSON,
+			desc: 'Schema-JSON herunterladen'
+		},
+		{
+			icon: Icon.UploadSolid,
+			action: uploadJSON,
+			desc: 'Schema-JSON hochladen'
+		},
+		{
+			icon: Icon.TrashBinSolid,
+			action: () => (dataPoints = []),
+			desc: 'Alle Datenpunkte löschen'
+		},
+		{
+			icon: Icon.ShuffleSolid,
+			action: () => (dataPoints = shuffle(dataPoints)),
+			desc: 'Datenpunkte mischen'
+		}
+	];
+
+	const itemActionButtons: {
+		icon: ComponentType;
+		action: (index: number) => void;
+		desc: string;
+	}[] = [
+		{
+			icon: Icon.EditOutline,
+			action: (index) => (picker = { type: 'edit', index }),
+			desc: 'Datenpunkt bearbeiten'
+		},
+		{
+			icon: Icon.CopySolid,
+			action: (index) => (picker = { type: 'insert', index }),
+			desc: 'Datenpunkt kopieren'
+		},
+		{
+			icon: Icon.TrashBinOutline,
+			action: (index) => (dataPoints = dataPoints.toSpliced(index, 1)),
+			desc: 'Datenpunkt löschen'
+		}
+	];
+
 	let sortingOngoing = false;
 	function sort() {
 		const matrix = adjacencyMatrix(
@@ -145,24 +196,19 @@
 			</div>
 		{/if}
 		<div class="m-4">
-			<button
-				class="p-4 mb-4 dark:bg-gray-600 bg-gray-300 dark:hover:bg-gray-500 hover:bg-gray-400 transition-all rounded-full"
-				on:click={() => (picker = { type: 'append' })}
-			>
-				<Icon.PlusSolid size="xl" />
-			</button>
-			<button
-				class="p-4 mb-4 dark:bg-gray-600 bg-gray-300 dark:hover:bg-gray-500 hover:bg-gray-400 transition-all rounded-full"
-				on:click={downloadJSON}
-			>
-				<Icon.DownloadSolid size="xl" />
-			</button>
-			<button
-				class="p-4 mb-4 dark:bg-gray-600 bg-gray-300 dark:hover:bg-gray-500 hover:bg-gray-400 transition-all rounded-full"
-				on:click={uploadJSON}
-			>
-				<Icon.UploadSolid size="xl" />
-			</button>
+			<div class="flex flex-row gap-4">
+				{#each actionButtons as btn}
+					<button
+						class="p-4 mb-4 dark:bg-gray-600 bg-gray-300 dark:hover:bg-gray-500 hover:bg-gray-400 transition-all rounded-full"
+						on:click={btn.action}
+					>
+						<svelte:component this={btn.icon} size="xl" />
+					</button>
+					<Tooltip type="auto">
+						{btn.desc}
+					</Tooltip>
+				{/each}
+			</div>
 			<div class="flex flex-col gap-2">
 				{#each dataPoints as dataPoint, index (dataPoint.name)}
 					<div
@@ -171,19 +217,15 @@
 					>
 						<span class="dark:text-white">{dataPoint.name}</span>
 						<span class="flex-grow" />
-						<button
-							class="p-2 bg-gray-300 dark:bg-gray-600 rounded-full"
-							on:click={() => (picker = { type: 'edit', index })}><Icon.EditOutline /></button
-						>
-						<button
-							class="p-2 bg-gray-300 dark:bg-gray-600 rounded-full"
-							on:click={() => (picker = { type: 'insert', index })}><Icon.CopySolid /></button
-						>
-						<button
-							class="p-2 bg-gray-300 dark:bg-gray-600 rounded-full"
-							on:click={() => (dataPoints = dataPoints.toSpliced(index, 1))}
-							><Icon.TrashBinOutline /></button
-						>
+						{#each itemActionButtons as btn}
+							<button
+								class="p-2 bg-gray-300 dark:bg-gray-600 dark:hover:bg-gray-500 hover:bg-gray-400 rounded-full transition-all"
+								on:click={() => btn.action(index)}><svelte:component this={btn.icon} /></button
+							>
+							<Tooltip>
+								{btn.desc}
+							</Tooltip>
+						{/each}
 					</div>
 				{/each}
 			</div>

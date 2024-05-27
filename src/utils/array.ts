@@ -14,3 +14,17 @@ export function groupBy<K, V>(array: V[], predicate: (item: V) => K): {key: K; v
 		values
 	}));
 }
+
+export function shuffle<T>(arr: T[]): T[] {
+	let array = arr.slice();
+	let currentIndex = array.length, randomIndex;
+
+	while (currentIndex !== 0) {
+		randomIndex = Math.floor(Math.random() * currentIndex);
+		currentIndex--;
+
+		[array[currentIndex], array[randomIndex]] = [array[randomIndex], array[currentIndex]];
+	}
+
+	return array;
+}
