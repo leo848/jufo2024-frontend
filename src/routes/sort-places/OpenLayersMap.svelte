@@ -86,7 +86,19 @@
 		markers.forEach((m) => m.removeFrom(map));
 		markers = (demo ? [] : points).map((p) => {
 			const marker = L.marker(p, { opacity: 0.8 });
-			marker.bindTooltip(p.name);
+			// @prettier-ignore
+			const safeName = new Option(p.name).innerText;
+			marker.bindTooltip(
+				`
+					<div>
+						<b> ${safeName} </b>
+					</div>
+					<p class="w-[150px] text-wrap">
+						${p.desc ?? ''}
+					</p>
+				`,
+				{ interactive: true, sticky: false }
+			);
 			marker.addTo(map);
 			return marker;
 		});
