@@ -259,19 +259,3 @@
 			: undefined}
 	/>
 {/if}
-
-<style>
-	.sort-btn {
-		background-image: linear-gradient(darkgray, darkgray), url('/sorting-emojis.png');
-		background-size: 100%;
-		background-position-y: 50%;
-		background-position-x: 50%;
-		background-blend-mode: screen;
-	}
-
-	.sort-btn:hover,
-	.sort-btn:active {
-		background-size: 200%;
-		font-weight: 900;
-	}
-</style>

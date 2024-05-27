@@ -324,11 +324,12 @@
 					/>
 				</div>
 				{#if send}
+					<div class="grow" />
 					{#if !progress.ongoing}
 						<div class="flex flex-row justify-stretch gap-4">
 							<button
 								on:click={() => send({ stepwise: false })}
-								class="flex flex-row justify-between p-4 grow rounded-xl text-white bg-gray-700 hover:bg-gray-600 transition-all p-4"
+								class="flex flex-row justify-between p-4 grow rounded-xl text-black text-xl bg-gray-700 hover:bg-gray-600 transition-all p-4 sort-btn items-center"
 								><Icon.PlaySolid />
 								<div>Ausführen</div>
 								<div /></button
