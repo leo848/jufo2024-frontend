@@ -382,9 +382,9 @@
 			json={colors.map((c) => ({
 				name: c.rgb().hex(),
 				data: {
-					Helligkeit: c.oklab().l,
-					'Farbwert a': c.oklab().a,
-					'Farbwert b': c.oklab().b
+					Helligkeit: c.oklab().unnormal().l,
+					'Farbwert a': c.oklab().unnormal().a,
+					'Farbwert b': c.oklab().unnormal().b
 				}
 			}))}
 			on:asVectors={invalidate(() => {
