@@ -264,107 +264,114 @@
 
 <Window title={name[currentAction]} mdCol={6} xlCol={horizontal ? 6 : 4}>
 	<div class={`grid grid-cols-${horizontal && selectedItem[currentAction] === null ? 2 : 1} m-4`}>
-		{#each displayItems[currentAction] as item (item.index)}
-			<button
-				animate:flip={{ duration: 200 }}
-				in:scale
-				class={`transition ${horizontal ? 'even:ml-2 odd:mr-2' : ''} mb-4 last:mb-0`}
-				on:click={() => (selectedItem[currentAction] = open(currentAction) ? null : item.index)}
-				disabled={progress.ongoing}
-			>
-				<div
-					class="bg-gray-100 dark:bg-gray-700 dark:hover:bg-gray-600 hover:bg-gray-100 transition-all p-2 rounded-xl border dark:border-gray-600"
+		{#if values.length >= 3}
+			{#each displayItems[currentAction] as item (item.index)}
+				<button
+					animate:flip={{ duration: 200 }}
+					in:scale
+					class={`transition ${horizontal ? 'even:ml-2 odd:mr-2' : ''} mb-4 last:mb-0`}
+					on:click={() => (selectedItem[currentAction] = open(currentAction) ? null : item.index)}
+					disabled={progress.ongoing}
 				>
-					<div class="flex items-center justify-between">
-						<Icon.AngleRightSolid
-							class="transition"
-							style={`transform: rotate(${open(currentAction) ? 90 : 0}deg)`}
-						/>
-						<span class="dark:text-gray-100 text-gray-900">
-							{item.name}
-						</span>
-						<svelte:component this={item.icon} />
+					<div
+						class="bg-gray-100 dark:bg-gray-700 dark:hover:bg-gray-600 hover:bg-gray-100 transition-all p-2 rounded-xl border dark:border-gray-600"
+					>
+						<div class="flex items-center justify-between">
+							<Icon.AngleRightSolid
+								class="transition"
+								style={`transform: rotate(${open(currentAction) ? 90 : 0}deg)`}
+							/>
+							<span class="dark:text-gray-100 text-gray-900">
+								{item.name}
+							</span>
+							<svelte:component this={item.icon} />
+						</div>
 					</div>
-				</div>
-			</button>
-		{/each}
-		{#if selectedItemAction !== null}
-			{@const { description, send, expectedTime, complexity, stepwise, parameters } =
-				items[currentAction][selectedItemAction]}
-			<div class="flex flex-col justify-between grow">
-				<div>
-					<div class="rounded-xl mb-4" in:scale={{ delay: 150 }}>{description}</div>
-					{#if expectedTime}
-						{@const time = expectedTime(values.length, latency)}
-						{@const [amount, suffix] = formatTimespan(time)}
-						<div>Erwartete Zeit: <b>{amount}</b> {suffix}</div>
-					{/if}
-					{#if complexity}
-						<div>Komplexität: <b>{complexity}</b></div>
-					{/if}
-					{#if parameters && parameters.length}
-						<OptionPoolSettings bind:pool {parameters} />
-					{/if}
-					<div class="mt-2">
-						Minimallatenz:
-						{#if latency == 0}
-							<b>keine</b>
-						{:else if latency < 1000}
-							<b>{latency}</b>ms
-						{:else}
-							<b>{(latency / 1000).toFixed(0)}</b>s
+				</button>
+			{/each}
+			{#if selectedItemAction !== null}
+				{@const { description, send, expectedTime, complexity, stepwise, parameters } =
+					items[currentAction][selectedItemAction]}
+				<div class="flex flex-col justify-between grow">
+					<div>
+						<div class="rounded-xl mb-4" in:scale={{ delay: 150 }}>{description}</div>
+						{#if expectedTime}
+							{@const time = expectedTime(values.length, latency)}
+							{@const [amount, suffix] = formatTimespan(time)}
+							<div>Erwartete Zeit: <b>{amount}</b> {suffix}</div>
 						{/if}
-					</div>
-					<input
-						type="range"
-						bind:value={latencySlider}
-						min={0}
-						max={6}
-						class="w-full bg-transparent text-white grayscale"
-					/>
-				</div>
-				{#if send}
-					<div class="grow" />
-					{#if !progress.ongoing}
-						<div class="flex flex-row justify-stretch gap-4">
-							<button
-								on:click={() => send({ stepwise: false })}
-								class="flex flex-row justify-between p-4 grow rounded-xl text-black text-xl bg-gray-700 hover:bg-gray-600 transition-all p-4 sort-btn items-center"
-								><Icon.PlaySolid />
-								<div>Ausführen</div>
-								<div /></button
-							>
-							{#if stepwise}
-								<button
-									on:click={() => send({ stepwise: true })}
-									class="flex flex-row justify-between p-4 grow rounded-xl text-white bg-gray-700 hover:bg-gray-600 transition-all p-4 items-center"
-									><Icon.PlayOutline />
-									<div>Schritt ausführen</div>
-									<div /></button
-								>
+						{#if complexity}
+							<div>Komplexität: <b>{complexity}</b></div>
+						{/if}
+						{#if parameters && parameters.length}
+							<OptionPoolSettings bind:pool {parameters} />
+						{/if}
+						<div class="mt-2">
+							Minimallatenz:
+							{#if latency == 0}
+								<b>keine</b>
+							{:else if latency < 1000}
+								<b>{latency}</b>ms
+							{:else}
+								<b>{(latency / 1000).toFixed(0)}</b>s
 							{/if}
 						</div>
-					{:else if progress.value === null}
-						<Spinner />
-					{:else}
-						{@const eta = progress.eta()}
-						{#if eta !== null && (!stepwise || progress.preferStep)}
-							{@const [amount, suffix] = formatTimespan(eta / 1000)}
-							<div>
-								{#if eta > 2000}ca. {/if}<b>{amount}</b>
-								{suffix} verbleibend
+						<input
+							type="range"
+							bind:value={latencySlider}
+							min={0}
+							max={6}
+							class="w-full bg-transparent text-white grayscale"
+						/>
+					</div>
+					{#if send}
+						<div class="grow" />
+						{#if !progress.ongoing}
+							<div class="flex flex-row justify-stretch gap-4">
+								<button
+									on:click={() => send({ stepwise: false })}
+									class="flex flex-row justify-between p-4 grow rounded-xl text-black text-xl bg-gray-700 hover:bg-gray-600 transition-all p-4 sort-btn items-center"
+									><Icon.PlaySolid />
+									<div>Ausführen</div>
+									<div /></button
+								>
+								{#if stepwise}
+									<button
+										on:click={() => send({ stepwise: true })}
+										class="flex flex-row justify-between p-4 grow rounded-xl text-white bg-gray-700 hover:bg-gray-600 transition-all p-4 items-center"
+										><Icon.PlayOutline />
+										<div>Schritt ausführen</div>
+										<div /></button
+									>
+								{/if}
 							</div>
+						{:else if progress.value === null}
+							<Spinner />
+						{:else}
+							{@const eta = progress.eta()}
+							{#if eta !== null && (!stepwise || progress.preferStep)}
+								{@const [amount, suffix] = formatTimespan(eta / 1000)}
+								<div>
+									{#if eta > 2000}ca. {/if}<b>{amount}</b>
+									{suffix} verbleibend
+								</div>
+							{/if}
+							<Progressbar progress={progress.value * 100} />
 						{/if}
-						<Progressbar progress={progress.value * 100} />
 					{/if}
-				{/if}
+				</div>
+			{:else if currentAction === 'improvement'}
+				<div class="grow h-full" />
+				<button
+					class="text-gray-500 hover:text-gray-200 transition-all underline self-center"
+					on:click={deletePath}>Pfad löschen</button
+				>
+			{/if}
+		{:else}
+			<div class="text-2xl">
+				Füge noch {#key values.length}<b in:scale>{3 - values.length}</b>{/key} Werte hinzu, um mit der
+				Kettensortierung anzufangen
 			</div>
-		{:else if currentAction === 'improvement'}
-			<div class="grow h-full" />
-			<button
-				class="text-gray-500 hover:text-gray-200 transition-all underline self-center"
-				on:click={deletePath}>Pfad löschen</button
-			>
 		{/if}
 	</div>
 </Window>
