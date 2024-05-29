@@ -24,6 +24,9 @@
 
 	export let demo: boolean = false;
 
+	let openRouteKeyPresent: boolean;
+	$: points, (openRouteKeyPresent = !!process.env.OPENROUTE_KEY);
+
 	let wrapperDiv: HTMLDivElement;
 	let selectElt: HTMLDivElement;
 	let map: L.Map;
@@ -212,20 +215,22 @@
 					class="mt-4 dark:bg-gray-700 bg-gray-200 w-full rounded"
 					bind:value={selection.name}
 				/>
-				<button
-					on:click|stopPropagation={async () => {
-						if (!selection) return;
-						const response = await getGeocodeName({
-							lat: selection?.position.lat,
-							lng: selection?.position.lng,
-							zoomLevel: map.getZoom()
-						});
-						selection.name = response.name;
-						selection.position = { lat: response.lat, lng: response.lng };
-					}}
-					class="p-1 dark:bg-gray-600 dark:hover:bg-gray-500 transition-all w-full rounded mt-4"
-					>Name ermitteln</button
-				>
+				{#if openRouteKeyPresent}
+					<button
+						on:click|stopPropagation={async () => {
+							if (!selection) return;
+							const response = await getGeocodeName({
+								lat: selection?.position.lat,
+								lng: selection?.position.lng,
+								zoomLevel: map.getZoom()
+							});
+							selection.name = response.name;
+							selection.position = { lat: response.lat, lng: response.lng };
+						}}
+						class="p-1 dark:bg-gray-600 dark:hover:bg-gray-500 transition-all w-full rounded mt-4"
+						>Name ermitteln</button
+					>
+				{/if}
 				<button
 					on:click|stopPropagation={invalidate(addSelection)}
 					class="text-xl p-2 bg-gray-100 dark:bg-gray-200 dark:hover:bg-white hover:bg-black dark:text-black text-white transition-all w-full rounded mt-4"
