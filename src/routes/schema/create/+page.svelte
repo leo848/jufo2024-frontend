@@ -9,6 +9,8 @@
 	import { goto } from '$app/navigation';
 	import { page } from '$app/stores';
 	import { groupBy } from '../../../utils/array';
+	import { sortByKey } from '../../../utils/sort';
+	import { scale } from 'svelte/transition';
 
 	title.set('Schema erstellen');
 
@@ -108,11 +110,14 @@
 		goto('/schema/list?highlight=' + schema.name);
 	}
 
-	$: compatibility = groupBy(
-		otherSchemas.flatMap((other) =>
-			schemaResult.success ? [[other, schemaResult.value.compatibility(other)] as const] : []
+	$: compatibility = sortByKey(
+		groupBy(
+			otherSchemas.flatMap((other) =>
+				schemaResult.success ? [[other, schemaResult.value.compatibility(other)] as const] : []
+			),
+			([_, comp]) => comp
 		),
-		([_, comp]) => comp
+		(group) => group.key.numericValue()
 	)
 		.map((group) => ({ ...group, value: group.values.map(([schema, _comp]) => schema) }))
 		.toReversed();
@@ -174,7 +179,7 @@
 	<div>Numerische Dimensionen ({schemaType.numericDimensions.length})</div>
 	<div class="ml-4 flex flex-col gap-4">
 		{#each schemaType.numericDimensions as dim, dimIndex}
-			<div class="dark:bg-gray-800 p-2 grid grid-cols-12 gap-4 rounded">
+			<div class="dark:bg-gray-800 p-2 grid grid-cols-12 gap-4 rounded" transition:scale>
 				<div class="col-span-12">
 					<div>Name</div>
 					<input
@@ -262,7 +267,7 @@
 
 	<div>Kategorielle Dimensionen ({schemaType.optionDimensions.length})</div>
 	{#each schemaType.optionDimensions as dim, dimIndex}
-		<div class="dark:bg-gray-800 p-2 grid grid-cols-12 gap-4 rounded">
+		<div class="dark:bg-gray-800 p-2 grid grid-cols-12 gap-4 rounded" transition:scale>
 			<div class="col-span-12">
 				<div>Name</div>
 				<input type="text" class="dark:bg-gray-700 rounded text-lg w-full" bind:value={dim.name} />
