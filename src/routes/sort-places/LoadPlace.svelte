@@ -13,6 +13,8 @@
 
 	let selectedPointList: null | PointList = null;
 
+	let search: null | string = null;
+
 	const dispatch = createEventDispatcher<{ load: null }>();
 
 	function load(list: PointList) {
@@ -39,7 +41,7 @@
 			{@const list = pointsLists[name]}
 			<div class="col-span-3 rounded overflow-hidden">
 				<button
-					class="text-xl dark:bg-gray-700 dark:hover:bg-gray-600 bg-gray-100 hover:bg-gray-200 transition-all p-2 color-white w-full items-center justify-between flex flex-row"
+					class="dark:bg-gray-700 dark:hover:bg-gray-600 bg-gray-100 hover:bg-gray-200 transition-all p-2 color-white w-full items-center justify-between flex flex-row"
 					on:click={() => (selectedPointList = list)}
 				>
 					<div class="dark:text-white text-gray-600 truncate">
@@ -61,10 +63,36 @@
 		<div class="text-3xl col-span-6 dark:text-white text-black align-center">
 			{selectedPointList.name}
 		</div>
-		<div class="max-h-64 col-span-4 overflow-y-scroll flex gap-2 text-sm flex-wrap grow">
-			{#each selectedPointList.values as point}
-				<div class="rounded-full dark:bg-gray-600 bg-gray-100 p-1" title={point.desc}>
-					{point.name}
+		<div class="col-span-4">
+			<input
+				bind:value={search}
+				type="text"
+				placeholder="Suche..."
+				class="w-full p-2 dark:bg-gray-700 rounded-xl"
+			/>
+		</div>
+		<div
+			class="max-h-64 col-span-4 overflow-y-scroll flex gap-2 text-sm flex-wrap grow items-start"
+		>
+			{#each selectedPointList.values.filter((v) => v.name
+					.toLowerCase()
+					.includes(search?.toLowerCase() ?? '')) as point}
+				<div>
+					<div
+						class="rounded-full dark:bg-gray-600 bg-gray-100 p-1 flex flex-row items-center gap-1"
+						title={point.desc}
+					>
+						<div>{point.name}</div>
+						{#if !points.map((p) => p.name).includes(point.name)}
+							<button
+								class="dark:text-gray-400 text-gray-600 dark:hover:text-gray-200 hover:text-gray-800 transition-all"
+								on:click={invalidate(() => {
+									dispatch('load');
+									points = [...points, point];
+								})}><Icon.PlusSolid size="sm" /></button
+							>
+						{/if}
+					</div>
 				</div>
 			{/each}
 		</div>
