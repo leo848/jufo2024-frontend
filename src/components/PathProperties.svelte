@@ -21,7 +21,7 @@
 
 	let displayLength = tweened(length, {
 		duration(from, to) {
-			return constrain(Math.abs(to - from), 5, 100) * 20;
+			return constrain(Math.abs(to - from), 5, 100) * 10;
 		},
 		easing: quartIn
 	});

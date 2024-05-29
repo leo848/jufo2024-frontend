@@ -27,7 +27,7 @@
 
 	title.set('Orte sortieren');
 
-	let points: NamedPoint[] = presets.hamburg.values;
+	let points: NamedPoint[] = presets.deutschland100.values;
 	let pointsLocked: boolean = false;
 	$: length = points.length;
 

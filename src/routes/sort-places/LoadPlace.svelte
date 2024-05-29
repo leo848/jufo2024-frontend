@@ -91,6 +91,12 @@
 									points = [...points, point];
 								})}><Icon.PlusSolid size="sm" /></button
 							>
+						{:else}
+							<div
+								class="dark:text-gray-400 text-gray-600 dark:hover:text-gray-200 hover:text-gray-800 transition-all"
+							>
+								<Icon.CheckSolid size="sm" />
+							</div>
 						{/if}
 					</div>
 				</div>
