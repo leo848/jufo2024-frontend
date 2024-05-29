@@ -105,7 +105,9 @@
 	const actionButtons = [
 		{
 			icon: Icon.PlusSolid,
-			action: () => (picker = { type: 'append' }),
+			action: () => {
+				picker = { type: 'append' };
+			},
 			desc: 'Datenpunkt hinzufügen'
 		},
 		{
@@ -120,12 +122,16 @@
 		},
 		{
 			icon: Icon.TrashBinSolid,
-			action: () => (dataPoints = []),
+			action: () => {
+				dataPoints = [];
+			},
 			desc: 'Alle Datenpunkte löschen'
 		},
 		{
 			icon: Icon.ShuffleSolid,
-			action: () => (dataPoints = shuffle(dataPoints)),
+			action: () => {
+				dataPoints = shuffle(dataPoints);
+			},
 			desc: 'Datenpunkte mischen'
 		}
 	];
@@ -137,12 +143,17 @@
 	}[] = [
 		{
 			icon: Icon.EditOutline,
-			action: (index) => (picker = { type: 'edit', index }),
+			action: (index) => {
+				picker = { type: 'edit', index };
+				console.log(picker);
+			},
 			desc: 'Datenpunkt bearbeiten'
 		},
 		{
 			icon: Icon.CopySolid,
-			action: (index) => (picker = { type: 'insert', index }),
+			action: (index) => {
+				picker = { type: 'insert', index };
+			},
 			desc: 'Datenpunkt kopieren'
 		},
 		{
