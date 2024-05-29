@@ -1,4 +1,4 @@
-export function groupBy<K, V>(array: V[], predicate: (item: V) => K): {key: K; values: V[]}[] {
+export function groupBy<K, V>(array: V[], predicate: (item: V) => K): { key: K; values: V[] }[] {
 	const groups: Map<K, V[]> = new Map();
 
 	for (const item of array) {
@@ -17,7 +17,8 @@ export function groupBy<K, V>(array: V[], predicate: (item: V) => K): {key: K; v
 
 export function shuffle<T>(arr: T[]): T[] {
 	let array = arr.slice();
-	let currentIndex = array.length, randomIndex;
+	let currentIndex = array.length,
+		randomIndex;
 
 	while (currentIndex !== 0) {
 		randomIndex = Math.floor(Math.random() * currentIndex);

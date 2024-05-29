@@ -16,7 +16,7 @@ export class UsefulSet<T> {
 	}
 
 	public get size(): number {
-		return this.inner.size
+		return this.inner.size;
 	}
 
 	isSubsetOf(other: Setty<T>): boolean {

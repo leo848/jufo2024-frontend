@@ -1,10 +1,10 @@
-import {z} from 'zod';
-import {deepCopy} from '../../utils/deepMap';
-import {UsefulSet} from '../../utils/set'
-import type {ComponentType} from 'svelte';
+import { z } from 'zod';
+import { deepCopy } from '../../utils/deepMap';
+import { UsefulSet } from '../../utils/set';
+import type { ComponentType } from 'svelte';
 import * as Icon from 'flowbite-svelte-icons';
-import type {Color} from '../../color/color';
-import {RgbColor} from '../../color/colorSpaces';
+import type { Color } from '../../color/color';
+import { RgbColor } from '../../color/colorSpaces';
 
 export const NumericDimension = z.object({
 	name: z.string().max(128),
@@ -49,7 +49,7 @@ export class Schema {
 	#numericDimensions: NumericDimension[];
 	#optionDimensions: OptionDimensions[];
 
-	private constructor({name, desc, numericDimensions, optionDimensions}: SchemaType) {
+	private constructor({ name, desc, numericDimensions, optionDimensions }: SchemaType) {
 		this.#name = name;
 		this.#desc = desc;
 		this.#numericDimensions = numericDimensions;
@@ -61,22 +61,22 @@ export class Schema {
 		desc,
 		numericDimensions,
 		optionDimensions
-	}: SchemaType): {success: true; value: Schema} | {success: false; error: string} {
-		if (name.length == 0) return {success: false, error: 'Fehlender Name'};
-		if (encodeURIComponent(name) != name) return {success: false, error: 'Name nicht URL-sicher'};
+	}: SchemaType): { success: true; value: Schema } | { success: false; error: string } {
+		if (name.length == 0) return { success: false, error: 'Fehlender Name' };
+		if (encodeURIComponent(name) != name) return { success: false, error: 'Name nicht URL-sicher' };
 		if (numericDimensions.length == 0 && optionDimensions.length == 0)
-			return {success: false, error: 'Mindestens eine Dimension benötigt'};
+			return { success: false, error: 'Mindestens eine Dimension benötigt' };
 		if (numericDimensions.some((dim) => dim.max && dim.min && dim.max < dim.min))
-			return {success: false, error: 'Maximum geringer als Minimum'};
+			return { success: false, error: 'Maximum geringer als Minimum' };
 		const allDimensions = [...numericDimensions, ...optionDimensions];
 		if (allDimensions.some((dim) => dim.weight < 0))
-			return {success: false, error: 'Gewicht darf nicht negativ sein'};
+			return { success: false, error: 'Gewicht darf nicht negativ sein' };
 		if (new Set(allDimensions.map((dim) => dim.name)).size < allDimensions.length)
-			return {success: false, error: 'Doppelt vorkommender Name'};
+			return { success: false, error: 'Doppelt vorkommender Name' };
 
 		return {
 			success: true,
-			value: new Schema({name, desc, numericDimensions, optionDimensions})
+			value: new Schema({ name, desc, numericDimensions, optionDimensions })
 		};
 	}
 
@@ -116,7 +116,7 @@ export class Schema {
 
 	validateDataPoint(
 		possibleDataPoint: PossibleDataPoint
-	): {success: true; value: DataPoint} | {success: false; error: string} {
+	): { success: true; value: DataPoint } | { success: false; error: string } {
 		if (possibleDataPoint.numericDimensions.length != this.numericDimensions.length) {
 			return {
 				success: false,
@@ -165,7 +165,7 @@ export class Schema {
 				};
 			}
 		}
-		return {success: true, value: new DataPoint(this, possibleDataPoint)};
+		return { success: true, value: new DataPoint(this, possibleDataPoint) };
 	}
 
 	stubPossibleDataPoint(): PossibleDataPoint {
@@ -182,17 +182,17 @@ export class Schema {
 
 	dataPointFromJSON(
 		json: any
-	): {success: true; value: DataPoint} | {success: false; error: string} {
+	): { success: true; value: DataPoint } | { success: false; error: string } {
 		const name = json.name;
-		if (!name) return {success: false, error: 'Datenpunkt ohne Name'};
+		if (!name) return { success: false, error: 'Datenpunkt ohne Name' };
 		const data = json.data;
-		if (!data) return {success: false, error: 'Datenpunkt ohne Daten'};
+		if (!data) return { success: false, error: 'Datenpunkt ohne Daten' };
 		const numericDimensions = [];
 		for (let i = 0; i < this.numericDimensions.length; i++) {
 			const dimensionSchema = this.numericDimensions[i];
 			const dataElement = json.data[dimensionSchema.name];
 			if (dataElement == null)
-				return {success: false, error: `Kein Wert für ${dimensionSchema.name}`};
+				return { success: false, error: `Kein Wert für ${dimensionSchema.name}` };
 			if (typeof dataElement !== 'number')
 				return {
 					success: false,
@@ -205,7 +205,7 @@ export class Schema {
 			const dimensionSchema = this.optionDimensions[i];
 			const dataElement = json.data[dimensionSchema.name];
 			if (dataElement == null)
-				return {success: false, error: `Kein Wert für ${dimensionSchema.name}`};
+				return { success: false, error: `Kein Wert für ${dimensionSchema.name}` };
 			if (typeof dataElement !== 'string')
 				return {
 					success: false,
@@ -213,12 +213,12 @@ export class Schema {
 				};
 			optionDimensions.push(dataElement);
 		}
-		const color = json["color"] ?? undefined;
+		const color = json['color'] ?? undefined;
 		return this.validateDataPoint({
 			name,
 			numericDimensions,
 			optionDimensions,
-			color,
+			color
 		});
 	}
 
@@ -233,8 +233,12 @@ export class Schema {
 
 		let compatibility = Compatibility.Full;
 
-		const myDims = new UsefulSet([...this.numericDimensions, ...this.optionDimensions].map(dim => dim.name));
-		const theirDims = new UsefulSet([...otherSchema.numericDimensions, ...otherSchema.optionDimensions].map(dim => dim.name));
+		const myDims = new UsefulSet(
+			[...this.numericDimensions, ...this.optionDimensions].map((dim) => dim.name)
+		);
+		const theirDims = new UsefulSet(
+			[...otherSchema.numericDimensions, ...otherSchema.optionDimensions].map((dim) => dim.name)
+		);
 		if (myDims.isSubsetIncomparable(theirDims)) {
 			compatibility = compatibility.and(Compatibility.None);
 		} else if (myDims.isProperSubsetOf(theirDims)) {
@@ -260,9 +264,17 @@ export class Schema {
 				superset: (a: number | undefined, b: number) => boolean;
 				subset: (a: number, b: number | undefined) => boolean;
 			}[] = [
-					{key: 'min', superset: (a, b) => a === undefined || a < b, subset: (a, b) => b === undefined || a > b},
-					{key: 'max', superset: (a, b) => a === undefined || a > b, subset: (a, b) => b === undefined || a < b}
-				];
+				{
+					key: 'min',
+					superset: (a, b) => a === undefined || a < b,
+					subset: (a, b) => b === undefined || a > b
+				},
+				{
+					key: 'max',
+					superset: (a, b) => a === undefined || a > b,
+					subset: (a, b) => b === undefined || a < b
+				}
+			];
 			const myDim = myNumericMap[key];
 			const theirDim = theirNumericMap[key];
 			for (const cKey of comparisonKeys) {
@@ -301,11 +313,11 @@ export class Schema {
 			const theirOptions = new UsefulSet(theirDim.options);
 
 			if (myOptions.isSubsetIncomparable(theirOptions)) {
-				compatibility = compatibility.and(Compatibility.None)
+				compatibility = compatibility.and(Compatibility.None);
 			} else if (myOptions.isProperSubsetOf(theirOptions)) {
-				compatibility = compatibility.and(Compatibility.Subset)
+				compatibility = compatibility.and(Compatibility.Subset);
 			} else if (myOptions.isProperSupersetOf(theirOptions)) {
-				compatibility = compatibility.and(Compatibility.Superset)
+				compatibility = compatibility.and(Compatibility.Superset);
 			}
 		}
 
@@ -320,7 +332,10 @@ export class DataPoint {
 	name: string;
 	#color: Color | null;
 
-	constructor(schema: Schema, {numericDimensions, optionDimensions, name, color}: PossibleDataPoint) {
+	constructor(
+		schema: Schema,
+		{ numericDimensions, optionDimensions, name, color }: PossibleDataPoint
+	) {
 		this.#validFor = schema;
 		this.#numericDimensions = numericDimensions;
 		this.#optionDimensions = optionDimensions;
@@ -374,7 +389,7 @@ export class DataPoint {
 		};
 	}
 
-	public toSelfContainedJSON(): {name: string; data: Record<string, string | number>} {
+	public toSelfContainedJSON(): { name: string; data: Record<string, string | number> } {
 		const data: Record<string, string | number> = {};
 		for (let i = 0; i < this.validFor.numericDimensions.length; i++) {
 			const dimensionSchema = this.validFor.numericDimensions[i];
@@ -436,22 +451,22 @@ export class Compatibility {
 
 	public toString(): string {
 		return [
-			"Keine Kompatibilität",
-			"Gemischte Kompatibilität",
-			"Teilmenge von",
-			"Obermenge von",
-			"Vollständige Kompatibilität"
-		][this.numericValue()]
+			'Keine Kompatibilität',
+			'Gemischte Kompatibilität',
+			'Teilmenge von',
+			'Obermenge von',
+			'Vollständige Kompatibilität'
+		][this.numericValue()];
 	}
 
 	public description(): string {
 		return [
-			"Die Schemata sind vollständig inkompatibel, d.h., kein für ein Schema gültiges Dokument ist auch für ein anderes anwendbar.",
-			"Die Kompatibilität kann sich von Dokument zu Dokument unterscheiden.",
-			"Das neu erstellte Schema ist eine Teilmenge dieser Schemata, also kann jedes Dokument des anderen Schemas auf das neue angewandt werden, aber nicht zwangsläufig auch andersherum.",
-			"Das neu erstellte Schema ist eine Übermenge dieser Schemata, also kann jedes Dokument des neuen Schemas auf ein hier aufgeführtes angewandt werden, aber nicht zwangsläufig auch andersherum.",
-			"Die beiden Schemata sind vollständig kompatibel."
-		][this.numericValue()]
+			'Die Schemata sind vollständig inkompatibel, d.h., kein für ein Schema gültiges Dokument ist auch für ein anderes anwendbar.',
+			'Die Kompatibilität kann sich von Dokument zu Dokument unterscheiden.',
+			'Das neu erstellte Schema ist eine Teilmenge dieser Schemata, also kann jedes Dokument des anderen Schemas auf das neue angewandt werden, aber nicht zwangsläufig auch andersherum.',
+			'Das neu erstellte Schema ist eine Übermenge dieser Schemata, also kann jedes Dokument des neuen Schemas auf ein hier aufgeführtes angewandt werden, aber nicht zwangsläufig auch andersherum.',
+			'Die beiden Schemata sind vollständig kompatibel.'
+		][this.numericValue()];
 	}
 
 	public icon(): ComponentType {
@@ -460,8 +475,8 @@ export class Compatibility {
 			Icon.ShuffleSolid,
 			Icon.ArrowLeftSolid,
 			Icon.ArrowRightSolid,
-			Icon.CheckSolid,
-		][this.numericValue()]
+			Icon.CheckSolid
+		][this.numericValue()];
 	}
 }
 
