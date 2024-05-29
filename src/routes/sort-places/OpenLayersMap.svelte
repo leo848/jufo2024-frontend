@@ -14,6 +14,7 @@
 	import type { TrueDistanceType } from '../../geom/dist';
 	import { tweened, type Tweened } from 'svelte/motion';
 	import { quadIn, quadInOut } from 'svelte/easing';
+	import { getGeocodeName } from './openRoute';
 
 	export let points: NamedPoint[];
 	export let edges: [CoordPoint, CoordPoint][];
@@ -185,6 +186,11 @@
 
 	function addSelection() {
 		if (selection == null) return;
+		getGeocodeName({
+			lat: selection.position.lat,
+			lng: selection.position.lng,
+			zoomLevel: map.getZoom()
+		});
 		let newPoint: NamedPoint = {
 			name: selection.name,
 			lat: selection.position.lat,
@@ -201,10 +207,28 @@
 			{#if selection !== null}
 				<div class="text-xl">Punkt hinzufügen</div>
 				<div>{selection.position.lat.toFixed(5)}°N, {selection.position.lng.toFixed(5)}°E</div>
-				<input type="text" class="mt-4 bg-gray-700 w-full rounded" bind:value={selection.name} />
+				<input
+					type="text"
+					class="mt-4 dark:bg-gray-700 bg-gray-200 w-full rounded"
+					bind:value={selection.name}
+				/>
+				<button
+					on:click|stopPropagation={async () => {
+						if (!selection) return;
+						const response = await getGeocodeName({
+							lat: selection?.position.lat,
+							lng: selection?.position.lng,
+							zoomLevel: map.getZoom()
+						});
+						selection.name = response.name;
+						selection.position = { lat: response.lat, lng: response.lng };
+					}}
+					class="p-1 dark:bg-gray-600 dark:hover:bg-gray-500 transition-all w-full rounded mt-4"
+					>Name ermitteln</button
+				>
 				<button
 					on:click|stopPropagation={invalidate(addSelection)}
-					class="text-xl p-2 bg-gray-600 hover:bg-gray-500 transition-all w-full rounded mt-4"
+					class="text-xl p-2 bg-gray-100 dark:bg-gray-200 dark:hover:bg-white hover:bg-black dark:text-black text-white transition-all w-full rounded mt-4"
 					>Hinzufügen</button
 				>
 			{/if}
@@ -225,10 +249,10 @@
 	}
 
 	:global(
-			.popup-thing,
-			.popup-thing > .leaflet-popup-content-wrapper,
-			.leaflet-popup-tip,
-			.leaflet-popup-content
+			.dark .popup-thing,
+			.dark .popup-thing > .leaflet-popup-content-wrapper,
+			.dark .leaflet-popup-tip,
+			.dark .leaflet-popup-content
 		) {
 		background-color: rgb(31 41 55);
 		font-family: Inter;
