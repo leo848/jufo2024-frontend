@@ -133,7 +133,7 @@
 		/>
 		{#if error.titleDuplicate}
 			<div class="text-red-500">
-				Name nicht verfügbar. Wie wäre es mit
+				Name bereits vergeben. Wie wäre es mit
 				<b
 					><SelectButton
 						bind:value={schemaType.name}
