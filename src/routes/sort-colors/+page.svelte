@@ -384,7 +384,10 @@
 				data: {
 					Helligkeit: c.oklab().unnormal().l,
 					'Farbwert a': c.oklab().unnormal().a,
-					'Farbwert b': c.oklab().unnormal().b
+					'Farbwert b': c.oklab().unnormal().b,
+					Rot: Math.floor(c.rgb().r * 255),
+					Grün: Math.floor(c.rgb().g),
+					Blau: Math.floor(c.rgb().b)
 				}
 			}))}
 			on:asVectors={invalidate(() => {
