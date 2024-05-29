@@ -3,6 +3,8 @@ import {deepCopy} from '../../utils/deepMap';
 import {UsefulSet} from '../../utils/set'
 import type {ComponentType} from 'svelte';
 import * as Icon from 'flowbite-svelte-icons';
+import type {Color} from '../../color/color';
+import {RgbColor} from '../../color/colorSpaces';
 
 export const NumericDimension = z.object({
 	name: z.string().max(128),
@@ -35,6 +37,7 @@ export type Schemas = z.infer<typeof Schemas>;
 
 export const PossibleDataPoint = z.object({
 	name: z.string(),
+	color: z.optional(z.number().min(0).max(0xffffff)),
 	numericDimensions: z.array(z.number()),
 	optionDimensions: z.array(z.string())
 });
@@ -210,10 +213,12 @@ export class Schema {
 				};
 			optionDimensions.push(dataElement);
 		}
+		const color = json["color"] ?? undefined;
 		return this.validateDataPoint({
 			name,
 			numericDimensions,
-			optionDimensions
+			optionDimensions,
+			color,
 		});
 	}
 
@@ -313,12 +318,20 @@ export class DataPoint {
 	#numericDimensions: number[];
 	#optionDimensions: string[];
 	name: string;
+	#color: Color | null;
 
-	constructor(schema: Schema, {numericDimensions, optionDimensions, name}: PossibleDataPoint) {
+	constructor(schema: Schema, {numericDimensions, optionDimensions, name, color}: PossibleDataPoint) {
 		this.#validFor = schema;
 		this.#numericDimensions = numericDimensions;
 		this.#optionDimensions = optionDimensions;
+		if (color != null) {
+			this.#color = RgbColor.fromNumeric(color).color();
+		} else this.#color = null;
 		this.name = name;
+	}
+
+	public get color(): Color | null {
+		return this.#color?.clone() ?? null;
 	}
 
 	public get validFor(): Schema {

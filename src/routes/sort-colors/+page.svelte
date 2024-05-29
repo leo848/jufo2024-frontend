@@ -381,6 +381,7 @@
 			loadAmount={Object.keys(presets).length}
 			json={colors.map((c) => ({
 				name: c.rgb().hex(),
+				color: c.rgb().numeric(),
 				data: {
 					Helligkeit: c.oklab().unnormal().l,
 					'Farbwert a': c.oklab().unnormal().a,

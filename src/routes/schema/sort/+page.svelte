@@ -145,7 +145,6 @@
 			icon: Icon.EditOutline,
 			action: (index) => {
 				picker = { type: 'edit', index };
-				console.log(picker);
 			},
 			desc: 'Datenpunkt bearbeiten'
 		},
@@ -224,13 +223,19 @@
 				{#each dataPoints as dataPoint, index (dataPoint.name)}
 					<div
 						class="p-2 dark:bg-gray-700 bg-gray-200 rounded flex flex-row gap-2 align-center items-center"
+						style:background-color={dataPoint.color != null ? dataPoint.color.css() : undefined}
+						style:color={dataPoint.color != null ? dataPoint.color.readable().css() : undefined}
 						animate:flip
 					>
-						<span class="dark:text-white">{dataPoint.name}</span>
+						<span
+							class="dark:text-white"
+							style:color={dataPoint.color != null ? dataPoint.color.readable().css() : undefined}
+							>{dataPoint.name}</span
+						>
 						<span class="flex-grow" />
 						{#each itemActionButtons as btn}
 							<button
-								class="p-2 bg-gray-300 dark:bg-gray-600 dark:hover:bg-gray-500 hover:bg-gray-400 rounded-full transition-all"
+								class="p-2 bg-gray-300 dark:text-white text-black dark:bg-gray-600 dark:hover:bg-gray-500 hover:bg-gray-400 rounded-full transition-all"
 								on:click={() => btn.action(index)}><svelte:component this={btn.icon} /></button
 							>
 							<Tooltip>
