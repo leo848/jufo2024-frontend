@@ -350,7 +350,7 @@
 							word: word.str.toLowerCase(),
 							desc: word.desc
 						});
-					}, index * 10 + 100);
+					}, index * 8 + 100);
 				});
 			}}
 		/>
