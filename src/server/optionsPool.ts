@@ -76,7 +76,9 @@ export const OptionsPool = z
 		iterationCount: z.number(),
 		milpSolver: z.literal('coinOrCbc'),
 		initialTemperature: z.number(),
-		ilpMaxDuration: z.number()
+		ilpMaxDuration: z.number(),
+		ilpStart: z.number(),
+		ilpEnd: z.number()
 	})
 	.partial();
 export type OptionsPool = z.infer<typeof OptionsPool>;

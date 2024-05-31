@@ -49,7 +49,6 @@
 	let path: number[][] | null | number[] = null;
 
 	let pool: OptionsPool = defaultPool();
-	$: pool, console.log(pool);
 
 	type ActionKind = 'construction' | 'improvement';
 	type ForAction<T> = Record<ActionKind, T>;

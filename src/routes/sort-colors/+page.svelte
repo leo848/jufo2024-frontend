@@ -380,7 +380,7 @@
 			bind:colorSpace={space}
 			loadAmount={Object.keys(presets).length}
 			json={colors.map((c) => ({
-				name: c.rgb().hex(),
+				name: '#' + c.rgb().hex(),
 				color: c.rgb().numeric(),
 				data: {
 					Helligkeit: c.oklab().unnormal().l,

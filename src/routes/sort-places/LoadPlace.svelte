@@ -76,7 +76,7 @@
 		>
 			{#each selectedPointList.values.filter((v) => v.name
 					.toLowerCase()
-					.includes(search?.toLowerCase() ?? '')) as point}
+					.startsWith(search?.toLowerCase() ?? '')) as point}
 				<div>
 					<div
 						class="rounded-full dark:bg-gray-600 bg-gray-100 p-1 flex flex-row items-center gap-1"
@@ -88,6 +88,7 @@
 								class="dark:text-gray-400 text-gray-600 dark:hover:text-gray-200 hover:text-gray-800 transition-all"
 								on:click={invalidate(() => {
 									dispatch('load');
+									search = null;
 									points = [...points, point];
 								})}><Icon.PlusSolid size="sm" /></button
 							>

@@ -136,27 +136,55 @@
 		}
 	];
 
+	let startPoint: number | undefined = undefined;
+	let endPoint: number | undefined = undefined;
+
 	const itemActionButtons: {
-		icon: ComponentType;
+		icon: (index: number) => ComponentType;
 		action: (index: number) => void;
 		desc: string;
+		disabled?: (index: number) => boolean;
 	}[] = [
 		{
-			icon: Icon.EditOutline,
+			icon: (index) => {
+				if (startPoint === index || endPoint === index) {
+					return Icon.StarSolid;
+				} else return Icon.StarOutline;
+			},
+			action: (index) => {
+				if (startPoint === index) {
+					startPoint = undefined;
+				} else if (endPoint == index) {
+					endPoint = undefined;
+				} else if (startPoint == undefined) {
+					startPoint = index;
+				} else if (endPoint == undefined) {
+					endPoint = index;
+				}
+			},
+			desc: 'Als Start-/Endpunkt festlegen',
+			disabled: (index: number) => {
+				if (index == startPoint || index === endPoint) {
+					return false;
+				} else return startPoint != undefined && endPoint != undefined;
+			}
+		},
+		{
+			icon: () => Icon.EditOutline,
 			action: (index) => {
 				picker = { type: 'edit', index };
 			},
 			desc: 'Datenpunkt bearbeiten'
 		},
 		{
-			icon: Icon.CopySolid,
+			icon: () => Icon.CopySolid,
 			action: (index) => {
 				picker = { type: 'insert', index };
 			},
 			desc: 'Datenpunkt kopieren'
 		},
 		{
-			icon: Icon.TrashBinOutline,
+			icon: () => Icon.TrashBinOutline,
 			action: (index) => (dataPoints = dataPoints.toSpliced(index, 1)),
 			desc: 'Datenpunkt löschen'
 		}
@@ -176,7 +204,9 @@
 				method: { type: 'ilp' }
 			},
 			pool: {
-				ilpMaxDuration: 60
+				ilpMaxDuration: 3600,
+				ilpStart: startPoint,
+				ilpEnd: endPoint
 			}
 		});
 		sortingOngoing = true;
@@ -186,6 +216,8 @@
 		if (pc.donePath) {
 			sortingOngoing = false;
 			dataPoints = pc.donePath.map((idx) => dataPoints[idx]);
+			startPoint = undefined;
+			endPoint = undefined;
 		}
 	});
 	onDestroy(() => unregisterCallback(callback));
@@ -234,13 +266,17 @@
 						>
 						<span class="flex-grow" />
 						{#each itemActionButtons as btn}
-							<button
-								class="p-2 bg-gray-300 dark:text-white text-black dark:bg-gray-600 dark:hover:bg-gray-500 hover:bg-gray-400 rounded-full transition-all"
-								on:click={() => btn.action(index)}><svelte:component this={btn.icon} /></button
-							>
-							<Tooltip>
-								{btn.desc}
-							</Tooltip>
+							{#key [startPoint, endPoint]}
+								<button
+									class="p-2 bg-gray-300 dark:text-white text-black dark:bg-gray-600 dark:hover:bg-gray-500 hover:bg-gray-400 rounded-full transition-all"
+									on:click={() => btn.action(index)}
+									disabled={(btn.disabled ?? (() => false))(index)}
+									><svelte:component this={btn.icon(index)} /></button
+								>
+								<Tooltip>
+									{btn.desc}
+								</Tooltip>
+							{/key}
 						{/each}
 					</div>
 				{/each}
