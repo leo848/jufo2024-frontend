@@ -290,7 +290,7 @@
 				let displayDist = delta.mag();
 				let trueDist =
 					(adjMatrix[particle1.vectorIdx] ?? [])[particle2.vectorIdx] ?? averageTrueDist;
-				let trueDisplayDist = ((trueDist * width) / 400) * 140;
+				let trueDisplayDist = ((trueDist * width) / 400) * 120;
 
 				trueDisplayDist /= averageTrueDist;
 

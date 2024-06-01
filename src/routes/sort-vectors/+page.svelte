@@ -290,7 +290,7 @@
 		/>
 		<Window title="Ansicht des Graphen (FDGD)" options xlCol={5}>
 			<ForceDirectedGraphOptions slot="options" bind:options={fdgOptions} actions={fdgActions} />
-			<div class="h-full m-0 min-h-[420px]">
+			<div class="h-full m-0 min-h-[620px]">
 				<ForceDirectedGraph
 					bind:redraw
 					values={points.map((p) => p.inner)}

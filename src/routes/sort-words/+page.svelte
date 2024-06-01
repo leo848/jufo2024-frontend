@@ -388,7 +388,7 @@
 	<PathProperties length={words.length} path={words.map((w) => w.vec)} {metric} xlCol={4} />
 	<Window title="Ansicht des Graphen (FDGD)" options xlCol={5}>
 		<ForceDirectedGraphOptions slot="options" bind:options={fdgOptions} actions={fdgActions} />
-		<div class="h-full m-0 min-h-[420px]">
+		<div class="h-full m-0 min-h-[620px]">
 			<ForceDirectedGraph
 				bind:redraw
 				values={positiveAdjacencyMatrix(

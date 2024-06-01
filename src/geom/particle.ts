@@ -1,4 +1,4 @@
-import { Vec2 } from './vector';
+import {Vec2} from './vector';
 
 export class Particle {
 	pos: Vec2;
@@ -35,7 +35,7 @@ export class Particle {
 		this.acc = this.acc.add(force);
 	}
 
-	update({ friction }: { friction?: number }) {
+	update({friction}: {friction?: number}) {
 		this.vel = this.vel.add(this.acc);
 		this.pos = this.pos.add(this.vel);
 
@@ -45,7 +45,7 @@ export class Particle {
 
 	draw(
 		ctx: CanvasRenderingContext2D,
-		options: { highlight: boolean; dark: boolean } = { highlight: false, dark: false }
+		options: {highlight: boolean; dark: boolean} = {highlight: false, dark: false}
 	): [[number, number], [number, number]] {
 		ctx.lineWidth = 2;
 		ctx.fillStyle =
@@ -53,7 +53,7 @@ export class Particle {
 		ctx.strokeStyle =
 			options.highlight === options.dark ? 'rgba(25%, 25%, 25%, 40%)' : 'rgba(80%, 80%, 80%, 40%)';
 
-		const fontSize = 28;
+		const fontSize = 14;
 		const textWidth = Math.max(fontSize, ctx.measureText(this.name).width + 10);
 
 		ctx.beginPath();
